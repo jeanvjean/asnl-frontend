@@ -1,0 +1,60 @@
+<template>
+  <div class="px-6 py-6">
+    <div class="bg-white px-6 py-4">
+      <h1
+        class="text-black py-2 border-b-2 font-medium border-purple-500 inline-block"
+      >
+        All Drivers
+      </h1>
+      <div
+        class="grid grid-rows-1 lg:grid-cols-3 xl:grid-cols-4 gap-y-4 lg:gap-x-6 mt-6"
+      >
+        <button
+          v-for="i in 5"
+          :key="i"
+          class="flex px-4 py-4 border border-gray-300 bg-gray-200 space-x-4 focus:outline-none focus:border-purple-500 rounded-sm"
+          @click="showDriver = true"
+        >
+          <img
+            class="h-12 w-12 rounded-full"
+            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+            alt=""
+          />
+          <div>
+            <div class="mb-4">
+              <p class="text-left text-black font-medium text-lg tracking-wide">
+                Chinedu Omunyere
+              </p>
+              <p class="text-left text-gray-600 font-light text-sm">Driver</p>
+            </div>
+            <div>
+              <p class="text-left text-black font-medium text-lg tracking-wide">
+                0708 099 8909
+              </p>
+              <p class="text-left text-gray-600 font-light text-sm">
+                Air Separation, Jos.
+              </p>
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+    <driver v-if="showDriver" @close="showDriver = false" />
+  </div>
+</template>
+<script lang="ts">
+import { defineComponent, ref } from '@nuxtjs/composition-api'
+import Driver from '~/components/Overlays/Driver.vue'
+export default defineComponent({
+  name: 'Drivers',
+  components: { Driver },
+  layout: 'dashboard',
+  setup() {
+    const showDriver = ref(false)
+
+    return {
+      showDriver,
+    }
+  },
+})
+</script>
