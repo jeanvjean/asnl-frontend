@@ -44,25 +44,35 @@
             <input-field
               :label-title="'Name'"
               :input-placeholder="'Chance Collins'"
+              @get="form.name = $event.value"
             ></input-field>
             <input-field
               :label-title="'Email Address'"
+              :input-type="'email'"
               :input-placeholder="'chance@airseparation.com'"
+              @get="form.email = $event.value"
             ></input-field>
             <select-input
               :label-title="'Department'"
               :default-option-text="'Select a Department'"
               :select-array="departments"
+              @get="
+                form.role = $event.value
+                getSubRoles()
+              "
             ></select-input>
 
             <select-input
               :label-title="'Role'"
-              :default-option-text="'Select a Department'"
-              :select-array="roles"
+              :default-option-text="'Select a Role'"
+              :select-array="subroles"
+              @get="form.subrole = $event.value"
             ></select-input>
 
             <button
+              type="button"
               class="bg-purple-600 flex justify-around space-x-2 items-center text-white max-w-3/5 py-3 px-4 my-4 rounded"
+              @click="inviteUser"
             >
               <span class="tracking-wide">Send Invites</span
               ><svg
@@ -112,17 +122,26 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
-import SelectInput from '~/components/Form/Select.vue'
-import InputField from '~/components/Form/Input.vue'
-
+import {
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+  useContext,
+} from '@nuxtjs/composition-api'
+import SelectInput from '@/components/Form/Select.vue'
+import InputField from '@/components/Form/Input.vue'
+import { UserRepository } from '@/module/User'
 export default defineComponent({
   name: 'NewUser',
   components: { SelectInput, InputField },
   layout: 'dashboard',
   setup() {
-    const departments = ['Admin', 'Finance', 'IT']
-    const roles = ['Manager', 'Secretary']
+    const userObject = new UserRepository()
+    const context = useContext()
+    const departments = ref([])
+    const myResponse: any = ref(null)
+    const subroles = ref([])
     const permissions = [
       'User Management',
       'Cylinders',
@@ -132,10 +151,57 @@ export default defineComponent({
       'Report',
     ]
 
+    const form = reactive({
+      name: '',
+      email: '',
+      role: '',
+      subrole: '',
+    })
+
+    const getSubRoles = () => {
+      subroles.value = []
+      if (form.role !== '') {
+        myResponse.value.forEach((element: any) => {
+          if (element.role === form.role) {
+            subroles.value = element.subroles
+          }
+        })
+      }
+    }
+
+    const inviteUser = () => {
+      if (
+        form.name !== '' &&
+        form.email !== '' &&
+        form.role !== '' &&
+        form.subrole !== ''
+      ) {
+        context.$toast.global.required()
+      } else {
+        console.log(form)
+        // userObject.inviteUser(form).finally(() => {
+        //   form.name = form.email = form.role = form.subrole = ''
+        // })
+      }
+    }
+
+    onMounted(() => {
+      userObject.fetchRoles().then((response: any) => {
+        myResponse.value = response.data.data
+        const filterRoles = myResponse.value.map((element: any) => {
+          return element.role
+        })
+        departments.value = filterRoles
+      })
+    })
+
     return {
       departments,
-      roles,
+      subroles,
       permissions,
+      form,
+      getSubRoles,
+      inviteUser,
     }
   },
 })

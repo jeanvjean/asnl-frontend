@@ -48,9 +48,9 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-import Input from '~/components/Form/Input.vue'
-import SelectInput from '~/components/Form/Select.vue'
-import Button from '~/components/Form/Button.vue'
+import Input from '@/components/Form/Input.vue'
+import SelectInput from '@/components/Form/Select.vue'
+import Button from '@/components/Form/Button.vue'
 export default defineComponent({
   name: 'Landing',
   components: { Input, Button, SelectInput },

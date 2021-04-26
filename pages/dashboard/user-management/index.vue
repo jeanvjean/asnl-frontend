@@ -85,48 +85,26 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
-import TableComponent from '~/components/Base/Table.vue'
-import AddUserButton from '~/components/Clickables/AddUser.vue'
-
+import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
+import TableComponent from '@/components/Base/Table.vue'
+import AddUserButton from '@/components/Clickables/AddUser.vue'
+import { UserRepository } from '@/module/User'
 export default defineComponent({
   name: 'Home',
   components: { TableComponent, AddUserButton },
   layout: 'dashboard',
   setup() {
     const headers = ['Name', 'Phone No', 'Email Address', 'Department']
-    const body = [
-      {
-        fullName: 'Full Name Goes here',
-        phone: '08034201894',
-        email: 'example@email.com',
-        department: 'Production',
-      },
-      {
-        fullName: 'Full Name Goes here',
-        phone: '08034201894',
-        email: 'example@email.com',
-        department: 'Production',
-      },
-      {
-        fullName: 'Full Name Goes here',
-        phone: '08034201894',
-        email: 'example@email.com',
-        department: 'Production',
-      },
-      {
-        fullName: 'Full Name Goes here',
-        phone: '08034201894',
-        email: 'example@email.com',
-        department: 'Production',
-      },
-      {
-        fullName: 'Full Name Goes here',
-        phone: '08034201894',
-        email: 'example@email.com',
-        department: 'Production',
-      },
-    ]
+    const userObject = new UserRepository()
+    const body = ref([])
+    const getUsers = () => {
+      userObject.getUsers().then((response: any) => {
+        const myResponse = response.data.data
+        body.value = myResponse
+      })
+    }
+    onMounted(getUsers)
+
     const defaultState = ref(false)
     return {
       headers,

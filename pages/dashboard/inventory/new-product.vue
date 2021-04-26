@@ -7,25 +7,6 @@
           <p class="text-gray-600 text-sm">Enter Product details below</p>
         </div>
         <div class="grid grid-rows-1 lg:grid-cols-4 gap-4">
-          <div class="w-full py-3">
-            <label
-              for="password"
-              class="block w-full px-1 text-gray-800 text-sm mb-1"
-              >Select Date</label
-            ><select
-              class="block w-full px-4 py-3.5 border-2 border-gray-200 text-black rounded-md focus:outline-none focus:border-purple-300 font-thin bg-white"
-            >
-              <option
-                v-for="(value, index) in locationArray"
-                :key="index"
-                :value="value"
-                class="text-black"
-              >
-                {{ value }}
-              </option>
-            </select>
-          </div>
-
           <input-component
             :label-title="'Division'"
             :input-placeholder="'Enter Division'"
@@ -120,9 +101,9 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-import InputComponent from '~/components/Form/Input.vue'
-import SelectComponent from '~/components/Form/Select.vue'
-import ButtonComponent from '~/components/Form/Button.vue'
+import InputComponent from '@/components/Form/Input.vue'
+import SelectComponent from '@/components/Form/Select.vue'
+import ButtonComponent from '@/components/Form/Button.vue'
 export default defineComponent({
   components: { InputComponent, SelectComponent, ButtonComponent },
   layout: 'dashboard',

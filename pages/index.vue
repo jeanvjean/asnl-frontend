@@ -14,10 +14,22 @@
       <Input
         :input-placeholder="'User@example.com'"
         :label-title="'Email Address'"
+        @get="credentials.email = $event.value"
       />
 
-      <Input :input-placeholder="'Enter Password'" :label-title="'Password'" />
-      <Button :button-text="'Login'" :button-class="'bg-gray-400 text-white'" />
+      <Input
+        :input-placeholder="'Enter Password'"
+        :input-type="'password'"
+        :label-title="'Password'"
+        @get="credentials.password = $event.value"
+      />
+      <Button
+        :button-text="'Login'"
+        :button-class="'bg-gray-400 text-white'"
+        :loading-status="loading.status"
+        :loading-text="loading.text"
+        @buttonClicked="login"
+      />
     </form>
     <div class="mt-4 font-thin text-gray-700 w-full">
       <nuxt-link to="/auth/forgot-password" class="text-center underline block"
@@ -27,13 +39,64 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
-import Input from '~/components/Form/Input.vue'
-import Button from '~/components/Form/Button.vue'
+import { defineComponent, reactive, useContext } from '@nuxtjs/composition-api'
+import { Auth } from '@/module/Auth'
+import { mainStore } from '@/module/Pinia'
+import Input from '@/components/Form/Input.vue'
+import Button from '@/components/Form/Button.vue'
+import Authenticated from '@/middleware/Authenticated'
 export default defineComponent({
   name: 'Landing',
   components: { Input, Button },
   layout: 'auth',
-  setup() {},
+  middleware: Authenticated,
+  setup() {
+    const ctx = useContext()
+    const appStore: any = mainStore()
+    const AuthObject = new Auth()
+    const credentials = reactive({
+      email: '',
+      password: '',
+    })
+    const loading = reactive({
+      text: 'Submitting',
+      status: false,
+    })
+    const login = () => {
+      if (!credentials.email) {
+        ctx.$toast.error('Email is Required')
+      }
+      if (!credentials.password) {
+        ctx.$toast.error('Password is Required')
+      }
+
+      if (credentials.email && credentials.password) {
+        loading.status = true
+        AuthObject.login(credentials)
+          .then((response: any) => {
+            const myResponse = response.data.data
+            appStore.saveUser(myResponse.user)
+            appStore.saveToken(myResponse.accessToken)
+
+            if (!myResponse.user.isVerified) {
+              ctx.redirect('/auth/change-password')
+            } else {
+              ctx.redirect('dashboard')
+            }
+          })
+          .finally(() => {
+            loading.status = false
+          })
+      }
+    }
+
+    return {
+      credentials,
+      AuthObject,
+      appStore,
+      loading,
+      login,
+    }
+  },
 })
 </script>

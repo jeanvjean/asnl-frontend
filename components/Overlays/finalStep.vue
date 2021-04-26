@@ -6,7 +6,7 @@
           <div class="w-3/4">
             <div class="w-full mb-8">
               <svg
-                v-if="status == 'approve'"
+                v-if="status == 'success'"
                 class="w-40 h-40 mx-auto"
                 viewBox="0 0 119 150"
                 fill="none"
@@ -119,7 +119,7 @@
                 />
               </svg>
               <svg
-                v-else-if="status == 'decline'"
+                v-else-if="status == 'error'"
                 class="w-40 h-40 mx-auto"
                 viewBox="0 0 119 150"
                 fill="none"
@@ -232,17 +232,8 @@
                 />
               </svg>
             </div>
-            <p
-              v-if="status == 'approve'"
-              class="inline-block text-xl text-center my-10"
-            >
-              You have successfully approved this request
-            </p>
-            <p
-              v-else-if="status == 'decline'"
-              class="inline-block text-xl text-center my-10"
-            >
-              You have regretably declined this request
+            <p class="inline-block text-xl text-center my-10">
+              {{ message }}
             </p>
             <div class="w-full mt-2">
               <button
@@ -260,7 +251,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-import BackDrop from '~/components/Base/Backdrop.vue'
+import BackDrop from '@/components/Base/Backdrop.vue'
 
 export default defineComponent({
   components: {
@@ -268,6 +259,10 @@ export default defineComponent({
   },
   props: {
     status: {
+      type: String,
+      required: true,
+    },
+    message: {
       type: String,
       required: true,
     },

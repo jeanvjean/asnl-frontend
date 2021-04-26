@@ -59,7 +59,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from '@nuxtjs/composition-api'
-import CreateSupplier from '~/components/Overlays/Supplier.vue'
+import CreateSupplier from '@/components/Overlays/Supplier.vue'
 export default defineComponent({
   name: 'Suppliers',
   components: { CreateSupplier },

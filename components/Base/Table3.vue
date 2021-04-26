@@ -85,7 +85,7 @@
 
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-import SearchComponent from '~/components/Base/Search.vue'
+import SearchComponent from '@/components/Base/Search.vue'
 
 export default defineComponent({
   components: { SearchComponent },

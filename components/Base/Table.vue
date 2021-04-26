@@ -56,14 +56,14 @@
                 class="h-8 w-8 rounded-full"
                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                 alt=""
-              /><span>{{ bodySingle.fullName }}</span>
+              /><span>{{ bodySingle.name }}</span>
             </div>
           </td>
           <td class="px-4 text-left py-4">{{ bodySingle.phone }}</td>
           <td class="px-4 text-left py-4">{{ bodySingle.email }}</td>
           <td class="px-4 text-left py-4">
             <span class="px-8 py-2 bg-green-100 text-green-400">{{
-              bodySingle.department
+              bodySingle.role
             }}</span>
           </td>
           <td class="px-4 py-4">
@@ -84,7 +84,7 @@
               <button
                 class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
               >
-                User Role
+                Change Role
               </button>
               <button
                 class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
@@ -106,8 +106,8 @@
 
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-import AddUserButton from '~/components/Clickables/AddUser.vue'
-import SearchComponent from '~/components/Base/Search.vue'
+import AddUserButton from '@/components/Clickables/AddUser.vue'
+import SearchComponent from '@/components/Base/Search.vue'
 
 export default defineComponent({
   components: { AddUserButton, SearchComponent },

@@ -14,11 +14,17 @@
           />
         </svg>
       </div>
-      <div class="px-8 py-2">
+      <div class="px-10 py-2 flex justify-between items-center my-2">
         <h1 class="py-2 px-2 border-b border-purple-500 inline-block">
           Route Plan
         </h1>
+        <button
+          class="bg-transparent border border-purple-600 text-purple-600 rounded-sm px-6 py-2"
+        >
+          Edit
+        </button>
       </div>
+
       <div class="flex justify-between items-center px-10 mt-4">
         <div class="flex space-x-4">
           <img
@@ -42,6 +48,30 @@
           <button class="text-purple-700 text-sm font-medium">
             Change Driver
           </button>
+        </div>
+      </div>
+      <div class="w-11/12 px-4 mx-auto my-6">
+        <div
+          class="flex bg-white text-black font-medium items-center justify-evenly"
+        >
+          <div class="px-4 py-4">
+            <h4>Fuel</h4>
+            <span class="text-gray-500 font-light text-md">30 Liters</span>
+          </div>
+
+          <div class="px-4 py-4">
+            <h4>RPP No</h4>
+            <span class="text-gray-500 font-light text-md">343421</span>
+          </div>
+
+          <div class="px-4 py-4">
+            <h4>Territory</h4>
+            <span class="text-gray-500 font-light text-md">Abuja</span>
+          </div>
+          <div class="px-4 py-4">
+            <h4>Quantity Projected</h4>
+            <span class="text-gray-500 font-light text-md">30 Liters</span>
+          </div>
         </div>
       </div>
       <div class="flex justify-between items-center px-10 mt-16">

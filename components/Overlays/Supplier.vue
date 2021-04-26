@@ -83,9 +83,9 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-import BackDrop from '~/components/Base/Backdrop.vue'
-import InputComponent from '~/components/Form/Input.vue'
-import SelectComponent from '~/components/Form/Select.vue'
+import BackDrop from '@/components/Base/Backdrop.vue'
+import InputComponent from '@/components/Form/Input.vue'
+import SelectComponent from '@/components/Form/Select.vue'
 
 export default defineComponent({
   components: {

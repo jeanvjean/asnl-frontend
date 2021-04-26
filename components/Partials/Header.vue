@@ -23,39 +23,8 @@
         />
       </svg>
     </button>
-    <div class="flex-1 px-4 flex justify-between">
-      <div class="flex-1 flex">
-        <form class="w-full flex md:ml-0" action="#" method="GET">
-          <label for="search_field" class="sr-only">Search</label>
-          <div class="relative w-full text-gray-400 focus-within:text-gray-600">
-            <div
-              class="absolute inset-y-0 left-0 flex items-center pointer-events-none"
-            >
-              <!-- Heroicon name: solid/search -->
-              <svg
-                class="h-5 w-5"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </div>
-            <input
-              id="search_field"
-              class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm"
-              placeholder="Search"
-              type="search"
-              name="search"
-            />
-          </div>
-        </form>
-      </div>
+    <div class="flex-1 px-4 flex justify-between items-center">
+      <h1 class="uppercase font-medium tracking-wide">{{ title }}</h1>
       <div class="ml-4 flex items-center md:ml-6">
         <button
           class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -96,7 +65,9 @@
                 alt=""
               />
             </button>
-            <span class="font-semibold text-sm">Anuoluwapo D.</span>
+            <span v-if="auth.name" class="font-semibold text-sm capitalize"
+              >{{ auth.name }}.</span
+            >
             <svg
               v-if="userMenu"
               class="w-4 h-4"
@@ -152,12 +123,13 @@
               >Settings</a
             >
 
-            <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            <button
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none"
               role="menuitem"
-              >Sign out</a
+              @click="logout"
             >
+              Sign out
+            </button>
           </div>
         </div>
       </div>
@@ -165,18 +137,46 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  ref,
+  useContext,
+  computed,
+  useRouter,
+} from '@nuxtjs/composition-api'
+import { mainStore } from '~/module/Pinia'
 
 export default defineComponent({
   name: 'Header',
   setup(_props, ctx) {
+    const context = useContext()
+    const router = useRouter()
     const userMenu = ref(false)
     const showMobileSidebar = () => {
       ctx.emit('show')
     }
+    const title = computed(() => {
+      const path: String = context.route.value.path
+      const splitPath: any = path.split('/')
+      const filterPaths = splitPath.filter((element: String) => {
+        return element !== ''
+      })
+      const lastPath: String = filterPaths[filterPaths.length - 1]
+      return lastPath
+    })
+    const appStore = mainStore()
+    const auth = appStore.getLoggedInUser
+    const logout = () => {
+      appStore.user = null
+      localStorage.removeItem('user')
+      router.push('/')
+    }
     return {
       userMenu,
       showMobileSidebar,
+      auth,
+      logout,
+      title,
     }
   },
 })

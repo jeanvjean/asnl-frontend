@@ -8,7 +8,7 @@
         </p>
         <div class="relative space-x-4 flex justify-between">
           <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
-            1834
+            {{ stat.totalCylinders }}
           </p>
           <svg
             width="120"
@@ -40,7 +40,7 @@
         </p>
         <div class="relative space-x-4 flex justify-between">
           <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
-            1399
+            {{ stat.totalBufferCylinders }}
           </p>
           <svg
             width="120"
@@ -71,7 +71,9 @@
           Total Assigned Cylinders
         </p>
         <div class="relative space-x-4 flex justify-between">
-          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">435</p>
+          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
+            {{ stat.totalAssignedCylinders }}
+          </p>
           <svg
             width="120"
             height="69"
@@ -132,9 +134,15 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
-import TableComponent from '~/components/Base/Table3.vue'
-import NewCylinder from '~/components/Overlays/NewCylinder.vue'
+import {
+  defineComponent,
+  ref,
+  onBeforeMount,
+  reactive,
+} from '@nuxtjs/composition-api'
+import TableComponent from '@/components/Base/Table3.vue'
+import NewCylinder from '@/components/Overlays/NewCylinder.vue'
+import { CylinderRepository } from '@/module/Cylinder'
 export default defineComponent({
   name: 'Analytics',
   components: { TableComponent, NewCylinder },
@@ -148,6 +156,20 @@ export default defineComponent({
       'Cylinder Type',
       'Date Cylinder',
     ]
+    const cylinderObject = new CylinderRepository()
+    const stat = reactive({
+      totalCylinders: 0,
+      totalBufferCylinders: 0,
+      totalAssignedCylinders: 0,
+    })
+    onBeforeMount(() => {
+      cylinderObject.getCylinders().then((response: any) => {
+        const myResponse = response.data.data
+        stat.totalCylinders = myResponse.counts.totalCylinders
+        stat.totalBufferCylinders = myResponse.counts.totalBufferCylinders
+        stat.totalBufferCylinders = myResponse.counts.totalAssignedCylinders
+      })
+    })
     const body = [
       {
         cylinder_number: 'ASNL-LUTH-1209',
@@ -195,6 +217,7 @@ export default defineComponent({
       headers,
       body,
       showRegister,
+      stat,
     }
   },
 })

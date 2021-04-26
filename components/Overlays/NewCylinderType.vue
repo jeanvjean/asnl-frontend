@@ -20,24 +20,30 @@
         <input-component
           :label-title="'Gas Name'"
           :input-placeholder="'Enter Gas Name'"
+          @get="form.gasName = $event.value"
         />
         <input-component
           :label-title="'Color Code'"
           :input-placeholder="'Enter Color Code'"
+          @get="form.colorCode = $event.value"
         />
         <button-component
           :button-text="'Create Cylinder Type'"
+          :loading-status="loading.status"
+          :loading-text="loading.text"
           :button-class="'bg-purple-600 text-white rounded-sm my-6'"
+          @buttonClicked="createCylinder"
         />
       </div>
     </div>
   </back-drop>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
-import BackDrop from '~/components/Base/Backdrop.vue'
-import InputComponent from '~/components/Form/Input.vue'
-import ButtonComponent from '~/components/Form/Button.vue'
+import { defineComponent, reactive, useContext } from '@nuxtjs/composition-api'
+import BackDrop from '@/components/Base/Backdrop.vue'
+import InputComponent from '@/components/Form/Input.vue'
+import ButtonComponent from '@/components/Form/Button.vue'
+import { CylinderRepository } from '@/module/Cylinder'
 
 export default defineComponent({
   components: {
@@ -46,12 +52,42 @@ export default defineComponent({
     ButtonComponent,
   },
   setup(_props, ctx) {
+    const mainContext = useContext()
     const close = () => {
       ctx.emit('close')
     }
+    const loading = reactive({
+      text: 'Submitting',
+      status: false,
+    })
+    const form = reactive({
+      gasName: '',
+      colorCode: '',
+    })
+    const cylinderObject = new CylinderRepository()
 
+    const createCylinder = () => {
+      if (!form.gasName && !form.colorCode) {
+        mainContext.$toast.global.required()
+      } else {
+        loading.status = true
+        cylinderObject
+          .createCylinder(form)
+          .then(() => {
+            ctx.emit('close')
+            form.gasName = ''
+            form.colorCode = ''
+          })
+          .finally(() => {
+            loading.status = false
+          })
+      }
+    }
     return {
       close,
+      loading,
+      form,
+      createCylinder,
     }
   },
 })

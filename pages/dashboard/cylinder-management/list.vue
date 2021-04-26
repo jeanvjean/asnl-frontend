@@ -171,8 +171,8 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from '@nuxtjs/composition-api'
-import TableComponent from '~/components/Base/Table3.vue'
-import NewCylinder from '~/components/Overlays/NewCylinder.vue'
+import TableComponent from '@/components/Base/Table3.vue'
+import NewCylinder from '@/components/Overlays/NewCylinder.vue'
 export default defineComponent({
   name: 'Analytics',
   components: { TableComponent, NewCylinder },

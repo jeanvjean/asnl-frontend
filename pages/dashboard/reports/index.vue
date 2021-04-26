@@ -170,8 +170,8 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-import Pagination from '~/components/Base/Pagination.vue'
-import SearchComponent from '~/components/Base/Search.vue'
+import Pagination from '@/components/Base/Pagination.vue'
+import SearchComponent from '@/components/Base/Search.vue'
 export default defineComponent({
   name: 'Reports',
   components: { Pagination, SearchComponent },

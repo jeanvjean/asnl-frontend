@@ -26,9 +26,9 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from '@nuxtjs/composition-api'
-import TableComponent from '~/components/Base/Table2.vue'
-import NewCylinderType from '~/components/Overlays/NewCylinderType.vue'
-import Card from '~/components/Base/Card.vue'
+import TableComponent from '@/components/Base/Table2.vue'
+import NewCylinderType from '@/components/Overlays/NewCylinderType.vue'
+import Card from '@/components/Base/Card.vue'
 export default defineComponent({
   name: 'CylinderPool',
   components: { TableComponent, NewCylinderType, Card },

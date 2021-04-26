@@ -42,7 +42,6 @@
                 </svg>
               </div>
               <input
-                id="search_field"
                 class="block border rounded-sm border-gray-300 w-full text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 px-10 py-4 sm:text-sm"
                 placeholder="Search for Users"
                 type="search"
@@ -62,11 +61,11 @@
             </svg>
           </button>
           <button
-            class="flex justify-around items-center bg-purple-600 px-4 space-x-4 h-auto text-white font-semibold text-md rounded-sm"
+            class="flex items-center bg-purple-600 px-4 space-x-2 h-auto text-white font-semibold text-md rounded-sm"
             @click="show"
           >
             <svg
-              class="w-4 h-4 fill-current text-white"
+              class="w-3 h-3 fill-current text-white"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 341.4 341.4"
             >
@@ -74,7 +73,7 @@
                 d="M192 149.4V0h-42.6v149.4H0V192h149.4v149.4H192V192h149.4v-42.6z"
               />
             </svg>
-            <span class="text-sm">Register</span>
+            <span class="text-sm">Create</span>
           </button>
         </div>
       </div>

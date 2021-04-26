@@ -162,21 +162,66 @@
                 >
               </div>
             </div>
-            <a
-              href="#"
-              class="text-white group px-4 py-4 rounded-md flex items-center space-x-6"
-            >
-              <svg
-                class="text-gray-300 mr-3 h-6 w-6 fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
+            <div class="w-full">
+              <button
+                class="text-white px-4 py-4 rounded-md flex justify-between w-full link-block focus:outline-none"
+                @click="toggleVehicle = !toggleVehicle"
               >
-                <path
-                  d="M7 8a4 4 0 110-8 4 4 0 010 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 017 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 11-1.33 7.76 5.96 5.96 0 000-7.52C12.1.1 12.53 0 13 0z"
-                />
-              </svg>
-              <span class="font-light font-xl">Vehicle Mgt</span>
-            </a>
+                <div class="flex space-x-6">
+                  <svg
+                    class="text-gray-300 mr-3 h-6 w-6 fill-current"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M7 8a4 4 0 110-8 4 4 0 010 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 017 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 11-1.33 7.76 5.96 5.96 0 000-7.52C12.1.1 12.53 0 13 0z"
+                    />
+                  </svg>
+
+                  <span class="font-light font-xl">Vehicle</span>
+                </div>
+                <svg
+                  v-if="!toggleVehicle"
+                  class="w-6 h-6 fill-current text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                  />
+                </svg>
+                <svg
+                  v-else
+                  class="w-6 h-6 fill-current text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z"
+                  />
+                </svg>
+              </button>
+              <div
+                v-if="toggleVehicle"
+                class="text-white ml-16 px-2 bg-dark-blue bg-opacity-50 link-list"
+              >
+                <router-link
+                  to="/dashboard/vehicle-management/"
+                  class="block px-2 py-2"
+                  >All Vehicles</router-link
+                >
+                <router-link
+                  to="/dashboard/vehicle-management/route-plan"
+                  class="block px-2 py-2"
+                  >Route Plan</router-link
+                >
+                <router-link
+                  to="/dashboard/vehicle-management/vehicle-performance"
+                  class="block px-2 py-2"
+                  >Vehicle Performance</router-link
+                >
+              </div>
+            </div>
             <div class="w-full">
               <button
                 class="text-white px-4 py-4 rounded-md flex justify-between w-full link-block focus:outline-none"
@@ -295,11 +340,13 @@ export default defineComponent({
     const toggleCylinder = ref(false)
     const toggleInventory = ref(false)
     const toggleReport = ref(false)
+    const toggleVehicle = ref(false)
 
     return {
       toggleCylinder,
       toggleInventory,
       toggleReport,
+      toggleVehicle,
     }
   },
 })

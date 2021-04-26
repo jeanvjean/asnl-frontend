@@ -43,17 +43,29 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
-import Driver from '~/components/Overlays/Driver.vue'
+import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
+import Driver from '@/components/Overlays/Driver.vue'
+import { DriverRepository } from '@/module/Driver'
 export default defineComponent({
   name: 'Drivers',
   components: { Driver },
   layout: 'dashboard',
   setup() {
     const showDriver = ref(false)
+    const drivers = ref([])
+    const driverObject = new DriverRepository()
 
+    const getDrivers = () => {
+      driverObject.getDrivers().then((response: any) => {
+        // eslint-disable-next-line no-console
+        console.log(response)
+      })
+    }
+
+    onMounted(getDrivers)
     return {
       showDriver,
+      drivers,
     }
   },
 })

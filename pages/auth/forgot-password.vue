@@ -21,7 +21,7 @@
       />
     </form>
     <div class="mt-4 font-thin text-gray-600 w-full">
-      <nuxt-link to="/auth" class="text-center underline block"
+      <nuxt-link to="/" class="text-center underline block"
         >Back to Sign-in</nuxt-link
       >
     </div>
@@ -29,8 +29,8 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-import Input from '~/components/Form/Input.vue'
-import Button from '~/components/Form/Button.vue'
+import Input from '@/components/Form/Input.vue'
+import Button from '@/components/Form/Button.vue'
 export default defineComponent({
   name: 'Landing',
   components: { Input, Button },
