@@ -20,16 +20,19 @@
         <select-component
           :label-title="'Driver'"
           :default-option-text="'Select Driver'"
-          :select-array="[]"
+          :select-array="drivers"
+          @get="form.driver = $event.value"
         />
         <input-component
           :label-title="'Comments'"
           :input-placeholder="'Enter Comments'"
+          @get="form.comment = $event.value"
         />
         <button-component
           :button-text="'Assign'"
           :button-class="'bg-purple-600 text-white rounded-sm mt-2'"
-          @buttonClicked="approve"
+          :loading-status="loading"
+          @buttonClicked="assignDriverAction"
         />
 
         <button-component
@@ -42,12 +45,17 @@
   </back-drop>
 </template>
 <script lang="ts">
-import { defineComponent, reactive } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  reactive,
+  ref,
+  useContext,
+} from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
-
+import { VehicleRepository } from '@/module/Vehicle'
 export default defineComponent({
   components: {
     BackDrop,
@@ -55,22 +63,48 @@ export default defineComponent({
     SelectComponent,
     ButtonComponent,
   },
+  props: {
+    drivers: {
+      type: Array,
+      required: true,
+    },
+  },
   setup(_props, ctx) {
+    const vehicleObject = new VehicleRepository()
+    const context = useContext()
     const close = () => {
       ctx.emit('close')
     }
+    const form = reactive({
+      comment: '',
+      driver: '',
+    })
     const approve = () => {
       ctx.emit('approve')
     }
-    const loading = reactive({
-      text: 'Submitting',
-      status: false,
-    })
 
+    const assignDriverAction = () => {
+      if (!form.comment || !form.driver) {
+        context.$toast.global.required()
+      } else {
+        loading.value = true
+        vehicleObject
+          .assignDriver(form)
+          .then(() => {
+            approve()
+          })
+          .finally(() => {
+            loading.value = false
+          })
+      }
+    }
+    const loading = ref(false)
     return {
       close,
       loading,
       approve,
+      form,
+      assignDriverAction,
     }
   },
 })

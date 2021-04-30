@@ -1,5 +1,5 @@
 <template>
-  <div class="py-6 space-y-2">
+  <div :key="key" class="py-6 space-y-2">
     <div class="px-4 sm:px-6 md:px-8 w-full text-black font-semibold text-lg">
       User Management
     </div>
@@ -44,29 +44,32 @@
             <input-field
               :label-title="'Name'"
               :input-placeholder="'Chance Collins'"
-              @get="form.name = $event.value"
+              @get="name = $event.value"
             ></input-field>
             <input-field
               :label-title="'Email Address'"
               :input-type="'email'"
               :input-placeholder="'chance@airseparation.com'"
-              @get="form.email = $event.value"
+              @get="email = $event.value"
+            ></input-field>
+            <input-field
+              :label-title="'Phone Number'"
+              :input-type="'text'"
+              :input-placeholder="'Enter Phone Number'"
+              @get="phone = $event.value"
             ></input-field>
             <select-input
               :label-title="'Department'"
               :default-option-text="'Select a Department'"
               :select-array="departments"
-              @get="
-                form.role = $event.value
-                getSubRoles()
-              "
+              @get="role = $event.value"
             ></select-input>
 
             <select-input
               :label-title="'Role'"
               :default-option-text="'Select a Role'"
               :select-array="subroles"
-              @get="form.subrole = $event.value"
+              @get="subrole = $event.value"
             ></select-input>
 
             <button
@@ -125,7 +128,7 @@
 import {
   defineComponent,
   onMounted,
-  reactive,
+  watch,
   ref,
   useContext,
 } from '@nuxtjs/composition-api'
@@ -151,37 +154,48 @@ export default defineComponent({
       'Report',
     ]
 
-    const form = reactive({
-      name: '',
-      email: '',
-      role: '',
-      subrole: '',
-    })
+    const name = ref('')
+    const email = ref('')
+    const role = ref('')
+    const subrole = ref('')
+    const phone = ref('')
 
-    const getSubRoles = () => {
-      subroles.value = []
-      if (form.role !== '') {
+    watch(role, () => {
+      if (role.value !== '') {
         myResponse.value.forEach((element: any) => {
-          if (element.role === form.role) {
-            subroles.value = element.subroles
+          if (element.role === role.value) {
+            subroles.value = element.subroles.map((el: any) => {
+              return {
+                name: el,
+                value: el,
+              }
+            })
           }
         })
       }
-    }
+    })
 
     const inviteUser = () => {
       if (
-        form.name !== '' &&
-        form.email !== '' &&
-        form.role !== '' &&
-        form.subrole !== ''
+        !name.value ||
+        !email.value ||
+        !role.value ||
+        !subrole.value ||
+        !phone.value
       ) {
         context.$toast.global.required()
       } else {
-        console.log(form)
-        // userObject.inviteUser(form).finally(() => {
-        //   form.name = form.email = form.role = form.subrole = ''
-        // })
+        const form = {
+          name: name.value,
+          email: email.value,
+          role: role.value,
+          subrole: subrole.value,
+          phoneNumber: phone.value,
+        }
+        userObject.inviteUser(form).then(() => {
+          name.value = email.value = role.value = subrole.value = ''
+          key.value++
+        })
       }
     }
 
@@ -189,19 +203,24 @@ export default defineComponent({
       userObject.fetchRoles().then((response: any) => {
         myResponse.value = response.data.data
         const filterRoles = myResponse.value.map((element: any) => {
-          return element.role
+          return { name: element.role, value: element.role }
         })
         departments.value = filterRoles
       })
     })
+    const key = ref(1)
 
     return {
       departments,
       subroles,
       permissions,
-      form,
-      getSubRoles,
+      name,
+      email,
+      role,
+      subrole,
       inviteUser,
+      key,
+      phone,
     }
   },
 })

@@ -17,6 +17,10 @@ class UserRepository {
   async fetchRoles() {
     return await $axios.get('/user/get-roles')
   }
+
+  async deleteUser(userId: number) {
+    return await $axios.delete('/user/delete-user/' + userId)
+  }
 }
 
 export { UserRepository }

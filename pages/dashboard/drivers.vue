@@ -10,10 +10,10 @@
         class="grid grid-rows-1 lg:grid-cols-3 xl:grid-cols-4 gap-y-4 lg:gap-x-6 mt-6"
       >
         <button
-          v-for="i in 5"
-          :key="i"
+          v-for="(driver, index) in drivers"
+          :key="index"
           class="flex px-4 py-4 border border-gray-300 bg-gray-200 space-x-4 focus:outline-none focus:border-purple-500 rounded-sm"
-          @click="showDriver = true"
+          @click="getDriver(index)"
         >
           <img
             class="h-12 w-12 rounded-full"
@@ -22,14 +22,18 @@
           />
           <div>
             <div class="mb-4">
-              <p class="text-left text-black font-medium text-lg tracking-wide">
-                Chinedu Omunyere
+              <p
+                class="capitalize text-left text-black font-medium text-lg tracking-wide"
+              >
+                {{ driver.name }}
               </p>
-              <p class="text-left text-gray-600 font-light text-sm">Driver</p>
+              <p class="capitalize text-left text-gray-600 font-light text-sm">
+                {{ driver.subrole }}
+              </p>
             </div>
             <div>
               <p class="text-left text-black font-medium text-lg tracking-wide">
-                0708 099 8909
+                {{ driver.phoneNumber }}
               </p>
               <p class="text-left text-gray-600 font-light text-sm">
                 Air Separation, Jos.
@@ -39,7 +43,11 @@
         </button>
       </div>
     </div>
-    <driver v-if="showDriver" @close="showDriver = false" />
+    <driver
+      v-if="showDriver"
+      :driver="clickedUser"
+      @close="showDriver = false"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -54,18 +62,24 @@ export default defineComponent({
     const showDriver = ref(false)
     const drivers = ref([])
     const driverObject = new DriverRepository()
-
+    const clickedUser = ref()
     const getDrivers = () => {
       driverObject.getDrivers().then((response: any) => {
-        // eslint-disable-next-line no-console
-        console.log(response)
+        drivers.value = response.data.data
       })
+    }
+
+    function getDriver(i: number) {
+      clickedUser.value = drivers.value[i]
+      showDriver.value = true
     }
 
     onMounted(getDrivers)
     return {
       showDriver,
       drivers,
+      getDriver,
+      clickedUser,
     }
   },
 })

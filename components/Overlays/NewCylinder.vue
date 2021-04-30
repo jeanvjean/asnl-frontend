@@ -23,6 +23,7 @@
         <select-component
           :label-title="'Cylinder Type'"
           :select-array="cylinderTypes"
+          :default-option-text="'Select a Cylinder Type'"
         />
         <input-component
           :label-title="'Original Cylinder Number'"
@@ -39,6 +40,7 @@
             >Gas Volume Content</label
           ><input
             placeholder="Enter Amount"
+            type="number"
             class="block w-full px-4 py-3 border-2 border-gray-200 rounded focus:outline-none focus:border-purple-300 font-thin placeholder-black hover:placeholder-opacity-25"
           />
           <select
@@ -50,6 +52,7 @@
 
         <input-component
           :label-title="'Date of Manufacture'"
+          :input-type="'date'"
           :input-placeholder="'Select Date Here'"
         />
         <input-component
@@ -58,13 +61,18 @@
         />
         <select-component
           :label-title="'Cylinder Assigned To'"
+          :default-option-text="'Select Customer'"
           :select-array="assignedTypes"
         />
         <input-component
           :label-title="'Testing Pressure'"
           :input-placeholder="'Enter Working Pressure here (bar)'"
         />
-        <select-component :label-title="'Gas Type'" :select-array="gasTypes" />
+        <select-component
+          :label-title="'Gas Type'"
+          :select-array="gasTypes"
+          :default-option-text="'Select Gas Type'"
+        />
         <input-component
           :label-title="'Standard Cylinder Color Code'"
           :input-placeholder="'Green'"
@@ -108,20 +116,36 @@
   </back-drop>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
-// import { CylinderRepository } from '@/module/Cylinder'
+import { CylinderRepository } from '@/module/Cylinder'
 export default defineComponent({
   components: { BackDrop, InputComponent, SelectComponent },
   setup(_props, ctx) {
-    const cylinderTypes = ['Buffer']
+    const cylinderObject = new CylinderRepository()
+    const cylinderTypes = [
+      { name: 'Buffer', value: 'buffer' },
+      { name: 'Assigned', value: 'assigned' },
+    ]
     const assignedTypes = ['UCH']
-    const gasTypes = ['Propane', 'Butane']
+    const gasTypes = ref([])
     const close = () => {
       ctx.emit('close')
     }
+
+    onMounted(() => {
+      cylinderObject.getCylinders().then((response) => {
+        const myResponse = response.data.data.cylinders
+        gasTypes.value = myResponse.map((element: any) => {
+          return {
+            name: element.gasName + ' - ' + element.colorCode,
+            value: element._id,
+          }
+        })
+      })
+    })
     return {
       cylinderTypes,
       assignedTypes,

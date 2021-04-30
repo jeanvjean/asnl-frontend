@@ -59,15 +59,15 @@
               /><span>{{ bodySingle.name }}</span>
             </div>
           </td>
-          <td class="px-4 text-left py-4">{{ bodySingle.phone }}</td>
+          <td class="px-4 text-left py-4">{{ bodySingle.phoneNumber }}</td>
           <td class="px-4 text-left py-4">{{ bodySingle.email }}</td>
           <td class="px-4 text-left py-4">
             <span class="px-8 py-2 bg-green-100 text-green-400">{{
               bodySingle.role
             }}</span>
           </td>
-          <td class="px-4 py-4">
-            <button class="mx-auto text-black w-6 h-6 relative icon-button">
+          <td class="px-4 py-4 icon-button">
+            <button class="mx-auto text-black w-6 h-6 relative">
               <svg
                 class="fill-current"
                 xmlns="http://www.w3.org/2000/svg"
@@ -88,6 +88,10 @@
               </button>
               <button
                 class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
+                @click="
+                  changeUser(index)
+                  showDeleteUser = true
+                "
               >
                 Delete User
               </button>
@@ -101,16 +105,22 @@
         </tr>
       </tbody>
     </table>
+    <delete-user
+      v-if="showDeleteUser"
+      :user="hoverUser"
+      @close="showDeleteUser = false"
+      @refresh="emitToParent"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, ref } from '@nuxtjs/composition-api'
 import AddUserButton from '@/components/Clickables/AddUser.vue'
 import SearchComponent from '@/components/Base/Search.vue'
-
+import DeleteUser from '@/components/Overlays/DeleteUser.vue'
 export default defineComponent({
-  components: { AddUserButton, SearchComponent },
+  components: { AddUserButton, SearchComponent, DeleteUser },
   props: {
     head: {
       type: Array,
@@ -121,6 +131,25 @@ export default defineComponent({
       required: true,
     },
   },
+  setup(_props, ctx) {
+    const showDeleteUser = ref(false)
+    const hoverUser = ref()
+
+    function changeUser(i: number) {
+      hoverUser.value = _props.body[i]
+    }
+
+    const emitToParent = () => {
+      ctx.emit('refresh')
+    }
+
+    return {
+      showDeleteUser,
+      hoverUser,
+      changeUser,
+      emitToParent,
+    }
+  },
 })
 </script>
 
@@ -128,10 +157,10 @@ export default defineComponent({
 .action-menu {
   display: none;
 }
-.icon-button:hover ~ .action-menu {
+.icon-button:hover > .action-menu {
   display: block;
 }
-.icon-button:focus ~ .action-menu {
+.icon-button:focus > .action-menu {
   display: block;
 }
 </style>

@@ -7,10 +7,6 @@ class CylinderRepository {
   async createCylinder(requestParameters: Object) {
     return await $axios.post('/cylinder/create-cylinder', requestParameters)
   }
-
-  async getCylinderTypes() {
-    return await $axios.get('/cylinder/fetch-cylinders')
-  }
 }
 
 export { CylinderRepository }

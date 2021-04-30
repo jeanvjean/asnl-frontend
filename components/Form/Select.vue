@@ -13,12 +13,12 @@
         {{ defaultOptionText }}
       </option>
       <option
-        v-for="(value, index) in selectArray"
+        v-for="(row, index) in selectArray"
         :key="index"
-        :value="value"
+        :value="row.value"
         class="text-black"
       >
-        {{ value }}
+        {{ row.name }}
       </option>
     </select>
   </div>

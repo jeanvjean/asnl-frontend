@@ -94,14 +94,14 @@
                 class="focus:outline-none focus:text-purple-500"
                 @click="showSingleVehicle = true"
               >
-                {{ bodySingle.name }}
+                {{ bodySingle.vehCategory }}
               </button>
             </td>
-            <td class="px-4 text-center py-4">{{ bodySingle.vehicle_no }}</td>
-            <td class="px-4 text-center py-4">{{ bodySingle.make }}</td>
-            <td class="px-4 text-center py-4">{{ bodySingle.type }}</td>
-            <td class="px-4 text-center py-4">{{ bodySingle.model }}</td>
-            <td class="px-4 text-center py-4">{{ bodySingle.mileage }}</td>
+            <td class="px-4 text-center py-4">{{ bodySingle.regNo }}</td>
+            <td class="px-4 text-center py-4">{{ bodySingle.manufacturer }}</td>
+            <td class="px-4 text-center py-4">{{ bodySingle.vehicleType }}</td>
+            <td class="px-4 text-center py-4">{{ bodySingle.vModel }}</td>
+            <td class="px-4 text-center py-4">{{ bodySingle.currMile }}</td>
             <td class="px-4 text-center py-4 icon-button">
               <button class="mx-auto text-black w-6 h-6 relative">
                 <svg
@@ -120,7 +120,7 @@
                 <button
                   type="button"
                   class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
-                  @click="showAssignDriver = true"
+                  @click="fetchDrivers()"
                 >
                   Assign Driver
                 </button>
@@ -211,6 +211,7 @@
     </div>
     <assign-driver
       v-if="showAssignDriver"
+      :drivers="drivers"
       @close="showAssignDriver = false"
       @approve="
         showAssignDriver = false
@@ -231,12 +232,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import AssignDriver from '@/components/Overlays/AssignDriver.vue'
 import finalStep from '@/components/Overlays/finalStep.vue'
 import singleVehicle from '@/components/Overlays/SingleVehicle.vue'
+import { VehicleRepository } from '@/module/Vehicle'
+import { DriverRepository } from '@/module/Driver'
 export default defineComponent({
   name: 'Reports',
   components: {
@@ -248,29 +251,47 @@ export default defineComponent({
   },
   layout: 'dashboard',
   setup() {
+    const vehicleObject = new VehicleRepository()
+    const driverObject = new DriverRepository()
     const defaultState = ref(false)
     const showAssignDriver = ref(false)
     const showFinalStep = ref(false)
     const showSingleVehicle = ref(false)
     const headers = [
-      'Vehicle Name',
-      'Vehicle No',
-      'Vehicle Make',
+      'Vehicle Category',
+      'Registration No',
+      'Manufacturer',
       'Vehicle Type',
       'Vehicle Model',
       'Latest Mileage',
       'Action',
     ]
-    const body = [
-      {
-        name: 'Nissan Prime',
-        vehicle_no: '#AAA456JK',
-        make: 'Sample Make',
-        type: 'Sample Type ',
-        model: 'Simple Model',
-        mileage: '2600 miles',
-      },
-    ]
+    const body = ref()
+    const drivers = ref()
+    const fetchVehicles = () => {
+      vehicleObject.fetchVehicles().then((response: any) => {
+        body.value = response
+      })
+    }
+    const fetchDrivers = () => {
+      driverObject
+        .getDrivers()
+        .then((response: any) => {
+          const driverResponse = response.data.data
+          drivers.value = driverResponse.map((el: any) => {
+            return {
+              name: el.name,
+              value: el._id,
+            }
+          })
+        })
+        .finally(() => {
+          showAssignDriver.value = true
+        })
+    }
+    onMounted(() => {
+      fetchVehicles()
+    })
     return {
       headers,
       body,
@@ -278,6 +299,8 @@ export default defineComponent({
       showAssignDriver,
       showFinalStep,
       showSingleVehicle,
+      fetchDrivers,
+      drivers,
     }
   },
 })

@@ -10,6 +10,7 @@
       :placeholder="inputPlaceholder"
       class="appearance-none block w-full px-4 py-3 border-2 border-gray-200 rounded-md focus:outline-none focus:border-purple-400 font-thin placeholder-gray-500 focus:placeholder-gray-300"
       @keyup="returnValue"
+      @change="returnValue"
     />
   </div>
 </template>

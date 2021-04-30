@@ -2,7 +2,9 @@
   <back-drop>
     <div class="w-full h-full bg-gray-200">
       <div class="flex justify-between px-10 py-6 bg-white">
-        <h1 class="tracking-wide font-semibold text-black">CHINEDU ONUNERE</h1>
+        <h1 class="tracking-wide font-semibold text-black uppercase">
+          {{ driver.name }}
+        </h1>
         <svg
           class="w-6 h-6 fill-current text-gray-400"
           xmlns="http://www.w3.org/2000/svg"
@@ -28,10 +30,12 @@
           />
           <div>
             <div>
-              <p class="text-left text-black font-medium text-md">
-                Chinedu Omunyere
+              <p class="text-left text-black font-medium text-md capitalize">
+                {{ driver.name }}
               </p>
-              <p class="text-left text-gray-600 font-light text-sm">Driver</p>
+              <p class="text-left text-gray-600 font-light text-sm">
+                {{ driver.subrole }}
+              </p>
             </div>
           </div>
         </div>
@@ -162,11 +166,16 @@ export default defineComponent({
   components: {
     BackDrop,
   },
+  props: {
+    driver: {
+      type: Object,
+      required: true,
+    },
+  },
   setup(_props, ctx) {
     const close = () => {
       ctx.emit('close')
     }
-
     return {
       close,
     }

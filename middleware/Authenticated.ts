@@ -8,7 +8,7 @@ const Authenticated: Middleware = ({ redirect }) => {
   if (auth && token) {
     let path
     if (!auth.isVerified) {
-      path = '/dashboard'
+      path = '/auth/change-password'
     } else {
       path = '/dashboard'
     }

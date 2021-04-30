@@ -79,7 +79,7 @@
     </div>
     <div v-else class="mx-auto px-4 sm:px-6 md:px-8 w-full">
       <div class="bg-white shadow-sm rounded h-full px-4">
-        <TableComponent :head="headers" :body="body" />
+        <TableComponent :head="headers" :body="body" @refresh="getUsers" />
       </div>
     </div>
   </div>
@@ -98,6 +98,7 @@ export default defineComponent({
     const userObject = new UserRepository()
     const body = ref([])
     const getUsers = () => {
+      console.log('Gotten here')
       userObject.getUsers().then((response: any) => {
         const myResponse = response.data.data
         body.value = myResponse
@@ -110,6 +111,7 @@ export default defineComponent({
       headers,
       body,
       defaultState,
+      getUsers,
     }
   },
 })
