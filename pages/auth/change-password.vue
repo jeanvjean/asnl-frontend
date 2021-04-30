@@ -93,7 +93,7 @@ export default defineComponent({
             loading.text = 'Retrieving user'
             userObject.getUser(userId, email).then((response: any) => {
               appStore.saveUser(response.data.data)
-              router.push('/dashboard')
+              router.push('/auth/account-setup')
             })
           })
           .finally(() => {

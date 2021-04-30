@@ -42,21 +42,10 @@
           </div>
           <form action="" class="w-full">
             <input-field
-              :label-title="'Name'"
-              :input-placeholder="'Chance Collins'"
-              @get="name = $event.value"
-            ></input-field>
-            <input-field
               :label-title="'Email Address'"
               :input-type="'email'"
               :input-placeholder="'chance@airseparation.com'"
               @get="email = $event.value"
-            ></input-field>
-            <input-field
-              :label-title="'Phone Number'"
-              :input-type="'text'"
-              :input-placeholder="'Enter Phone Number'"
-              @get="phone = $event.value"
             ></input-field>
             <select-input
               :label-title="'Department'"
@@ -154,11 +143,9 @@ export default defineComponent({
       'Report',
     ]
 
-    const name = ref('')
     const email = ref('')
     const role = ref('')
     const subrole = ref('')
-    const phone = ref('')
 
     watch(role, () => {
       if (role.value !== '') {
@@ -176,24 +163,16 @@ export default defineComponent({
     })
 
     const inviteUser = () => {
-      if (
-        !name.value ||
-        !email.value ||
-        !role.value ||
-        !subrole.value ||
-        !phone.value
-      ) {
+      if (!email.value || !role.value || !subrole.value) {
         context.$toast.global.required()
       } else {
         const form = {
-          name: name.value,
           email: email.value,
           role: role.value,
           subrole: subrole.value,
-          phoneNumber: phone.value,
         }
         userObject.inviteUser(form).then(() => {
-          name.value = email.value = role.value = subrole.value = ''
+          email.value = role.value = subrole.value = ''
           key.value++
         })
       }
@@ -214,13 +193,11 @@ export default defineComponent({
       departments,
       subroles,
       permissions,
-      name,
       email,
       role,
       subrole,
       inviteUser,
       key,
-      phone,
     }
   },
 })

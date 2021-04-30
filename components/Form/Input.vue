@@ -15,7 +15,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   props: {
@@ -32,12 +32,22 @@ export default defineComponent({
       required: false,
       default: 'text',
     },
+    defaultValue: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
   setup(_props, ctx) {
     const inputValue = ref('')
     const returnValue = () => {
       ctx.emit('get', inputValue)
     }
+    onMounted(() => {
+      if (_props.defaultValue) {
+        inputValue.value = _props.defaultValue
+      }
+    })
     return {
       returnValue,
       inputValue,

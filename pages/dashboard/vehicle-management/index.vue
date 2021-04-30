@@ -221,7 +221,7 @@
     <final-step
       v-if="showFinalStep"
       :status="'success'"
-      :message="'You have successfully assigned Chinedu Onunyere a vehicle'"
+      :message="'Driver has been assigned successfully'"
       @close="showFinalStep = false"
     />
     <single-vehicle

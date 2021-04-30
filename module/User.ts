@@ -10,6 +10,10 @@ class UserRepository {
     })
   }
 
+  async updateUser(requestParameters: Object, userId: String) {
+    return await $axios.post('/user/update-user/' + userId, requestParameters)
+  }
+
   async getUsers() {
     return await $axios.get('/user/get-users')
   }
