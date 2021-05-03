@@ -5,5 +5,13 @@ export class ProductRepository {
     return await $axios.post('/inventory/create-product', request)
   }
 
-  // async getProducts(request: Object) {}
+  async getProducts() {
+    return await $axios.get('/inventory/fetch-products').then((response) => {
+      return response.data.data
+    })
+  }
+
+  async createSupplier(request: Object) {
+    return await $axios.post('/inventory/create-supplier', request)
+  }
 }

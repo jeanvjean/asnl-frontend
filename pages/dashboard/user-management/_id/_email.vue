@@ -31,9 +31,19 @@
       <div class="py-8 space-y-4">
         <h1 class="inline-block text-xl font-medium">Contact Information</h1>
 
-        <div v-for="(element, index) in contact" :key="index" class="space-y-1">
-          <p class="text-gray-400 capitalize">{{ index }}</p>
-          <p class="text-black">{{ element }}</p>
+        <div class="space-y-1">
+          <p class="text-gray-400 capitalize">Full Name</p>
+          <p v-if="user" class="text-black">{{ user['name'] | isValue }}</p>
+        </div>
+        <div class="space-y-1">
+          <p class="text-gray-400 capitalize">Email Address</p>
+          <p v-if="user" class="text-black">{{ user['email'] | isValue }}</p>
+        </div>
+        <div class="space-y-1">
+          <p class="text-gray-400 capitalize">Phone Number</p>
+          <p v-if="user" class="text-black">
+            {{ user['phoneNumber'] | isValue }}
+          </p>
         </div>
       </div>
     </div>
@@ -56,21 +66,52 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onBeforeMount,
+  onMounted,
+  ref,
+  useRoute,
+  useRouter,
+} from '@nuxtjs/composition-api'
+import { UserRepository } from '@/module/User'
 
 export default defineComponent({
   name: 'Profile',
+  filters: {
+    isValue(value: string) {
+      let result
+      if (value) {
+        result = value
+      } else {
+        result = 'Not Specified By User'
+      }
+
+      return result
+    },
+  },
   layout: 'dashboard',
   setup() {
-    const contact = {
-      email: 'chioma.assurance@airseparation.com',
-      phone: '08023124567',
-      gender: 'Female',
-      location: 'Jos',
-    }
+    const route = useRoute()
+    const router = useRouter()
+    const userId = route.value.params.id
+    const email = route.value.params.email
+    const userObject = new UserRepository()
+    const user = ref()
+    onBeforeMount(() => {
+      if (!userId || !email) {
+        router.push('/user-management/')
+      }
+    })
+
+    onMounted(() => {
+      userObject.getUser(userId, email).then((response) => {
+        user.value = response.data.data
+      })
+    })
 
     return {
-      contact,
+      user,
     }
   },
 })

@@ -23,47 +23,51 @@
             </svg>
           </div>
         </div>
-        <div class="w-full flex my-6 space-x-8">
-          <h1 class="py-2 border-b border-purple-500">General Inventories</h1>
-          <h1 class="py-2">Product (Gas Refill)</h1>
-        </div>
         <div
           class="grid grid-rows-1 lg:grid-cols-2 gap-y-4 lg:gap-x-4 lg:gap-y-1 my-4"
         >
           <select-component
             :label-title="'Product Type'"
-            :default-option-text="'Multiple Select'"
-            :select-array="[]"
+            :default-option-text="'Select Product Type'"
+            :select-array="gasTypes"
+            @get="formInputs.productType = $event.value"
           />
           <input-component
             :label-title="'Name'"
             :input-placeholder="'Enter Name'"
+            @get="formInputs.name = $event.value"
           />
           <input-component
             :label-title="'Location'"
             :input-placeholder="'Enter Location'"
+            @get="formInputs.location = $event.value"
           />
           <input-component
             :label-title="'Contact Person'"
             :input-placeholder="'Enter contact person'"
+            @get="formInputs.contactPerson = $event.value"
           />
           <input-component
             :label-title="'Email address'"
             :input-placeholder="'Enter Email Address'"
+            @get="formInputs.emailAddress = $event.value"
           />
           <input-component
             :label-title="'Telephone No'"
             :input-placeholder="'Enter Telephone'"
+            @get="formInputs.phoneNumber = $event.value"
           />
           <select-component
             :label-title="'Supplier Type'"
             :default-option-text="'Select Supplier Type'"
-            :select-array="[]"
+            :select-array="supplierTypes"
+            @get="formInputs.supplierType = $event.value"
           />
         </div>
         <div>
           <button
             class="bg-purple-700 text-white flex space-x-6 px-4 py-2 items-center rounded"
+            @click="createSupplier()"
           >
             <span>Create Supplier</span>
             <svg
@@ -82,24 +86,63 @@
   </back-drop>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, reactive, useContext } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
-
+import { ProductRepository } from '@/module/Product'
 export default defineComponent({
   components: {
     BackDrop,
     InputComponent,
     SelectComponent,
   },
+  props: {
+    supplierTypes: {
+      type: Array,
+      required: true,
+    },
+    gasTypes: {
+      type: Array,
+      required: true,
+    },
+  },
   setup(_props, ctx) {
+    const context = useContext()
+    const productObject = new ProductRepository()
     const close = () => {
       ctx.emit('close')
     }
 
+    const formInputs = reactive({
+      productType: '',
+      name: '',
+      location: '',
+      contactPerson: '',
+      emailAddress: '',
+      phoneNumber: '',
+      supplierType: '',
+    })
+
+    function valuesNotEmpty(obj: Object) {
+      return Object.values(obj).every(
+        (element) => element !== null && element !== ''
+      )
+    }
+    const createSupplier = () => {
+      if (valuesNotEmpty(formInputs)) {
+        productObject.createSupplier(formInputs).then(() => {
+          close()
+        })
+      } else {
+        context.$toast.global.required()
+      }
+    }
+
     return {
       close,
+      formInputs,
+      createSupplier,
     }
   },
 })

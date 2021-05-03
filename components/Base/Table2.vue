@@ -22,7 +22,7 @@
         </div>
 
         <div class="flex space-x-4 py-2">
-          <form class="w-full flex md:ml-0">
+          <form class="w-full flex md:ml-0" autocomplete="off">
             <label for="search_field" class="sr-only">Search</label>
             <div
               class="relative w-full text-gray-400 focus-within:text-gray-600"

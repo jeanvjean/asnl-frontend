@@ -33,8 +33,8 @@
             :class="mod(index) ? 'bg-gray-200' : ''"
             class="grid grid-cols-2 px-2 py-3"
           >
-            <div class="px-2 py-1">{{ detail.title }}</div>
-            <div class="px-2 py-1">{{ detail.value }}</div>
+            <div class="px-2 py-1 capitalize">{{ formatTitle(index) }}</div>
+            <div class="px-2 py-1">{{ detail }}</div>
           </div>
         </section>
         <section v-else-if="showBarcode" class="bg-gray-200">
@@ -125,25 +125,51 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
-
+import {
+  defineComponent,
+  onBeforeMount,
+  onMounted,
+  ref,
+  useRoute,
+  useRouter,
+} from '@nuxtjs/composition-api'
+import { CylinderRepository } from '@/module/Cylinder'
 export default defineComponent({
   name: 'SingleCylinder',
   layout: 'dashboard',
   setup() {
-    const details = [
-      { title: 'Cylinder Type', value: 'Buffer' },
-      { title: 'Cylinder Number', value: '90A-2019' },
-      { title: 'Water Capacity', value: '128kg' },
-      { title: 'Gas Volume Content', value: '385kg' },
-      { title: 'Date of Manufacture', value: 'March 21, 2018' },
-      { title: 'Filing Pressure', value: '392bar' },
-      { title: 'Cylinder Assigned No', value: 'UCH' },
-      { title: 'Testing Pressure', value: '190bar' },
-      { title: 'AS Assigned Number', value: 'ASNL BF-103' },
-      { title: 'Gas Type', value: 'Oxygen' },
-      { title: 'Cylinder Color Code', value: 'Green' },
-    ]
+    const route = useRoute()
+    const router = useRouter()
+    const cylinderId = ref()
+    onBeforeMount(() => {
+      cylinderId.value = route.value.params.id
+      if (!cylinderId) {
+        router.push('/dashboard')
+      }
+    })
+    const details = ref({})
+    const cylinderObject = new CylinderRepository()
+    onMounted(() => {
+      cylinderObject.getCylinder(cylinderId.value).then((response) => {
+        const cylinderResponse = response.data.data
+        details.value = {
+          Cylinder_Type: cylinderResponse.cylinderType,
+          Water_Capacity: cylinderResponse.waterCapacity,
+          Date_Manufactured: cylinderResponse.dateManufactured,
+          Gas_Type: cylinderResponse.gasType,
+          Standard_Color: cylinderResponse.standardColor,
+          Testing_Pressure: cylinderResponse.testingPresure,
+          Filling_Preasure: cylinderResponse.fillingPreasure,
+          GasVolume_Content: cylinderResponse.gasVolumeContent,
+          Assigned_To: cylinderResponse.assignedTo,
+          Assigned_Number: cylinderResponse.assignedNumber,
+        }
+      })
+    })
+
+    function formatTitle(value: string) {
+      return value.replaceAll('_', ' ')
+    }
 
     const showDetails = ref(true)
     const showBarcode = ref(false)
@@ -152,6 +178,7 @@ export default defineComponent({
       details,
       showDetails,
       showBarcode,
+      formatTitle,
     }
   },
   methods: {

@@ -58,20 +58,22 @@
             <input type="checkbox" class="border-2 border-gray-400 rounded" />
           </td>
           <td class="px-4 text-left py-4">
-            <span>{{ bodySingle.cylinder_number }}</span>
+            <span>{{ bodySingle.assignedNumber }}</span>
           </td>
           <td class="px-4 text-left py-4">{{ bodySingle.gas_type }}</td>
-          <td class="px-4 text-left py-4">{{ bodySingle.volume }}</td>
-          <td class="px-4 text-left py-4">{{ bodySingle.capacity }}</td>
+          <td class="px-4 text-left py-4">{{ bodySingle.gasVolumeContent }}</td>
+          <td class="px-4 text-left py-4">{{ bodySingle.waterCapacity }}</td>
           <td class="px-4 text-left py-4">
-            <span class="px-8 py-2 bg-green-100 text-green-400">{{
-              bodySingle.type
-            }}</span>
+            <span class="px-4 py-2 bg-green-100 text-green-400 capitalize"
+              >{{ bodySingle.cylinderType }} Cylinder</span
+            >
           </td>
-          <td class="px-4 text-left py-4">{{ bodySingle.date }}</td>
+          <td class="px-4 text-left py-4">
+            {{ formatDate(bodySingle.dateManufactured) }}
+          </td>
           <td class="px-4 text-center py-4">
             <router-link
-              to="/dashboard/cylinder-management/transfer"
+              :to="'/dashboard/cylinder-management/single/' + bodySingle._id"
               class="px-4 py-2 border border-purple-500 rounded text-purple-600 text-sm"
             >
               View Details
@@ -103,8 +105,24 @@ export default defineComponent({
     const show = () => {
       ctx.emit('show')
     }
+    function formatDate(dateValue: string) {
+      const date = new Date(dateValue)
+      const year = date.getFullYear()
+      let month: any = date.getMonth() + 1
+      let dt: any = date.getDate()
+
+      if (dt < 10) {
+        dt = '0' + dt
+      }
+      if (month < 10) {
+        month = '0' + month
+      }
+
+      return year + '-' + month + '-' + dt
+    }
     return {
       show,
+      formatDate,
     }
   },
 })

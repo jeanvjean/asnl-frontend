@@ -98,7 +98,6 @@ export default defineComponent({
     const userObject = new UserRepository()
     const body = ref([])
     const getUsers = () => {
-      console.log('Gotten here')
       userObject.getUsers().then((response: any) => {
         const myResponse = response.data.data
         body.value = myResponse

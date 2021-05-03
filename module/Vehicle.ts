@@ -21,6 +21,12 @@ class VehicleRepository {
       requestParameters
     )
   }
+
+  async fetchVehicle(id: String) {
+    return await $axios.get('/vehicle/fetch-vehicle/' + id).then((response) => {
+      return response.data.data
+    })
+  }
 }
 
 export { VehicleRepository }

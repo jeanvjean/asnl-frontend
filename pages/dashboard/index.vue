@@ -123,7 +123,7 @@
     <div class="bg-white px-4 py-6">
       <table-component
         :head="headers"
-        :body="body"
+        :body="registeredCylinders"
         @show="showRegister = true"
       ></table-component>
     </div>
@@ -154,22 +154,26 @@ export default defineComponent({
       'Gas Volume Content',
       'Water Capacity',
       'Cylinder Type',
-      'Date Cylinder',
+      'Date of Manufacture',
     ]
     const cylinderObject = new CylinderRepository()
+    const registeredCylinders = ref([])
     const stat = reactive({
       totalCylinders: 0,
       totalBufferCylinders: 0,
       totalAssignedCylinders: 0,
     })
+
     onBeforeMount(() => {
-      cylinderObject.getCylinders().then((response: any) => {
-        const myResponse = response.data.data
+      cylinderObject.getEverythingCylinder().then((responses: any) => {
+        const myResponse = responses[0].data.data
         stat.totalCylinders = myResponse.counts.totalCylinders
         stat.totalBufferCylinders = myResponse.counts.totalBufferCylinders
         stat.totalBufferCylinders = myResponse.counts.totalAssignedCylinders
+        registeredCylinders.value = responses[1].data.data.cylinders
       })
     })
+
     const body = [
       {
         cylinder_number: 'ASNL-LUTH-1209',
@@ -218,6 +222,7 @@ export default defineComponent({
       body,
       showRegister,
       stat,
+      registeredCylinders,
     }
   },
 })

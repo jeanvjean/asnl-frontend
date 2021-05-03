@@ -46,7 +46,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(bodySingle, index) in body" :key="index" class="font-light">
+        <tr
+          v-for="(bodySingle, index) in body"
+          :key="index"
+          class="font-light hover:bg-gray-200"
+        >
           <td class="w-6 px-6 py-4">
             <input type="checkbox" class="border-2 border-gray-400 rounded" />
           </td>
@@ -79,7 +83,7 @@
               </svg>
             </button>
             <div
-              class="absolute -ml-16 bg-gray-50 border border-gray-300 w-40 font-light text-sm rounded-md action-menu z-10"
+              class="absolute -ml-16 bg-gray-50 border border-gray-300 w-40 font-medium text-sm rounded-md action-menu z-10"
             >
               <button
                 class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
@@ -100,6 +104,17 @@
               >
                 Suspend User
               </button>
+              <router-link
+                class="block px-3 py-4 text-center text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none font-medium"
+                :to="
+                  '/dashboard/user-management/' +
+                  bodySingle._id +
+                  '/' +
+                  bodySingle.email
+                "
+              >
+                View User</router-link
+              >
             </div>
           </td>
         </tr>

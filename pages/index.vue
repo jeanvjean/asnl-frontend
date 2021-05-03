@@ -10,7 +10,7 @@
         </span>
       </div>
     </div>
-    <form action="" class="mt-2 px-4">
+    <form action="" class="mt-2 px-4" autocomplete="off">
       <Input
         :input-placeholder="'User@example.com'"
         :label-title="'Email Address'"

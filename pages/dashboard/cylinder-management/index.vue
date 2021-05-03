@@ -1,6 +1,6 @@
 <template>
   <div class="py-6 px-6">
-    <card-slider />
+    <card-slider :analytics="statistics" />
     <div class="bg-white px-6 mt-8">
       <table-component
         :head="headers"
@@ -74,12 +74,221 @@ export default defineComponent({
         date: 'August 23, 2019',
       },
     ]
+
+    const statistics = [
+      [
+        [
+          {
+            title: 'Total ASNL Cylinders',
+            value: 0,
+          },
+          [
+            {
+              title: 'Buffer Cylinders',
+              value: 0,
+            },
+            {
+              title: 'Assigned Cylinders',
+              value: 0,
+            },
+          ],
+        ],
+        [
+          {
+            title: 'ASNL Cylinders with customers',
+            value: 0,
+          },
+          [
+            {
+              title: 'Buffer Cylinders',
+              value: 0,
+            },
+            {
+              title: 'Assigned Cylinders',
+              value: 0,
+            },
+          ],
+        ],
+        [
+          {
+            title: 'Cylinders with ASNL',
+            value: 0,
+            type: 'other',
+          },
+          [
+            [
+              {
+                title: 'Filled',
+                value: 0,
+              },
+              {
+                title: 'Buffer',
+                value: 0,
+              },
+              {
+                title: 'Assigned',
+                value: 0,
+              },
+            ],
+            [
+              {
+                title: 'Empty',
+                value: 0,
+              },
+              {
+                title: 'Buffer',
+                value: 0,
+              },
+              {
+                title: 'Assigned',
+                value: 0,
+              },
+            ],
+          ],
+        ],
+      ],
+      [
+        [
+          {
+            title: 'Total Customer Cylinders',
+            value: 0,
+          },
+          [
+            {
+              title: 'Buffer Cylinders',
+              value: 0,
+            },
+            {
+              title: 'Assigned Cylinders',
+              value: 0,
+            },
+          ],
+        ],
+        [
+          {
+            title: 'Total Bad Customer Cylinders',
+            value: 0,
+          },
+          [
+            {
+              title: 'Buffer Cylinders',
+              value: 0,
+            },
+            {
+              title: 'Assigned Cylinders',
+              value: 0,
+            },
+          ],
+        ],
+        [
+          {
+            title: 'Total Bad ASNL Customer Cylinders',
+            value: 0,
+          },
+          [
+            {
+              title: 'Buffer Cylinders',
+              value: 0,
+            },
+            {
+              title: 'Assigned Cylinders',
+              value: 0,
+            },
+          ],
+        ],
+      ],
+      [
+        [
+          {
+            title: 'Total Cylinders with Suppliers',
+            value: 0,
+          },
+          [
+            {
+              title: 'Buffer Cylinders',
+              value: 0,
+            },
+            {
+              title: 'Assigned Cylinders',
+              value: 0,
+            },
+          ],
+        ],
+        [
+          {
+            title: 'Cylinder with Internal Suppliers',
+            value: 0,
+            type: 'other',
+          },
+          [
+            [
+              {
+                title: 'ASNL Cylinders',
+                value: 0,
+              },
+              {
+                title: 'Buffer',
+                value: 0,
+              },
+              {
+                title: 'Assigned',
+                value: 0,
+              },
+            ],
+            [
+              {
+                title: 'Customer Cylinders',
+                value: 0,
+              },
+            ],
+          ],
+        ],
+        [
+          {
+            title: 'Cylinder with External Suppliers',
+            value: 0,
+            type: 'other',
+          },
+          [
+            [
+              {
+                title: 'Third Party Cylinders',
+                value: 0,
+              },
+              {
+                title: 'Buffer',
+                value: 0,
+              },
+              {
+                title: 'Assigned',
+                value: 0,
+              },
+            ],
+            [
+              {
+                title: 'Empty',
+                value: 0,
+              },
+              {
+                title: 'Buffer',
+                value: 0,
+              },
+              {
+                title: 'Assigned',
+                value: 0,
+              },
+            ],
+          ],
+        ],
+      ],
+    ]
     const showType = ref(false)
 
     return {
       headers,
       body,
       showType,
+      statistics,
     }
   },
 })

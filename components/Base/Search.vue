@@ -1,6 +1,6 @@
 <template>
   <div class="flex-1 flex">
-    <form class="w-full flex md:ml-0" action="#" method="GET">
+    <form class="w-full flex md:ml-0" autocomplete="off">
       <label for="search_field" class="sr-only">Search</label>
       <div class="relative w-full text-gray-400 focus-within:text-gray-600">
         <div

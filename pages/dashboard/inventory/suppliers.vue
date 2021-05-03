@@ -8,7 +8,7 @@
         </div>
         <button
           class="bg-purple-600 text-white flex items-center space-x-5 px-4 py-2 rounded font-medium"
-          @click="show = !show"
+          @click="fetchCylinders"
         >
           <svg
             class="w-3 h-3 fill-current"
@@ -54,20 +54,55 @@
         </div>
       </div>
     </div>
-    <create-supplier v-if="show" @close="show = false" />
+    <create-supplier
+      v-if="show"
+      :supplier-types="supplierTypes"
+      :gas-types="gasTypes"
+      @close="show = false"
+    />
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, ref } from '@nuxtjs/composition-api'
 import CreateSupplier from '@/components/Overlays/Supplier.vue'
+import { CylinderRepository } from '@/module/Cylinder'
 export default defineComponent({
   name: 'Suppliers',
   components: { CreateSupplier },
   layout: 'dashboard',
   setup() {
     const show = ref(false)
+    const gasTypes = ref()
+    const cylinderObject = new CylinderRepository()
+
+    const fetchCylinders = () => {
+      cylinderObject.getCylinders().then((response) => {
+        const myResponse = response.data.data.cylinders
+        gasTypes.value = myResponse.map((element: any) => {
+          return {
+            name: element.gasName + ' - ' + element.colorCode,
+            value: element._id,
+          }
+        })
+        show.value = true
+      })
+    }
+
+    const supplierTypes = [
+      {
+        name: 'General Inventory',
+        value: 'general-inventory',
+      },
+      {
+        name: 'Product Gas Refill',
+        value: 'product-gas-refill',
+      },
+    ]
     return {
       show,
+      supplierTypes,
+      fetchCylinders,
+      gasTypes,
     }
   },
 })

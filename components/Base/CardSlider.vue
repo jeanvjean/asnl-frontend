@@ -3,13 +3,19 @@
     <transition :name="transitionAnimation" mode="out-in">
       <div :key="currentIndex">
         <div class="grid grid-rows-1 lg:grid-cols-3 gap-4">
-          <card
-            v-for="i in 3"
-            :key="i"
-            :header-stat="statistics[currentIndex][0]"
-            :bottom-stat="statistics[currentIndex][1]"
+          <span
+            v-for="(stat, index) in analytics[currentIndex]"
+            :key="index"
+            class="inline-block"
           >
-          </card>
+            <card2
+              v-if="stat[0].type && stat[0].type === 'other'"
+              :header-stat="stat[0]"
+              :bottom-stat="stat[1]"
+            >
+            </card2>
+            <card v-else :header-stat="stat[0]" :bottom-stat="stat[1]"> </card>
+          </span>
         </div>
       </div>
     </transition>
@@ -31,7 +37,7 @@
       </div>
       <div
         :class="
-          currentIndex === statistics.length - 1 ? 'invisible' : ' visible'
+          currentIndex === analytics.length - 1 ? 'invisible' : ' visible'
         "
         class="flex justify-center items-center w-8 h-8 rounded-full bg-dark-blue mr-3"
       >
@@ -52,83 +58,39 @@
 <script lang="ts">
 import { defineComponent, ref } from '@nuxtjs/composition-api'
 import Card from '@/components/Base/Card.vue'
+import Card2 from '@/components/Base/Card2.vue'
 
 export default defineComponent({
-  components: { Card },
-  setup() {
+  components: { Card, Card2 },
+  props: {
+    analytics: {
+      type: Array,
+      required: true,
+    },
+  },
+  setup(_props) {
     const currentIndex = ref(0)
     const transitionAnimation = ref()
 
     const prevSlide = () => {
-      transitionAnimation.value = 'fade-in-right'
+      transitionAnimation.value = 'fade-in-up'
 
       if (currentIndex.value === 0) {
-        currentIndex.value = statistics.length - 1
+        currentIndex.value = _props.analytics.length - 1
       } else {
         currentIndex.value -= 1
       }
     }
     const nextSlide = () => {
-      transitionAnimation.value = 'fade-in-left'
-      if (currentIndex.value === statistics.length - 1) {
+      transitionAnimation.value = 'fade-in-down'
+      if (currentIndex.value === _props.analytics.length - 1) {
         currentIndex.value = 0
       } else {
         currentIndex.value += 1
       }
     }
 
-    const statistics = [
-      [
-        {
-          title: 'Total ASNL Cylinders',
-          value: 4319,
-        },
-        [
-          {
-            title: 'Buffer Cylinders',
-            value: 2589,
-          },
-          {
-            title: 'Assigned Cylinders',
-            value: 456,
-          },
-        ],
-      ],
-      [
-        {
-          title: 'Total Spare Parts',
-          value: 4319,
-        },
-        [
-          {
-            title: 'Total Products',
-            value: 2589,
-          },
-          {
-            title: 'Total Supplier',
-            value: 456,
-          },
-        ],
-      ],
-      [
-        {
-          title: 'Total Spare Parts',
-          value: 4319,
-        },
-        [
-          {
-            title: 'Total Products',
-            value: 2589,
-          },
-          {
-            title: 'Total Supplier',
-            value: 456,
-          },
-        ],
-      ],
-    ]
     return {
-      statistics,
       nextSlide,
       prevSlide,
       currentIndex,

@@ -1,6 +1,6 @@
 <template>
   <div class="py-6 px-6">
-    <card-slider />
+    <card-slider :analytics="statistics" />
     <div class="bg-white px-6 mt-8">
       <div class="overflow-x-auto w-full py-4">
         <div class="w-full mb-4">
@@ -26,7 +26,7 @@
               </select>
             </div>
             <div class="flex-1 flex">
-              <form class="w-full flex md:ml-0" action="#" method="GET">
+              <form class="w-full flex md:ml-0" autocomplete="off">
                 <label for="search_field" class="sr-only">Search</label>
                 <div
                   class="relative w-full text-gray-400 focus-within:text-gray-600"
@@ -198,15 +198,17 @@
                 />
               </td>
 
-              <td class="px-4 text-left py-4">{{ bodySingle.product_id }}</td>
-              <td class="px-4 text-left py-4">{{ bodySingle.description }}</td>
-              <td class="px-4 text-left py-4">{{ bodySingle.part_no }}</td>
+              <td class="px-4 text-left py-4">{{ bodySingle.asnlNumber }}</td>
+              <td class="px-4 text-left py-4">
+                {{ bodySingle.itemDescription }}
+              </td>
+              <td class="px-4 text-left py-4">{{ bodySingle.partNumber }}</td>
               <td class="px-4 text-left py-4">{{ bodySingle.quantity }}</td>
               <td class="px-4 text-left py-4">
-                {{ bodySingle.reorder_level }}
+                {{ bodySingle.reorderLevel }}
               </td>
-              <td class="px-4 text-left py-4">{{ bodySingle.unit_cost }}</td>
-              <td class="px-4 text-left py-4">{{ bodySingle.total_cost }}</td>
+              <td class="px-4 text-left py-4">{{ bodySingle.unitCost }}</td>
+              <td class="px-4 text-left py-4">{{ bodySingle.totalCost }}</td>
               <td class="px-4 text-left py-4">{{ bodySingle.location }}</td>
             </tr>
           </tbody>
@@ -221,17 +223,18 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
 import RecieveProduct from '@/components/Overlays/RecieveProducts.vue'
 import IssueProduct from '@/components/Overlays/IssueProducts.vue'
 import CardSlider from '@/components/Base/CardSlider.vue'
+import { ProductRepository } from '@/module/Product'
 export default defineComponent({
   name: 'CylinderPool',
   components: { RecieveProduct, IssueProduct, CardSlider },
   layout: 'dashboard',
   setup() {
     const headers = [
-      'Product No',
+      'ASNL Number',
       'item description',
       'Part no',
       'Quantity',
@@ -242,76 +245,70 @@ export default defineComponent({
     ]
     const showRecieveProduct = ref(false)
     const showIssueProduct = ref(false)
-    const body = [
-      {
-        product_id: 'ASORO985',
-        description: 'Product Name here',
-        part_no: '132M75',
-        quantity: '100',
-        reorder_level: '5',
-        unit_cost: '100',
-        total_cost: '10000',
-        location: 'Ketu,Lagos',
-      },
-      {
-        product_id: 'ASORO985',
-        description: 'Product Name here',
-        part_no: '132M75',
-        quantity: '100',
-        reorder_level: '5',
-        unit_cost: '100',
-        total_cost: '10000',
-        location: 'Ketu,Lagos',
-      },
-      {
-        product_id: 'ASORO985',
-        description: 'Product Name here',
-        part_no: '132M75',
-        quantity: '100',
-        reorder_level: '5',
-        unit_cost: '100',
-        total_cost: '10000',
-        location: 'Ketu,Lagos',
-      },
-      {
-        product_id: 'ASORO985',
-        description: 'Product Name here',
-        part_no: '132M75',
-        quantity: '100',
-        reorder_level: '5',
-        unit_cost: '100',
-        total_cost: '10000',
-        location: 'Ketu,Lagos',
-      },
-      {
-        product_id: 'ASORO985',
-        description: 'Product Name here',
-        part_no: '132M75',
-        quantity: '100',
-        reorder_level: '5',
-        unit_cost: '100',
-        total_cost: '10000',
-        location: 'Ketu,Lagos',
-      },
-    ]
+    const productObject = new ProductRepository()
+
+    const body = ref()
+
+    onMounted(() => {
+      productObject.getProducts().then((response) => {
+        body.value = response
+      })
+    })
     const showType = ref(false)
+
+    const defaultState = ref(false)
     const statistics = [
-      {
-        title: 'Total Products',
-        value: 4319,
-      },
       [
-        {
-          title: 'In Stock',
-          value: 2589,
-        },
-        {
-          title: 'Issued Out',
-          value: 1730,
-        },
+        [
+          {
+            title: 'Name of Spare Part',
+            value: 0,
+          },
+          [
+            {
+              title: 'Instock',
+              value: 0,
+            },
+            {
+              title: 'Issued Out',
+              value: 0,
+            },
+          ],
+        ],
+        [
+          {
+            title: 'Name of Spare Part',
+            value: 0,
+          },
+          [
+            {
+              title: 'Instock',
+              value: 0,
+            },
+            {
+              title: 'Issued Out',
+              value: 0,
+            },
+          ],
+        ],
+        [
+          {
+            title: 'Name of Spare Part',
+            value: 0,
+          },
+          [
+            {
+              title: 'Instock',
+              value: 0,
+            },
+            {
+              title: 'Issued Out',
+              value: 0,
+            },
+          ],
+        ],
       ],
     ]
-    const defaultState = ref(false)
     return {
       headers,
       body,

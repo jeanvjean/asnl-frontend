@@ -1,12 +1,12 @@
 <template>
   <div
-    class="lg:col-span-1 w-full h-48 bg-weird-purple text-purple-200 text-sm rounded-sm px-6 py-4"
+    class="lg:col-span-1 w-full bg-weird-purple text-purple-200 text-sm rounded-sm px-6 py-4 h-full flex flex-col justify-between space-y-2"
   >
-    <div class="flex justify-between mb-8 h-16 border-b-2 border-gray-300">
+    <div class="flex justify-between border-b-2 border-gray-300 pb-4">
       <div>{{ headerStat.title }}</div>
       <div class="text-white text-2xl">{{ headerStat.value }}</div>
     </div>
-    <div class="flex justify-between h-16">
+    <div class="flex justify-between">
       <div class="space-y-2">
         <p>{{ bottomStat[0].title }}</p>
         <p class="text-white text-2xl text-left">{{ bottomStat[0].value }}</p>

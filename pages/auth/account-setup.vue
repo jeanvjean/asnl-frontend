@@ -10,7 +10,7 @@
         </span>
       </div>
     </div>
-    <form class="mt-2 px-4">
+    <form class="mt-2 px-4" autocomplete="off">
       <div class="grid grid-rows-1 md:grid-cols-2 sm:gap-y-4 md:gap-x-4">
         <Input
           :input-placeholder="'Durodola Caroline'"

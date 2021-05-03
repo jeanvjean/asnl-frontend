@@ -89,14 +89,7 @@
             <td class="w-6 px-6 py-4">
               <input type="checkbox" class="border-2 border-gray-400 rounded" />
             </td>
-            <td class="px-4 text-center py-4">
-              <button
-                class="focus:outline-none focus:text-purple-500"
-                @click="showSingleVehicle = true"
-              >
-                {{ bodySingle.vehCategory }}
-              </button>
-            </td>
+            <td class="px-4 text-center py-4">{{ bodySingle.vehCategory }}</td>
             <td class="px-4 text-center py-4">{{ bodySingle.regNo }}</td>
             <td class="px-4 text-center py-4">{{ bodySingle.manufacturer }}</td>
             <td class="px-4 text-center py-4">{{ bodySingle.vehicleType }}</td>
@@ -117,6 +110,13 @@
               <div
                 class="absolute -ml-6 bg-gray-50 border border-gray-300 w-40 font-light text-sm rounded-md action-menu z-50"
               >
+                <button
+                  type="button"
+                  class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
+                  @click="fetchVehicle(bodySingle._id)"
+                >
+                  View Vehicle
+                </button>
                 <button
                   type="button"
                   class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
@@ -226,6 +226,7 @@
     />
     <single-vehicle
       v-if="showSingleVehicle"
+      :vehicle="vehicle"
       @close="showSingleVehicle = false"
     />
   </div>
@@ -257,6 +258,7 @@ export default defineComponent({
     const showAssignDriver = ref(false)
     const showFinalStep = ref(false)
     const showSingleVehicle = ref(false)
+    const vehicle = ref()
     const headers = [
       'Vehicle Category',
       'Registration No',
@@ -289,6 +291,17 @@ export default defineComponent({
           showAssignDriver.value = true
         })
     }
+
+    function fetchVehicle(vehicleId: string) {
+      vehicleObject
+        .fetchVehicle(vehicleId)
+        .then((response) => {
+          vehicle.value = response
+        })
+        .finally(() => {
+          showSingleVehicle.value = true
+        })
+    }
     onMounted(() => {
       fetchVehicles()
     })
@@ -301,6 +314,8 @@ export default defineComponent({
       showSingleVehicle,
       fetchDrivers,
       drivers,
+      fetchVehicle,
+      vehicle,
     }
   },
 })
