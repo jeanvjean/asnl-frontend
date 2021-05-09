@@ -14,4 +14,16 @@ export class ProductRepository {
   async createSupplier(request: Object) {
     return await $axios.post('/inventory/create-supplier', request)
   }
+
+  async fetchBranches() {
+    return await $axios.get('/inventory/fetch-branches').then((response) => {
+      return response.data.data
+    })
+  }
+
+  async fetchSuppliers() {
+    return await $axios.get('inventory/fetch-suppliers').then((response) => {
+      return response.data
+    })
+  }
 }

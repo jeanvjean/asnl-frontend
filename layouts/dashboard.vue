@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen flex overflow-hidden bg-gray-200 font-sans">
+  <div class="h-screen flex overflow-hidden bg-gray-200 customFontLight">
     <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
     <MobileSidebar
       :show-modal="toggleMobileSidebar"
@@ -35,3 +35,16 @@ export default defineComponent({
   },
 })
 </script>
+<style>
+.customFontRegular {
+  font-family: 'tt_normsregular';
+}
+
+.customFontLight {
+  font-family: 'tt_normslight';
+}
+
+.customFontBold {
+  font-family: 'tt_normsbold';
+}
+</style>

@@ -25,7 +25,7 @@
       />
       <Button
         :button-text="'Login'"
-        :button-class="'bg-gray-400 text-white'"
+        :button-class="addedClass"
         :loading-status="loading.status"
         :loading-text="loading.text"
         @buttonClicked="login"
@@ -39,7 +39,13 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, useContext } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  reactive,
+  ref,
+  useContext,
+  watch,
+} from '@nuxtjs/composition-api'
 import { Auth } from '@/module/Auth'
 import { mainStore } from '@/module/Pinia'
 import Input from '@/components/Form/Input.vue'
@@ -54,13 +60,25 @@ export default defineComponent({
     const ctx = useContext()
     const appStore: any = mainStore()
     const AuthObject = new Auth()
+
     const credentials = reactive({
       email: '',
       password: '',
     })
+
     const loading = reactive({
       text: 'Submitting',
       status: false,
+    })
+
+    const addedClass = ref('bg-gray-400 text-white')
+
+    watch(credentials, () => {
+      if (credentials.password !== '') {
+        addedClass.value = 'bg-purple-500 text-white'
+      } else {
+        addedClass.value = 'bg-gray-400 text-white'
+      }
     })
     const login = () => {
       if (!credentials.email) {
@@ -71,6 +89,7 @@ export default defineComponent({
       }
 
       if (credentials.email && credentials.password) {
+        credentials.email = String(credentials.email).toLowerCase()
         loading.status = true
         AuthObject.login(credentials)
           .then((response: any) => {
@@ -96,6 +115,7 @@ export default defineComponent({
       appStore,
       loading,
       login,
+      addedClass,
     }
   },
 })

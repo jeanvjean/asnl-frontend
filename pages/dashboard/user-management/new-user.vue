@@ -81,30 +81,41 @@
         </div>
         <div class="lg:col-span-2 bg-purple-50 w-full rounded-md py-10">
           <div>
-            <h1 class="font-medium text-2xl px-10 py-4">Permission</h1>
+            <h1 class="font-medium text-2xl px-10 py-4 customFontBold">
+              Permission
+            </h1>
           </div>
-          <div
-            v-for="(permission, index) in permissions"
-            :key="index"
-            class="grid grid-cols-2 px-10 py-4 gap-2"
-          >
-            <div class="my-auto space-x-4">
-              <input
+          <div v-if="permissions">
+            <div
+              v-for="(permission, index) in permissions"
+              :key="index"
+              class="grid grid-cols-2 px-10 py-4 gap-2"
+            >
+              <div class="my-auto space-x-4">
+                <!-- <input
                 type="checkbox"
                 class="w-6 h-6 rounded border-black border"
-              />
-              <label for="" class="text-black font-medium text-md">{{
-                permission
-              }}</label>
-            </div>
-            <div class="flex justify-evenly items-center">
-              <div class="space-x-2 text-black text-md font-light items-center">
-                <input type="radio" class="w-6 h-6" />
-                <label for="">Read</label>
+              /> -->
+                <label
+                  for=""
+                  class="text-black font-medium text-md customFontRegular"
+                  >{{ permission.name }}</label
+                >
               </div>
-              <div class="space-x-2 text-black text-lg font-light items-center">
-                <input type="radio" checked class="w-6 h-6" />
-                <label for="">Edit</label>
+              <div class="flex justify-evenly items-center">
+                <div
+                  v-for="(subrole, i) in permission.sub_permissions"
+                  :key="i"
+                  class="space-x-2 text-black text-md customFontRegular items-center"
+                >
+                  <input
+                    type="checkbox"
+                    :value="subrole"
+                    class="w-6 h-6 rounded-full"
+                    @change="editPermissions(subrole, permission.name)"
+                  />
+                  <label for="">{{ subrole }}</label>
+                </div>
               </div>
             </div>
           </div>
@@ -134,14 +145,9 @@ export default defineComponent({
     const departments = ref([])
     const myResponse: any = ref(null)
     const subroles = ref([])
-    const permissions = [
-      'User Management',
-      'Cylinders',
-      'Inventory Management',
-      'Vehicle Management',
-      'Complaint',
-      'Report',
-    ]
+    const permissions = ref([])
+
+    const requestPermissions = ref()
 
     const email = ref('')
     const role = ref('')
@@ -166,15 +172,54 @@ export default defineComponent({
       if (!email.value || !role.value || !subrole.value) {
         context.$toast.global.required()
       } else {
-        const form = {
-          email: email.value,
-          role: role.value,
-          subrole: subrole.value,
-        }
-        userObject.inviteUser(form).then(() => {
-          email.value = role.value = subrole.value = ''
-          key.value++
+        requestPermissions.value.forEach((element: any, index: number) => {
+          if (!element.sub_permissions.length) {
+            requestPermissions.value.splice(index, 1)
+          }
         })
+        if (!requestPermissions.value.length) {
+          context.$toast.error('Please Select at least one Permission')
+        } else {
+          const form = {
+            email: String(email.value).toLowerCase(),
+            role: role.value,
+            subrole: subrole.value,
+            permissions: requestPermissions.value,
+          }
+          userObject.inviteUser(form).then(() => {
+            email.value = role.value = subrole.value = ''
+            key.value++
+          })
+        }
+      }
+    }
+
+    function editPermissions(subrole: string, role: string): void {
+      if (!requestPermissions.value.length) {
+        requestPermissions.value.push({
+          name: role,
+          sub_permissions: [subrole],
+        })
+      } else {
+        const exist = ref(false)
+        requestPermissions.value.forEach((element: any) => {
+          if (element.name === role) {
+            if (element.sub_permissions.includes(subrole)) {
+              const index = element.sub_permissions.indexOf(subrole)
+              element.sub_permissions.splice(index, 1)
+              exist.value = true
+            } else {
+              element.sub_permissions.push(subrole)
+              exist.value = true
+            }
+          }
+        })
+        if (exist.value === false) {
+          requestPermissions.value.push({
+            name: role,
+            sub_permissions: [subrole],
+          })
+        }
       }
     }
 
@@ -185,6 +230,11 @@ export default defineComponent({
           return { name: element.role, value: element.role }
         })
         departments.value = filterRoles
+      })
+
+      userObject.fetchPermissions().then((response: any) => {
+        permissions.value = response.data.data
+        requestPermissions.value = []
       })
     })
     const key = ref(1)
@@ -198,6 +248,8 @@ export default defineComponent({
       subrole,
       inviteUser,
       key,
+      requestPermissions,
+      editPermissions,
     }
   },
 })

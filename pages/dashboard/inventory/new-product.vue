@@ -7,9 +7,10 @@
           <p class="text-gray-600 text-sm">Enter Product details below</p>
         </div>
         <div class="grid grid-rows-1 lg:grid-cols-4 gap-4">
-          <input-component
+          <select-component
             :label-title="'Division'"
-            :input-placeholder="'Enter Division'"
+            :default-option-text="'Choose a Division'"
+            :select-array="divisions"
             @get="form.division = $event.value"
           />
 
@@ -121,15 +122,17 @@
 <script lang="ts">
 import {
   defineComponent,
+  onMounted,
   reactive,
   ref,
   useContext,
 } from '@nuxtjs/composition-api'
 import InputComponent from '@/components/Form/Input.vue'
+import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import { ProductRepository } from '@/module/Product'
 export default defineComponent({
-  components: { InputComponent, ButtonComponent },
+  components: { InputComponent, ButtonComponent, SelectComponent },
   layout: 'dashboard',
   setup() {
     const form = reactive({
@@ -152,12 +155,28 @@ export default defineComponent({
     const context = useContext()
     const productObj = new ProductRepository()
     const loading = ref(false)
+    const divisions = ref([])
 
     function valuesNotEmpty(obj: Object) {
       return Object.values(obj).every(
         (element) => element !== null && element !== ''
       )
     }
+
+    function fetchBranches() {
+      productObj.fetchBranches().then((response) => {
+        divisions.value = response.map((element: any) => {
+          return {
+            name: element.location,
+            value: element._id,
+          }
+        })
+      })
+    }
+
+    onMounted(() => {
+      fetchBranches()
+    })
 
     const createProduct = () => {
       if (valuesNotEmpty(form)) {
@@ -185,6 +204,7 @@ export default defineComponent({
       reset,
       createProduct,
       loading,
+      divisions,
     }
   },
 })

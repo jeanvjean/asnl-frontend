@@ -105,7 +105,17 @@
                 <router-link
                   to="/dashboard/cylinder-management/list"
                   class="block px-2 py-2"
+                  >Cylinder Transfer Analytics</router-link
+                >
+                <router-link
+                  to="/dashboard/cylinder-management/transfer"
+                  class="block px-2 py-2"
                   >Cylinder Transfer</router-link
+                >
+                <router-link
+                  to="/dashboard/cylinder-management/single"
+                  class="block px-2 py-2"
+                  >Single Cylinder</router-link
                 >
               </div>
             </div>
@@ -219,6 +229,11 @@
                   to="/dashboard/vehicle-management/vehicle-performance"
                   class="block px-2 py-2"
                   >Vehicle Performance</router-link
+                >
+                <router-link
+                  to="/dashboard/vehicle-management/corrective-maintenance"
+                  class="block px-2 py-2"
+                  >Corrective Maintenace</router-link
                 >
               </div>
             </div>

@@ -18,6 +18,10 @@ class UserRepository {
     return await $axios.get('/user/get-users')
   }
 
+  async fetchPermissions() {
+    return await $axios.get('/user/fetch-permissions')
+  }
+
   async fetchRoles() {
     return await $axios.get('/user/get-roles')
   }

@@ -70,7 +70,7 @@
       <div class="lg:col-span-3 overflow-x-auto bg-white">
         <div class="flex justify-between px-6 py-4">
           <h1 class="flex-1 text-gray-400 font-medium text-lg">
-            Transfer Cylinder within Division
+            Condemn Cylinder
           </h1>
           <div class="flex space-x-6">
             <button
@@ -125,29 +125,24 @@
               <tr>
                 <th class="w-auto">#</th>
                 <th
-                  class="font-light text-lg px-2 py-2 text-center w-2/12 border border-gray-400"
+                  class="font-light text-lg px-2 py-2 text-center w-3/12 border border-gray-400"
                 >
-                  Customer Name
-                </th>
-                <th
-                  class="font-light text-lg px-2 py-2 text-center w-2/12 border border-gray-400"
-                >
-                  Cylinder Number
-                </th>
-                <th
-                  class="font-light text-lg px-2 py-2 text-center w-2/12 border border-gray-400"
-                >
-                  Volume
-                </th>
-                <th
-                  class="font-light text-lg px-2 py-2 text-center w-2/12 border border-gray-400"
-                >
-                  Product
+                  Assigned No
                 </th>
                 <th
                   class="font-light text-lg px-2 py-2 text-center w-3/12 border border-gray-400"
                 >
-                  Type
+                  Cylinder No
+                </th>
+                <th
+                  class="font-light text-lg px-2 py-2 text-center w-2/12 border border-gray-400"
+                >
+                  Purchase Date
+                </th>
+                <th
+                  class="font-light text-lg px-2 py-2 text-center w-3/12 border border-gray-400"
+                >
+                  Reason
                 </th>
                 <th class="w-auto"></th>
               </tr>
@@ -160,33 +155,25 @@
                 <td
                   class="font-light text-lg px-4 py-2 text-center border border-gray-400"
                 >
-                  <input-component :input-placeholder="'Enter Customer Name'" />
+                  <input-component :input-placeholder="'Enter Assigned No'" />
+                </td>
+                <td
+                  class="font-light text-lg px-4 py-2 text-center border border-gray-400"
+                >
+                  <input-component :input-placeholder="'Enter Cylinder No'" />
                 </td>
                 <td
                   class="font-light text-lg px-4 py-2 text-center border border-gray-400"
                 >
                   <input-component
-                    :input-placeholder="'Enter Cylinder Number'"
+                    :input-placeholder="'Select Purchase Date'"
+                    :input-type="'date'"
                   />
                 </td>
                 <td
                   class="font-light text-lg px-4 py-2 text-center border border-gray-400"
                 >
-                  <input-component :input-placeholder="'Enter Volume'" />
-                </td>
-                <td
-                  class="font-light text-lg px-4 py-2 text-center border border-gray-400"
-                >
-                  <input-component :input-placeholder="'Enter Product Name'" />
-                </td>
-                <td
-                  class="font-light text-lg px-4 py-2 text-center border border-gray-400"
-                >
-                  <select
-                    class="w-full px-2 py-2 border-0 focus:outline-none focus:border-0"
-                  >
-                    <option value="Buffer">Buffer</option>
-                  </select>
+                  <input-component :input-placeholder="'Enter Reason'" />
                 </td>
 
                 <td class="font-light text-lg px-3 py-2 text-center">
@@ -228,17 +215,8 @@
             </button>
           </div>
         </div>
-        <div
-          class="px-10 py-6 grid grid-rows-1 lg:grid-cols-2 gap-y-4 lg:gap-x-4 border-b border-t border-gray-300"
-        >
-          <select-component
-            :label-title="'Type of Transfer'"
-            :select-array="types"
-          />
 
-          <select-component :label-title="'To'" :select-array="reciepients" />
-        </div>
-        <div class="px-10 py-4">
+        <div class="px-10 py-4 mt-20">
           <label for="" class="text-black text-lg px-2 py-2">Comments</label>
           <input
             type="text"
@@ -311,13 +289,12 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, watch } from '@nuxtjs/composition-api'
-import SelectComponent from '@/components/Form/Select.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import Confirmation from '@/components/Overlays/Confirmation.vue'
 import FinalStep from '@/components/Overlays/finalStep.vue'
 export default defineComponent({
   name: 'Transfer',
-  components: { SelectComponent, Confirmation, FinalStep, InputComponent },
+  components: { Confirmation, FinalStep, InputComponent },
   layout: 'dashboard',
   setup() {
     const types = ['Temporary Transfer']

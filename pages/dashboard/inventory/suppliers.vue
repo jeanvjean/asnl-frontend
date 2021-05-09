@@ -22,9 +22,9 @@
           <span>Add New</span>
         </button>
       </div>
-      <div class="grid grid-rows-1 lg:grid-cols-5 gap-y-4 md:gap-x-4 py-4">
+      <div class="grid grid-rows-1 lg:grid-cols-4 gap-y-4 md:gap-x-4 py-4">
         <div
-          v-for="i in 5"
+          v-for="(supplier, i) in suppliers"
           :key="i"
           class="bg-gray-200 border border-gray-500 rounded-sm py-4 px-4 space-y-1"
         >
@@ -38,18 +38,18 @@
                 d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"
               />
             </svg>
-            <span class="text-md tracking-wide">Supplier Name</span>
+            <span class="text-md tracking-wide">{{ supplier.name }}</span>
           </div>
           <div>
             <p class="text-gray-500 inline-block">
-              No 5, Herbert Macaulay Way, Jos.
+              {{ supplier.location }}
             </p>
           </div>
-          <div>
-            <p class="inline-block">gassupplier@company.com</p>
+          <div class="w-full">
+            <span>{{ supplier.emailAddress }}</span>
           </div>
           <div>
-            <p class="inline-block">+234 905 8033 452</p>
+            <p class="inline-block">{{ supplier.phoneNumber }}</p>
           </div>
         </div>
       </div>
@@ -63,8 +63,9 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
 import CreateSupplier from '@/components/Overlays/Supplier.vue'
+import { ProductRepository } from '@/module/Product'
 import { CylinderRepository } from '@/module/Cylinder'
 export default defineComponent({
   name: 'Suppliers',
@@ -72,21 +73,32 @@ export default defineComponent({
   layout: 'dashboard',
   setup() {
     const show = ref(false)
-    const gasTypes = ref()
+    const gasTypes = ref([])
+    const productObject = new ProductRepository()
     const cylinderObject = new CylinderRepository()
+    const suppliers = ref([])
+
+    const fetchSuppliers = () => {
+      productObject.fetchSuppliers().then((response) => {
+        suppliers.value = response.data
+      })
+    }
 
     const fetchCylinders = () => {
       cylinderObject.getCylinders().then((response) => {
-        const myResponse = response.data.data.cylinders
-        gasTypes.value = myResponse.map((element: any) => {
+        gasTypes.value = response.data.data.cylinders.map((el: any) => {
           return {
-            name: element.gasName + ' - ' + element.colorCode,
-            value: element._id,
+            name: el.gasName + ' - ' + el.colorCode,
+            value: el._id,
           }
         })
         show.value = true
       })
     }
+
+    onMounted(() => {
+      fetchSuppliers()
+    })
 
     const supplierTypes = [
       {
@@ -101,8 +113,9 @@ export default defineComponent({
     return {
       show,
       supplierTypes,
-      fetchCylinders,
       gasTypes,
+      fetchCylinders,
+      suppliers,
     }
   },
 })
