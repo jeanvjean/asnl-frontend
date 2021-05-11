@@ -15,15 +15,16 @@
         />
         <div class="w-full">
           <h2
-            class="text-center text-2xl text-black font-medium tracking-wider"
+            v-if="user"
+            class="text-center text-2xl text-black font-medium tracking-wider capitalize"
           >
-            Chioma Assurance
+            {{ user['name'] | isValue }}
           </h2>
         </div>
-        <div class="w-full">
-          <p class="text-center space-x-2">
-            <span class="text-black">Sales Department</span>
-            <span class="text-purple-400">Sales Analyst</span>
+        <div v-if="user" class="w-full">
+          <p class="text-center space-x-2 capitalize">
+            <span class="text-black">{{ user['role'] }} Department</span>
+            <span class="text-purple-400">{{ user['subrole'] }}</span>
           </p>
         </div>
       </div>
@@ -33,7 +34,9 @@
 
         <div class="space-y-1">
           <p class="text-gray-400 capitalize">Full Name</p>
-          <p v-if="user" class="text-black">{{ user['name'] | isValue }}</p>
+          <p v-if="user" class="text-black capitalize">
+            {{ user['name'] | isValue }}
+          </p>
         </div>
         <div class="space-y-1">
           <p class="text-gray-400 capitalize">Email Address</p>
@@ -80,7 +83,7 @@ export default defineComponent({
   name: 'Profile',
   filters: {
     isValue(value: string) {
-      let result
+      let result: string
       if (value) {
         result = value
       } else {

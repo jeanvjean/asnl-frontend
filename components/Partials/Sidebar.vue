@@ -25,7 +25,6 @@
               <svg
                 class="text-gray-300 mr-3 h-6 w-6"
                 xmlns="http://www.w3.org/2000/svg"
-                fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 aria-hidden="true"
@@ -44,12 +43,13 @@
               class="text-white group px-4 py-4 rounded-md flex items-center space-x-6"
             >
               <svg
-                class="text-gray-300 mr-3 h-6 w-6 fill-current"
                 xmlns="http://www.w3.org/2000/svg"
+                class="text-gray-300 mr-3 h-6 w-6"
                 viewBox="0 0 20 20"
+                fill="currentColor"
               >
                 <path
-                  d="M7 8a4 4 0 110-8 4 4 0 010 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 017 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 11-1.33 7.76 5.96 5.96 0 000-7.52C12.1.1 12.53 0 13 0z"
+                  d="M9 6a3 3 0 11-6 0 3 3 0 016 0zm8 0a3 3 0 11-6 0 3 3 0 016 0zm-4.07 11c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"
                 />
               </svg>
               <span class="font-light font-xl">User Management</span>
@@ -63,10 +63,10 @@
                   <svg
                     class="text-gray-300 mr-3 h-6 w-6 fill-current"
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
+                    viewBox="0 0 452.608 452.608"
                   >
                     <path
-                      d="M7 8a4 4 0 110-8 4 4 0 010 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 017 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 11-1.33 7.76 5.96 5.96 0 000-7.52C12.1.1 12.53 0 13 0z"
+                      d="M285.184 92.672V63.488h6.656c17.408 0 31.744-14.336 31.744-31.744S309.248 0 291.84 0H160.768c-17.408 0-31.744 14.336-31.744 31.744s14.336 31.744 31.744 31.744h6.656v29.184c-38.912 2.56-69.12 34.816-69.12 73.728v80.384h256V166.4c0-38.912-30.208-71.168-69.12-73.728zm-25.6-.512h-20.48V80.896h-25.6V92.16h-20.48V62.976h66.56V92.16zM98.304 272.384v81.92c0 28.16 15.872 53.76 40.96 66.56v31.744h174.08v-31.744c25.088-12.8 40.96-38.4 40.96-66.56v-81.92h-256z"
                     />
                   </svg>
 
@@ -131,7 +131,7 @@
                     viewBox="0 0 20 20"
                   >
                     <path
-                      d="M7 8a4 4 0 110-8 4 4 0 010 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 017 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 11-1.33 7.76 5.96 5.96 0 000-7.52C12.1.1 12.53 0 13 0z"
+                      d="M0 10V2l2-2h8l10 10-10 10L0 10zm4.5-4a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
                     />
                   </svg>
 
@@ -179,12 +179,16 @@
               >
                 <div class="flex space-x-6">
                   <svg
-                    class="text-gray-300 mr-3 h-6 w-6 fill-current"
                     xmlns="http://www.w3.org/2000/svg"
+                    class="text-gray-300 mr-3 h-6 w-6 fill-current"
                     viewBox="0 0 20 20"
+                    fill="currentColor"
                   >
                     <path
-                      d="M7 8a4 4 0 110-8 4 4 0 010 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 017 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 11-1.33 7.76 5.96 5.96 0 000-7.52C12.1.1 12.53 0 13 0z"
+                      d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm7 0a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
+                    />
+                    <path
+                      d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zm11 3a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"
                     />
                   </svg>
 
@@ -202,7 +206,7 @@
                 </svg>
                 <svg
                   v-else
-                  class="w-6 h-6 fill-current text-white"
+                  class="w-6 h-6 fill-current text-gray-300"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -244,12 +248,14 @@
               >
                 <div class="flex space-x-6">
                   <svg
-                    class="text-gray-300 mr-3 h-6 w-6 fill-current"
+                    class="w-8 h-8 fill-current text-gray-300"
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
                   >
                     <path
-                      d="M7 8a4 4 0 110-8 4 4 0 010 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 017 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 11-1.33 7.76 5.96 5.96 0 000-7.52C12.1.1 12.53 0 13 0z"
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z"
+                      fill="rgba(209, 213, 219, 1)"
                     />
                   </svg>
 
@@ -300,12 +306,15 @@
               class="text-white group px-4 py-4 rounded-md flex items-center space-x-6"
             >
               <svg
-                class="text-gray-300 mr-3 h-6 w-6 fill-current"
+                class="mr-3 h-6 w-6 fill-current text-gray-300"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
+                viewBox="0 0 490.667 490.667"
               >
                 <path
-                  d="M7 8a4 4 0 110-8 4 4 0 010 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 017 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 11-1.33 7.76 5.96 5.96 0 000-7.52C12.1.1 12.53 0 13 0z"
+                  d="M245.333 0C110.059 0 0 110.059 0 245.333s110.059 245.333 245.333 245.333 245.333-110.059 245.333-245.333S380.608 0 245.333 0zm0 448c-111.744 0-202.667-90.923-202.667-202.667S133.589 42.667 245.333 42.667 448 133.589 448 245.333 357.077 448 245.333 448z"
+                />
+                <path
+                  d="M359.552 131.136c-3.093-3.115-7.765-4.011-11.755-2.261l-149.333 64c-2.517 1.067-4.523 3.093-5.611 5.611l-64 149.333a10.653 10.653 0 002.261 11.755 10.82 10.82 0 007.552 3.093c1.408 0 2.837-.299 4.203-.853l149.333-64a10.761 10.761 0 005.611-5.611l64-149.333a10.687 10.687 0 00-2.261-11.734zM245.333 266.667c-11.755 0-21.333-9.579-21.333-21.333 0-11.755 9.579-21.333 21.333-21.333 11.755 0 21.333 9.579 21.333 21.333.001 11.754-9.578 21.333-21.333 21.333z"
                 />
               </svg>
               <span class="font-light font-xl">Drivers</span>
@@ -316,31 +325,39 @@
               class="text-white group px-4 py-4 rounded-md flex items-center space-x-6"
             >
               <svg
-                class="text-gray-300 mr-3 h-6 w-6 fill-current"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
+                class="mr-3 h-6 w-6 fill-current text-transparent"
+                viewBox="0 0 24 24"
+                stroke="rgba(209, 213, 219, 1)"
               >
                 <path
-                  d="M7 8a4 4 0 110-8 4 4 0 010 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 017 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 11-1.33 7.76 5.96 5.96 0 000-7.52C12.1.1 12.53 0 13 0z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
                 />
               </svg>
               <span class="font-light font-xl">Archive</span>
             </a>
-            <a
-              href="#"
+            <button
               class="text-white group px-4 py-4 rounded-md flex items-center space-x-6"
+              @click="logout"
             >
               <svg
-                class="text-gray-300 mr-3 h-6 w-6 fill-current"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
+                class="mr-3 h-6 w-6 fill-current text-transparent"
+                viewBox="0 0 24 24"
+                stroke="rgba(209, 213, 219, 1)"
               >
                 <path
-                  d="M7 8a4 4 0 110-8 4 4 0 010 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 017 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 11-1.33 7.76 5.96 5.96 0 000-7.52C12.1.1 12.53 0 13 0z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                 />
               </svg>
               <span class="font-light font-xl">Logout</span>
-            </a>
+            </button>
           </nav>
         </div>
       </div>
@@ -349,19 +366,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, ref, useRouter } from '@nuxtjs/composition-api'
+import { mainStore } from '~/module/Pinia'
+
 export default defineComponent({
   setup() {
     const toggleCylinder = ref(false)
     const toggleInventory = ref(false)
     const toggleReport = ref(false)
     const toggleVehicle = ref(false)
+    const appStore = mainStore()
+    const router = useRouter()
 
+    const logout = () => {
+      appStore.user = null
+      localStorage.removeItem('user')
+      router.push('/')
+    }
     return {
       toggleCylinder,
       toggleInventory,
       toggleReport,
       toggleVehicle,
+      logout,
     }
   },
 })
