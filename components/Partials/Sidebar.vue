@@ -112,11 +112,6 @@
                   class="block px-2 py-2"
                   >Cylinder Transfer</router-link
                 >
-                <router-link
-                  to="/dashboard/cylinder-management/single"
-                  class="block px-2 py-2"
-                  >Single Cylinder</router-link
-                >
               </div>
             </div>
             <div class="w-full">
