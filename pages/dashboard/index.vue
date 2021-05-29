@@ -165,12 +165,12 @@ export default defineComponent({
     })
 
     onBeforeMount(() => {
-      cylinderObject.getEverythingCylinder().then((responses: any) => {
-        const myResponse = responses[0].data.data
+      cylinderObject.getRegisteredCylinders().then((responses: any) => {
+        const myResponse = responses.data.data
         stat.totalCylinders = myResponse.counts.totalCylinders
         stat.totalBufferCylinders = myResponse.counts.totalBufferCylinders
         stat.totalBufferCylinders = myResponse.counts.totalAssignedCylinders
-        registeredCylinders.value = responses[1].data.data.cylinders
+        registeredCylinders.value = responses.data.data.cylinders
       })
     })
 

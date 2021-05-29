@@ -60,7 +60,7 @@
           <td class="px-4 text-left py-4">
             <span>{{ bodySingle.assignedNumber }}</span>
           </td>
-          <td class="px-4 text-left py-4">{{ bodySingle.gasName }}</td>
+          <td class="px-4 text-left py-4">{{ bodySingle.gasType.gasName }}</td>
           <td class="px-4 text-left py-4">{{ bodySingle.gasVolumeContent }}</td>
           <td class="px-4 text-left py-4">{{ bodySingle.waterCapacity }}</td>
           <td class="px-4 text-left py-4">
