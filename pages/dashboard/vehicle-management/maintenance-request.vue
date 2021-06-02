@@ -3,7 +3,7 @@
     <div class="flex justify-evenly items-center w-full lg:w-1/2 mb-4">
       <h1 class="text-xl text-black font-medium">Transfer Cylinders</h1>
       <button
-        class="flex justify-between items-center bg-purple-600 text-white px-4 py-2 rounded-sm space-x-3"
+        class="flex justify-between items-center bg-purple-600 text-white px-4 py-2 rounded-sm-sm space-x-3"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -17,7 +17,7 @@
         <span>Within Division </span>
       </button>
       <button
-        class="flex justify-between items-center bg-transparent text-purple-500 border border-purple-500 px-4 py-2 rounded-sm space-x-2"
+        class="flex justify-between items-center bg-transparent text-purple-500 border border-purple-500 px-4 py-2 rounded-sm-sm space-x-2"
       >
         <svg
           class="w-6 h-6 fill-current"
@@ -34,7 +34,7 @@
         <span>Outright sales/transfer</span>
       </button>
       <button
-        class="flex justify-between items-center bg-transparent text-purple-500 border border-purple-500 px-4 py-2 rounded-sm space-x-2"
+        class="flex justify-between items-center bg-transparent text-purple-500 border border-purple-500 px-4 py-2 rounded-sm-sm space-x-2"
       >
         <svg
           class="w-6 h-6 fill-current"
@@ -57,7 +57,7 @@
           </h1>
           <div class="flex space-x-6">
             <button
-              class="flex items-center bg-purple-600 text-white space-x-4 px-4 py-2 rounded-sm"
+              class="flex items-center bg-purple-600 text-white space-x-4 px-4 py-2 rounded-sm-sm"
               @click="
                 status = 'success'
                 showConfirmation = true
@@ -79,7 +79,7 @@
               </svg>
             </button>
             <button
-              class="flex items-center space-x-4 px-4 py-2 rounded-sm border border-purple-600"
+              class="flex items-center space-x-4 px-4 py-2 rounded-sm-sm border border-purple-600"
               @click="
                 status = 'error'
                 showConfirmation = true

@@ -8,7 +8,7 @@
           </h1>
           <div class="flex space-x-6">
             <button
-              class="flex items-center bg-purple-600 text-white space-x-4 px-4 py-2 rounded-sm"
+              class="flex items-center bg-purple-600 text-white space-x-4 px-4 py-2 rounded-sm-sm"
               @click="
                 status = 'success'
                 showConfirmation = true
@@ -30,7 +30,7 @@
               </svg>
             </button>
             <button
-              class="flex items-center space-x-4 px-4 py-2 rounded-sm border border-purple-600"
+              class="flex items-center space-x-4 px-4 py-2 rounded-sm-sm border border-purple-600"
               @click="
                 status = 'error'
                 showConfirmation = true

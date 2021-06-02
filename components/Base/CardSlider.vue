@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-dark-blue px-6 py-6 rounded relative">
+  <div class="bg-dark-blue px-6 py-6 rounded-sm relative">
     <transition :name="transitionAnimation" mode="out-in">
       <div :key="currentIndex">
         <div class="grid grid-rows-1 lg:grid-cols-3 gap-4">

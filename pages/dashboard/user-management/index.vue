@@ -5,7 +5,7 @@
     </div>
     <div v-if="defaultState" class="mx-auto px-4 sm:px-6 md:px-8 w-full">
       <div
-        class="bg-white shadow-sm rounded h-96 px-4 flex justify-center items-center"
+        class="bg-white shadow-sm rounded-sm h-96 px-4 flex justify-center items-center"
       >
         <div class="w-full sm:w-full md:w-3/5 space-y-6">
           <svg
@@ -78,7 +78,7 @@
       </div>
     </div>
     <div v-else class="mx-auto px-4 sm:px-6 md:px-8 w-full">
-      <div class="bg-white shadow-sm rounded h-full px-4">
+      <div class="bg-white shadow-sm rounded-sm h-full px-4">
         <TableComponent :head="headers" :body="body" @refresh="getUsers" />
       </div>
     </div>
@@ -103,7 +103,10 @@ export default defineComponent({
         body.value = myResponse
       })
     }
-    onMounted(getUsers)
+
+    onMounted(() => {
+      getUsers()
+    })
 
     const defaultState = ref(false)
     return {

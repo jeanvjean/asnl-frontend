@@ -7,7 +7,7 @@
         </h1>
         <div class="flex items-center space-x-6">
           <button
-            class="bg-transparent text-purple-600 border border-purple-600 px-6 py-2 rounded-sm"
+            class="bg-transparent text-purple-600 border border-purple-600 px-6 py-2 rounded-sm-sm"
           >
             Download
           </button>
@@ -127,7 +127,7 @@
                 </div>
               </div>
               <button
-                class="px-4 py-2 rounded-sm text-purple-500 bg-transparent border border-purple-600"
+                class="px-4 py-2 rounded-sm-sm text-purple-500 bg-transparent border border-purple-600"
               >
                 Route Plan
               </button>
@@ -201,7 +201,7 @@
                 </div>
               </div>
               <button
-                class="px-4 py-2 rounded-sm text-purple-500 bg-transparent border border-purple-600"
+                class="px-4 py-2 rounded-sm-sm text-purple-500 bg-transparent border border-purple-600"
               >
                 See Details
               </button>
@@ -270,7 +270,7 @@
               </div>
             </div>
             <button
-              class="px-4 py-2 rounded-sm text-purple-500 bg-transparent border border-purple-600"
+              class="px-4 py-2 rounded-sm-sm text-purple-500 bg-transparent border border-purple-600"
             >
               See Details
             </button>
@@ -333,7 +333,7 @@
             </div>
             <router-link
               to="/dashboard/vehicle-management/vehicle-performance"
-              class="px-4 py-2 rounded-sm text-purple-500 bg-transparent border border-purple-600"
+              class="px-4 py-2 rounded-sm-sm text-purple-500 bg-transparent border border-purple-600"
             >
               See Details
             </router-link>

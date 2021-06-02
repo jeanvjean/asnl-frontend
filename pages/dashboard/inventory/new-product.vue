@@ -1,6 +1,6 @@
 <template>
   <div :key="keyValue" class="px-6 py-6">
-    <div class="bg-white w-full h-full rounded-md">
+    <div class="bg-white w-full h-full rounded-sm-md">
       <div class="px-6 py-6">
         <div class="mb-4">
           <h1 class="font-medium text-xl text-black">Create Product</h1>
@@ -14,9 +14,10 @@
             @get="form.division = $event.value"
           />
 
-          <input-component
+          <select-component
             :label-title="'Supplier'"
-            :input-placeholder="'Enter Supplier'"
+            :default-option-text="'Choose a Supplier'"
+            :select-array="suppliers"
             @get="form.supplier = $event.value"
           />
 
@@ -105,13 +106,13 @@
         <div class="lg:flex w-full lg:space-x-4 lg:w-2/5">
           <button-component
             :button-text="'Create Product'"
-            :button-class="'py-2 bg-purple-500 text-white rounded'"
+            :button-class="'py-2 bg-purple-500 text-white rounded-sm'"
             :loading-status="loading"
             @buttonClicked="createProduct"
           />
           <button-component
             :button-text="'Cancel'"
-            :button-class="'py-2 bg-white text-purple-500 border border-purple-500 rounded'"
+            :button-class="'py-2 bg-white text-purple-500 border border-purple-500 rounded-sm'"
             @buttonClicked="reset"
           />
         </div>
@@ -156,6 +157,7 @@ export default defineComponent({
     const productObj = new ProductRepository()
     const loading = ref(false)
     const divisions = ref([])
+    const suppliers = ref([])
 
     function valuesNotEmpty(obj: Object) {
       return Object.values(obj).every(
@@ -174,8 +176,20 @@ export default defineComponent({
       })
     }
 
+    function fetchSuppliers() {
+      productObj.fetchSuppliers().then((response) => {
+        suppliers.value = response.data.map((element: any) => {
+          return {
+            name: element.name,
+            value: element._id,
+          }
+        })
+      })
+    }
+
     onMounted(() => {
       fetchBranches()
+      fetchSuppliers()
     })
 
     const createProduct = () => {
@@ -205,6 +219,7 @@ export default defineComponent({
       createProduct,
       loading,
       divisions,
+      suppliers,
     }
   },
 })

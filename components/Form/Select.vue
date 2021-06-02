@@ -6,17 +6,21 @@
       >{{ labelTitle }}</label
     ><select
       v-model="selectedValue"
-      class="appearance-none block w-full px-4 py-3 border-2 border-gray-200 text-black rounded-md focus:outline-none focus:border-purple-300 font-thin bg-white"
+      class="appearance-none block w-full px-4 py-3 border-2 border-gray-200 text-black rounded-sm-md focus:outline-none focus:border-purple-300 font-thin bg-white"
       @change="returnValue"
     >
-      <option v-if="defaultOptionText" value="">
+      <option
+        v-if="defaultOptionText"
+        class="capitalize text-gray-500 disabled"
+        value=""
+      >
         {{ defaultOptionText }}
       </option>
       <option
         v-for="(row, index) in selectArray"
         :key="index"
         :value="row.value"
-        class="text-black"
+        class="text-black capitalize"
       >
         {{ row.name }}
       </option>
@@ -41,9 +45,14 @@ export default defineComponent({
       type: String,
       required: false,
     },
+    initValue: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
   setup(_props, ctx) {
-    const selectedValue = ref('')
+    const selectedValue = ref<String>(_props.initValue)
     const returnValue = () => {
       ctx.emit('get', selectedValue)
     }

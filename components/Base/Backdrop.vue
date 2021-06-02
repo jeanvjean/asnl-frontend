@@ -1,7 +1,7 @@
 <template>
   <div
     :class="centralize ? 'items-center' : ' items-start'"
-    class="fixed inset-0 bg-black bg-opacity-25 flex justify-center z-20 w-screen h-screen overflow-y-auto"
+    class="fixed inset-0 bg-black bg-opacity-25 flex justify-center z-10 w-screen h-screen overflow-y-auto"
   >
     <slot></slot>
   </div>
@@ -16,6 +16,15 @@ export default defineComponent({
       default: true,
       type: Boolean,
     },
+  },
+  setup(_props, ctx) {
+    const close = () => {
+      ctx.emit('close')
+    }
+
+    return {
+      close,
+    }
   },
 })
 </script>

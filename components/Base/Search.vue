@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 flex">
+  <div class="flex flex-1">
     <form class="w-full flex md:ml-0" autocomplete="off">
       <label for="search_field" class="sr-only">Search</label>
       <div class="relative w-full text-gray-400 focus-within:text-gray-600">
@@ -18,7 +18,7 @@
           </svg>
         </div>
         <input
-          class="block border rounded-sm border-gray-300 w-96 lg:w-full h-full text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 px-10 py-3 sm:text-sm"
+          class="block border rounded-sm-sm border-gray-300 w-96 lg:w-full h-full text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 px-10 py-3 sm:text-sm"
           :placeholder="placeHolder"
           type="search"
           name="search"

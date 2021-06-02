@@ -13,7 +13,7 @@
           </h1>
           <div class="flex space-x-6">
             <button
-              class="flex items-center bg-purple-600 text-white space-x-4 px-4 py-2 rounded-sm"
+              class="flex items-center bg-purple-600 text-white space-x-4 px-4 py-2 rounded-sm-sm"
               @click="
                 status = 'success'
                 showConfirmation = true
@@ -35,7 +35,7 @@
               </svg>
             </button>
             <button
-              class="flex items-center space-x-4 px-4 py-2 rounded-sm border border-purple-600"
+              class="flex items-center space-x-4 px-4 py-2 rounded-sm-sm border border-purple-600"
               @click="
                 status = 'error'
                 showConfirmation = true
@@ -95,14 +95,14 @@
           class="px-10 flex flex-col space-y-4 lg:space-y-0 lg:space-x-4 justify-between lg:flex-row py-6"
         >
           <div class="grid grid-rows-1 gap-2 w-full">
-            <div class="border border-black rounded-md px-4 py-2">
+            <div class="border border-black rounded-sm-md px-4 py-2">
               <h3>Tyre</h3>
               <div class="grid grid-rows lg:grid-cols-2">
                 <check-box :label-title="'Inflation Pressure'" />
                 <check-box :label-title="'Cracks and Nuts'" />
               </div>
             </div>
-            <div class="border border-black rounded-md px-4 py-2">
+            <div class="border border-black rounded-sm-md px-4 py-2">
               <h3>Light</h3>
               <div class="grid grid-rows lg:grid-cols-3">
                 <check-box :label-title="'Interior'" />
@@ -111,14 +111,14 @@
                 <check-box :label-title="'Emergency'" />
               </div>
             </div>
-            <div class="border border-black rounded-md px-4 py-2">
+            <div class="border border-black rounded-sm-md px-4 py-2">
               <h3>Accessories</h3>
               <div class="grid grid-rows lg:grid-cols-2">
                 <check-box :label-title="'Tape/Radio'" />
                 <check-box :label-title="'Seat Belt'" />
               </div>
             </div>
-            <div class="border border-black rounded-md px-4 py-2">
+            <div class="border border-black rounded-sm-md px-4 py-2">
               <h3>Tools</h3>
               <div class="grid grid-rows lg:grid-cols-2">
                 <check-box :label-title="'Jack & Wheel Spanner'" />
@@ -128,7 +128,7 @@
           </div>
 
           <div class="grid grid-rows-1 w-full gap-y-2 gap-x-0 lg:gap-x-2">
-            <div class="border h-auto border-black rounded-md px-4 py-2">
+            <div class="border h-auto border-black rounded-sm-md px-4 py-2">
               <h3>Engine</h3>
               <div class="grid grid-cols-2">
                 <check-box :label-title="'Oil Level'" />
@@ -139,7 +139,7 @@
                 <check-box :label-title="'Battery Water Level'" />
               </div>
             </div>
-            <div class="border h-auto border-black rounded-md px-4 py-2">
+            <div class="border h-auto border-black rounded-sm-md px-4 py-2">
               <h3>Control</h3>
               <div class="grid grid-cols-2">
                 <check-box :label-title="'Horn'" />

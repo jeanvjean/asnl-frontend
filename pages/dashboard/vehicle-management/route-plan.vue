@@ -24,24 +24,7 @@
       <div
         class="flex items-center px-2 py-2 space-x-4 sm:w-80 lg:w-full overflow-auto"
       >
-        <div
-          class="flex items-center border-2 border-gray-300 justify-around space-x-2 text-gray-500 rounded-sm"
-        >
-          <svg
-            class="w-4 h-4 ml-2 fill-current"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path
-              d="M17 16v4h-2v-4h-2v-3h6v3h-2zM1 9h6v3H1V9zm6-4h6v3H7V5zM3 0h2v8H3V0zm12 0h2v12h-2V0zM9 0h2v4H9V0zM3 12h2v8H3v-8zm6-4h2v12H9V8z"
-            />
-          </svg>
-          <select
-            class="border-l-2 border-t-0 border-b-0 border-r-0 border-gray-300"
-          >
-            <option value="">Filter By</option>
-          </select>
-        </div>
+        <filter-component />
         <search-component :place-holder="'Search for Vehicles'" />
         <pagination />
       </div>
@@ -50,7 +33,10 @@
           <thead class="bg-gray-200">
             <tr>
               <th class="w-6 px-6 py-4">
-                <input type="checkbox" class="border border-gray-500 rounded" />
+                <input
+                  type="checkbox"
+                  class="border border-gray-500 rounded-sm"
+                />
               </th>
               <th
                 v-for="(headSingle, index) in headers"
@@ -70,7 +56,7 @@
               <td class="w-6 px-6 py-4">
                 <input
                   type="checkbox"
-                  class="border-2 border-gray-400 rounded"
+                  class="border-2 border-gray-400 rounded-sm"
                 />
               </td>
               <td
@@ -87,7 +73,7 @@
               <td class="px-4 text-left py-4">{{ bodySingle.end }}</td>
               <td class="px-4 text-left py-4">
                 <button
-                  class="mx-auto text-purple-500 border-2 border-purple-500 py-1.5 px-8 rounded-sm"
+                  class="mx-auto text-purple-500 border-2 border-purple-500 py-1.5 px-8 rounded-sm-sm"
                   @click="showRoute = true"
                 >
                   Details
@@ -106,10 +92,11 @@
 import { defineComponent, ref } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
+import FilterComponent from '@/components/Base/Filter.vue'
 import SingleRoute from '@/components/Overlays/DriverRoute.vue'
 export default defineComponent({
   name: 'Reports',
-  components: { Pagination, SearchComponent, SingleRoute },
+  components: { Pagination, SearchComponent, SingleRoute, FilterComponent },
   layout: 'dashboard',
   setup() {
     const showRoute = ref(false)

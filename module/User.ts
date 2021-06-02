@@ -29,6 +29,13 @@ class UserRepository {
   async deleteUser(userId: number) {
     return await $axios.delete('/user/delete-user/' + userId)
   }
+
+  async updateUserRole(userId: String, role: String, subrole: String) {
+    return await $axios.post('/user/change-role/' + userId, {
+      role,
+      subrole,
+    })
+  }
 }
 
 export { UserRepository }

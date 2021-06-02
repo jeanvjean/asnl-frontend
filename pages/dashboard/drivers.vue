@@ -12,7 +12,7 @@
         <button
           v-for="(driver, index) in drivers"
           :key="index"
-          class="flex px-4 py-4 border border-gray-300 bg-gray-200 space-x-4 focus:outline-none focus:border-purple-500 rounded-sm"
+          class="flex px-4 py-4 border border-gray-300 bg-gray-200 space-x-4 focus:outline-none focus:border-purple-500 rounded-sm-sm"
           @click="getDriver(index)"
         >
           <img

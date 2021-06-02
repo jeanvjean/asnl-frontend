@@ -163,7 +163,7 @@
         </div>
         <div class="flex space-x-6 px-12 py-4 my-2">
           <button
-            class="flex space-x-6 py-2 px-4 items-center bg-purple-600 rounded"
+            class="flex space-x-6 py-2 px-4 items-center bg-purple-600 rounded-sm"
           >
             <span class="text-white font-medium text-lg">Save</span>
             <svg
@@ -177,7 +177,7 @@
             </svg>
           </button>
           <button
-            class="flex space-x-6 py-2 px-4 items-center bg-purple-600 rounded"
+            class="flex space-x-6 py-2 px-4 items-center bg-purple-600 rounded-sm"
           >
             <span class="text-white font-medium text-lg">Print</span>
             <svg

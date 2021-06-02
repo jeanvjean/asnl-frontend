@@ -6,7 +6,7 @@
       class="bg-white flex flex-col lg:flex-row justify-center items-center w-full h-96 px-4 py-4 space-y-4 lg:space-y-0 lg:space-x-8 mt-4"
     >
       <div>
-        <button class="border-2 border-gray-200 px-10 py-12 rounded-md">
+        <button class="border-2 border-gray-200 px-10 py-12 rounded-sm-md">
           <svg
             class="w-8 h-8 fill-current text-gray-600 mx-auto"
             viewBox="0 0 30 36"
@@ -26,7 +26,7 @@
         </button>
       </div>
       <div>
-        <button class="border-2 border-gray-200 px-10 py-12 rounded-md">
+        <button class="border-2 border-gray-200 px-10 py-12 rounded-sm-md">
           <svg
             class="w-8 h-8 fill-current text-gray-600 mx-auto"
             viewBox="0 0 30 36"

@@ -19,7 +19,7 @@
           Route Plan
         </h1>
         <button
-          class="bg-transparent border border-purple-600 text-purple-600 rounded-sm px-6 py-2"
+          class="bg-transparent border border-purple-600 text-purple-600 rounded-sm-sm px-6 py-2"
         >
           Edit
         </button>

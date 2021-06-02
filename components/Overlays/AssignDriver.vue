@@ -1,6 +1,6 @@
 <template>
   <back-drop>
-    <div class="w-full sm:w-full md:w-1/4 bg-white py-10 px-8 rounded-md">
+    <div class="w-full sm:w-full md:w-1/4 bg-white py-10 px-8 rounded-sm-md">
       <div class="flex justify-between items-center my-2">
         <div>
           <p class="text-xl font-medium">Assign Driver</p>
@@ -30,14 +30,14 @@
         />
         <button-component
           :button-text="'Assign'"
-          :button-class="'bg-purple-600 text-white rounded-sm mt-2'"
+          :button-class="'bg-purple-600 text-white rounded-sm-sm mt-2'"
           :loading-status="loading"
           @buttonClicked="assignDriverAction"
         />
 
         <button-component
           :button-text="'Cancel'"
-          :button-class="'bg-white text-purple-600 rounded-sm my-2 border border-purple-600'"
+          :button-class="'bg-white text-purple-600 rounded-sm-sm my-2 border border-purple-600'"
           @buttonClicked="close"
         />
       </div>

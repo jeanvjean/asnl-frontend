@@ -1,34 +1,17 @@
 <template>
   <div class="py-6">
     <div class="mx-auto px-4 sm:px-6 md:px-8 w-full">
-      <div class="bg-white shadow-sm rounded h-full px-4">
+      <div class="bg-white shadow-sm rounded-sm h-full px-4">
         <div class="overflow-x-auto w-full py-4">
           <div class="w-full mb-4">
             <div
               class="flex items-center justify-around px-2 py-2 space-x-4 w-full"
             >
-              <div
-                class="flex items-center border-2 border-gray-300 justify-around space-x-2 text-gray-500"
-              >
-                <svg
-                  class="w-4 h-4 ml-2 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M17 16v4h-2v-4h-2v-3h6v3h-2zM1 9h6v3H1V9zm6-4h6v3H7V5zM3 0h2v8H3V0zm12 0h2v12h-2V0zM9 0h2v4H9V0zM3 12h2v8H3v-8zm6-4h2v12H9V8z"
-                  />
-                </svg>
-                <select
-                  class="border-l-2 border-t-0 border-b-0 border-r-0 border-gray-300 ring-0 appearance-none"
-                >
-                  <option value="">Filter By</option>
-                </select>
-              </div>
+              <filter-component />
               <search-component :place-holder="'Search'" />
 
               <button
-                class="flex justify-between items-end bg-purple-600 px-4 py-2.5 space-x-4 rounded text-white font-semibold text-md"
+                class="flex justify-between items-end bg-purple-600 px-4 py-2.5 space-x-4 rounded-sm text-white font-semibold text-md"
                 @click="showNewCustomer = !showNewCustomer"
               >
                 <svg
@@ -50,7 +33,7 @@
           </div>
           <div v-if="defaultState" class="mx-auto px-4 sm:px-6 md:px-8 w-full">
             <div
-              class="bg-white shadow-sm rounded h-96 px-4 flex justify-center items-center"
+              class="bg-white shadow-sm rounded-sm h-96 px-4 flex justify-center items-center"
             >
               <div class="w-full sm:w-full md:w-3/5 space-y-6">
                 <svg
@@ -124,7 +107,7 @@
                 <th class="w-6 px-6 py-4">
                   <input
                     type="checkbox"
-                    class="border border-gray-500 rounded"
+                    class="border border-gray-500 rounded-sm"
                   />
                 </th>
                 <th
@@ -150,7 +133,7 @@
                 <td class="w-6 px-6 py-4">
                   <input
                     type="checkbox"
-                    class="border-2 border-gray-400 rounded"
+                    class="border-2 border-gray-400 rounded-sm"
                   />
                 </td>
                 <td class="px-4 text-left py-4">
@@ -180,7 +163,7 @@
                     </svg>
                   </button>
                   <div
-                    class="absolute ml-4 bg-gray-50 border border-gray-300 w-40 font-medium text-sm rounded-md action-menu z-10"
+                    class="absolute ml-4 bg-gray-50 border border-gray-300 w-40 font-medium text-sm rounded-sm-md action-menu z-10"
                   >
                     <button
                       class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
@@ -221,9 +204,11 @@ import { defineComponent, ref } from '@nuxtjs/composition-api'
 import SearchComponent from '@/components/Base/Search.vue'
 import NewCustomer from '@/components/Overlays/NewCustomer.vue'
 import Customer from '@/components/Overlays/Customer.vue'
+import FilterComponent from '@/components/Base/Filter.vue'
+
 export default defineComponent({
   name: 'Home',
-  components: { SearchComponent, NewCustomer, Customer },
+  components: { SearchComponent, NewCustomer, Customer, FilterComponent },
   layout: 'dashboard',
   setup() {
     const headers = ['Customer Name', 'Email Address', 'Phone No.', 'Address']

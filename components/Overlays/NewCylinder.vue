@@ -1,6 +1,6 @@
 <template>
   <back-drop>
-    <div class="w-full sm:w-full md:w-1/2 bg-white py-4 px-8 rounded-md">
+    <div class="w-full sm:w-full md:w-1/2 bg-white py-4 px-8 rounded-sm-md">
       <div class="flex justify-between items-center my-2">
         <div>
           <p class="text-xl font-medium">Register Gas Cylinder</p>
@@ -46,10 +46,10 @@
             v-model="formInputs.gasVolumeContent"
             placeholder="Enter Amount"
             type="number"
-            class="block w-full px-4 py-3 border-2 border-gray-200 rounded focus:outline-none focus:border-purple-300 font-thin placeholder-black hover:placeholder-opacity-25"
+            class="block w-full px-4 py-3 border-2 border-gray-200 rounded-sm focus:outline-none focus:border-purple-300 font-thin placeholder-black hover:placeholder-opacity-25"
           />
           <select
-            class="absolute top-12 right-0 -mt-2.5 bg-gray-200 border-none py-3 rounded"
+            class="absolute top-12 right-0 -mt-2.5 bg-gray-200 border-none py-3 rounded-sm"
           >
             <option value="KG">KG</option>
           </select>
@@ -99,7 +99,7 @@
       </div>
       <div class="flex justify-center items-center space-x-4 mt-4">
         <button
-          class="rounded-sm px-4 py-2 border-2 border-purple-300 text-sm font-light flex justify-between items-center space-x-4"
+          class="rounded-sm-sm px-4 py-2 border-2 border-purple-300 text-sm font-light flex justify-between items-center space-x-4"
         >
           <span>Add More Cylinders</span>
           <svg
@@ -113,7 +113,7 @@
           </svg>
         </button>
         <button
-          class="rounded-sm px-4 py-2 border border-purple-300 text-sm font-light flex justify-between items-center space-x-4 bg-purple-500 text-white"
+          class="rounded-sm-sm px-4 py-2 border border-purple-300 text-sm font-light flex justify-between items-center space-x-4 bg-purple-500 text-white"
           @click="createCylinder"
         >
           <span>Complete Registration</span>

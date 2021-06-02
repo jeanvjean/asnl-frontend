@@ -1,6 +1,6 @@
 <template>
   <div :key="keyValue" class="px-6 py-6">
-    <div class="bg-white w-full h-full rounded-md">
+    <div class="bg-white w-full h-full rounded-sm-md">
       <div class="px-6 py-6">
         <div class="mb-4">
           <h1 class="font-medium text-xl text-black">Create Vehicle</h1>
@@ -132,13 +132,13 @@
         <div class="lg:flex w-full lg:space-x-4 lg:w-2/5 my-6">
           <button-component
             :button-text="'Create Vehicle'"
-            :button-class="'py-2 bg-purple-500 text-white rounded'"
+            :button-class="'py-2 bg-purple-500 text-white rounded-sm'"
             :loading-status="loading"
             @buttonClicked="createVehicle"
           />
           <button-component
             :button-text="'Cancel'"
-            :button-class="'py-2 bg-white text-purple-500 border border-purple-500 rounded'"
+            :button-class="'py-2 bg-white text-purple-500 border border-purple-500 rounded-sm'"
             @buttonClicked="reset"
           />
         </div>

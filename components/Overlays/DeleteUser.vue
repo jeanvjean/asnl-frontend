@@ -1,12 +1,12 @@
 <template>
   <back-drop>
-    <div class="w-1/5 bg-white rounded px-4 py-4 text-black font-light">
+    <div class="w-1/5 bg-white rounded-sm px-4 py-4 text-black font-light">
       <div>
         <h1 class="text-xl font-medium">Delete User</h1>
         <span class="block text-md">Are you sure you want to delete</span>
       </div>
       <div
-        class="flex space-x-4 items-center w-full my-4 px-2 bg-gray-200 py-2 rounded-sm"
+        class="flex space-x-4 items-center w-full my-4 px-2 bg-gray-200 py-2 rounded-sm-sm"
       >
         <img
           class="h-20 w-20 rounded-full"

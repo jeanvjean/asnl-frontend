@@ -7,24 +7,7 @@
           <div
             class="flex items-center justify-around px-2 py-2 space-x-4 w-full"
           >
-            <div
-              class="flex items-center border-2 border-gray-300 justify-around space-x-2 text-gray-500"
-            >
-              <svg
-                class="w-4 h-4 ml-2 fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M17 16v4h-2v-4h-2v-3h6v3h-2zM1 9h6v3H1V9zm6-4h6v3H7V5zM3 0h2v8H3V0zm12 0h2v12h-2V0zM9 0h2v4H9V0zM3 12h2v8H3v-8zm6-4h2v12H9V8z"
-                />
-              </svg>
-              <select
-                class="border-l-2 border-t-0 border-b-0 border-r-0 border-gray-300"
-              >
-                <option value="">Filter By</option>
-              </select>
-            </div>
+            <filter-component />
             <div class="flex-1 flex">
               <form class="w-full flex md:ml-0" autocomplete="off">
                 <label for="search_field" class="sr-only">Search</label>
@@ -46,7 +29,7 @@
                     </svg>
                   </div>
                   <input
-                    class="block border rounded-sm border-gray-300 w-full h-full text-gray-900 focus:outline-none focus:ring-0 px-10 py-4 sm:text-sm"
+                    class="block border rounded-sm-sm border-gray-300 w-full h-full text-gray-900 focus:outline-none focus:ring-0 px-10 py-4 sm:text-sm"
                     placeholder="Search"
                     type="search"
                     name="search"
@@ -56,7 +39,7 @@
             </div>
 
             <button
-              class="flex justify-between items-center bg-purple-600 px-4 py-3 text-white font-medium text-md space-x-2 rounded"
+              class="flex justify-between items-center bg-purple-600 px-4 py-3 text-white font-medium text-md space-x-2 rounded-sm"
               @click="showIssueProduct = true"
             >
               <svg
@@ -71,7 +54,7 @@
               <span>Issue Product</span>
             </button>
             <button
-              class="flex justify-between items-center bg-purple-600 px-4 py-3 text-white font-medium text-md space-x-2 rounded"
+              class="flex justify-between items-center bg-purple-600 px-4 py-3 text-white font-medium text-md space-x-2 rounded-sm"
               @click="showRecieveProduct = true"
             >
               <svg
@@ -86,7 +69,7 @@
               <span> Recieve Product </span>
             </button>
             <router-link
-              class="flex justify-between items-center bg-purple-600 px-4 py-3 text-white font-medium text-md space-x-2 rounded"
+              class="flex justify-between items-center bg-purple-600 px-4 py-3 text-white font-medium text-md space-x-2 rounded-sm"
               to="/dashboard/inventory/new-product"
             >
               <svg
@@ -104,7 +87,7 @@
         </div>
         <div v-if="defaultState" class="mx-auto px-4 sm:px-6 md:px-8 w-full">
           <div
-            class="bg-white shadow-sm rounded h-96 px-4 flex justify-center items-center"
+            class="bg-white shadow-sm rounded-sm h-96 px-4 flex justify-center items-center"
           >
             <div class="w-full sm:w-full md:w-2/5 space-y-6">
               <svg
@@ -174,7 +157,10 @@
           <thead class="bg-gray-200">
             <tr>
               <th class="w-6 px-6 py-4">
-                <input type="checkbox" class="border border-gray-500 rounded" />
+                <input
+                  type="checkbox"
+                  class="border border-gray-500 rounded-sm"
+                />
               </th>
               <th
                 v-for="(headSingle, index) in headers"
@@ -194,7 +180,7 @@
               <td class="w-6 px-6 py-4">
                 <input
                   type="checkbox"
-                  class="border-2 border-gray-400 rounded"
+                  class="border-2 border-gray-400 rounded-sm"
                 />
               </td>
 
@@ -228,9 +214,11 @@ import RecieveProduct from '@/components/Overlays/RecieveProducts.vue'
 import IssueProduct from '@/components/Overlays/IssueProducts.vue'
 import CardSlider from '@/components/Base/CardSlider.vue'
 import { ProductRepository } from '@/module/Product'
+import FilterComponent from '@/components/Base/Filter.vue'
+
 export default defineComponent({
   name: 'CylinderPool',
-  components: { RecieveProduct, IssueProduct, CardSlider },
+  components: { RecieveProduct, IssueProduct, CardSlider, FilterComponent },
   layout: 'dashboard',
   setup() {
     const headers = [

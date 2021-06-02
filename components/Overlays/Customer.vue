@@ -31,7 +31,7 @@
           >
           <div class="w-full flex justify-between items-center mt-3">
             <button
-              class="flex justify-between space-x-2 items-center bg-gray-300 px-3 py-2 rounded-md"
+              class="flex justify-between space-x-2 items-center bg-gray-300 px-3 py-2 rounded-sm-md"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@
               ><span>gas@luth.org</span>
             </button>
             <button
-              class="flex justify-between space-x-2 items-center bg-gray-300 px-3 py-2 rounded-md"
+              class="flex justify-between space-x-2 items-center bg-gray-300 px-3 py-2 rounded-sm-md"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -63,27 +63,27 @@
             </button>
             <button
               v-if="sections.cylinder"
-              class="bg-purple-600 text-white rounded-md px-6 py-2 font-medium"
+              class="bg-purple-600 text-white rounded-sm-md px-6 py-2 font-medium"
             >
               Add Cylinder
             </button>
             <button
               v-else-if="sections.pickup || sections.pickupForm"
-              class="bg-purple-600 text-white rounded-md px-6 py-2 font-medium"
+              class="bg-purple-600 text-white rounded-sm-md px-6 py-2 font-medium"
               @click="changeSection('pickupForm')"
             >
               Request Pickup
             </button>
             <button
               v-else-if="sections.complaint || sections.complaintForm"
-              class="bg-purple-600 text-white rounded-md px-6 py-2 font-medium"
+              class="bg-purple-600 text-white rounded-sm-md px-6 py-2 font-medium"
               @click="changeSection('complaintForm')"
             >
               Create Complaint
             </button>
             <button
               v-else
-              class="bg-purple-600 text-white rounded-md px-6 py-2 font-medium"
+              class="bg-purple-600 text-white rounded-sm-md px-6 py-2 font-medium"
             >
               Create Order
             </button>
@@ -171,7 +171,7 @@
           class="flex justify-between items-center w-full bg-white px-4 py-3"
         >
           <span>Order ASORO985</span>
-          <span class="text-gray-500 bg-gray-200 rounded-sm px-4 py-2"
+          <span class="text-gray-500 bg-gray-200 rounded-sm-sm px-4 py-2"
             >Pending</span
           >
           <span>01 Aug 2019. 04:55pm</span>
@@ -181,7 +181,7 @@
           class="flex justify-between items-center w-full bg-white px-4 py-3"
         >
           <span>Order ASORO985</span>
-          <span class="text-green-500 bg-green-100 rounded-sm px-4 py-2"
+          <span class="text-green-500 bg-green-100 rounded-sm-sm px-4 py-2"
             >Delivered</span
           >
           <span>01 Aug 2019. 04:55pm</span>
@@ -193,7 +193,7 @@
           class="flex justify-between items-center w-full bg-white px-4 py-3"
         >
           <span>#PU2323221</span>
-          <span class="text-gray-500 bg-gray-200 rounded-sm px-4 py-2"
+          <span class="text-gray-500 bg-gray-200 rounded-sm-sm px-4 py-2"
             >Pending</span
           >
           <span>01 Aug 2019. 04:55pm</span>
@@ -203,7 +203,7 @@
           class="flex justify-between items-center w-full bg-white px-4 py-3"
         >
           <span>#PU2323221</span>
-          <span class="text-green-500 bg-green-100 rounded-sm px-4 py-2"
+          <span class="text-green-500 bg-green-100 rounded-sm-sm px-4 py-2"
             >Delivered</span
           >
           <span>01 Aug 2019. 04:55pm</span>
@@ -215,7 +215,7 @@
           class="flex justify-between items-center w-full bg-white px-4 py-3"
         >
           <span>#2323221</span>
-          <span class="text-gray-500 bg-gray-200 rounded-sm px-4 py-2"
+          <span class="text-gray-500 bg-gray-200 rounded-sm-sm px-4 py-2"
             >Pending</span
           >
           <span>01 Aug 2019. 04:55pm</span>
@@ -225,7 +225,7 @@
           class="flex justify-between items-center w-full bg-white px-4 py-2"
         >
           <span>#2323221</span>
-          <span class="text-green-500 bg-green-100 rounded-sm px-4 py-2"
+          <span class="text-green-500 bg-green-100 rounded-sm-sm px-4 py-2"
             >Delivered</span
           >
           <span>01 Aug 2019. 04:55pm</span>
@@ -266,7 +266,7 @@
           >
             <h2 class="font-semibold text-black text-lg">Request Pickup</h2>
             <button
-              class="text-sm border border-purple-600 rounded-sm px-4 py-2 text-purple-500"
+              class="text-sm border border-purple-600 rounded-sm-sm px-4 py-2 text-purple-500"
               @click="changeSection('pickup')"
             >
               Pickup List
@@ -293,7 +293,7 @@
               />
 
               <button-component
-                :button-class="'bg-purple-600 text-white rounded-sm'"
+                :button-class="'bg-purple-600 text-white rounded-sm-sm'"
                 :button-text="'Request Pickup'"
               />
             </div>
@@ -308,7 +308,7 @@
           >
             <h2 class="font-semibold text-black text-lg">New Complaint</h2>
             <button
-              class="text-sm border border-purple-600 rounded-sm px-4 py-2 text-purple-500"
+              class="text-sm border border-purple-600 rounded-sm-sm px-4 py-2 text-purple-500"
               @click="changeSection('complaint')"
             >
               Complaint List
@@ -333,7 +333,7 @@
               />
 
               <button-component
-                :button-class="'bg-purple-600 text-white rounded-sm'"
+                :button-class="'bg-purple-600 text-white rounded-sm-sm'"
                 :button-text="'Request Pickup'"
               />
             </div>
@@ -342,27 +342,7 @@
       </section>
 
       <section v-if="sections.cylinder" class="w-full space-y-3">
-        <div class="flex items-center space-x-4 my-4">
-          <span>Filter By</span>
-          <div
-            class="flex items-center border-2 border-gray-300 justify-around space-x-2 text-gray-500 rounded-sm"
-          >
-            <svg
-              class="w-4 h-4 ml-2 fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path
-                d="M17 16v4h-2v-4h-2v-3h6v3h-2zM1 9h6v3H1V9zm6-4h6v3H7V5zM3 0h2v8H3V0zm12 0h2v12h-2V0zM9 0h2v4H9V0zM3 12h2v8H3v-8zm6-4h2v12H9V8z"
-              />
-            </svg>
-            <select
-              class="border-l-2 border-t-0 border-b-0 border-r-0 border-gray-300"
-            >
-              <option value="">All</option>
-            </select>
-          </div>
-        </div>
+        <filter-component />
 
         <div
           class="flex justify-between items-center w-full bg-white px-4 py-3"
@@ -394,7 +374,7 @@
               </svg>
             </button>
             <div
-              class="absolute right-0 -mb-32 bg-gray-50 border border-gray-300 w-40 font-medium text-sm rounded-md action-menu z-10"
+              class="absolute right-0 -mb-32 bg-gray-50 border border-gray-300 w-40 font-medium text-sm rounded-sm-md action-menu z-10"
             >
               <button
                 class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
@@ -439,7 +419,7 @@
               </svg>
             </button>
             <div
-              class="absolute right-0 -mb-32 bg-gray-50 border border-gray-300 w-40 font-medium text-sm rounded-md action-menu z-10"
+              class="absolute right-0 -mb-32 bg-gray-50 border border-gray-300 w-40 font-medium text-sm rounded-sm-md action-menu z-10"
             >
               <button
                 class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
@@ -466,6 +446,7 @@ import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import TextAreaComponent from '@/components/Form/TextArea.vue'
+import FilterComponent from '@/components/Base/Filter.vue'
 
 export default defineComponent({
   components: {
@@ -474,6 +455,7 @@ export default defineComponent({
     SelectComponent,
     ButtonComponent,
     TextAreaComponent,
+    FilterComponent,
   },
   setup(_props, ctx) {
     const close = () => {

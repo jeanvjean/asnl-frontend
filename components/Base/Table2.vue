@@ -2,24 +2,7 @@
   <div class="overflow-x-auto w-full py-4">
     <div class="w-full mb-4">
       <div class="flex items-center justify-between py-2 w-full">
-        <div
-          class="flex items-center border-2 border-gray-300 justify-around space-x-2 text-gray-500"
-        >
-          <svg
-            class="w-4 h-4 ml-2 fill-current"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path
-              d="M17 16v4h-2v-4h-2v-3h6v3h-2zM1 9h6v3H1V9zm6-4h6v3H7V5zM3 0h2v8H3V0zm12 0h2v12h-2V0zM9 0h2v4H9V0zM3 12h2v8H3v-8zm6-4h2v12H9V8z"
-            />
-          </svg>
-          <select
-            class="border-l-2 border-t-0 border-b-0 border-r-0 border-gray-300"
-          >
-            <option value="">Filter By</option>
-          </select>
-        </div>
+        <filter-component />
 
         <div class="flex space-x-4 py-2">
           <form class="w-full flex md:ml-0" autocomplete="off">
@@ -42,14 +25,14 @@
                 </svg>
               </div>
               <input
-                class="block border rounded-sm border-gray-300 w-full text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 px-10 py-4 sm:text-sm"
+                class="block border rounded-sm-sm border-gray-300 w-full text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 px-10 py-4 sm:text-sm"
                 placeholder="Search for Users"
                 type="search"
                 name="search"
               />
             </div>
           </form>
-          <button class="bg-gray-200 rounded-sm px-6 py-4">
+          <button class="bg-gray-200 rounded-sm-sm px-6 py-4">
             <svg
               class="fill-current w-4 h-4 text-black"
               xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +44,7 @@
             </svg>
           </button>
           <button
-            class="flex items-center bg-purple-600 px-4 space-x-2 h-auto text-white font-semibold text-md rounded-sm"
+            class="flex items-center bg-purple-600 px-3 py-2 space-x-2 h-auto text-white font-semibold text-md rounded-sm"
             @click="show"
           >
             <svg
@@ -82,7 +65,7 @@
       <thead class="bg-gray-200">
         <tr>
           <th class="w-6 px-6 py-4">
-            <input type="checkbox" class="border border-gray-500 rounded" />
+            <input type="checkbox" class="border border-gray-500 rounded-sm" />
           </th>
           <th
             v-for="(headSingle, index) in head"
@@ -91,25 +74,43 @@
           >
             {{ headSingle }}
           </th>
+          <th
+            class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-center"
+          >
+            Actions
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(bodySingle, index) in body" :key="index" class="font-light">
           <td class="w-6 px-6 py-4">
-            <input type="checkbox" class="border-2 border-gray-400 rounded" />
+            <input
+              type="checkbox"
+              class="border-2 border-gray-400 rounded-sm"
+            />
           </td>
           <td class="px-4 text-left py-4">
-            <span>{{ bodySingle.cylinder_number }}</span>
+            <span>{{ bodySingle.assignedNumber }}</span>
           </td>
-          <td class="px-4 text-left py-4">{{ bodySingle.gas_type }}</td>
-          <td class="px-4 text-left py-4">{{ bodySingle.volume }}</td>
-          <td class="px-4 text-left py-4">{{ bodySingle.capacity }}</td>
+          <td class="px-4 text-left py-4">{{ bodySingle.gasType.gasName }}</td>
+          <td class="px-4 text-left py-4">{{ bodySingle.gasVolumeContent }}</td>
+          <td class="px-4 text-left py-4">{{ bodySingle.waterCapacity }}</td>
           <td class="px-4 text-left py-4">
-            <span class="px-8 py-2 bg-green-100 text-green-400">{{
-              bodySingle.type
-            }}</span>
+            <span class="px-4 py-2 bg-green-100 text-green-400 capitalize"
+              >{{ bodySingle.cylinderType }} Cylinder</span
+            >
           </td>
-          <td class="px-4 text-left py-4">{{ bodySingle.date }}</td>
+          <td class="px-4 text-left py-4">
+            {{ formatDate(bodySingle.dateManufactured) }}
+          </td>
+          <td class="px-4 text-center py-4">
+            <router-link
+              :to="'/dashboard/cylinder-management/single/' + bodySingle._id"
+              class="px-4 py-2 border border-purple-500 rounded-sm text-purple-600 text-sm"
+            >
+              View Details
+            </router-link>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -118,7 +119,10 @@
 
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
+import FilterComponent from '@/components/Base/Filter.vue'
+
 export default defineComponent({
+  components: { FilterComponent },
   props: {
     head: {
       type: Array,
@@ -133,9 +137,24 @@ export default defineComponent({
     const show = () => {
       ctx.emit('show')
     }
+    function formatDate(dateValue: string) {
+      const date = new Date(dateValue)
+      const year = date.getFullYear()
+      let month: any = date.getMonth() + 1
+      let dt: any = date.getDate()
 
+      if (dt < 10) {
+        dt = '0' + dt
+      }
+      if (month < 10) {
+        month = '0' + month
+      }
+
+      return year + '-' + month + '-' + dt
+    }
     return {
       show,
+      formatDate,
     }
   },
 })

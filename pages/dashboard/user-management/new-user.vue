@@ -5,7 +5,7 @@
     </div>
     <div class="mx-auto px-4 sm:px-6 lg:px-8 w-full">
       <div
-        class="bg-white shadow-sm rounded h-full px-4 py-4 lg:px-12 lg:py-12 grid grid-rows-1 lg:grid-cols-3 sm:gap-y-3 lg:gap-x-12"
+        class="bg-white shadow-sm rounded-sm h-full px-4 py-4 lg:px-12 lg:py-12 grid grid-rows-1 lg:grid-cols-3 sm:gap-y-3 lg:gap-x-12"
       >
         <div class="lg:col-span-1 px-2 py-2 lg:px-8 lg:py-6 w-full">
           <div class="space-y-1 mb-4">
@@ -63,7 +63,7 @@
 
             <button
               type="button"
-              class="bg-purple-600 flex justify-around space-x-2 items-center text-white max-w-3/5 py-3 px-4 my-4 rounded"
+              class="bg-purple-600 flex justify-around space-x-2 items-center text-white max-w-3/5 py-3 px-4 my-4 rounded-sm"
               @click="inviteUser"
             >
               <span class="tracking-wide">Send Invites</span
@@ -79,7 +79,7 @@
             </button>
           </form>
         </div>
-        <div class="lg:col-span-2 bg-purple-50 w-full rounded-md py-10">
+        <div class="lg:col-span-2 bg-purple-50 w-full rounded-sm-md py-10">
           <div>
             <h1 class="font-medium text-2xl px-10 py-4 customFontBold">
               Permission
@@ -94,7 +94,7 @@
               <div class="my-auto space-x-4">
                 <!-- <input
                 type="checkbox"
-                class="w-6 h-6 rounded border-black border"
+                class="w-6 h-6 rounded-sm border-black border"
               /> -->
                 <label
                   for=""
@@ -157,12 +157,21 @@ export default defineComponent({
       if (role.value !== '') {
         myResponse.value.forEach((element: any) => {
           if (element.role === role.value) {
-            subroles.value = element.subroles.map((el: any) => {
-              return {
-                name: el,
-                value: el,
-              }
-            })
+            if (element.subroles) {
+              subroles.value = element.subroles.map((el: any) => {
+                return {
+                  name: el,
+                  value: el,
+                }
+              })
+            } else {
+              subroles.value = element.subrole.map((el: any) => {
+                return {
+                  name: el,
+                  value: el,
+                }
+              })
+            }
           }
         })
       }

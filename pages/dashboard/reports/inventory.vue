@@ -12,29 +12,7 @@
         <div>Products Issued Out Reports by Customer</div>
       </div>
       <div class="my-4 px-4 py-2">
-        <div>
-          <div class="flex space-x-4 items-center">
-            <label class="text-gray-500">Filter By</label>
-            <div
-              class="flex items-center border-2 border-gray-300 justify-around space-x-2 text-gray-500 w-auto"
-            >
-              <svg
-                class="w-4 h-4 ml-2 fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M17 16v4h-2v-4h-2v-3h6v3h-2zM1 9h6v3H1V9zm6-4h6v3H7V5zM3 0h2v8H3V0zm12 0h2v12h-2V0zM9 0h2v4H9V0zM3 12h2v8H3v-8zm6-4h2v12H9V8z"
-                />
-              </svg>
-              <select
-                class="border-l-2 border-t-0 border-b-0 border-r-0 border-gray-300"
-              >
-                <option value="">All</option>
-              </select>
-            </div>
-          </div>
-        </div>
+        <div><filter-component /></div>
       </div>
 
       <table class="w-full table-auto mt-4">
@@ -74,9 +52,11 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
+import FilterComponent from '@/components/Base/Filter.vue'
 
 export default defineComponent({
   name: 'Inventory',
+  components: { FilterComponent },
   layout: 'dashboard',
   setup() {
     const headers = [

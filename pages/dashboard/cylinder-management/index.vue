@@ -15,10 +15,12 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, onBeforeMount, ref } from '@nuxtjs/composition-api'
 import TableComponent from '@/components/Base/Table2.vue'
 import NewCylinderType from '@/components/Overlays/NewCylinderType.vue'
 import CardSlider from '@/components/Base/CardSlider.vue'
+import { CylinderRepository } from '@/module/Cylinder'
+
 export default defineComponent({
   name: 'CylinderPool',
   components: { TableComponent, NewCylinderType, CardSlider },
@@ -32,48 +34,14 @@ export default defineComponent({
       'Cylinder Type',
       'Date Cylinder',
     ]
-    const body = [
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-    ]
+    const cylinderObject = new CylinderRepository()
+    const body = ref<Object[]>()
+
+    onBeforeMount(() => {
+      cylinderObject.getRegisteredCylinders().then((responses: any) => {
+        body.value = responses.data.data.cylinders
+      })
+    })
 
     const statistics = [
       [

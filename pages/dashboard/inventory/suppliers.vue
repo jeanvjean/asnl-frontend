@@ -7,7 +7,7 @@
           <h1 class="py-2">Gas (Refill)</h1>
         </div>
         <button
-          class="bg-purple-600 text-white flex items-center space-x-5 px-4 py-2 rounded font-medium"
+          class="bg-purple-600 text-white flex items-center space-x-5 px-4 py-2 rounded-sm font-medium"
           @click="fetchCylinders"
         >
           <svg
@@ -22,11 +22,11 @@
           <span>Add New</span>
         </button>
       </div>
-      <div class="grid grid-rows-1 lg:grid-cols-4 gap-y-4 md:gap-x-4 py-4">
+      <div class="grid grid-rows-1 lg:grid-cols-5 gap-y-4 md:gap-x-4 py-4">
         <div
           v-for="(supplier, i) in suppliers"
           :key="i"
-          class="bg-gray-200 border border-gray-500 rounded-sm py-4 px-4 space-y-1"
+          class="bg-purple-50 border border-gray-100 rounded-sm-sm py-4 px-4 space-y-1"
         >
           <div class="flex space-x-4 text-black">
             <svg

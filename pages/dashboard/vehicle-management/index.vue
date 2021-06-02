@@ -5,7 +5,7 @@
       <div class="flex space-x-4">
         <router-link
           to="/dashboard/vehicle-management/maintenance"
-          class="flex space-x-2 items-center bg-purple-600 rounded-sm px-4 py-2 text-white"
+          class="flex space-x-2 items-center bg-purple-600 rounded-sm-sm px-4 py-2 text-white"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +21,7 @@
         </router-link>
         <router-link
           to="/dashboard/vehicle-management/create-vehicle"
-          class="flex space-x-2 items-center bg-purple-600 rounded-sm px-4 py-2 text-white"
+          class="flex space-x-2 items-center bg-purple-600 rounded-sm-sm px-4 py-2 text-white"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -44,24 +44,7 @@
 
     <div v-if="!defaultState" class="bg-white px-6 py-4 mt-6">
       <div class="flex items-center justify-around px-2 py-2 space-x-4 w-full">
-        <div
-          class="flex items-center border-2 border-gray-300 justify-around space-x-2 text-gray-500 rounded-sm"
-        >
-          <svg
-            class="w-4 h-4 ml-2 fill-current"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path
-              d="M17 16v4h-2v-4h-2v-3h6v3h-2zM1 9h6v3H1V9zm6-4h6v3H7V5zM3 0h2v8H3V0zm12 0h2v12h-2V0zM9 0h2v4H9V0zM3 12h2v8H3v-8zm6-4h2v12H9V8z"
-            />
-          </svg>
-          <select
-            class="border-l-2 border-t-0 border-b-0 border-r-0 border-gray-300"
-          >
-            <option value="">Filter By</option>
-          </select>
-        </div>
+        <filter-component />
         <search-component :place-holder="'Search for Vehicles'" />
         <pagination />
       </div>
@@ -69,7 +52,10 @@
         <thead class="bg-gray-200">
           <tr>
             <th class="w-6 px-6 py-4">
-              <input type="checkbox" class="border border-gray-500 rounded" />
+              <input
+                type="checkbox"
+                class="border border-gray-500 rounded-sm"
+              />
             </th>
             <th
               v-for="(headSingle, index) in headers"
@@ -87,7 +73,10 @@
             class="font-light hover:bg-gray-100"
           >
             <td class="w-6 px-6 py-4">
-              <input type="checkbox" class="border-2 border-gray-400 rounded" />
+              <input
+                type="checkbox"
+                class="border-2 border-gray-400 rounded-sm"
+              />
             </td>
             <td class="px-4 text-center py-4">{{ bodySingle.vehCategory }}</td>
             <td class="px-4 text-center py-4">{{ bodySingle.regNo }}</td>
@@ -108,7 +97,7 @@
                 </svg>
               </button>
               <div
-                class="absolute -ml-6 bg-gray-50 border border-gray-300 w-40 font-light text-sm rounded-md action-menu z-50"
+                class="absolute -ml-6 bg-gray-50 border border-gray-300 w-40 font-light text-sm rounded-sm-md action-menu z-50"
               >
                 <button
                   type="button"
@@ -144,7 +133,7 @@
     </div>
     <div v-else class="mx-auto px-6 sm:px-6 md:px-8 w-full bg-white mt-6">
       <div
-        class="bg-white shadow-sm rounded h-96 px-4 flex justify-center items-center"
+        class="bg-white shadow-sm rounded-sm h-96 px-4 flex justify-center items-center"
       >
         <div class="w-full sm:w-full md:w-3/5 space-y-6">
           <svg
@@ -236,6 +225,7 @@
 import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
+import FilterComponent from '@/components/Base/Filter.vue'
 import AssignDriver from '@/components/Overlays/AssignDriver.vue'
 import finalStep from '@/components/Overlays/finalStep.vue'
 import singleVehicle from '@/components/Overlays/SingleVehicle.vue'
@@ -249,6 +239,7 @@ export default defineComponent({
     AssignDriver,
     finalStep,
     singleVehicle,
+    FilterComponent,
   },
   layout: 'dashboard',
   setup() {

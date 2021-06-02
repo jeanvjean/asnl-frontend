@@ -3,7 +3,7 @@
     <button
       v-if="!loadingStatus"
       type="button"
-      class="w-full py-3 rounded"
+      class="w-full py-3 rounded-sm"
       :class="buttonClass"
       @click="buttonClicked"
     >
@@ -12,7 +12,7 @@
     <button
       v-else
       type="button"
-      class="w-full py-3 rounded flex items-center justify-center space-x-2 animate-pulse"
+      class="w-full py-3 rounded-sm flex items-center justify-center space-x-2 animate-pulse"
       :class="buttonClass"
       @click="buttonClicked"
     >

@@ -1,7 +1,7 @@
 <template>
   <back-drop>
-    <div class="w-full lg:w-1/2 bg-white py-10 px-8 rounded-md">
-      <div class="bg-white rounded-sm">
+    <div class="w-full lg:w-1/2 bg-white py-10 px-8 rounded-sm-md">
+      <div class="bg-white rounded-sm-sm">
         <div class="flex justify-between items-center">
           <div>
             <p>Create Supplier</p>
@@ -66,7 +66,7 @@
         </div>
         <div>
           <button
-            class="bg-purple-700 text-white flex space-x-6 px-4 py-2 items-center rounded"
+            class="bg-purple-700 text-white flex space-x-6 px-4 py-2 items-center rounded-sm"
             @click="createSupplier()"
           >
             <span>Create Supplier</span>

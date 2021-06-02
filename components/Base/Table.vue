@@ -1,27 +1,9 @@
 <template>
   <div class="overflow-x-auto w-full py-4">
     <div class="w-full mb-4">
-      <div class="flex items-center justify-around px-2 py-2 space-x-4 w-full">
-        <div
-          class="flex items-center border-2 border-gray-300 justify-around space-x-2 text-gray-500"
-        >
-          <svg
-            class="w-4 h-4 ml-2 fill-current"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path
-              d="M17 16v4h-2v-4h-2v-3h6v3h-2zM1 9h6v3H1V9zm6-4h6v3H7V5zM3 0h2v8H3V0zm12 0h2v12h-2V0zM9 0h2v4H9V0zM3 12h2v8H3v-8zm6-4h2v12H9V8z"
-            />
-          </svg>
-          <select
-            class="border-l-2 border-t-0 border-b-0 border-r-0 border-gray-300"
-          >
-            <option value="">Filter By</option>
-          </select>
-        </div>
+      <div class="flex items-center justify-between px-2 py-2 space-x-4 w-full">
+        <filter-component />
         <search-component :place-holder="'Search for User'" />
-
         <AddUserButton />
       </div>
     </div>
@@ -29,7 +11,7 @@
       <thead class="bg-gray-200">
         <tr>
           <th class="w-6 px-6 py-4">
-            <input type="checkbox" class="border border-gray-500 rounded" />
+            <input type="checkbox" class="border border-gray-500 rounded-sm" />
           </th>
           <th
             v-for="(headSingle, index) in head"
@@ -52,7 +34,10 @@
           class="font-light hover:bg-gray-200"
         >
           <td class="w-6 px-6 py-4">
-            <input type="checkbox" class="border-2 border-gray-400 rounded" />
+            <input
+              type="checkbox"
+              class="border-2 border-gray-400 rounded-sm"
+            />
           </td>
           <td class="px-4 text-left py-4">
             <div class="flex items-center space-x-4">
@@ -83,10 +68,14 @@
               </svg>
             </button>
             <div
-              class="absolute -ml-16 bg-gray-50 border border-gray-300 w-40 font-medium text-sm rounded-md action-menu z-10"
+              class="absolute -ml-16 bg-gray-50 border border-gray-300 w-40 font-medium text-sm rounded-sm-md action-menu z-10"
             >
               <button
                 class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
+                @click="
+                  changeUser(index)
+                  showChangeRole = true
+                "
               >
                 Change Role
               </button>
@@ -126,16 +115,33 @@
       @close="showDeleteUser = false"
       @refresh="emitToParent"
     />
+    <change-role
+      v-if="showChangeRole"
+      :user="hoverUser"
+      :roles="roles"
+      @refresh="emitToParent"
+      @close="showChangeRole = false"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
 import AddUserButton from '@/components/Clickables/AddUser.vue'
 import SearchComponent from '@/components/Base/Search.vue'
+import FilterComponent from '@/components/Base/Filter.vue'
 import DeleteUser from '@/components/Overlays/DeleteUser.vue'
+import ChangeRole from '@/components/Overlays/ChangeRole.vue'
+import { UserRepository } from '@/module/User'
+
 export default defineComponent({
-  components: { AddUserButton, SearchComponent, DeleteUser },
+  components: {
+    AddUserButton,
+    SearchComponent,
+    DeleteUser,
+    ChangeRole,
+    FilterComponent,
+  },
   props: {
     head: {
       type: Array,
@@ -148,10 +154,48 @@ export default defineComponent({
   },
   setup(_props, ctx) {
     const showDeleteUser = ref(false)
+    const showChangeRole = ref(false)
     const hoverUser = ref()
+    const roles = ref<any>([])
+    const userObject = new UserRepository()
 
     function changeUser(i: number) {
       hoverUser.value = _props.body[i]
+    }
+
+    onMounted(() => {
+      getRoles()
+    })
+
+    const getRoles = () => {
+      userObject.fetchRoles().then((response: any) => {
+        const allRoles: any = response.data.data
+
+        allRoles.forEach((element: any) => {
+          let subroles: any
+          const role: any = {
+            name: element.role,
+            value: element.role,
+          }
+          if (element.subroles) {
+            subroles = element.subroles.map((el: any) => {
+              return {
+                name: el,
+                value: el,
+              }
+            })
+          } else {
+            subroles = element.subrole.map((el: any) => {
+              return {
+                name: el,
+                value: el,
+              }
+            })
+          }
+          role.subroles = subroles
+          roles.value.push(role)
+        })
+      })
     }
 
     const emitToParent = () => {
@@ -163,6 +207,8 @@ export default defineComponent({
       hoverUser,
       changeUser,
       emitToParent,
+      showChangeRole,
+      roles,
     }
   },
 })

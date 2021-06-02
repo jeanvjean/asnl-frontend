@@ -40,7 +40,7 @@
         <section v-else-if="showBarcode" class="bg-gray-200">
           <div class="w-4/5 mx-auto py-10 px-6">
             <div
-              class="px-6 py-10 bg-white rounded-sm flex justify-center items-center"
+              class="px-6 py-10 bg-white rounded-sm-sm flex justify-center items-center"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +60,7 @@
             </div>
             <div class="px-6 my-4">
               <button
-                class="rounded-sm px-6 py-3 border border-purple-300 text-sm font-light flex justify-between items-center bg-purple-500 text-white w-full"
+                class="rounded-sm-sm px-6 py-3 border border-purple-300 text-sm font-light flex justify-between items-center bg-purple-500 text-white w-full"
               >
                 <span>Product Barcode</span>
                 <svg
@@ -86,7 +86,7 @@
         </section>
       </div>
       <button
-        class="rounded py-2 px-4 w-full bg-transparent text-purple-500 text-center border-2 border-purple-500"
+        class="rounded-sm py-2 px-4 w-full bg-transparent text-purple-500 text-center border-2 border-purple-500"
       >
         Download Cylinder History
       </button>

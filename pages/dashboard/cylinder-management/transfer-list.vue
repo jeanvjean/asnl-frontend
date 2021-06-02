@@ -160,6 +160,7 @@
       <table-component
         :head="headers"
         :body="body"
+        :show-main="false"
         @show="showRegister = true"
       ></table-component>
     </div>
@@ -170,9 +171,11 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, onBeforeMount, ref } from '@nuxtjs/composition-api'
 import TableComponent from '@/components/Base/Table3.vue'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
+import { CylinderRepository } from '@/module/Cylinder'
+
 export default defineComponent({
   name: 'Analytics',
   components: { TableComponent, NewCylinder },
@@ -186,48 +189,16 @@ export default defineComponent({
       'Cylinder Type',
       'Date Cylinder',
     ]
-    const body = [
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-    ]
+
+    const cylinderObject = new CylinderRepository()
+    const body = ref<Object[]>()
+
+    onBeforeMount(() => {
+      cylinderObject.getRegisteredCylinders().then((responses: any) => {
+        body.value = responses.data.data.cylinders
+      })
+    })
+
     const showRegister = ref(false)
     return {
       headers,

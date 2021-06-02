@@ -1,12 +1,12 @@
 <template>
   <back-drop>
-    <div class="w-full lg:w-3/5 bg-white rounded-md">
-      <div class="rounded-sm">
+    <div class="w-full lg:w-3/5 bg-white rounded-sm-md">
+      <div class="rounded-sm-sm">
         <div class="flex justify-between items-center bg-white py-4 px-8">
           <h1>Issue Products</h1>
           <div class="flex space-x-8 items-center">
             <button
-              class="flex space-x-4 py-2 px-4 items-center bg-purple-600 rounded"
+              class="flex space-x-4 py-2 px-4 items-center bg-purple-600 rounded-sm"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -180,12 +180,12 @@
             class="w-full lg:w-3/5 lg:flex lg:justify-between lg:items-center lg:space-x-6"
           >
             <button
-              class="px-8 py-2 rounded-sm bg-purple-500 text-white w-full"
+              class="px-8 py-2 rounded-sm-sm bg-purple-500 text-white w-full"
             >
               Disburse Stock
             </button>
             <button
-              class="px-8 py-2 rounded-sm bg-white text-purple border border-purple-500 w-full"
+              class="px-8 py-2 rounded-sm-sm bg-white text-purple border border-purple-500 w-full"
             >
               Cancel
             </button>

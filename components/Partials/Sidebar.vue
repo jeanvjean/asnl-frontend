@@ -3,7 +3,7 @@
     <div class="flex flex-col w-80">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div class="flex flex-col h-0 flex-1">
-        <div class="h-20 px-4 bg-gray-900 flex items-center justify-between">
+        <div class="h-20 px-4 bg-bg-sidebar flex items-center justify-between">
           <h2 class="text-white text-left font-semibold text-2xl">
             Air Separation
           </h2>
@@ -16,14 +16,14 @@
           </svg>
         </div>
         <div class="flex-1 flex flex-col overflow-y-auto">
-          <nav class="flex-1 px-4 py-4 bg-gray-800 space-y-4">
+          <nav class="flex-1 px-4 py-4 bg-bg-sidebar space-y-4">
             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
             <router-link
               to="/dashboard/"
-              class="text-white group px-4 py-4 rounded-md flex items-center space-x-6"
+              class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
             >
               <svg
-                class="text-gray-300 mr-3 h-6 w-6"
+                class="text-gray-300 mr-3 h-5 w-5"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -40,11 +40,11 @@
             </router-link>
             <router-link
               to="/dashboard/user-management/"
-              class="text-white group px-4 py-4 rounded-md flex items-center space-x-6"
+              class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="text-gray-300 mr-3 h-6 w-6"
+                class="text-gray-300 mr-3 h-5 w-5"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -56,12 +56,12 @@
             </router-link>
             <div class="w-full">
               <button
-                class="text-white px-4 py-4 rounded-md flex justify-between w-full link-block focus:outline-none"
+                class="text-white px-4 py-4 rounded-sm-md flex justify-between w-full link-block focus:outline-none"
                 @click="toggleCylinder = !toggleCylinder"
               >
                 <div class="flex space-x-6">
                   <svg
-                    class="text-gray-300 mr-3 h-6 w-6 fill-current"
+                    class="text-gray-300 mr-3 h-5 w-5 fill-current"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 452.608 452.608"
                   >
@@ -103,7 +103,7 @@
                   >Analytics</router-link
                 >
                 <router-link
-                  to="/dashboard/cylinder-management/list"
+                  to="/dashboard/cylinder-management/transfer-list"
                   class="block px-2 py-2"
                   >Cylinder Transfer Analytics</router-link
                 >
@@ -116,12 +116,12 @@
             </div>
             <div class="w-full">
               <button
-                class="text-white px-4 py-4 rounded-md flex justify-between w-full link-block focus:outline-none"
+                class="text-white px-4 py-4 rounded-sm-md flex justify-between w-full link-block focus:outline-none"
                 @click="toggleInventory = !toggleInventory"
               >
                 <div class="flex space-x-6">
                   <svg
-                    class="text-gray-300 mr-3 h-6 w-6 fill-current"
+                    class="text-gray-300 mr-3 h-5 w-5 fill-current"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                   >
@@ -165,17 +165,27 @@
                   class="block px-2 py-2"
                   >Supplier</router-link
                 >
+                <router-link
+                  to="/dashboard/inventory/grn"
+                  class="block px-2 py-2"
+                  >GRN</router-link
+                >
+                <router-link
+                  to="/dashboard/inventory/issue-products"
+                  class="block px-2 py-2"
+                  >Issue Products</router-link
+                >
               </div>
             </div>
             <div class="w-full">
               <button
-                class="text-white px-4 py-4 rounded-md flex justify-between w-full link-block focus:outline-none"
+                class="text-white px-4 py-4 rounded-sm-md flex justify-between w-full link-block focus:outline-none"
                 @click="toggleVehicle = !toggleVehicle"
               >
                 <div class="flex space-x-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="text-gray-300 mr-3 h-6 w-6 fill-current"
+                    class="text-gray-300 mr-3 h-5 w-5 fill-current"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -238,7 +248,7 @@
             </div>
             <div class="w-full">
               <button
-                class="text-white px-4 py-4 rounded-md flex justify-between w-full link-block focus:outline-none"
+                class="text-white px-4 py-4 rounded-sm-md flex justify-between w-full link-block focus:outline-none"
                 @click="toggleReport = !toggleReport"
               >
                 <div class="flex space-x-6">
@@ -298,10 +308,10 @@
             </div>
             <router-link
               to="/dashboard/drivers"
-              class="text-white group px-4 py-4 rounded-md flex items-center space-x-6"
+              class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
             >
               <svg
-                class="mr-3 h-6 w-6 fill-current text-gray-300"
+                class="mr-3 h-5 w-5 fill-current text-gray-300"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 490.667 490.667"
               >
@@ -317,11 +327,11 @@
 
             <a
               href="#"
-              class="text-white group px-4 py-4 rounded-md flex items-center space-x-6"
+              class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="mr-3 h-6 w-6 fill-current text-transparent"
+                class="mr-3 h-5 w-5 fill-current text-transparent"
                 viewBox="0 0 24 24"
                 stroke="rgba(209, 213, 219, 1)"
               >
@@ -335,12 +345,12 @@
               <span class="font-light font-xl">Archive</span>
             </a>
             <button
-              class="text-white group px-4 py-4 rounded-md flex items-center space-x-6"
+              class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
               @click="logout"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="mr-3 h-6 w-6 fill-current text-transparent"
+                class="mr-3 h-5 w-5 fill-current text-transparent"
                 viewBox="0 0 24 24"
                 stroke="rgba(209, 213, 219, 1)"
               >

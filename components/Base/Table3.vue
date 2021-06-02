@@ -1,25 +1,8 @@
 <template>
   <div class="overflow-x-auto w-full py-4 px-4">
-    <div class="w-full mb-4">
+    <div v-if="showMain" class="w-full mb-4">
       <div class="flex items-center justify-around px-2 py-2 space-x-4 w-full">
-        <div
-          class="flex items-center border-2 border-gray-300 justify-around space-x-2 text-gray-500"
-        >
-          <svg
-            class="w-4 h-4 ml-2 fill-current"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path
-              d="M17 16v4h-2v-4h-2v-3h6v3h-2zM1 9h6v3H1V9zm6-4h6v3H7V5zM3 0h2v8H3V0zm12 0h2v12h-2V0zM9 0h2v4H9V0zM3 12h2v8H3v-8zm6-4h2v12H9V8z"
-            />
-          </svg>
-          <select
-            class="border-l-2 border-t-0 border-b-0 border-r-0 border-gray-300"
-          >
-            <option value="">Filter By</option>
-          </select>
-        </div>
+        <filter-component />
         <search-component
           :place-holder="'Search for Users, Cylinder no,gas type, Cylinder Volume'"
         />
@@ -32,11 +15,39 @@
         </button>
       </div>
     </div>
+    <div v-else class="w-full mb-4">
+      <div class="flex items-center justify-between px-2 py-2 w-full">
+        <div>
+          <button
+            class="flex space-x-4 items-center bg-gray-200 rounded-sm px-5 py-2.5"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              class="w-6 h-6 fill-current text-transparent"
+              stroke="black"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+              />
+            </svg>
+            <span>Filter</span>
+          </button>
+        </div>
+        <div class="w-1/3">
+          <search-component :place-holder="'Search'" />
+        </div>
+      </div>
+    </div>
     <table class="w-full table-auto">
       <thead class="bg-gray-200">
         <tr>
           <th class="w-6 px-6 py-4">
-            <input type="checkbox" class="border border-gray-500 rounded" />
+            <input type="checkbox" class="border border-gray-500 rounded-sm" />
           </th>
           <th
             v-for="(headSingle, index) in head"
@@ -55,7 +66,10 @@
       <tbody>
         <tr v-for="(bodySingle, index) in body" :key="index" class="font-light">
           <td class="w-6 px-6 py-4">
-            <input type="checkbox" class="border-2 border-gray-400 rounded" />
+            <input
+              type="checkbox"
+              class="border-2 border-gray-400 rounded-sm"
+            />
           </td>
           <td class="px-4 text-left py-4">
             <span>{{ bodySingle.assignedNumber }}</span>
@@ -74,7 +88,7 @@
           <td class="px-4 text-center py-4">
             <router-link
               :to="'/dashboard/cylinder-management/single/' + bodySingle._id"
-              class="px-4 py-2 border border-purple-500 rounded text-purple-600 text-sm"
+              class="px-4 py-2 border border-purple-500 rounded-sm text-purple-600 text-sm"
             >
               View Details
             </router-link>
@@ -88,9 +102,10 @@
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
 import SearchComponent from '@/components/Base/Search.vue'
+import FilterComponent from '@/components/Base/Filter.vue'
 
 export default defineComponent({
-  components: { SearchComponent },
+  components: { SearchComponent, FilterComponent },
   props: {
     head: {
       type: Array,
@@ -99,6 +114,11 @@ export default defineComponent({
     body: {
       type: Array,
       required: true,
+    },
+    showMain: {
+      type: Boolean,
+      required: false,
+      default: true,
     },
   },
   setup(_props, ctx) {

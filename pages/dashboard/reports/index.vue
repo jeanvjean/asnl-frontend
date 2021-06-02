@@ -4,7 +4,7 @@
       <h1>Report</h1>
       <div class="flex space-x-4">
         <button
-          class="flex space-x-4 items-center bg-purple-600 rounded-sm px-4 py-2 text-white"
+          class="flex space-x-4 items-center bg-purple-600 rounded-sm-sm px-4 py-2 text-white"
         >
           <svg
             class="w-5 h-5 fill-current"
@@ -23,7 +23,7 @@
           <span> Download Report (PDF)</span>
         </button>
         <button
-          class="flex space-x-4 items-center bg-purple-600 rounded-sm px-4 py-2 text-white"
+          class="flex space-x-4 items-center bg-purple-600 rounded-sm-sm px-4 py-2 text-white"
         >
           <svg
             class="w-5 h-5 fill-current"
@@ -101,7 +101,7 @@
         </div>
         <router-link
           to="/dashboard/reports/create-report"
-          class="bg-purple-600 text-white px-6 py-2 rounded"
+          class="bg-purple-600 text-white px-6 py-2 rounded-sm"
         >
           Create Report
         </router-link>
@@ -109,24 +109,7 @@
       <div
         class="flex items-center justify-around px-2 py-2 space-x-4 w-full mt-2"
       >
-        <div
-          class="flex items-center border-2 border-gray-300 justify-around space-x-2 text-gray-500"
-        >
-          <svg
-            class="w-4 h-4 ml-2 fill-current"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path
-              d="M17 16v4h-2v-4h-2v-3h6v3h-2zM1 9h6v3H1V9zm6-4h6v3H7V5zM3 0h2v8H3V0zm12 0h2v12h-2V0zM9 0h2v4H9V0zM3 12h2v8H3v-8zm6-4h2v12H9V8z"
-            />
-          </svg>
-          <select
-            class="border-l-2 border-t-0 border-b-0 border-r-0 border-gray-300"
-          >
-            <option value="">Filter By</option>
-          </select>
-        </div>
+        <filter-component />
         <search-component :place-holder="'Search for Vehicles'" />
         <pagination />
       </div>
@@ -134,7 +117,10 @@
         <thead class="bg-gray-200">
           <tr>
             <th class="w-6 px-6 py-4">
-              <input type="checkbox" class="border border-gray-500 rounded" />
+              <input
+                type="checkbox"
+                class="border border-gray-500 rounded-sm"
+              />
             </th>
             <th
               v-for="(headSingle, index) in headers"
@@ -152,13 +138,16 @@
             class="font-light"
           >
             <td class="w-6 px-6 py-4">
-              <input type="checkbox" class="border-2 border-gray-400 rounded" />
+              <input
+                type="checkbox"
+                class="border-2 border-gray-400 rounded-sm"
+              />
             </td>
             <td class="px-4 text-center py-4">{{ bodySingle.date }}</td>
             <td class="px-4 text-center py-4">{{ bodySingle.report_no }}</td>
             <td class="px-4 text-center py-4">
               <span
-                class="px-8 py-2 bg-yellow-600 text-yellow-700 bg-opacity-50 rounded-sm"
+                class="px-8 py-2 bg-yellow-600 text-yellow-700 bg-opacity-50 rounded-sm-sm"
                 >{{ bodySingle.status }}</span
               >
             </td>
@@ -172,9 +161,11 @@
 import { defineComponent } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
+import FilterComponent from '@/components/Base/Filter.vue'
+
 export default defineComponent({
   name: 'Reports',
-  components: { Pagination, SearchComponent },
+  components: { Pagination, SearchComponent, FilterComponent },
   layout: 'dashboard',
   setup() {
     const headers = ['Date', 'Report No', 'Status']
