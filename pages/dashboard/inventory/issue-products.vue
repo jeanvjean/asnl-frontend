@@ -205,6 +205,7 @@
             <td class="px-4 text-center py-4">
               <button
                 class="px-2 py-1 border border-purple-500 rounded-sm text-purple-600 text-sm"
+                @click="showIssueProduct = !showIssueProduct"
               >
                 View Details
               </button>
@@ -213,6 +214,8 @@
         </tbody>
       </table>
     </div>
+
+    <issue-product v-if="showIssueProduct" @close="showIssueProduct = false" />
   </div>
 </template>
 <script lang="ts">
@@ -220,10 +223,11 @@ import { defineComponent, ref } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
+import IssueProduct from '@/components/Overlays/IssueProducts.vue'
 
 export default defineComponent({
   name: 'Analytics',
-  components: { Pagination, SearchComponent, FilterComponent },
+  components: { Pagination, SearchComponent, FilterComponent, IssueProduct },
   layout: 'dashboard',
   setup() {
     const headers = [
@@ -235,10 +239,12 @@ export default defineComponent({
       'Date',
     ]
     const body = ref([])
+    const showIssueProduct = ref(false)
 
     return {
       headers,
       body,
+      showIssueProduct,
     }
   },
 })

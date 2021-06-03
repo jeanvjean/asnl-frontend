@@ -5,15 +5,19 @@ const isAuthenticated: Middleware = ({ redirect }) => {
   const appStore = mainStore()
   const auth: any = appStore.getLoggedInUser
   const token: any = appStore.getToken
+  let path = '/'
+
   if (auth && token) {
-    let path
     if (!auth.isVerified) {
       path = '/auth/change-password'
-      redirect(path)
+    } else if (!auth.name) {
+      path = '/auth/account-setup'
+    } else {
+      path = '/dashboard'
     }
-  } else {
-    redirect('/')
   }
+
+  redirect(path)
 }
 
 export default isAuthenticated

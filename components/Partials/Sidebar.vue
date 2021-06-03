@@ -1,9 +1,9 @@
 <template>
-  <div class="hidden md:flex md:flex-shrink-0">
+  <div class="hidden md:flex md:flex-shrink-0 bg-bg-sidebar">
     <div class="flex flex-col w-80">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div class="flex flex-col h-0 flex-1">
-        <div class="h-20 px-4 bg-bg-sidebar flex items-center justify-between">
+        <div class="h-20 px-4 flex items-center justify-between">
           <h2 class="text-white text-left font-semibold text-2xl">
             Air Separation
           </h2>
@@ -15,9 +15,21 @@
             <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
           </svg>
         </div>
+        <!-- <div class="flex-1 flex flex-col overflow-y-auto">
+          <nav class="flex-1 px-4 py-4 bg-bg-sidebar space-y-4">
+            <router-link
+              v-for="(nav, index) in navigations"
+              :key="index"
+              :to="nav.link"
+              class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
+            >
+              <component :is="nav.icon" class="text-gray-300 mr-3 h-5 w-5" />
+              <span class="font-light font-xl">{{ nav.title }}</span>
+            </router-link>
+          </nav>
+        </div> -->
         <div class="flex-1 flex flex-col overflow-y-auto">
           <nav class="flex-1 px-4 py-4 bg-bg-sidebar space-y-4">
-            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
             <router-link
               to="/dashboard/"
               class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
@@ -325,8 +337,8 @@
               <span class="font-light font-xl">Drivers</span>
             </router-link>
 
-            <a
-              href="#"
+            <router-link
+              to="/dashboard/customer-management/"
               class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
             >
               <svg
@@ -342,11 +354,30 @@
                   d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
                 />
               </svg>
-              <span class="font-light font-xl">Archive</span>
-            </a>
-            <button
+              <span class="font-light font-xl">Customers</span>
+            </router-link>
+            <router-link
+              to="/dashboard/production/erc-list"
               class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
-              @click="logout"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="mr-3 h-5 w-5 fill-current text-transparent"
+                viewBox="0 0 24 24"
+                stroke="rgba(209, 213, 219, 1)"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                />
+              </svg>
+              <span class="font-light font-xl">Production</span>
+            </router-link>
+            <router-link
+              class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
+              to="/auth/logout"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -362,7 +393,7 @@
                 />
               </svg>
               <span class="font-light font-xl">Logout</span>
-            </button>
+            </router-link>
           </nav>
         </div>
       </div>
@@ -371,8 +402,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, useRouter } from '@nuxtjs/composition-api'
-import { mainStore } from '~/module/Pinia'
+import { defineComponent, ref } from '@nuxtjs/composition-api'
+// import { getNavigations } from '@/constants/navigation'
+// import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
   setup() {
@@ -380,20 +412,19 @@ export default defineComponent({
     const toggleInventory = ref(false)
     const toggleReport = ref(false)
     const toggleVehicle = ref(false)
-    const appStore = mainStore()
-    const router = useRouter()
+    // const appStore = mainStore()
 
-    const logout = () => {
-      appStore.user = null
-      localStorage.removeItem('user')
-      router.push('/')
-    }
+    // const auth: any = appStore.getLoggedInUser
+
+    // const role = auth?.role ?? 'admin'
+    // const navigations = getNavigations(role)
+
     return {
       toggleCylinder,
       toggleInventory,
       toggleReport,
       toggleVehicle,
-      logout,
+      // navigations,
     }
   },
 })

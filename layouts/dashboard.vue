@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen flex overflow-hidden bg-gray-200 customFontLight">
+  <div class="h-screen flex overflow-hidden bg-gray-200 customFontRegular">
     <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
     <MobileSidebar
       :show-modal="toggleMobileSidebar"
@@ -23,6 +23,7 @@ import { defineComponent, ref } from '@nuxtjs/composition-api'
 import Header from '@/components/Partials/Header.vue'
 import MobileSidebar from '@/components/Partials/MobileSidebar.vue'
 import Sidebar from '@/components/Partials/Sidebar.vue'
+
 export default defineComponent({
   name: 'Dashboard',
   components: { Header, Sidebar, MobileSidebar },

@@ -200,6 +200,7 @@
             <td class="px-4 text-center py-4">
               <button
                 class="px-2 py-1 border border-purple-500 rounded-sm text-purple-600 text-sm"
+                @click="showRecieveProduct = !showRecieveProduct"
               >
                 View Details
               </button>
@@ -208,6 +209,10 @@
         </tbody>
       </table>
     </div>
+    <recieve-product
+      v-if="showRecieveProduct"
+      @close="showRecieveProduct = false"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -215,10 +220,10 @@ import { defineComponent, ref } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
-
+import RecieveProduct from '@/components/Overlays/RecieveProducts.vue'
 export default defineComponent({
   name: 'Analytics',
-  components: { Pagination, SearchComponent, FilterComponent },
+  components: { Pagination, SearchComponent, FilterComponent, RecieveProduct },
   layout: 'dashboard',
   setup() {
     const headers = [
@@ -231,10 +236,11 @@ export default defineComponent({
       'Date',
     ]
     const body = ref([])
-
+    const showRecieveProduct = ref(false)
     return {
       headers,
       body,
+      showRecieveProduct,
     }
   },
 })

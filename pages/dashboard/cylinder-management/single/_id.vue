@@ -155,8 +155,10 @@ export default defineComponent({
         details.value = {
           Cylinder_Type: cylinderResponse.cylinderType,
           Water_Capacity: cylinderResponse.waterCapacity,
-          Date_Manufactured: cylinderResponse.dateManufactured,
-          Gas_Type: cylinderResponse.gasType,
+          Date_Manufactured: new Date(
+            cylinderResponse.dateManufactured
+          ).toDateString(),
+          Gas_Type: cylinderResponse.gasType.gasName,
           Standard_Color: cylinderResponse.standardColor,
           Testing_Pressure: cylinderResponse.testingPresure,
           Filling_Preasure: cylinderResponse.fillingPreasure,

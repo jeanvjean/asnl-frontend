@@ -94,16 +94,6 @@
             </svg>
           </div>
 
-          <!--
-              Dropdown menu, show/hide based on menu state.
-
-              Entering: "transition ease-out duration-100"
-                From: "transform opacity-0 scale-95"
-                To: "transform opacity-100 scale-100"
-              Leaving: "transition ease-in duration-75"
-                From: "transform opacity-100 scale-100"
-                To: "transform opacity-0 scale-95"
-            -->
           <div
             v-if="userMenu"
             class="origin-top-right absolute right-0 mt-2 w-48 rounded-sm-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
@@ -125,13 +115,13 @@
               >Settings</a
             >
 
-            <button
+            <router-link
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none"
               role="menuitem"
-              @click="logout"
+              to="/auth/logout"
             >
               Sign out
-            </button>
+            </router-link>
           </div>
         </div>
       </div>
@@ -144,19 +134,21 @@ import {
   ref,
   useContext,
   computed,
-  useRouter,
 } from '@nuxtjs/composition-api'
-import { mainStore } from '~/module/Pinia'
+import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
   name: 'Header',
   setup(_props, ctx) {
     const context = useContext()
-    const router = useRouter()
     const userMenu = ref(false)
+
     const showMobileSidebar = () => {
       ctx.emit('show')
     }
+    const appStore = mainStore()
+    const auth: any = appStore.getLoggedInUser
+
     const title = computed(() => {
       const path: String = context.route.value.path
       const splitPath: any = path.split('/')
@@ -166,18 +158,11 @@ export default defineComponent({
       const lastPath: String = filterPaths[filterPaths.length - 1]
       return lastPath
     })
-    const appStore = mainStore()
-    const auth = appStore.getLoggedInUser
-    const logout = () => {
-      appStore.user = null
-      localStorage.removeItem('user')
-      router.push('/')
-    }
+
     return {
       userMenu,
       showMobileSidebar,
       auth,
-      logout,
       title,
     }
   },

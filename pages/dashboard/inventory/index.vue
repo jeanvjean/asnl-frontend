@@ -38,9 +38,9 @@
               </form>
             </div>
 
-            <button
+            <router-link
+              to="/dashboard/inventory/issue-products"
               class="flex justify-between items-center bg-purple-600 px-4 py-3 text-white font-medium text-md space-x-2 rounded-sm"
-              @click="showIssueProduct = true"
             >
               <svg
                 class="w-3 h-3 fill-current text-white"
@@ -52,10 +52,10 @@
                 />
               </svg>
               <span>Issue Product</span>
-            </button>
-            <button
+            </router-link>
+            <router-link
+              to="/dashboard/inventory/grn"
               class="flex justify-between items-center bg-purple-600 px-4 py-3 text-white font-medium text-md space-x-2 rounded-sm"
-              @click="showRecieveProduct = true"
             >
               <svg
                 class="w-4 h-4 fill-current text-white"
@@ -67,7 +67,7 @@
                 />
               </svg>
               <span> Recieve Product </span>
-            </button>
+            </router-link>
             <router-link
               class="flex justify-between items-center bg-purple-600 px-4 py-3 text-white font-medium text-md space-x-2 rounded-sm"
               to="/dashboard/inventory/new-product"
@@ -201,24 +201,18 @@
         </table>
       </div>
     </div>
-    <recieve-product
-      v-if="showRecieveProduct"
-      @close="showRecieveProduct = false"
-    />
-    <issue-product v-if="showIssueProduct" @close="showIssueProduct = false" />
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
-import RecieveProduct from '@/components/Overlays/RecieveProducts.vue'
-import IssueProduct from '@/components/Overlays/IssueProducts.vue'
+
 import CardSlider from '@/components/Base/CardSlider.vue'
 import { ProductRepository } from '@/module/Product'
 import FilterComponent from '@/components/Base/Filter.vue'
 
 export default defineComponent({
   name: 'CylinderPool',
-  components: { RecieveProduct, IssueProduct, CardSlider, FilterComponent },
+  components: { CardSlider, FilterComponent },
   layout: 'dashboard',
   setup() {
     const headers = [
@@ -231,8 +225,7 @@ export default defineComponent({
       'Total Cost',
       'Location',
     ]
-    const showRecieveProduct = ref(false)
-    const showIssueProduct = ref(false)
+
     const productObject = new ProductRepository()
 
     const body = ref()
@@ -303,8 +296,6 @@ export default defineComponent({
       showType,
       statistics,
       defaultState,
-      showRecieveProduct,
-      showIssueProduct,
     }
   },
 })
