@@ -1,7 +1,14 @@
 <template>
   <div class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
     <button
-      class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+      class="
+        px-4
+        border-r border-gray-200
+        text-gray-500
+        focus:outline-none
+        focus:ring-2 focus:ring-inset focus:ring-indigo-500
+        md:hidden
+      "
       @click="showMobileSidebar"
     >
       <span class="sr-only">Open sidebar</span>
@@ -29,7 +36,15 @@
       </h1>
       <div class="ml-4 flex items-center md:ml-6">
         <button
-          class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          class="
+            bg-white
+            p-1
+            rounded-full
+            text-gray-400
+            hover:text-gray-500
+            focus:outline-none
+            focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+          "
         >
           <span class="sr-only">View notifications</span>
           <!-- Heroicon name: outline/bell -->
@@ -56,7 +71,15 @@
             <button
               id="user-menu"
               type="button"
-              class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none"
+              class="
+                max-w-xs
+                bg-white
+                flex
+                items-center
+                text-sm
+                rounded-full
+                focus:outline-none
+              "
               aria-expanded="false"
               aria-haspopup="true"
             >
@@ -96,7 +119,19 @@
 
           <div
             v-if="userMenu"
-            class="origin-top-right absolute right-0 mt-2 w-48 rounded-sm-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+            class="
+              origin-top-right
+              absolute
+              right-0
+              mt-2
+              w-48
+              rounded-sm-md
+              shadow-lg
+              py-1
+              bg-white
+              ring-1 ring-black ring-opacity-5
+              focus:outline-none
+            "
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="user-menu"
@@ -116,7 +151,14 @@
             >
 
             <router-link
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none"
+              class="
+                block
+                px-4
+                py-2
+                text-sm text-gray-700
+                hover:bg-gray-100
+                focus:outline-none
+              "
               role="menuitem"
               to="/auth/logout"
             >

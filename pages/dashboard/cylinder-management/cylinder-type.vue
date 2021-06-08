@@ -8,7 +8,16 @@
           </h1>
           <div class="flex space-x-6">
             <button
-              class="flex items-center bg-purple-600 text-white space-x-4 px-4 py-2 rounded-sm-sm"
+              class="
+                flex
+                items-center
+                bg-purple-600
+                text-white
+                space-x-4
+                px-4
+                py-2
+                rounded-sm-sm
+              "
               @click="
                 status = 'success'
                 showConfirmation = true
@@ -30,7 +39,15 @@
               </svg>
             </button>
             <button
-              class="flex items-center space-x-4 px-4 py-2 rounded-sm-sm border border-purple-600"
+              class="
+                flex
+                items-center
+                space-x-4
+                px-4
+                py-2
+                rounded-sm-sm
+                border border-purple-600
+              "
               @click="
                 status = 'error'
                 showConfirmation = true
@@ -55,7 +72,12 @@
         </div>
         <div class="w-full overflow-x-auto px-8 my-8">
           <div
-            class="grid grid-rows-1 lg:grid-cols-4 divide divide-x-2 divide-black mt-8"
+            class="
+              grid grid-rows-1
+              lg:grid-cols-4
+              divide divide-x-2 divide-black
+              mt-8
+            "
           >
             <div class="flex items-center justify-center">
               <div class="space-y-4">
@@ -87,7 +109,12 @@
           </div>
 
           <div
-            class="grid grid-rows-1 lg:grid-cols-4 divide divide-x-2 divide-black mt-8"
+            class="
+              grid grid-rows-1
+              lg:grid-cols-4
+              divide divide-x-2 divide-black
+              mt-8
+            "
           >
             <div class="flex items-center justify-center">
               <div class="space-y-4">
@@ -119,7 +146,15 @@
           </div>
         </div>
         <div
-          class="px-10 py-6 grid grid-rows-1 lg:grid-cols-2 gap-y-4 lg:gap-x-4 border-b border-t border-gray-300"
+          class="
+            px-10
+            py-6
+            grid grid-rows-1
+            lg:grid-cols-2
+            gap-y-4
+            lg:gap-x-4
+            border-b border-t border-gray-300
+          "
         >
           <select-component
             :label-title="'Cylinder Type'"

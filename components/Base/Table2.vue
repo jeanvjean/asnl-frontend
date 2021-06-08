@@ -11,7 +11,15 @@
               class="relative w-full text-gray-400 focus-within:text-gray-600"
             >
               <div
-                class="absolute inset-y-0 left-0 ml-4 flex items-center pointer-events-none"
+                class="
+                  absolute
+                  inset-y-0
+                  left-0
+                  ml-4
+                  flex
+                  items-center
+                  pointer-events-none
+                "
               >
                 <!-- Heroicon name: solid/search -->
                 <svg
@@ -25,7 +33,21 @@
                 </svg>
               </div>
               <input
-                class="block border rounded-sm-sm border-gray-300 w-full text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 px-10 py-4 sm:text-sm"
+                class="
+                  block
+                  border
+                  rounded-sm-sm
+                  border-gray-300
+                  w-full
+                  text-gray-900
+                  placeholder-gray-500
+                  focus:outline-none
+                  focus:placeholder-gray-400
+                  focus:ring-0
+                  px-10
+                  py-4
+                  sm:text-sm
+                "
                 placeholder="Search for Users"
                 type="search"
                 name="search"
@@ -44,7 +66,19 @@
             </svg>
           </button>
           <button
-            class="flex items-center bg-purple-600 px-3 py-2 space-x-2 h-auto text-white font-semibold text-md rounded-sm"
+            class="
+              flex
+              items-center
+              bg-purple-600
+              px-3
+              py-2
+              space-x-2
+              h-auto
+              text-white
+              font-semibold
+              text-md
+              rounded-sm
+            "
             @click="show"
           >
             <svg
@@ -70,12 +104,28 @@
           <th
             v-for="(headSingle, index) in head"
             :key="index"
-            class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-left"
+            class="
+              uppercase
+              text-gray-800
+              font-thin
+              text-sm
+              px-4
+              py-2
+              text-left
+            "
           >
             {{ headSingle }}
           </th>
           <th
-            class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-center"
+            class="
+              uppercase
+              text-gray-800
+              font-thin
+              text-sm
+              px-4
+              py-2
+              text-center
+            "
           >
             Actions
           </th>
@@ -106,7 +156,13 @@
           <td class="px-4 text-center py-4">
             <router-link
               :to="'/dashboard/cylinder-management/single/' + bodySingle._id"
-              class="px-4 py-2 border border-purple-500 rounded-sm text-purple-600 text-sm"
+              class="
+                px-4
+                py-2
+                border border-purple-500
+                rounded-sm
+                text-purple-600 text-sm
+              "
             >
               View Details
             </router-link>

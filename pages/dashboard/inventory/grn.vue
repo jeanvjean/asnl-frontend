@@ -1,5 +1,5 @@
 <template>
-  <div class="py-6 px-8">
+  <div :key="componentKey" class="py-6 px-8">
     <div class="grid grid-rows-1 xl:grid-cols-3 gap-4 mb-6">
       <div class="bg-white px-10 pt-10 pb-24">
         <p class="font-medium text-black tracking-wide pb-4">Total GRN</p>
@@ -153,6 +153,30 @@
       <div class="flex items-center justify-around px-2 py-2 space-x-4 w-full">
         <filter-component />
         <search-component :place-holder="'Search for GRN'" />
+        <button
+          class="
+            px-4
+            py-2
+            rounded-sm
+            text-white
+            bg-purple-600
+            flex
+            items-center
+            space-x-4
+          "
+          @click="showRecieveProduct = !showRecieveProduct"
+        >
+          <svg
+            class="w-3 h-3 fill-current text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 341.4 341.4"
+          >
+            <path
+              d="M192 149.4V0h-42.6v149.4H0V192h149.4v149.4H192V192h149.4v-42.6z"
+            />
+          </svg>
+          <span> Create GRN</span>
+        </button>
         <pagination />
       </div>
       <table class="w-full table-auto mt-2">
@@ -167,19 +191,39 @@
             <th
               v-for="(headSingle, index) in headers"
               :key="index"
-              class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-center"
+              class="
+                uppercase
+                text-gray-800
+                font-thin
+                text-sm
+                px-4
+                py-2
+                text-center
+              "
             >
               {{ headSingle }}
             </th>
             <th
-              class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-center"
+              class="
+                uppercase
+                text-gray-800
+                font-thin
+                text-sm
+                px-4
+                py-2
+                text-center
+              "
             >
               Action
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="i in 8" :key="i" class="font-light hover:bg-gray-100">
+          <tr
+            v-for="(inventory, i) in inventories"
+            :key="i"
+            class="font-light hover:bg-gray-100"
+          >
             <td class="w-6 px-6 py-4">
               <input
                 type="checkbox"
@@ -187,20 +231,28 @@
               />
             </td>
             <td class="px-4 text-center py-4">1020333343AS</td>
-            <td class="px-4 text-center py-4">John Supplies</td>
-            <td class="px-4 text-center py-4">0000000</td>
-            <td class="px-4 text-center py-4">WB62323111</td>
-            <td class="px-4 text-center py-4">IVC3342232</td>
+            <td class="px-4 text-center py-4">{{ inventory.supplier }}</td>
+            <td class="px-4 text-center py-4">{{ inventory.LPOnumber }}</td>
+            <td class="px-4 text-center py-4">{{ inventory.wayBillNumber }}</td>
+            <td class="px-4 text-center py-4">{{ inventory.invoiceNumber }}</td>
             <td class="px-4 text-left py-4">
               <span class="px-8 py-2 bg-yellow-100 text-red-400">
-                Pending
+                {{ inventory.direction }}
               </span>
             </td>
-            <td class="px-4 text-center py-4">12/06/2020</td>
+            <td class="px-4 text-center py-4">
+              {{ new Date(inventory.dateReceived).toDateString() }}
+            </td>
             <td class="px-4 text-center py-4">
               <button
-                class="px-2 py-1 border border-purple-500 rounded-sm text-purple-600 text-sm"
-                @click="showRecieveProduct = !showRecieveProduct"
+                class="
+                  px-2
+                  py-1
+                  border border-purple-500
+                  rounded-sm
+                  text-purple-600 text-sm
+                "
+                @click="getInventory(inventory._id)"
               >
                 View Details
               </button>
@@ -211,19 +263,34 @@
     </div>
     <recieve-product
       v-if="showRecieveProduct"
+      @reload="componentKey++"
       @close="showRecieveProduct = false"
+    />
+    <recieve-product-detail
+      v-if="showRecieveDetails"
+      :inventory="inventoryDetails"
+      @close="showRecieveDetails = !showRecieveDetails"
     />
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, ref, onMounted } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
 import RecieveProduct from '@/components/Overlays/RecieveProducts.vue'
+import RecieveProductDetail from '@/components/Overlays/RecieveProductDetail.vue'
+import { ProductRepository } from '@/module/Product'
+
 export default defineComponent({
   name: 'Analytics',
-  components: { Pagination, SearchComponent, FilterComponent, RecieveProduct },
+  components: {
+    Pagination,
+    SearchComponent,
+    FilterComponent,
+    RecieveProduct,
+    RecieveProductDetail,
+  },
   layout: 'dashboard',
   setup() {
     const headers = [
@@ -235,12 +302,37 @@ export default defineComponent({
       'Status',
       'Date',
     ]
-    const body = ref([])
+    const inventories = ref<any>([])
     const showRecieveProduct = ref(false)
+
+    const showRecieveDetails = ref(false)
+    const inventoryDetails = ref()
+
+    const componentKey = ref(0)
+
+    const productObject = new ProductRepository()
+
+    async function getInventory(value: String) {
+      await productObject.fetchInventory(value).then((response) => {
+        inventoryDetails.value = response.data.data
+        showRecieveDetails.value = !showRecieveDetails.value
+      })
+    }
+
+    onMounted(async () => {
+      await productObject.fetchInventories().then((response) => {
+        inventories.value = response.data.data
+      })
+    })
+
     return {
       headers,
-      body,
+      inventories,
       showRecieveProduct,
+      getInventory,
+      showRecieveDetails,
+      inventoryDetails,
+      componentKey,
     }
   },
 })

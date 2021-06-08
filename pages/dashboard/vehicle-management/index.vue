@@ -5,7 +5,16 @@
       <div class="flex space-x-4">
         <router-link
           to="/dashboard/vehicle-management/maintenance"
-          class="flex space-x-2 items-center bg-purple-600 rounded-sm-sm px-4 py-2 text-white"
+          class="
+            flex
+            space-x-2
+            items-center
+            bg-purple-600
+            rounded-sm-sm
+            px-4
+            py-2
+            text-white
+          "
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +30,16 @@
         </router-link>
         <router-link
           to="/dashboard/vehicle-management/create-vehicle"
-          class="flex space-x-2 items-center bg-purple-600 rounded-sm-sm px-4 py-2 text-white"
+          class="
+            flex
+            space-x-2
+            items-center
+            bg-purple-600
+            rounded-sm-sm
+            px-4
+            py-2
+            text-white
+          "
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +78,15 @@
             <th
               v-for="(headSingle, index) in headers"
               :key="index"
-              class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-center"
+              class="
+                uppercase
+                text-gray-800
+                font-thin
+                text-sm
+                px-4
+                py-2
+                text-center
+              "
             >
               {{ headSingle }}
             </th>
@@ -97,31 +123,82 @@
                 </svg>
               </button>
               <div
-                class="absolute -ml-6 bg-gray-50 border border-gray-300 w-40 font-light text-sm rounded-sm-md action-menu z-50"
+                class="
+                  absolute
+                  -ml-6
+                  bg-gray-50
+                  border border-gray-300
+                  w-40
+                  font-light
+                  text-sm
+                  rounded-sm-md
+                  action-menu
+                  z-50
+                "
               >
                 <button
                   type="button"
-                  class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
+                  class="
+                    block
+                    px-3
+                    py-4
+                    text-black
+                    focus:outline-none
+                    hover:bg-purple-300
+                    hover:text-purple-500
+                    w-full
+                    overflow-none
+                  "
                   @click="fetchVehicle(bodySingle._id)"
                 >
                   View Vehicle
                 </button>
                 <button
                   type="button"
-                  class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
+                  class="
+                    block
+                    px-3
+                    py-4
+                    text-black
+                    focus:outline-none
+                    hover:bg-purple-300
+                    hover:text-purple-500
+                    w-full
+                    overflow-none
+                  "
                   @click="fetchDrivers()"
                 >
                   Assign Driver
                 </button>
                 <button
                   type="button"
-                  class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
+                  class="
+                    block
+                    px-3
+                    py-4
+                    text-black
+                    focus:outline-none
+                    hover:bg-purple-300
+                    hover:text-purple-500
+                    w-full
+                    overflow-none
+                  "
                 >
                   Delete Vehicle
                 </button>
                 <button
                   type="button"
-                  class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
+                  class="
+                    block
+                    px-3
+                    py-4
+                    text-black
+                    focus:outline-none
+                    hover:bg-purple-300
+                    hover:text-purple-500
+                    w-full
+                    overflow-none
+                  "
                 >
                   Remove Driver
                 </button>
@@ -133,7 +210,16 @@
     </div>
     <div v-else class="mx-auto px-6 sm:px-6 md:px-8 w-full bg-white mt-6">
       <div
-        class="bg-white shadow-sm rounded-sm h-96 px-4 flex justify-center items-center"
+        class="
+          bg-white
+          shadow-sm
+          rounded-sm
+          h-96
+          px-4
+          flex
+          justify-center
+          items-center
+        "
       >
         <div class="w-full sm:w-full md:w-3/5 space-y-6">
           <svg

@@ -3,7 +3,17 @@
     <div class="flex justify-evenly items-center w-full lg:w-2/3 mb-4">
       <h1 class="text-xl text-black font-medium">Transfer Cylinders</h1>
       <button
-        class="flex justify-between items-center bg-purple-600 text-white px-4 py-2 rounded-sm-sm space-x-3"
+        class="
+          flex
+          justify-between
+          items-center
+          bg-purple-600
+          text-white
+          px-4
+          py-2
+          rounded-sm-sm
+          space-x-3
+        "
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -17,7 +27,18 @@
         <span>Within Division </span>
       </button>
       <button
-        class="flex justify-between items-center bg-transparent text-purple-500 border border-purple-500 px-4 py-2 rounded-sm-sm space-x-2"
+        class="
+          flex
+          justify-between
+          items-center
+          bg-transparent
+          text-purple-500
+          border border-purple-500
+          px-4
+          py-2
+          rounded-sm-sm
+          space-x-2
+        "
       >
         <svg
           class="w-6 h-6 fill-current"
@@ -35,7 +56,18 @@
       </button>
       <router-link
         to="/dashboard/cylinder-management/condemn"
-        class="flex justify-between items-center bg-purple-500 text-white border border-purple-500 px-4 py-2 rounded-sm-sm space-x-2"
+        class="
+          flex
+          justify-between
+          items-center
+          bg-purple-500
+          text-white
+          border border-purple-500
+          px-4
+          py-2
+          rounded-sm-sm
+          space-x-2
+        "
       >
         <svg
           class="w-6 h-6 fill-current"
@@ -46,12 +78,24 @@
             fill-rule="evenodd"
             d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
             clip-rule="evenodd"
-          /></svg
-        ><span>Condemn</span>
+          />
+        </svg>
+        <span>Condemn</span>
       </router-link>
       <router-link
         to="/dashboard/cylinder-management/cylinder-type"
-        class="flex justify-between items-center bg-transparent text-purple-500 border border-purple-500 px-4 py-2 rounded-sm-sm space-x-2"
+        class="
+          flex
+          justify-between
+          items-center
+          bg-transparent
+          text-purple-500
+          border border-purple-500
+          px-4
+          py-2
+          rounded-sm-sm
+          space-x-2
+        "
       >
         <svg
           class="w-6 h-6 fill-current"
@@ -62,8 +106,9 @@
             fill-rule="evenodd"
             d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
             clip-rule="evenodd"
-          /></svg
-        ><span class="text-center">Cylinder Type</span>
+          />
+        </svg>
+        <span class="text-center">Cylinder Type</span>
       </router-link>
     </div>
     <div class="grid grid-rows-1 lg:grid-cols-4 py-2">
@@ -74,7 +119,16 @@
           </h1>
           <div class="flex space-x-6">
             <button
-              class="flex items-center bg-purple-600 text-white space-x-4 px-4 py-2 rounded-sm-sm"
+              class="
+                flex
+                items-center
+                bg-purple-600
+                text-white
+                space-x-4
+                px-4
+                py-2
+                rounded-sm-sm
+              "
               @click="
                 status = 'success'
                 showConfirmation = true
@@ -96,7 +150,15 @@
               </svg>
             </button>
             <button
-              class="flex items-center space-x-4 px-4 py-2 rounded-sm-sm border border-purple-600"
+              class="
+                flex
+                items-center
+                space-x-4
+                px-4
+                py-2
+                rounded-sm-sm
+                border border-purple-600
+              "
               @click="
                 status = 'error'
                 showConfirmation = true
@@ -125,22 +187,54 @@
               <tr>
                 <th class="w-auto">#</th>
                 <th
-                  class="font-light text-lg px-2 py-2 text-center w-3/12 border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-3/12
+                    border border-gray-400
+                  "
                 >
                   Assigned No
                 </th>
                 <th
-                  class="font-light text-lg px-2 py-2 text-center w-3/12 border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-3/12
+                    border border-gray-400
+                  "
                 >
                   Cylinder No
                 </th>
                 <th
-                  class="font-light text-lg px-2 py-2 text-center w-2/12 border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-2/12
+                    border border-gray-400
+                  "
                 >
                   Purchase Date
                 </th>
                 <th
-                  class="font-light text-lg px-2 py-2 text-center w-3/12 border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-3/12
+                    border border-gray-400
+                  "
                 >
                   Reason
                 </th>
@@ -153,17 +247,38 @@
                   {{ i }}
                 </td>
                 <td
-                  class="font-light text-lg px-4 py-2 text-center border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-4
+                    py-2
+                    text-center
+                    border border-gray-400
+                  "
                 >
                   <input-component :input-placeholder="'Enter Assigned No'" />
                 </td>
                 <td
-                  class="font-light text-lg px-4 py-2 text-center border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-4
+                    py-2
+                    text-center
+                    border border-gray-400
+                  "
                 >
                   <input-component :input-placeholder="'Enter Cylinder No'" />
                 </td>
                 <td
-                  class="font-light text-lg px-4 py-2 text-center border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-4
+                    py-2
+                    text-center
+                    border border-gray-400
+                  "
                 >
                   <input-component
                     :input-placeholder="'Select Purchase Date'"
@@ -171,7 +286,14 @@
                   />
                 </td>
                 <td
-                  class="font-light text-lg px-4 py-2 text-center border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-4
+                    py-2
+                    text-center
+                    border border-gray-400
+                  "
                 >
                   <input-component :input-placeholder="'Enter Reason'" />
                 </td>

@@ -1,6 +1,6 @@
 <template>
   <back-drop>
-    <div :key="componentKey" class="w-full lg:w-3/5 bg-white rounded-sm-md">
+    <div class="w-full lg:w-3/5 bg-white rounded-sm-md">
       <div class="rounded-sm-sm">
         <div class="flex justify-between items-center bg-white py-4 px-8">
           <h1>Recieve Products</h1>
@@ -52,7 +52,9 @@
             <div class="flex space-x-2 items-center">
               <span>Date:</span>
               <div class="flex space-x-2 items-center">
-                <span>{{ new Date().toDateString() }}</span>
+                <span>{{
+                  new Date(inventory.dateReceived).toDateString()
+                }}</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="w-4 h-4 fill-current text-white"
@@ -70,53 +72,25 @@
             </div>
           </div>
           <div class="grid grid-rows-1 lg:grid-cols-4 gap-x-4 items-center">
-            <input-component
-              :label-title="'Supplier'"
-              :input-placeholder="'Enter Supplier'"
-              @get="form.supplier = $event.value"
-            />
-            <div
-              class="
-                lg:col-span-3
-                flex
-                justify-between
-                items-center
-                space-x-4
-                w-full
-                h-full
-                px-6
-                py-4
-              "
-            >
-              <div class="px-4 py-1 w-full text-center">
-                <p class="text-left">LPO Number</p>
-                <input-component
-                  :input-placeholder="'Enter LPO Number'"
-                  @get="form.LPOnumber = $event.value"
-                />
-              </div>
-              <div
-                class="px-4 py-1 border-l border-gray-400 w-full text-center"
-              >
-                <p class="text-left">Waybill Number</p>
-                <input-component
-                  :input-placeholder="'000000000000'"
-                  @get="form.wayBillNumber = $event.value"
-                />
-              </div>
-              <div
-                class="px-4 py-1 border-l border-gray-400 w-full text-center"
-              >
-                <p class="text-left">Invoice Number</p>
-                <input-component
-                  :input-placeholder="'000000000000'"
-                  @get="form.invoiceNumber = $event.value"
-                />
-              </div>
+            <div class="px-4 py-1 w-full text-center">
+              <p class="text-center">Supplier</p>
+              <p>{{ inventory.supplier }}</p>
+            </div>
+            <div class="px-4 py-1 w-full border-l border-gray-400 text-center">
+              <p class="text-center">LPO Number</p>
+              <p>{{ inventory.LPOnumber }}</p>
+            </div>
+            <div class="px-4 py-1 border-l border-gray-400 w-full text-center">
+              <p class="text-center">Waybill Number</p>
+              <p>{{ inventory.wayBillNumber }}</p>
+            </div>
+            <div class="px-4 py-1 border-l border-gray-400 w-full text-center">
+              <p class="text-center">Invoice Number</p>
+              <p>{{ inventory.invoiceNumber }}</p>
             </div>
           </div>
           <div class="w-full overflow-x-auto">
-            <table class="w-full table-auto border-separate">
+            <table class="w-full table-auto border-collapse">
               <thead>
                 <tr>
                   <th
@@ -227,97 +201,34 @@
                   >
                     Comment
                   </th>
-                  <th
-                    class="
-                      px-4
-                      py-2
-                      font-medium
-                      text-gray-600
-                      uppercase
-                      text-sm
-                    "
-                  ></th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(product, i) in products" :key="i">
-                  <td class="text-center">{{ Number(i) + 1 }}</td>
-                  <td>
-                    <input-component
-                      :input-placeholder="'Enter Product Number'"
-                      :default-value="products[i].productNumber"
-                      @get="products[i].productNumber = $event.value"
-                    />
+                <tr v-for="(detail, index) in inventory.products" :key="index">
+                  <td class="text-center">{{ Number(index) + 1 }}</td>
+                  <td class="px-4 py-3 border border-gray-600">
+                    {{ detail.productNumber }}
                   </td>
-                  <td>
-                    <input-component
-                      :input-placeholder="'Enter Product Name'"
-                      :default-value="products[i].productName"
-                      @get="products[i].productName = $event.value"
-                    />
+                  <td class="px-4 py-3 border border-gray-600">
+                    {{ detail.productName }}
                   </td>
-                  <td>
-                    <input-component
-                      :input-placeholder="'Enter Quantity'"
-                      :default-value="products[i].quantity"
-                      :input-type="'number'"
-                      @get="products[i].quantity = $event.value"
-                    />
+                  <td class="px-4 py-3 border border-gray-600">
+                    {{ detail.quantity }}
                   </td>
-                  <td>
-                    <input-component
-                      :input-placeholder="'#'"
-                      :default-value="products[i].passed"
-                      :input-type="'number'"
-                      @get="products[i].passed = $event.value"
-                    />
+                  <td class="px-4 py-3 border border-gray-600">
+                    {{ detail.passed }}
                   </td>
-                  <td>
-                    <input-component
-                      :input-placeholder="'#'"
-                      :default-value="products[i].rejected"
-                      :input-type="'number'"
-                      @get="products[i].rejected = $event.value"
-                    />
+                  <td class="px-4 py-3 border border-gray-600">
+                    {{ detail.rejected }}
                   </td>
-                  <td>
-                    <input-component
-                      :input-placeholder="'#'"
-                      :default-value="products[i].unitCost"
-                      :input-type="'number'"
-                      @get="products[i].unitCost = $event.value"
-                    />
+                  <td class="px-4 py-3 border border-gray-600">
+                    {{ detail.unitCost }}
                   </td>
-                  <td>
-                    <input-component
-                      :input-placeholder="'Enter Total Cost'"
-                      :default-value="products[i].totalCost"
-                      :input-type="'number'"
-                      @get="products[i].totalCost = $event.value"
-                    />
+                  <td class="px-4 py-3 border border-gray-600">
+                    {{ detail.totalCost }}
                   </td>
-                  <td>
-                    <input-component
-                      :input-placeholder="'Enter Comment'"
-                      :default-value="products[i].comment"
-                      @get="products[i].comment = $event.value"
-                    />
-                  </td>
-                  <td class="text-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="fill-current text-transparent w-4 h-4"
-                      viewBox="0 0 24 24"
-                      stroke="black"
-                      @click="decreaseCounter(i)"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
+                  <td class="px-4 py-3 border border-gray-600">
+                    {{ detail.comment }}
                   </td>
                 </tr>
               </tbody>
@@ -325,10 +236,7 @@
           </div>
           <div class="flex justify-between items-start w-11/12 h-full mx-auto">
             <div class="w-full mx-auto h-full">
-              <button
-                class="flex items-center space-x-1"
-                @click="increaseCounter"
-              >
+              <button class="flex items-center space-x-1 invisible">
                 <div>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -399,7 +307,6 @@
           >
             <button
               class="px-8 py-2 rounded-sm bg-btn-purple text-white w-full"
-              @click="submitForm"
             >
               Recieve Product
             </button>
@@ -424,112 +331,30 @@
   </back-drop>
 </template>
 <script lang="ts">
-import {
-  defineComponent,
-  reactive,
-  ref,
-  useContext,
-} from '@nuxtjs/composition-api'
+import { defineComponent } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
-import InputComponent from '@/components/Form/Input.vue'
-import { ProductRepository } from '@/module/Product'
 import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
   components: {
     BackDrop,
-    InputComponent,
+  },
+  props: {
+    inventory: {
+      type: Object,
+      required: true,
+    },
   },
   setup(_props, ctx) {
     const close = () => {
       ctx.emit('close')
     }
-    const count = ref(0)
-    const form = reactive({
-      supplier: '',
-      LPOnumber: '',
-      wayBillNumber: '',
-      invoiceNumber: '',
-    })
 
     const appStore = mainStore()
     const user: any = appStore.getLoggedInUser
 
-    const productObject = new ProductRepository()
-    const products = ref<any>([])
-
-    const componentKey = ref<number>(0)
-
-    const context = useContext()
-
-    const increaseCounter = () => {
-      products.value.push({
-        productNumber: '',
-        productName: '',
-        quantity: '0',
-        passed: '0',
-        rejected: '0',
-        unitCost: '0',
-        totalCost: '0',
-        comment: '',
-      })
-    }
-
-    function decreaseCounter(index: any) {
-      products.value.splice(index, 1)
-      componentKey.value++
-    }
-
-    const submitForm = async () => {
-      if (
-        !form.supplier ||
-        !form.LPOnumber ||
-        !form.invoiceNumber ||
-        !form.wayBillNumber
-      ) {
-        context.$toast.error('All Fields are Required')
-      } else if (!products.value.length) {
-        context.$toast.error('Minimum of One Product should be added')
-      } else {
-        let result = false
-        products.value.forEach((element: any) => {
-          const values = Object.values(element)
-          result = values.every((val) => {
-            return val !== ''
-          })
-        })
-
-        if (result) {
-          await productObject
-            .registerInventory({
-              products: products.value,
-              supplier: form.supplier,
-              LPOnumber: form.LPOnumber,
-              invoiceNumber: form.invoiceNumber,
-              wayBillNumber: form.wayBillNumber,
-              dateReceived: new Date(),
-              direction: 'out-going',
-            })
-            .then(() => {
-              componentKey.value = 0
-              ctx.emit('reload')
-              close()
-            })
-        } else {
-          context.$toast.error('All Fields are Required')
-        }
-      }
-    }
-
     return {
       close,
-      count,
-      form,
-      products,
-      increaseCounter,
-      decreaseCounter,
-      submitForm,
-      componentKey,
       user,
     }
   },

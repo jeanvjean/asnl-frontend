@@ -32,7 +32,16 @@
           <nav class="flex-1 px-4 py-4 bg-bg-sidebar space-y-4">
             <router-link
               to="/dashboard/"
-              class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
+              class="
+                text-white
+                group
+                px-4
+                py-4
+                rounded-sm-md
+                flex
+                items-center
+                space-x-6
+              "
             >
               <svg
                 class="text-gray-300 mr-3 h-5 w-5"
@@ -52,7 +61,16 @@
             </router-link>
             <router-link
               to="/dashboard/user-management/"
-              class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
+              class="
+                text-white
+                group
+                px-4
+                py-4
+                rounded-sm-md
+                flex
+                items-center
+                space-x-6
+              "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -68,7 +86,17 @@
             </router-link>
             <div class="w-full">
               <button
-                class="text-white px-4 py-4 rounded-sm-md flex justify-between w-full link-block focus:outline-none"
+                class="
+                  text-white
+                  px-4
+                  py-4
+                  rounded-sm-md
+                  flex
+                  justify-between
+                  w-full
+                  link-block
+                  focus:outline-none
+                "
                 @click="toggleCylinder = !toggleCylinder"
               >
                 <div class="flex space-x-6">
@@ -107,7 +135,13 @@
               </button>
               <div
                 v-if="toggleCylinder"
-                class="text-white ml-16 px-2 bg-dark-blue bg-opacity-50 link-list"
+                class="
+                  text-white
+                  ml-16
+                  px-2
+                  bg-dark-blue bg-opacity-50
+                  link-list
+                "
               >
                 <router-link
                   to="/dashboard/cylinder-management/"
@@ -128,7 +162,17 @@
             </div>
             <div class="w-full">
               <button
-                class="text-white px-4 py-4 rounded-sm-md flex justify-between w-full link-block focus:outline-none"
+                class="
+                  text-white
+                  px-4
+                  py-4
+                  rounded-sm-md
+                  flex
+                  justify-between
+                  w-full
+                  link-block
+                  focus:outline-none
+                "
                 @click="toggleInventory = !toggleInventory"
               >
                 <div class="flex space-x-6">
@@ -167,7 +211,13 @@
               </button>
               <div
                 v-if="toggleInventory"
-                class="text-white ml-16 px-2 bg-dark-blue bg-opacity-50 link-list"
+                class="
+                  text-white
+                  ml-16
+                  px-2
+                  bg-dark-blue bg-opacity-50
+                  link-list
+                "
               >
                 <router-link to="/dashboard/inventory/" class="block px-2 py-2"
                   >Analytics</router-link
@@ -191,7 +241,17 @@
             </div>
             <div class="w-full">
               <button
-                class="text-white px-4 py-4 rounded-sm-md flex justify-between w-full link-block focus:outline-none"
+                class="
+                  text-white
+                  px-4
+                  py-4
+                  rounded-sm-md
+                  flex
+                  justify-between
+                  w-full
+                  link-block
+                  focus:outline-none
+                "
                 @click="toggleVehicle = !toggleVehicle"
               >
                 <div class="flex space-x-6">
@@ -234,7 +294,13 @@
               </button>
               <div
                 v-if="toggleVehicle"
-                class="text-white ml-16 px-2 bg-dark-blue bg-opacity-50 link-list"
+                class="
+                  text-white
+                  ml-16
+                  px-2
+                  bg-dark-blue bg-opacity-50
+                  link-list
+                "
               >
                 <router-link
                   to="/dashboard/vehicle-management/"
@@ -260,7 +326,17 @@
             </div>
             <div class="w-full">
               <button
-                class="text-white px-4 py-4 rounded-sm-md flex justify-between w-full link-block focus:outline-none"
+                class="
+                  text-white
+                  px-4
+                  py-4
+                  rounded-sm-md
+                  flex
+                  justify-between
+                  w-full
+                  link-block
+                  focus:outline-none
+                "
                 @click="toggleReport = !toggleReport"
               >
                 <div class="flex space-x-6">
@@ -301,7 +377,13 @@
               </button>
               <div
                 v-if="toggleReport"
-                class="text-white ml-16 px-2 bg-dark-blue bg-opacity-50 link-list"
+                class="
+                  text-white
+                  ml-16
+                  px-2
+                  bg-dark-blue bg-opacity-50
+                  link-list
+                "
               >
                 <router-link to="/dashboard/reports/" class="block px-2 py-2"
                   >All Reports</router-link
@@ -320,7 +402,16 @@
             </div>
             <router-link
               to="/dashboard/drivers"
-              class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
+              class="
+                text-white
+                group
+                px-4
+                py-4
+                rounded-sm-md
+                flex
+                items-center
+                space-x-6
+              "
             >
               <svg
                 class="mr-3 h-5 w-5 fill-current text-gray-300"
@@ -339,7 +430,16 @@
 
             <router-link
               to="/dashboard/customer-management/"
-              class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
+              class="
+                text-white
+                group
+                px-4
+                py-4
+                rounded-sm-md
+                flex
+                items-center
+                space-x-6
+              "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -356,27 +456,108 @@
               </svg>
               <span class="font-light font-xl">Customers</span>
             </router-link>
-            <router-link
-              to="/dashboard/production/erc-list"
-              class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="mr-3 h-5 w-5 fill-current text-transparent"
-                viewBox="0 0 24 24"
-                stroke="rgba(209, 213, 219, 1)"
+
+            <div class="w-full">
+              <button
+                class="
+                  text-white
+                  px-4
+                  py-4
+                  rounded-sm-md
+                  flex
+                  justify-between
+                  w-full
+                  link-block
+                  focus:outline-none
+                "
+                @click="toggleProduction = !toggleProduction"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                />
-              </svg>
-              <span class="font-light font-xl">Production</span>
-            </router-link>
+                <div class="flex space-x-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="mr-3 h-5 w-5 fill-current text-transparent"
+                    viewBox="0 0 24 24"
+                    stroke="rgba(209, 213, 219, 1)"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                    />
+                  </svg>
+
+                  <span class="font-light font-xl">Production</span>
+                </div>
+                <svg
+                  v-if="!toggleProduction"
+                  class="w-6 h-6 fill-current text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                  />
+                </svg>
+                <svg
+                  v-else
+                  class="w-6 h-6 fill-current text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z"
+                  />
+                </svg>
+              </button>
+              <div
+                v-if="toggleProduction"
+                class="
+                  text-white
+                  ml-16
+                  px-2
+                  bg-dark-blue bg-opacity-50
+                  link-list
+                "
+              >
+                <router-link
+                  to="/dashboard/production/erc-list"
+                  class="block px-2 py-2"
+                  >ERC List</router-link
+                >
+                <router-link
+                  to="/dashboard/production/production-schedule"
+                  class="block px-2 py-2"
+                  >Production Schedule</router-link
+                >
+                <router-link
+                  to="/dashboard/production/sales-requisition"
+                  class="block px-2 py-2"
+                  >Sales Requisition List</router-link
+                >
+                <router-link
+                  to="/dashboard/production/production-schedule-status"
+                  class="block px-2 py-2"
+                  >Production Schedule Status</router-link
+                >
+                <router-link
+                  to="/dashboard/production/internal-purchase-requisition"
+                  class="block px-2 py-2"
+                  >Internal Purchase Requisition</router-link
+                >
+              </div>
+            </div>
             <router-link
-              class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
+              class="
+                text-white
+                group
+                px-4
+                py-4
+                rounded-sm-md
+                flex
+                items-center
+                space-x-6
+              "
               to="/auth/logout"
             >
               <svg
@@ -412,6 +593,7 @@ export default defineComponent({
     const toggleInventory = ref(false)
     const toggleReport = ref(false)
     const toggleVehicle = ref(false)
+    const toggleProduction = ref(false)
     // const appStore = mainStore()
 
     // const auth: any = appStore.getLoggedInUser
@@ -424,6 +606,7 @@ export default defineComponent({
       toggleInventory,
       toggleReport,
       toggleVehicle,
+      toggleProduction,
       // navigations,
     }
   },

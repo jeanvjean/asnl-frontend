@@ -6,7 +6,15 @@
           <h1>Issue Products</h1>
           <div class="flex space-x-8 items-center">
             <button
-              class="flex space-x-4 py-2 px-4 items-center bg-purple-600 rounded-sm"
+              class="
+                flex
+                space-x-4
+                py-2
+                px-4
+                items-center
+                bg-btn-purple
+                rounded-sm
+              "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -35,7 +43,7 @@
             </svg>
           </div>
         </div>
-        <div class="bg-gray-200 py-6 px-8 space-y-6">
+        <div class="bg-white py-6 px-8 space-y-6">
           <div class="flex justify-between items-center text-md">
             <div>
               <span>MRN:</span>
@@ -82,37 +90,86 @@
               <thead>
                 <tr>
                   <th
-                    class="px-4 py-2 font-medium text-gray-600 uppercase text-center text-sm"
+                    class="
+                      px-4
+                      py-2
+                      font-medium
+                      text-gray-600
+                      uppercase
+                      text-center text-sm
+                    "
                   >
                     S/N
                   </th>
                   <th
-                    class="px-4 py-2 font-medium text-gray-600 uppercase text-sm"
+                    class="
+                      px-4
+                      py-2
+                      font-medium
+                      text-gray-600
+                      uppercase
+                      text-sm
+                    "
                   >
                     Product Number
                   </th>
                   <th
-                    class="px-4 py-2 font-medium text-gray-600 uppercase text-sm"
+                    class="
+                      px-4
+                      py-2
+                      font-medium
+                      text-gray-600
+                      uppercase
+                      text-sm
+                    "
                   >
                     Qty
                   </th>
                   <th
-                    class="px-4 py-2 font-medium text-gray-600 uppercase text-sm"
+                    class="
+                      px-4
+                      py-2
+                      font-medium
+                      text-gray-600
+                      uppercase
+                      text-sm
+                    "
                   >
                     Passed
                   </th>
                   <th
-                    class="px-4 py-2 font-medium text-gray-600 uppercase text-sm"
+                    class="
+                      px-4
+                      py-2
+                      font-medium
+                      text-gray-600
+                      uppercase
+                      text-sm
+                    "
                   >
                     Rejected
                   </th>
                   <th
-                    class="px-4 py-2 font-medium text-gray-600 uppercase text-sm"
+                    class="
+                      px-4
+                      py-2
+                      font-medium
+                      text-gray-600
+                      uppercase
+                      text-sm
+                    "
                   >
                     Comment
                   </th>
                   <th
-                    class="px-4 py-2 font-medium text-gray-600 uppercase text-sm"
+                    class="
+                      px-4
+                      py-2
+                      font-medium
+                      text-gray-600
+                      uppercase
+                      text-sm
+                    "
                   ></th>
                 </tr>
               </thead>
@@ -177,15 +234,30 @@
             </div>
           </div>
           <div
-            class="w-full lg:w-3/5 lg:flex lg:justify-between lg:items-center lg:space-x-6"
+            class="
+              w-full
+              lg:w-3/5
+              lg:flex
+              lg:justify-between
+              lg:items-center
+              lg:space-x-6
+            "
           >
             <button
-              class="px-8 py-2 rounded-sm-sm bg-purple-500 text-white w-full"
+              class="px-6 py-2 rounded-sm bg-btn-purple text-white w-full"
             >
               Disburse Stock
             </button>
             <button
-              class="px-8 py-2 rounded-sm-sm bg-white text-purple border border-purple-500 w-full"
+              class="
+                px-6
+                py-2
+                rounded-sm-sm
+                bg-white
+                text-purple
+                border border-purple-500
+                w-full
+              "
             >
               Cancel
             </button>

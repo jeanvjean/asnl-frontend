@@ -8,7 +8,17 @@
         />
 
         <button
-          class="flex justify-between items-end bg-purple-600 px-4 py-2 text-white font-semibold text-md"
+          class="
+            flex
+            justify-between
+            items-end
+            bg-purple-600
+            px-4
+            py-2
+            text-white
+            font-semibold
+            text-md
+          "
           @click="show"
         >
           Register Cylinder
@@ -19,7 +29,15 @@
       <div class="flex items-center justify-between px-2 py-2 w-full">
         <div>
           <button
-            class="flex space-x-4 items-center bg-gray-200 rounded-sm px-5 py-2.5"
+            class="
+              flex
+              space-x-4
+              items-center
+              bg-gray-200
+              rounded-sm
+              px-5
+              py-2.5
+            "
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -56,12 +74,28 @@
             <th
               v-for="(headSingle, index) in head"
               :key="index"
-              class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-left"
+              class="
+                uppercase
+                text-gray-800
+                font-thin
+                text-sm
+                px-4
+                py-2
+                text-left
+              "
             >
               {{ headSingle }}
             </th>
             <th
-              class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-center"
+              class="
+                uppercase
+                text-gray-800
+                font-thin
+                text-sm
+                px-4
+                py-2
+                text-center
+              "
             >
               Actions
             </th>
@@ -100,7 +134,15 @@
             <td class="px-4 text-center py-4">
               <router-link
                 :to="'/dashboard/cylinder-management/single/' + bodySingle._id"
-                class="px-4 py-2 border border-purple-500 rounded-sm text-purple-600 text-sm inline-block w-full"
+                class="
+                  px-4
+                  py-2
+                  border border-purple-500
+                  rounded-sm
+                  text-purple-600 text-sm
+                  inline-block
+                  w-full
+                "
               >
                 View Details
               </router-link>

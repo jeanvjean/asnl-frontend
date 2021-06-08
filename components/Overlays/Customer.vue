@@ -2,7 +2,17 @@
   <back-drop>
     <div class="w-full h-full bg-gray-200 relative pt-8 px-10">
       <svg
-        class="w-6 h-6 fill-current text-gray-400 absolute top-0 right-0 mr-10 mt-6"
+        class="
+          w-6
+          h-6
+          fill-current
+          text-gray-400
+          absolute
+          top-0
+          right-0
+          mr-10
+          mt-6
+        "
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
         @click="close"
@@ -15,7 +25,16 @@
       <div class="flex items-start space-x-4">
         <div class="flex-initial">
           <svg
-            class="text-purple-600 mr-3 h-10 w-10 fill-current bg-purple-200 rounded-full p-2"
+            class="
+              text-purple-600
+              mr-3
+              h-10
+              w-10
+              fill-current
+              bg-purple-200
+              rounded-full
+              p-2
+            "
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 452.608 452.608"
           >
@@ -31,7 +50,16 @@
           >
           <div class="w-full flex justify-between items-center mt-3">
             <button
-              class="flex justify-between space-x-2 items-center bg-gray-300 px-3 py-2 rounded-sm-md"
+              class="
+                flex
+                justify-between
+                space-x-2
+                items-center
+                bg-gray-300
+                px-3
+                py-2
+                rounded-sm-md
+              "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +76,16 @@
               ><span>gas@luth.org</span>
             </button>
             <button
-              class="flex justify-between space-x-2 items-center bg-gray-300 px-3 py-2 rounded-sm-md"
+              class="
+                flex
+                justify-between
+                space-x-2
+                items-center
+                bg-gray-300
+                px-3
+                py-2
+                rounded-sm-md
+              "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -63,27 +100,55 @@
             </button>
             <button
               v-if="sections.cylinder"
-              class="bg-purple-600 text-white rounded-sm-md px-6 py-2 font-medium"
+              class="
+                bg-purple-600
+                text-white
+                rounded-sm-md
+                px-6
+                py-2
+                font-medium
+              "
             >
               Add Cylinder
             </button>
             <button
               v-else-if="sections.pickup || sections.pickupForm"
-              class="bg-purple-600 text-white rounded-sm-md px-6 py-2 font-medium"
+              class="
+                bg-purple-600
+                text-white
+                rounded-sm-md
+                px-6
+                py-2
+                font-medium
+              "
               @click="changeSection('pickupForm')"
             >
               Request Pickup
             </button>
             <button
               v-else-if="sections.complaint || sections.complaintForm"
-              class="bg-purple-600 text-white rounded-sm-md px-6 py-2 font-medium"
+              class="
+                bg-purple-600
+                text-white
+                rounded-sm-md
+                px-6
+                py-2
+                font-medium
+              "
               @click="changeSection('complaintForm')"
             >
               Create Complaint
             </button>
             <button
               v-else
-              class="bg-purple-600 text-white rounded-sm-md px-6 py-2 font-medium"
+              class="
+                bg-purple-600
+                text-white
+                rounded-sm-md
+                px-6
+                py-2
+                font-medium
+              "
             >
               Create Order
             </button>
@@ -240,7 +305,15 @@
           @click="toggleAccordion(index)"
         >
           <button
-            class="flex justify-between items-center w-full px-4 py-3 focus:outline-none"
+            class="
+              flex
+              justify-between
+              items-center
+              w-full
+              px-4
+              py-3
+              focus:outline-none
+            "
           >
             <span>{{ accordion.title }}</span>
             <span :class="accordion.class" class="trounded-sm px-4 py-2">{{
@@ -262,11 +335,24 @@
       <section v-if="sections.pickupForm" class="w-full space-y-3">
         <div class="bg-white px-8 py-4">
           <div
-            class="flex justify-between items-center border-0 border-b border-gray-400 py-3"
+            class="
+              flex
+              justify-between
+              items-center
+              border-0 border-b border-gray-400
+              py-3
+            "
           >
             <h2 class="font-semibold text-black text-lg">Request Pickup</h2>
             <button
-              class="text-sm border border-purple-600 rounded-sm-sm px-4 py-2 text-purple-500"
+              class="
+                text-sm
+                border border-purple-600
+                rounded-sm-sm
+                px-4
+                py-2
+                text-purple-500
+              "
               @click="changeSection('pickup')"
             >
               Pickup List
@@ -304,11 +390,24 @@
       <section v-if="sections.complaintForm" class="w-full space-y-3">
         <div class="bg-white px-8 py-4">
           <div
-            class="flex justify-between items-center border-0 border-b border-gray-400 py-3"
+            class="
+              flex
+              justify-between
+              items-center
+              border-0 border-b border-gray-400
+              py-3
+            "
           >
             <h2 class="font-semibold text-black text-lg">New Complaint</h2>
             <button
-              class="text-sm border border-purple-600 rounded-sm-sm px-4 py-2 text-purple-500"
+              class="
+                text-sm
+                border border-purple-600
+                rounded-sm-sm
+                px-4
+                py-2
+                text-purple-500
+              "
               @click="changeSection('complaint')"
             >
               Complaint List
@@ -374,15 +473,47 @@
               </svg>
             </button>
             <div
-              class="absolute right-0 -mb-32 bg-gray-50 border border-gray-300 w-40 font-medium text-sm rounded-sm-md action-menu z-10"
+              class="
+                absolute
+                right-0
+                -mb-32
+                bg-gray-50
+                border border-gray-300
+                w-40
+                font-medium
+                text-sm
+                rounded-sm-md
+                action-menu
+                z-10
+              "
             >
               <button
-                class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
+                class="
+                  block
+                  px-3
+                  py-4
+                  text-black
+                  focus:outline-none
+                  hover:bg-purple-300
+                  hover:text-purple-500
+                  w-full
+                  overflow-none
+                "
               >
                 View Details
               </button>
               <button
-                class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
+                class="
+                  block
+                  px-3
+                  py-4
+                  text-black
+                  focus:outline-none
+                  hover:bg-purple-300
+                  hover:text-purple-500
+                  w-full
+                  overflow-none
+                "
               >
                 Remove
               </button>
@@ -419,15 +550,47 @@
               </svg>
             </button>
             <div
-              class="absolute right-0 -mb-32 bg-gray-50 border border-gray-300 w-40 font-medium text-sm rounded-sm-md action-menu z-10"
+              class="
+                absolute
+                right-0
+                -mb-32
+                bg-gray-50
+                border border-gray-300
+                w-40
+                font-medium
+                text-sm
+                rounded-sm-md
+                action-menu
+                z-10
+              "
             >
               <button
-                class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
+                class="
+                  block
+                  px-3
+                  py-4
+                  text-black
+                  focus:outline-none
+                  hover:bg-purple-300
+                  hover:text-purple-500
+                  w-full
+                  overflow-none
+                "
               >
                 View Details
               </button>
               <button
-                class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
+                class="
+                  block
+                  px-3
+                  py-4
+                  text-black
+                  focus:outline-none
+                  hover:bg-purple-300
+                  hover:text-purple-500
+                  w-full
+                  overflow-none
+                "
               >
                 Remove
               </button>
@@ -479,24 +642,21 @@ export default defineComponent({
         status: 'Pending',
         class: 'text-red-400 bg-yellow-100',
         show: true,
-        body:
-          'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animisint atque tempore quia nisi, eum doloremque non voluptatum.Perspiciatis obcaecati nesciunt tempora dolores. Dicta ipsam admagni possimus fuga sequi?',
+        body: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animisint atque tempore quia nisi, eum doloremque non voluptatum.Perspiciatis obcaecati nesciunt tempora dolores. Dicta ipsam admagni possimus fuga sequi?',
       },
       {
         title: 'Support Complain',
         status: 'Resolved',
         class: 'text-green-400 bg-green-100',
         show: false,
-        body:
-          'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animisint atque tempore quia nisi, eum doloremque non voluptatum.Perspiciatis obcaecati nesciunt tempora dolores. Dicta ipsam admagni possimus fuga sequi?',
+        body: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animisint atque tempore quia nisi, eum doloremque non voluptatum.Perspiciatis obcaecati nesciunt tempora dolores. Dicta ipsam admagni possimus fuga sequi?',
       },
       {
         title: 'Delivery Complain',
         status: 'Resolved',
         class: 'text-green-400 bg-green-100',
         show: false,
-        body:
-          'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animisint atque tempore quia nisi, eum doloremque non voluptatum.Perspiciatis obcaecati nesciunt tempora dolores. Dicta ipsam admagni possimus fuga sequi?',
+        body: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animisint atque tempore quia nisi, eum doloremque non voluptatum.Perspiciatis obcaecati nesciunt tempora dolores. Dicta ipsam admagni possimus fuga sequi?',
       },
     ])
 
