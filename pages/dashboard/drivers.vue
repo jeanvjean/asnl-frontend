@@ -2,17 +2,41 @@
   <div class="px-6 py-6">
     <div class="bg-white px-6 py-4">
       <h1
-        class="text-black py-2 border-b-2 font-medium border-purple-500 inline-block"
+        class="
+          text-black
+          py-2
+          border-b-2
+          font-medium
+          border-btn-purple
+          inline-block
+        "
       >
         All Drivers
       </h1>
       <div
-        class="grid grid-rows-1 lg:grid-cols-3 xl:grid-cols-4 gap-y-4 lg:gap-x-6 mt-6"
+        class="
+          grid grid-rows-1
+          lg:grid-cols-3
+          xl:grid-cols-4
+          gap-y-4
+          lg:gap-x-6
+          mt-6
+        "
       >
         <button
           v-for="(driver, index) in drivers"
           :key="index"
-          class="flex px-4 py-4 border border-gray-300 bg-gray-200 space-x-4 focus:outline-none focus:border-purple-500 rounded-sm-sm"
+          class="
+            flex
+            px-4
+            py-4
+            border border-gray-300
+            bg-gray-200
+            space-x-4
+            focus:outline-none
+            focus:border-btn-purple
+            rounded-sm
+          "
           @click="getDriver(index)"
         >
           <img
@@ -23,7 +47,13 @@
           <div>
             <div class="mb-4">
               <p
-                class="capitalize text-left text-black font-medium text-lg tracking-wide"
+                class="
+                  capitalize
+                  text-left text-black
+                  font-medium
+                  text-lg
+                  tracking-wide
+                "
               >
                 {{ driver.name }}
               </p>

@@ -132,13 +132,13 @@
         <div class="lg:flex w-full lg:space-x-4 lg:w-2/5 my-6">
           <button-component
             :button-text="'Create Vehicle'"
-            :button-class="'py-2 bg-purple-500 text-white rounded-sm'"
+            :button-class="'py-2 bg-btn-purple text-white rounded-sm'"
             :loading-status="loading"
             @buttonClicked="createVehicle"
           />
           <button-component
             :button-text="'Cancel'"
-            :button-class="'py-2 bg-white text-purple-500 border border-purple-500 rounded-sm'"
+            :button-class="'py-2 bg-white text-btn-purple border border-btn-purple rounded-sm'"
             @buttonClicked="reset"
           />
         </div>

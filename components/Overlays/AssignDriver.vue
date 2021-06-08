@@ -30,14 +30,14 @@
         />
         <button-component
           :button-text="'Assign'"
-          :button-class="'bg-purple-600 text-white rounded-sm-sm mt-2'"
+          :button-class="'bg-btn-purple text-white rounded-sm mt-2'"
           :loading-status="loading"
           @buttonClicked="assignDriverAction"
         />
 
         <button-component
           :button-text="'Cancel'"
-          :button-class="'bg-white text-purple-600 rounded-sm-sm my-2 border border-purple-600'"
+          :button-class="'bg-white text-btn-purple rounded-sm my-2 border border-btn-purple'"
           @buttonClicked="close"
         />
       </div>

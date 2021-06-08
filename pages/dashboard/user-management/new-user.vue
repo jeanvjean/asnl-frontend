@@ -5,12 +5,34 @@
     </div>
     <div class="mx-auto px-4 sm:px-6 lg:px-8 w-full">
       <div
-        class="bg-white shadow-sm rounded-sm h-full px-4 py-4 lg:px-12 lg:py-12 grid grid-rows-1 lg:grid-cols-3 sm:gap-y-3 lg:gap-x-12"
+        class="
+          bg-white
+          shadow-sm
+          rounded-sm
+          h-full
+          px-4
+          py-4
+          lg:px-12
+          lg:py-12
+          grid grid-rows-1
+          lg:grid-cols-3
+          sm:gap-y-3
+          lg:gap-x-12
+        "
       >
         <div class="lg:col-span-1 px-2 py-2 lg:px-8 lg:py-6 w-full">
           <div class="space-y-1 mb-4">
             <div
-              class="rounded-full bg-purple-300 w-10 h-10 flex justify-center items-center mb-3"
+              class="
+                rounded-full
+                bg-btn-purple
+                w-10
+                h-10
+                flex
+                justify-center
+                items-center
+                mb-3
+              "
             >
               <svg
                 width="41"
@@ -63,7 +85,19 @@
 
             <button
               type="button"
-              class="bg-purple-600 flex justify-around space-x-2 items-center text-white max-w-3/5 py-3 px-4 my-4 rounded-sm"
+              class="
+                bg-btn-purple
+                flex
+                justify-around
+                space-x-2
+                items-center
+                text-white
+                max-w-3/5
+                py-3
+                px-4
+                my-4
+                rounded-sm
+              "
               @click="inviteUser"
             >
               <span class="tracking-wide">Send Invites</span
@@ -106,7 +140,12 @@
                 <div
                   v-for="(subrole, i) in permission.sub_permissions"
                   :key="i"
-                  class="space-x-2 text-black text-md customFontRegular items-center"
+                  class="
+                    space-x-2
+                    text-black text-md
+                    customFontRegular
+                    items-center
+                  "
                 >
                   <input
                     type="checkbox"

@@ -12,12 +12,13 @@
             flex
             justify-between
             items-end
-            bg-purple-600
+            bg-btn-purple
             px-4
             py-2
             text-white
             font-semibold
             text-md
+            rounded-sm
           "
           @click="show"
         >
@@ -63,7 +64,7 @@
     </div>
     <div class="overflow-x-auto w-full">
       <table class="table-auto w-full">
-        <thead class="bg-gray-200">
+        <thead class="bg-gray-100">
           <tr>
             <th class="w-6 px-6 py-4">
               <input
@@ -133,13 +134,15 @@
             </td>
             <td class="px-4 text-center py-4">
               <router-link
-                :to="'/dashboard/cylinder-management/single/' + bodySingle._id"
+                :to="
+                  '/dashboard/cylinder-management/cylinder/' + bodySingle._id
+                "
                 class="
                   px-4
                   py-2
-                  border border-purple-500
+                  border border-btn-purple
                   rounded-sm
-                  text-purple-600 text-sm
+                  text-btn-purple text-sm
                   inline-block
                   w-full
                 "

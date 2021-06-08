@@ -14,9 +14,9 @@
                 space-x-4
                 px-4
                 py-2
-                rounded-sm-sm
-                border border-purple-600
-                text-purple-500
+                rounded-sm
+                border border-btn-purple
+                text-btn-purple
               "
             >
               Generate Invoice
@@ -25,12 +25,12 @@
               class="
                 flex
                 items-center
-                bg-purple-600
+                bg-btn-purple
                 text-white
                 space-x-4
                 px-4
                 py-2
-                rounded-sm-sm
+                rounded-sm
               "
               @click="
                 status = 'success'
@@ -39,7 +39,7 @@
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 fill-current text-purple-600"
+                class="w-4 h-4 fill-current text-btn-purple"
                 viewBox="0 0 24 24"
                 stroke="white"
               >

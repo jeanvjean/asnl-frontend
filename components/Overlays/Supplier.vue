@@ -1,7 +1,7 @@
 <template>
   <back-drop>
     <div class="w-full lg:w-1/2 bg-white py-10 px-8 rounded-sm-md">
-      <div class="bg-white rounded-sm-sm">
+      <div class="bg-white rounded-sm">
         <div class="flex justify-between items-center">
           <div>
             <p>Create Supplier</p>
@@ -24,7 +24,13 @@
           </div>
         </div>
         <div
-          class="grid grid-rows-1 lg:grid-cols-2 gap-y-4 lg:gap-x-4 lg:gap-y-1 my-4"
+          class="
+            grid grid-rows-1
+            lg:grid-cols-2
+            gap-y-4
+            lg:gap-x-4 lg:gap-y-1
+            my-4
+          "
         >
           <select-component
             :label-title="'Product Type'"
@@ -66,7 +72,16 @@
         </div>
         <div>
           <button
-            class="bg-purple-700 text-white flex space-x-6 px-4 py-2 items-center rounded-sm"
+            class="
+              bg-btn-purple
+              text-white
+              flex
+              space-x-6
+              px-4
+              py-2
+              items-center
+              rounded-sm
+            "
             @click="createSupplier()"
           >
             <span>Create Supplier</span>

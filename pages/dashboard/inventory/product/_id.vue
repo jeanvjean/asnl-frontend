@@ -10,110 +10,92 @@
           <select-component
             :label-title="'Division'"
             :default-option-text="'Choose a Division'"
-            :select-array="divisions"
-            @get="form.division = $event.value"
+            :select-array="[]"
           />
 
           <select-component
             :label-title="'Supplier'"
             :default-option-text="'Choose a Supplier'"
-            :select-array="suppliers"
-            @get="form.supplier = $event.value"
+            :select-array="[]"
           />
 
           <input-component
             :label-title="'Item Description'"
             :input-placeholder="'Enter description'"
-            @get="form.itemDescription = $event.value"
           />
 
           <input-component
             :label-title="'Equipment Model'"
             :input-placeholder="'Enter Equipment Model'"
-            @get="form.equipmentModel = $event.value"
           />
 
           <input-component
             :label-title="'Equipment Type'"
             :input-placeholder="'Enter Equipment Type'"
-            @get="form.equipmentType = $event.value"
           />
 
           <input-component
             :label-title="'Area of Specialization'"
             :input-placeholder="'Enter Area of Specialization'"
-            @get="form.areaOfSpecialization = $event.value"
           />
 
           <input-component
             :label-title="'ASNL Part No'"
             :input-placeholder="'#######'"
             :input-type="'number'"
-            @get="form.asnlNumber = $event.value"
           />
 
           <input-component
             :label-title="'Part No'"
             :input-placeholder="'########'"
             :input-type="'number'"
-            @get="form.partNumber = $event.value"
           />
 
           <input-component
             :label-title="'Serial No'"
             :input-placeholder="'Enter Serial Number'"
-            @get="form.partNumber = $event.value"
           />
 
           <input-component
             :label-title="'Reorder level'"
             :input-placeholder="'#'"
             :input-type="'number'"
-            @get="form.reorderLevel = $event.value"
           />
 
           <input-component
             :label-title="'Unit Cost'"
             :input-placeholder="'#'"
             :input-type="'number'"
-            @get="form.unitCost = $event.value"
           />
 
           <input-component
             :label-title="'Total Cost'"
             :input-placeholder="'#'"
             :input-type="'number'"
-            @get="form.totalCost = $event.value"
           />
 
           <input-component
             :label-title="'Quantity'"
             :input-placeholder="'Enter Quantity'"
             :input-type="'number'"
-            @get="form.quantity = $event.value"
           />
           <input-component
             :label-title="'Location'"
             :input-placeholder="'Enter Location'"
-            @get="form.location = $event.value"
           />
           <input-component
             :label-title="'Referrer'"
             :input-placeholder="'Enter Referrer'"
-            @get="form.referer = $event.value"
           />
         </div>
         <div class="lg:flex w-full lg:space-x-4 lg:w-2/5">
           <button-component
             :button-text="'Create Product'"
             :button-class="'py-2 bg-btn-purple text-white rounded-sm'"
-            :loading-status="loading"
-            @buttonClicked="createProduct"
           />
           <button-component
             :button-text="'Cancel'"
             :button-class="'py-2 bg-white text-btn-purple border border-btn-purple rounded-sm'"
-            @buttonClicked="reset"
           />
         </div>
       </div>
@@ -124,9 +106,8 @@
 import {
   defineComponent,
   onMounted,
-  reactive,
   ref,
-  useContext,
+  useRoute,
 } from '@nuxtjs/composition-api'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
@@ -136,90 +117,27 @@ export default defineComponent({
   components: { InputComponent, ButtonComponent, SelectComponent },
   layout: 'dashboard',
   setup() {
-    const form = reactive({
-      itemDescription: '',
-      equipmentModel: '',
-      equipmentType: '',
-      areaOfSpecialization: '',
-      asnlNumber: '',
-      partNumber: '',
-      serialNumber: '1',
-      quantity: '',
-      unitCost: '',
-      totalCost: '',
-      reorderLevel: '',
-      location: '',
-      referer: '',
-      division: '',
-      supplier: '',
-    })
-    const context = useContext()
+    const route = useRoute()
     const productObj = new ProductRepository()
-    const loading = ref(false)
-    const divisions = ref([])
-    const suppliers = ref([])
 
-    function valuesNotEmpty(obj: Object) {
-      return Object.values(obj).every(
-        (element) => element !== null && element !== ''
-      )
-    }
-
-    function fetchBranches() {
-      productObj.fetchBranches().then((response) => {
-        divisions.value = response.map((element: any) => {
-          return {
-            name: element.location,
-            value: element._id,
-          }
-        })
-      })
-    }
-
-    function fetchSuppliers() {
-      productObj.fetchSuppliers().then((response) => {
-        suppliers.value = response.data.map((element: any) => {
-          return {
-            name: element.name,
-            value: element._id,
-          }
-        })
+    async function fetchProduct(productId: String) {
+      await productObj.fetchProduct(productId).then((response) => {
+        console.log(response)
       })
     }
 
     onMounted(() => {
-      fetchBranches()
-      fetchSuppliers()
+      console.log(route.value.params)
+      fetchProduct(route.value.params.id)
     })
-
-    const createProduct = () => {
-      if (valuesNotEmpty(form)) {
-        loading.value = true
-        productObj
-          .createProduct(form)
-          .then(() => {
-            reset()
-          })
-          .finally(() => {
-            loading.value = false
-          })
-      } else {
-        context.$toast.global.required()
-      }
-    }
 
     const reset = () => {
       keyValue.value++
     }
     const keyValue = ref(1)
     return {
-      form,
       keyValue,
       reset,
-      createProduct,
-      loading,
-      divisions,
-      suppliers,
     }
   },
 })

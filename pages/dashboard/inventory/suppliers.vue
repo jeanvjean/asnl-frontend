@@ -3,11 +3,21 @@
     <div class="bg-white w-full px-6 py-6 h-full">
       <div class="flex justify-between mb-2">
         <div class="flex space-x-6 items-center font-medium text-black">
-          <h1 class="py-2 border-b-2 border-purple-500">General Inventory</h1>
+          <h1 class="py-2 border-b-2 border-btn-purple">General Inventory</h1>
           <h1 class="py-2">Gas (Refill)</h1>
         </div>
         <button
-          class="bg-purple-600 text-white flex items-center space-x-5 px-4 py-2 rounded-sm font-medium"
+          class="
+            bg-btn-purple
+            text-white
+            flex
+            items-center
+            space-x-5
+            px-4
+            py-2
+            rounded-sm
+            font-medium
+          "
           @click="fetchCylinders"
         >
           <svg
@@ -26,13 +36,20 @@
         <div
           v-for="(supplier, i) in suppliers"
           :key="i"
-          class="bg-purple-50 border border-gray-100 rounded-sm-sm py-4 px-4 space-y-1"
+          class="
+            bg-purple-50
+            border border-gray-100
+            rounded-sm
+            py-4
+            px-4
+            space-y-1
+          "
         >
           <div class="flex space-x-4 text-black">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
-              class="w-6 h-6 fill-current text-purple-600"
+              class="w-6 h-6 fill-current text-btn-purple"
             >
               <path
                 d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"

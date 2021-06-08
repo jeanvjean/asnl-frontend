@@ -2,7 +2,13 @@
   <div class="grid grid-rows-1 lg:grid-cols-5 w-full h-auto py-6 px-6 gap-4">
     <div class="lg:col-span-2 bg-white px-6 py-4 h-full">
       <h1
-        class="inline-block text-2xl font-medium border-b-2 border-purple-600 mb-4"
+        class="
+          inline-block
+          text-2xl
+          font-medium
+          border-b-2 border-btn-purple
+          mb-4
+        "
       >
         User Details
       </h1>
@@ -16,7 +22,12 @@
         <div class="w-full">
           <h2
             v-if="user"
-            class="text-center text-2xl text-black font-medium tracking-wider capitalize"
+            class="
+              text-center text-2xl text-black
+              font-medium
+              tracking-wider
+              capitalize
+            "
           >
             {{ user['name'] | isValue }}
           </h2>
@@ -24,7 +35,7 @@
         <div v-if="user" class="w-full">
           <p class="text-center space-x-2 capitalize">
             <span class="text-black">{{ user['role'] }} Department</span>
-            <span class="text-purple-400">{{ user['subrole'] }}</span>
+            <span class="text-btn-purple">{{ user['subrole'] }}</span>
           </p>
         </div>
       </div>
@@ -52,7 +63,13 @@
     </div>
     <div class="lg:col-span-3 bg-white px-6 py-4">
       <h1
-        class="inline-block text-2xl font-medium border-b-2 border-purple-600 mb-4"
+        class="
+          inline-block
+          text-2xl
+          font-medium
+          border-b-2 border-btn-purple
+          mb-4
+        "
       >
         Activity Logs
       </h1>

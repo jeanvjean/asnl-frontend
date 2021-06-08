@@ -34,7 +34,7 @@
         :button-text="'Set Password'"
         :loading-status="loading.status"
         :loading-text="loading.text"
-        :button-class="'bg-purple-800 font-semibold text-white'"
+        :button-class="'bg-btn-purple font-semibold text-white'"
         @buttonClicked="changePassword"
       />
     </form>

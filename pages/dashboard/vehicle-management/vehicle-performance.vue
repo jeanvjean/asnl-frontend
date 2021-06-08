@@ -24,7 +24,14 @@
           </div>
         </div>
         <div
-          class="grid grid-cols-2 lg:grid-cols-5 gap-2 px-10 divide-x-2 divide-black my-6"
+          class="
+            grid grid-cols-2
+            lg:grid-cols-5
+            gap-2
+            px-10
+            divide-x-2 divide-black
+            my-6
+          "
         >
           <div
             v-for="(detail, index) in details[0]"
@@ -38,7 +45,14 @@
           </div>
         </div>
         <div
-          class="grid grid-cols-2 lg:grid-cols-5 gap-2 px-10 divide-x-2 divide-black my-6"
+          class="
+            grid grid-cols-2
+            lg:grid-cols-5
+            gap-2
+            px-10
+            divide-x-2 divide-black
+            my-6
+          "
         >
           <div
             v-for="(detail, index) in details[1]"
@@ -163,7 +177,15 @@
         </div>
         <div class="flex space-x-6 px-12 py-4 my-2">
           <button
-            class="flex space-x-6 py-2 px-4 items-center bg-purple-600 rounded-sm"
+            class="
+              flex
+              space-x-6
+              py-2
+              px-4
+              items-center
+              bg-btn-purple
+              rounded-sm
+            "
           >
             <span class="text-white font-medium text-lg">Save</span>
             <svg
@@ -177,12 +199,20 @@
             </svg>
           </button>
           <button
-            class="flex space-x-6 py-2 px-4 items-center bg-purple-600 rounded-sm"
+            class="
+              flex
+              space-x-6
+              py-2
+              px-4
+              items-center
+              bg-btn-purple
+              rounded-sm
+            "
           >
             <span class="text-white font-medium text-lg">Print</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="w-4 h-4 fill-current text-purple-600"
+              class="w-4 h-4 fill-current text-btn-purple"
               viewBox="0 0 24 24"
               stroke="white"
             >

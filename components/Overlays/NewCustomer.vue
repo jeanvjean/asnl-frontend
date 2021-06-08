@@ -1,7 +1,16 @@
 <template>
   <back-drop :centralize="false">
     <div
-      class="w-full sm:w-full md:w-1/2 bg-white py-4 px-8 rounded-sm-md overflow-y-auto"
+      class="
+        w-full
+        sm:w-full
+        md:w-1/2
+        bg-white
+        py-4
+        px-8
+        rounded-sm-md
+        overflow-y-auto
+      "
     >
       <div class="flex justify-between items-center my-2">
         <div>
@@ -96,11 +105,29 @@
       </div>
 
       <div
-        class="border-t border-b-0 border-l-0 border-r-0 pt-3 my-2 border-2 border-gray-300 flex justify-between items-center px-3"
+        class="
+          border-t border-b-0 border-l-0 border-r-0
+          pt-3
+          my-2
+          border-2 border-gray-300
+          flex
+          justify-between
+          items-center
+          px-3
+        "
       >
         <h4>Products Section</h4>
         <button
-          class="flex justify-center items-center bg-purple-400 text-white px-4 py-2 rounded-sm"
+          class="
+            flex
+            justify-center
+            items-center
+            bg-btn-purple
+            text-white
+            px-4
+            py-2
+            rounded-sm
+          "
           @click="count++"
         >
           <svg
@@ -135,7 +162,19 @@
       </div>
 
       <button
-        class="rounded-sm-md mt-4 px-8 py-3 border border-blue-300 text-md font-semibold flex justify-between bg-blue-500 text-white"
+        class="
+          rounded-sm-md
+          mt-4
+          px-8
+          py-3
+          border border-blue-300
+          text-md
+          font-semibold
+          flex
+          justify-between
+          bg-blue-500
+          text-white
+        "
       >
         Add Customer
       </button>

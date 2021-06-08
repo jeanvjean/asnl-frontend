@@ -4,7 +4,16 @@
       <h1>Report</h1>
       <div class="flex space-x-4">
         <button
-          class="flex space-x-4 items-center bg-purple-600 rounded-sm-sm px-4 py-2 text-white"
+          class="
+            flex
+            space-x-4
+            items-center
+            bg-btn-purple
+            rounded-sm
+            px-4
+            py-2
+            text-white
+          "
         >
           <svg
             class="w-5 h-5 fill-current"
@@ -23,7 +32,16 @@
           <span> Download Report (PDF)</span>
         </button>
         <button
-          class="flex space-x-4 items-center bg-purple-600 rounded-sm-sm px-4 py-2 text-white"
+          class="
+            flex
+            space-x-4
+            items-center
+            bg-btn-purple
+            rounded-sm
+            px-4
+            py-2
+            text-white
+          "
         >
           <svg
             class="w-5 h-5 fill-current"
@@ -89,19 +107,24 @@
       <div class="flex justify-between">
         <div class="flex items-center space-x-4">
           <button
-            class="px-2 py-2 focus:outline-none focus:border-b-2 focus:border-purple-500"
+            class="
+              px-2
+              py-2
+              focus:outline-none
+              focus:border-b-2 focus:border-btn-purple
+            "
           >
             Inventory Management
           </button>
           <button
-            class="px-2 py-2 focus:outline-none border-b-2 border-purple-500"
+            class="px-2 py-2 focus:outline-none border-b-2 border-btn-purple"
           >
             Cylinder Management
           </button>
         </div>
         <router-link
           to="/dashboard/reports/create-report"
-          class="bg-purple-600 text-white px-6 py-2 rounded-sm"
+          class="bg-btn-purple text-white px-6 py-2 rounded-sm"
         >
           Create Report
         </router-link>
@@ -114,7 +137,7 @@
         <pagination />
       </div>
       <table class="w-full table-auto mt-2">
-        <thead class="bg-gray-200">
+        <thead class="bg-gray-100">
           <tr>
             <th class="w-6 px-6 py-4">
               <input
@@ -125,7 +148,15 @@
             <th
               v-for="(headSingle, index) in headers"
               :key="index"
-              class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-center"
+              class="
+                uppercase
+                text-gray-800
+                font-thin
+                text-sm
+                px-4
+                py-2
+                text-center
+              "
             >
               {{ headSingle }}
             </th>
@@ -147,7 +178,14 @@
             <td class="px-4 text-center py-4">{{ bodySingle.report_no }}</td>
             <td class="px-4 text-center py-4">
               <span
-                class="px-8 py-2 bg-yellow-600 text-yellow-700 bg-opacity-50 rounded-sm-sm"
+                class="
+                  px-8
+                  py-2
+                  bg-yellow-600
+                  text-yellow-700
+                  bg-opacity-50
+                  rounded-sm
+                "
                 >{{ bodySingle.status }}</span
               >
             </td>

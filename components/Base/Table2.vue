@@ -36,7 +36,7 @@
                 class="
                   block
                   border
-                  rounded-sm-sm
+                  rounded-sm
                   border-gray-300
                   w-full
                   text-gray-900
@@ -54,7 +54,7 @@
               />
             </div>
           </form>
-          <button class="bg-gray-200 rounded-sm-sm px-6 py-4">
+          <button class="bg-gray-200 rounded-sm px-6 py-4">
             <svg
               class="fill-current w-4 h-4 text-black"
               xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +69,7 @@
             class="
               flex
               items-center
-              bg-purple-600
+              bg-btn-purple
               px-3
               py-2
               space-x-2
@@ -96,7 +96,7 @@
       </div>
     </div>
     <table class="w-full table-auto">
-      <thead class="bg-gray-200">
+      <thead class="bg-gray-100">
         <tr>
           <th class="w-6 px-6 py-4">
             <input type="checkbox" class="border border-gray-500 rounded-sm" />
@@ -155,13 +155,13 @@
           </td>
           <td class="px-4 text-center py-4">
             <router-link
-              :to="'/dashboard/cylinder-management/single/' + bodySingle._id"
+              :to="'/dashboard/cylinder-management/cylinder/' + bodySingle._id"
               class="
                 px-4
                 py-2
-                border border-purple-500
+                border border-btn-purple
                 rounded-sm
-                text-purple-600 text-sm
+                text-btn-purple text-sm
               "
             >
               View Details

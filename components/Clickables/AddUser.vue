@@ -1,7 +1,20 @@
 <template>
   <router-link
     to="/dashboard/user-management/new-user"
-    class="flex justify-between items-end bg-purple-600 px-3.5 py-2 space-x-4 text-white font-semibold text-md rounded-sm"
+    class="
+      flex
+      justify-between
+      items-end
+      bg-btn-purple
+      px-3.5
+      py-2
+      h-full
+      space-x-4
+      text-white
+      font-semibold
+      text-md
+      rounded-sm
+    "
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"

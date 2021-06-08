@@ -13,7 +13,16 @@
           </h1>
           <div class="flex space-x-6">
             <button
-              class="flex items-center bg-purple-600 text-white space-x-4 px-4 py-2 rounded-sm-sm"
+              class="
+                flex
+                items-center
+                bg-btn-purple
+                text-white
+                space-x-4
+                px-4
+                py-2
+                rounded-sm
+              "
               @click="
                 status = 'success'
                 showConfirmation = true
@@ -21,7 +30,7 @@
             >
               <span>Approve</span>
               <svg
-                class="w-6 h-6 fill-current text-purple-600"
+                class="w-6 h-6 fill-current text-btn-purple"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 stroke="white"
@@ -35,7 +44,15 @@
               </svg>
             </button>
             <button
-              class="flex items-center space-x-4 px-4 py-2 rounded-sm-sm border border-purple-600"
+              class="
+                flex
+                items-center
+                space-x-4
+                px-4
+                py-2
+                rounded-sm
+                border border-btn-purple
+              "
               @click="
                 status = 'error'
                 showConfirmation = true
@@ -60,7 +77,14 @@
         </div>
 
         <div
-          class="px-10 grid grid-rows-1 lg:grid-cols-2 gap-y-4 lg:gap-x-4 lg:gap-y-1 border-b border-gray-300"
+          class="
+            px-10
+            grid grid-rows-1
+            lg:grid-cols-2
+            gap-y-4
+            lg:gap-x-4 lg:gap-y-1
+            border-b border-gray-300
+          "
         >
           <select-component
             :label-title="'Select Driver'"
@@ -92,7 +116,15 @@
           />
         </div>
         <div
-          class="px-10 flex flex-col space-y-4 lg:space-y-0 lg:space-x-4 justify-between lg:flex-row py-6"
+          class="
+            px-10
+            flex flex-col
+            space-y-4
+            lg:space-y-0 lg:space-x-4
+            justify-between
+            lg:flex-row
+            py-6
+          "
         >
           <div class="grid grid-rows-1 gap-2 w-full">
             <div class="border border-black rounded-sm-md px-4 py-2">

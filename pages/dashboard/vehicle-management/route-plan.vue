@@ -8,21 +8,30 @@
       <div class="flex px-2 py-4 space-x-6 text-black">
         <button
           class="px-2 py-2 focus:outline-none"
-          :class="pickUp ? 'text-purple-500 border-b  border-purple-500' : ''"
+          :class="pickUp ? 'text-btn-purple border-b  border-btn-purple' : ''"
           @click="active"
         >
           Pick up
         </button>
         <button
           class="px-2 py-2 focus:outline-none"
-          :class="delivery ? 'text-purple-500 border-b  border-purple-500' : ''"
+          :class="delivery ? 'text-btn-purple border-b  border-btn-purple' : ''"
           @click="active"
         >
           Delivery
         </button>
       </div>
       <div
-        class="flex items-center px-2 py-2 space-x-4 sm:w-80 lg:w-full overflow-auto"
+        class="
+          flex
+          items-center
+          px-2
+          py-2
+          space-x-4
+          sm:w-80
+          lg:w-full
+          overflow-auto
+        "
       >
         <filter-component />
         <search-component :place-holder="'Search for Vehicles'" />
@@ -30,7 +39,7 @@
       </div>
       <div class="overflow-auto">
         <table class="w-96 lg:w-full table table-auto mt-2">
-          <thead class="bg-gray-200">
+          <thead class="bg-gray-100">
             <tr>
               <th class="w-6 px-6 py-4">
                 <input
@@ -41,7 +50,15 @@
               <th
                 v-for="(headSingle, index) in headers"
                 :key="index"
-                class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-left"
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-4
+                  py-2
+                  text-left
+                "
               >
                 {{ headSingle }}
               </th>
@@ -60,7 +77,15 @@
                 />
               </td>
               <td
-                class="px-4 text-left py-4 flex justify-start items-center space-x-2"
+                class="
+                  px-4
+                  text-left
+                  py-4
+                  flex
+                  justify-start
+                  items-center
+                  space-x-2
+                "
               >
                 <img
                   class="h-10 w-10 rounded-full"
@@ -73,7 +98,14 @@
               <td class="px-4 text-left py-4">{{ bodySingle.end }}</td>
               <td class="px-4 text-left py-4">
                 <button
-                  class="mx-auto text-purple-500 border-2 border-purple-500 py-1.5 px-8 rounded-sm-sm"
+                  class="
+                    mx-auto
+                    text-btn-purple
+                    border-2 border-btn-purple
+                    py-1.5
+                    px-8
+                    rounded-sm
+                  "
                   @click="showRoute = true"
                 >
                   Details

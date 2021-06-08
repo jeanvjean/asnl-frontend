@@ -19,7 +19,7 @@
       <Button
         :button-text="'Send Password Reset Link'"
         :loading-status="loading"
-        :button-class="'bg-purple-800 text-white'"
+        :button-class="'bg-btn-purple text-white'"
         @buttonClicked="requestReset"
       />
     </form>

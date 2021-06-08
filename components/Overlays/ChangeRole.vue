@@ -5,7 +5,17 @@
         <h1 class="text-lg font-medium">Change Role</h1>
       </div>
       <div
-        class="flex space-x-4 items-center w-full my-4 px-2 bg-gray-200 py-2 rounded-sm-sm"
+        class="
+          flex
+          space-x-4
+          items-center
+          w-full
+          my-4
+          px-2
+          bg-gray-200
+          py-2
+          rounded-sm
+        "
       >
         <img
           class="h-20 w-20 rounded-full"
@@ -43,13 +53,13 @@
           :button-text="'Change Role'"
           :loading-status="loading"
           :loading-text="loadingText"
-          :button-class="'text-white bg-purple-500'"
+          :button-class="'text-white bg-btn-purple'"
           @buttonClicked="updateUserRole"
         />
 
         <button-component
           :button-text="'Cancel'"
-          :button-class="'text-black bg-white border border-purple-500'"
+          :button-class="'text-black bg-white border border-btn-purple'"
           @buttonClicked="close"
         />
       </div>

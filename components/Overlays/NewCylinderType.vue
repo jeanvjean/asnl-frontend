@@ -31,7 +31,7 @@
           :button-text="'Create Cylinder Type'"
           :loading-status="loading.status"
           :loading-text="loading.text"
-          :button-class="'bg-purple-600 text-white rounded-sm-sm my-6'"
+          :button-class="'bg-btn-purple text-white rounded-sm my-6'"
           @buttonClicked="createCylinder"
         />
       </div>

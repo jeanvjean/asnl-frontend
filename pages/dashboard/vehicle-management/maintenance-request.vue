@@ -3,7 +3,17 @@
     <div class="flex justify-evenly items-center w-full lg:w-1/2 mb-4">
       <h1 class="text-xl text-black font-medium">Transfer Cylinders</h1>
       <button
-        class="flex justify-between items-center bg-purple-600 text-white px-4 py-2 rounded-sm-sm space-x-3"
+        class="
+          flex
+          justify-between
+          items-center
+          bg-btn-purple
+          text-white
+          px-4
+          py-2
+          rounded-sm
+          space-x-3
+        "
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -17,7 +27,18 @@
         <span>Within Division </span>
       </button>
       <button
-        class="flex justify-between items-center bg-transparent text-purple-500 border border-purple-500 px-4 py-2 rounded-sm-sm space-x-2"
+        class="
+          flex
+          justify-between
+          items-center
+          bg-transparent
+          text-btn-purple
+          border border-btn-purple
+          px-4
+          py-2
+          rounded-sm
+          space-x-2
+        "
       >
         <svg
           class="w-6 h-6 fill-current"
@@ -34,7 +55,18 @@
         <span>Outright sales/transfer</span>
       </button>
       <button
-        class="flex justify-between items-center bg-transparent text-purple-500 border border-purple-500 px-4 py-2 rounded-sm-sm space-x-2"
+        class="
+          flex
+          justify-between
+          items-center
+          bg-transparent
+          text-btn-purple
+          border border-btn-purple
+          px-4
+          py-2
+          rounded-sm
+          space-x-2
+        "
       >
         <svg
           class="w-6 h-6 fill-current"
@@ -57,7 +89,16 @@
           </h1>
           <div class="flex space-x-6">
             <button
-              class="flex items-center bg-purple-600 text-white space-x-4 px-4 py-2 rounded-sm-sm"
+              class="
+                flex
+                items-center
+                bg-btn-purple
+                text-white
+                space-x-4
+                px-4
+                py-2
+                rounded-sm
+              "
               @click="
                 status = 'success'
                 showConfirmation = true
@@ -65,7 +106,7 @@
             >
               <span>Approve</span>
               <svg
-                class="w-6 h-6 fill-current text-purple-600"
+                class="w-6 h-6 fill-current text-btn-purple"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 stroke="white"
@@ -79,7 +120,15 @@
               </svg>
             </button>
             <button
-              class="flex items-center space-x-4 px-4 py-2 rounded-sm-sm border border-purple-600"
+              class="
+                flex
+                items-center
+                space-x-4
+                px-4
+                py-2
+                rounded-sm
+                border border-btn-purple
+              "
               @click="
                 status = 'error'
                 showConfirmation = true
@@ -127,30 +176,72 @@
                   {{ i }}
                 </td>
                 <td
-                  class="font-light text-lg px-4 py-2 text-center border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-4
+                    py-2
+                    text-center
+                    border border-gray-400
+                  "
                 >
                   John Maxwell
                 </td>
                 <td
-                  class="font-light text-lg px-4 py-2 text-center border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-4
+                    py-2
+                    text-center
+                    border border-gray-400
+                  "
                 >
                   AS 1256
                 </td>
                 <td
-                  class="font-light text-lg px-4 py-2 text-center border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-4
+                    py-2
+                    text-center
+                    border border-gray-400
+                  "
                 >
                   50kg
                 </td>
                 <td
-                  class="font-light text-lg px-4 py-2 text-center border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-4
+                    py-2
+                    text-center
+                    border border-gray-400
+                  "
                 >
                   Oxygen
                 </td>
                 <td
-                  class="font-light text-lg px-4 py-2 text-center border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-4
+                    py-2
+                    text-center
+                    border border-gray-400
+                  "
                 >
                   <select
-                    class="w-full px-2 py-2 border-0 focus:outline-none focus:border-0"
+                    class="
+                      w-full
+                      px-2
+                      py-2
+                      border-0
+                      focus:outline-none
+                      focus:border-0
+                    "
                   >
                     <option value="Buffer">Buffer</option>
                   </select>
@@ -196,7 +287,15 @@
           </div>
         </div>
         <div
-          class="px-10 py-6 grid grid-rows-1 lg:grid-cols-2 gap-y-4 lg:gap-x-4 border-b border-t border-gray-300"
+          class="
+            px-10
+            py-6
+            grid grid-rows-1
+            lg:grid-cols-2
+            gap-y-4
+            lg:gap-x-4
+            border-b border-t border-gray-300
+          "
         >
           <select-component
             :label-title="'Type of Transfer'"

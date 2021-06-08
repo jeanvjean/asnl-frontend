@@ -5,8 +5,16 @@
         <div class="grid grid-cols-2 gap-4 mb-4">
           <button
             type="button"
-            class="font-medium text-black pb-2 pl-2 text-lg tracking-wide focus:outline-none"
-            :class="showDetails ? 'border-b border-purple-500' : ''"
+            class="
+              font-medium
+              text-black
+              pb-2
+              pl-2
+              text-lg
+              tracking-wide
+              focus:outline-none
+            "
+            :class="showDetails ? 'border-b border-btn-purple' : ''"
             @click="
               showDetails = true
               showBarcode = false
@@ -16,8 +24,16 @@
           </button>
           <button
             type="button"
-            class="font-medium text-black pb-2 pl-2 text-lg tracking-wide focus:outline-none"
-            :class="showBarcode ? 'border-b border-purple-500' : ''"
+            class="
+              font-medium
+              text-black
+              pb-2
+              pl-2
+              text-lg
+              tracking-wide
+              focus:outline-none
+            "
+            :class="showBarcode ? 'border-b border-btn-purple' : ''"
             @click="
               showDetails = false
               showBarcode = true
@@ -40,7 +56,15 @@
         <section v-else-if="showBarcode" class="bg-gray-200">
           <div class="w-4/5 mx-auto py-10 px-6">
             <div
-              class="px-6 py-10 bg-white rounded-sm-sm flex justify-center items-center"
+              class="
+                px-6
+                py-10
+                bg-white
+                rounded-sm
+                flex
+                justify-center
+                items-center
+              "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +84,20 @@
             </div>
             <div class="px-6 my-4">
               <button
-                class="rounded-sm-sm px-6 py-3 border border-purple-300 text-sm font-light flex justify-between items-center bg-purple-500 text-white w-full"
+                class="
+                  rounded-sm
+                  px-6
+                  py-3
+                  border border-btn-purple
+                  text-sm
+                  font-light
+                  flex
+                  justify-between
+                  items-center
+                  bg-btn-purple
+                  text-white
+                  w-full
+                "
               >
                 <span>Product Barcode</span>
                 <svg
@@ -76,7 +113,16 @@
             </div>
             <div class="px-4 my-4 w-full">
               <div
-                class="flex space-x-4 w-full items-center justify-center text-xl font-semibold text-black"
+                class="
+                  flex
+                  space-x-4
+                  w-full
+                  items-center
+                  justify-center
+                  text-xl
+                  font-semibold
+                  text-black
+                "
               >
                 <h1 class="font-light">Gas Cylinder:</h1>
                 <span>ASNL BF-103 </span>
@@ -86,14 +132,30 @@
         </section>
       </div>
       <button
-        class="rounded-sm py-2 px-4 w-full bg-transparent text-purple-500 text-center border-2 border-purple-500"
+        class="
+          rounded-sm
+          py-2
+          px-4
+          w-full
+          bg-transparent
+          text-btn-purple text-center
+          border-2 border-btn-purple
+        "
       >
         Download Cylinder History
       </button>
     </div>
     <div class="lg:col-span-2 bg-white px-4 py-4 overflow-y-scroll h-screen">
       <h1
-        class="font-medium border-b border-purple-500 tracking-wide text-xl inline-block pb-2 mb-4"
+        class="
+          font-medium
+          border-b border-btn-purple
+          tracking-wide
+          text-xl
+          inline-block
+          pb-2
+          mb-4
+        "
       >
         Tracking
       </h1>
@@ -108,7 +170,13 @@
             class="flex justify-between px-4 py-3 space-x-4"
           >
             <div
-              class="w-4 h-4 bg-purple-300 border-2 border-purple-600 rounded-full"
+              class="
+                w-4
+                h-4
+                bg-btn-purple
+                border-2 border-btn-purple
+                rounded-full
+              "
             ></div>
             <div>
               <p class="text-md font-light">

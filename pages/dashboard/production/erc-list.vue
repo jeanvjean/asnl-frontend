@@ -5,13 +5,33 @@
         <div class="overflow-x-auto w-full py-4">
           <div class="w-full mb-4">
             <div
-              class="flex items-center justify-around px-2 py-2 space-x-4 w-full"
+              class="
+                flex
+                items-center
+                justify-around
+                px-2
+                py-2
+                space-x-4
+                w-full
+              "
             >
               <filter-button />
               <search-component :place-holder="'Search'" />
 
               <button
-                class="flex justify-between items-end bg-purple-600 px-8 py-2 space-x-4 rounded-sm text-white font-semibold text-md"
+                class="
+                  flex
+                  justify-between
+                  items-end
+                  bg-btn-purple
+                  px-8
+                  py-2
+                  space-x-4
+                  rounded-sm
+                  text-white
+                  font-semibold
+                  text-md
+                "
               >
                 View Filled ECR
               </button>
@@ -19,7 +39,16 @@
           </div>
           <div v-if="defaultState" class="mx-auto px-4 sm:px-6 md:px-8 w-full">
             <div
-              class="bg-white shadow-sm rounded-sm h-96 px-4 flex justify-center items-center"
+              class="
+                bg-white
+                shadow-sm
+                rounded-sm
+                h-96
+                px-4
+                flex
+                justify-center
+                items-center
+              "
             >
               <div class="w-full sm:w-full md:w-3/5 space-y-6">
                 <svg
@@ -88,7 +117,7 @@
           </div>
 
           <table v-else class="w-full table-auto">
-            <thead class="bg-gray-200">
+            <thead class="bg-gray-100">
               <tr>
                 <th class="w-6 px-6 py-4">
                   <input
@@ -99,12 +128,28 @@
                 <th
                   v-for="(headSingle, index) in headers"
                   :key="index"
-                  class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-left"
+                  class="
+                    uppercase
+                    text-gray-800
+                    font-thin
+                    text-sm
+                    px-4
+                    py-2
+                    text-left
+                  "
                 >
                   {{ headSingle }}
                 </th>
                 <th
-                  class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-center"
+                  class="
+                    uppercase
+                    text-gray-800
+                    font-thin
+                    text-sm
+                    px-4
+                    py-2
+                    text-center
+                  "
                 >
                   Action
                 </th>
@@ -132,7 +177,13 @@
                 </td>
                 <td class="px-4 text-center py-4">
                   <button
-                    class="px-6 py-1 border border-purple-500 rounded-sm text-purple-600 text-sm"
+                    class="
+                      px-6
+                      py-1
+                      border border-btn-purple
+                      rounded-sm
+                      text-btn-purple text-sm
+                    "
                     @click="showErc = true"
                   >
                     Details

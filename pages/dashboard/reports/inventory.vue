@@ -6,7 +6,7 @@
       <div
         class="grid grid-rows-1 lg:grid-cols-2 font-medium text-lg gap-4 mb-4"
       >
-        <div class="text-purple-500">Products Issued Out Reports</div>
+        <div class="text-btn-purple">Products Issued Out Reports</div>
         <div>Products Issued Out Reports by Equipment Type</div>
         <div>Products Issued Out Reports by Equipment Model</div>
         <div>Products Issued Out Reports by Customer</div>
@@ -21,7 +21,15 @@
             <th
               v-for="(headSingle, index) in headers"
               :key="index"
-              class="uppercase text-gray-900 font-medium text-sm px-4 py-4 text-center"
+              class="
+                uppercase
+                text-gray-900
+                font-medium
+                text-sm
+                px-4
+                py-4
+                text-center
+              "
             >
               {{ headSingle }}
             </th>

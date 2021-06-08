@@ -17,7 +17,7 @@
         </svg>
       </div>
       <div class="px-8 py-2">
-        <h1 class="py-2 px-2 border-b border-purple-500 inline-block">
+        <h1 class="py-2 px-2 border-b border-btn-purple inline-block">
           Route Plan
         </h1>
       </div>
@@ -43,7 +43,7 @@
           <p class="text-gray-400 text-sm font-medium">
             Aug 23, 2019 @ 05:45pm
           </p>
-          <button class="text-purple-700 text-sm font-medium">
+          <button class="text-btn-purple text-sm font-medium">
             Change Driver
           </button>
         </div>

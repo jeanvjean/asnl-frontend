@@ -54,7 +54,7 @@
         <div class="w-3/4 mx-auto">
           <button-component
             :button-text="'Send to Production'"
-            :button-class="'bg-purple-600 text-white rounded-sm-sm my-6'"
+            :button-class="'bg-btn-purple text-white rounded-sm my-6'"
           />
         </div>
       </div>

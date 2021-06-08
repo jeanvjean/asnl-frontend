@@ -12,10 +12,23 @@
               <form class="w-full flex md:ml-0" autocomplete="off">
                 <label for="search_field" class="sr-only">Search</label>
                 <div
-                  class="relative w-full text-gray-400 focus-within:text-gray-600"
+                  class="
+                    relative
+                    w-full
+                    text-gray-400
+                    focus-within:text-gray-600
+                  "
                 >
                   <div
-                    class="absolute inset-y-0 left-0 ml-4 flex items-center pointer-events-none"
+                    class="
+                      absolute
+                      inset-y-0
+                      left-0
+                      ml-4
+                      flex
+                      items-center
+                      pointer-events-none
+                    "
                   >
                     <!-- Heroicon name: solid/search -->
                     <svg
@@ -29,7 +42,20 @@
                     </svg>
                   </div>
                   <input
-                    class="block border rounded-sm-sm border-gray-300 w-full h-full text-gray-900 focus:outline-none focus:ring-0 px-10 py-4 sm:text-sm"
+                    class="
+                      block
+                      border
+                      rounded-sm
+                      border-gray-300
+                      w-full
+                      h-full
+                      text-gray-900
+                      focus:outline-none
+                      focus:ring-0
+                      px-10
+                      py-4
+                      sm:text-sm
+                    "
                     placeholder="Search"
                     type="search"
                     name="search"
@@ -39,37 +65,19 @@
             </div>
 
             <router-link
-              to="/dashboard/inventory/issue-products"
-              class="flex justify-between items-center bg-purple-600 px-4 py-3 text-white font-medium text-md space-x-2 rounded-sm"
-            >
-              <svg
-                class="w-3 h-3 fill-current text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 341.4 341.4"
-              >
-                <path
-                  d="M192 149.4V0h-42.6v149.4H0V192h149.4v149.4H192V192h149.4v-42.6z"
-                />
-              </svg>
-              <span>Issue Product</span>
-            </router-link>
-            <router-link
-              to="/dashboard/inventory/grn"
-              class="flex justify-between items-center bg-purple-600 px-4 py-3 text-white font-medium text-md space-x-2 rounded-sm"
-            >
-              <svg
-                class="w-4 h-4 fill-current text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zm4 10a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z"
-                />
-              </svg>
-              <span> Recieve Product </span>
-            </router-link>
-            <router-link
-              class="flex justify-between items-center bg-purple-600 px-4 py-3 text-white font-medium text-md space-x-2 rounded-sm"
+              class="
+                flex
+                justify-between
+                items-center
+                bg-btn-purple
+                px-4
+                py-3
+                text-white
+                font-medium
+                text-md
+                space-x-2
+                rounded-sm
+              "
               to="/dashboard/inventory/new-product"
             >
               <svg
@@ -87,7 +95,16 @@
         </div>
         <div v-if="defaultState" class="mx-auto px-4 sm:px-6 md:px-8 w-full">
           <div
-            class="bg-white shadow-sm rounded-sm h-96 px-4 flex justify-center items-center"
+            class="
+              bg-white
+              shadow-sm
+              rounded-sm
+              h-96
+              px-4
+              flex
+              justify-center
+              items-center
+            "
           >
             <div class="w-full sm:w-full md:w-2/5 space-y-6">
               <svg
@@ -154,7 +171,7 @@
         </div>
 
         <table v-else class="w-full table-auto">
-          <thead class="bg-gray-200">
+          <thead class="bg-gray-100">
             <tr>
               <th class="w-6 px-6 py-4">
                 <input
@@ -165,7 +182,15 @@
               <th
                 v-for="(headSingle, index) in headers"
                 :key="index"
-                class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-left"
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-4
+                  py-2
+                  text-left
+                "
               >
                 {{ headSingle }}
               </th>
@@ -196,6 +221,20 @@
               <td class="px-4 text-left py-4">{{ bodySingle.unitCost }}</td>
               <td class="px-4 text-left py-4">{{ bodySingle.totalCost }}</td>
               <td class="px-4 text-left py-4">{{ bodySingle.location }}</td>
+              <td class="px-4 text-center py-4">
+                <router-link
+                  :to="'/dashboard/inventory/product/' + bodySingle._id"
+                  class="
+                    px-4
+                    py-2
+                    border border-btn-purple
+                    rounded-sm
+                    text-btn-purple text-sm
+                  "
+                >
+                  Details
+                </router-link>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -224,6 +263,7 @@ export default defineComponent({
       'Unit Cost',
       'Total Cost',
       'Location',
+      'Action',
     ]
 
     const productObject = new ProductRepository()

@@ -5,7 +5,15 @@
         <div class="overflow-x-auto w-full py-4">
           <div class="w-full mb-4">
             <div
-              class="flex items-center justify-between px-2 py-2 space-x-4 w-full"
+              class="
+                flex
+                items-center
+                justify-between
+                px-2
+                py-2
+                space-x-4
+                w-full
+              "
             >
               <filter-button />
               <div>
@@ -15,7 +23,7 @@
           </div>
 
           <table class="w-full table-auto">
-            <thead class="bg-gray-200">
+            <thead class="bg-gray-100">
               <tr>
                 <th class="w-6 px-6 py-4">
                   <input
@@ -26,12 +34,28 @@
                 <th
                   v-for="(headSingle, index) in headers"
                   :key="index"
-                  class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-left"
+                  class="
+                    uppercase
+                    text-gray-800
+                    font-thin
+                    text-sm
+                    px-4
+                    py-2
+                    text-left
+                  "
                 >
                   {{ headSingle }}
                 </th>
                 <th
-                  class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-center"
+                  class="
+                    uppercase
+                    text-gray-800
+                    font-thin
+                    text-sm
+                    px-4
+                    py-2
+                    text-center
+                  "
                 >
                   Action
                 </th>
@@ -67,9 +91,15 @@
                 <td class="px-4 text-center py-4">
                   <router-link
                     :to="
-                      '/dashboard/cylinder-management/single/' + cylinder._id
+                      '/dashboard/cylinder-management/cylinder/' + cylinder._id
                     "
-                    class="px-6 py-1 border border-purple-500 rounded-sm text-purple-600 text-sm"
+                    class="
+                      px-6
+                      py-1
+                      border border-btn-purple
+                      rounded-sm
+                      text-btn-purple text-sm
+                    "
                   >
                     Details
                   </router-link>

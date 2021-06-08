@@ -2,7 +2,17 @@
   <back-drop>
     <div class="w-full h-full bg-gray-100 relative pt-8 px-6 overflow-y-auto">
       <svg
-        class="w-6 h-6 fill-current text-gray-400 absolute top-0 right-0 mr-10 mt-5"
+        class="
+          w-6
+          h-6
+          fill-current
+          text-gray-400
+          absolute
+          top-0
+          right-0
+          mr-10
+          mt-5
+        "
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
         @click="close"
@@ -27,20 +37,23 @@
         <div class="w-full items-center py-3.5 bg-indigo-100 my-4">
           <div class="flex justify-between items-center px-4 py-2 font-medium">
             <button
-              class="focus:outline-none focus:border focus:border-0 focus:border-purple-500"
+              class="
+                focus:outline-none
+                focus:border focus:border-0 focus:border-btn-purple
+              "
             >
               Cylinder 1
             </button>
-            <button class="focus:outline-none focus:border-purple-500">
+            <button class="focus:outline-none focus:border-btn-purple">
               Cylinder 2
             </button>
-            <button class="focus:outline-none focus:border-purple-500">
+            <button class="focus:outline-none focus:border-btn-purple">
               Cylinder 3
             </button>
-            <button class="focus:outline-none focus:border-purple-500">
+            <button class="focus:outline-none focus:border-btn-purple">
               Cylinder 4
             </button>
-            <button class="focus:outline-none text-purple-500">View All</button>
+            <button class="focus:outline-none text-btn-purple">View All</button>
           </div>
           <div
             v-for="(profileDetail, index) in inner"
@@ -67,7 +80,7 @@
         </div>
         <div class="px-4 py-2">
           <h2>Scan all Cylinder</h2>
-          <button class="px-6 py-2 bg-purple-600 text-white font-semibold">
+          <button class="px-6 py-2 bg-btn-purple text-white font-semibold">
             Schedule for Production
           </button>
         </div>

@@ -159,7 +159,7 @@
             py-2
             rounded-sm
             text-white
-            bg-purple-600
+            bg-btn-purple
             flex
             items-center
             space-x-4
@@ -180,7 +180,7 @@
         <pagination />
       </div>
       <table class="w-full table-auto mt-2">
-        <thead class="bg-gray-200">
+        <thead class="bg-gray-100">
           <tr>
             <th class="w-6 px-6 py-4">
               <input
@@ -237,7 +237,7 @@
             <td class="px-4 text-center py-4">{{ inventory.invoiceNumber }}</td>
             <td class="px-4 text-left py-4">
               <span class="px-8 py-2 bg-yellow-100 text-red-400">
-                {{ inventory.direction }}
+                Pending
               </span>
             </td>
             <td class="px-4 text-center py-4">
@@ -248,9 +248,9 @@
                 class="
                   px-2
                   py-1
-                  border border-purple-500
+                  border border-btn-purple
                   rounded-sm
-                  text-purple-600 text-sm
+                  text-btn-purple text-sm
                 "
                 @click="getInventory(inventory._id)"
               >
@@ -321,7 +321,7 @@ export default defineComponent({
 
     onMounted(async () => {
       await productObject.fetchInventories().then((response) => {
-        inventories.value = response.data.data
+        inventories.value = response.data.data.inventory
       })
     })
 

@@ -237,7 +237,7 @@
             </p>
             <div class="w-full mt-2">
               <button
-                class="w-full py-3 rounded-sm bg-purple-600 text-white border"
+                class="w-full py-3 rounded-sm bg-btn-purple text-white border"
                 @click="close"
               >
                 Continue

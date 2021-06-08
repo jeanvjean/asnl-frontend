@@ -7,8 +7,8 @@
             flex
             space-x-2
             items-center
-            bg-purple-600
-            rounded-sm-sm
+            bg-btn-purple
+            rounded-sm
             px-8
             py-3
             text-white
@@ -36,7 +36,7 @@
         </div>
       </div>
       <table class="w-full table-auto mt-2">
-        <thead class="bg-gray-200">
+        <thead class="bg-gray-100">
           <tr>
             <th class="w-6 px-6 py-4">
               <input
@@ -76,8 +76,8 @@
               <router-link
                 to="/dashboard/production/requisition-details"
                 class="
-                  border border-purple-600
-                  text-purple-600
+                  border border-btn-purple
+                  text-btn-purple
                   py-1
                   px-4
                   rounded-sm

@@ -87,8 +87,8 @@
                 <div class="flex justify-between items-center w-4/5">
                   <button
                     class="
-                      border border-purple-600
-                      text-purple-600
+                      border border-btn-purple
+                      text-btn-purple
                       rounded-sm
                       px-6
                       py-1
@@ -99,8 +99,8 @@
                   </button>
                   <button
                     class="
-                      border border-purple-600
-                      text-purple-600
+                      border border-btn-purple
+                      text-btn-purple
                       rounded-sm
                       px-8
                       py-1

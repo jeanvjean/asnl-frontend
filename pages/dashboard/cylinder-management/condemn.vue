@@ -7,11 +7,11 @@
           flex
           justify-between
           items-center
-          bg-purple-600
+          bg-btn-purple
           text-white
           px-4
           py-2
-          rounded-sm-sm
+          rounded-sm
           space-x-3
         "
       >
@@ -32,11 +32,11 @@
           justify-between
           items-center
           bg-transparent
-          text-purple-500
-          border border-purple-500
+          text-btn-purple
+          border border-btn-purple
           px-4
           py-2
-          rounded-sm-sm
+          rounded-sm
           space-x-2
         "
       >
@@ -60,12 +60,12 @@
           flex
           justify-between
           items-center
-          bg-purple-500
+          bg-btn-purple
           text-white
-          border border-purple-500
+          border border-btn-purple
           px-4
           py-2
-          rounded-sm-sm
+          rounded-sm
           space-x-2
         "
       >
@@ -89,11 +89,11 @@
           justify-between
           items-center
           bg-transparent
-          text-purple-500
-          border border-purple-500
+          text-btn-purple
+          border border-btn-purple
           px-4
           py-2
-          rounded-sm-sm
+          rounded-sm
           space-x-2
         "
       >
@@ -122,12 +122,12 @@
               class="
                 flex
                 items-center
-                bg-purple-600
+                bg-btn-purple
                 text-white
                 space-x-4
                 px-4
                 py-2
-                rounded-sm-sm
+                rounded-sm
               "
               @click="
                 status = 'success'
@@ -136,7 +136,7 @@
             >
               <span>Approve</span>
               <svg
-                class="w-6 h-6 fill-current text-purple-600"
+                class="w-6 h-6 fill-current text-btn-purple"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 stroke="white"
@@ -156,8 +156,8 @@
                 space-x-4
                 px-4
                 py-2
-                rounded-sm-sm
-                border border-purple-600
+                rounded-sm
+                border border-btn-purple
               "
               @click="
                 status = 'error'

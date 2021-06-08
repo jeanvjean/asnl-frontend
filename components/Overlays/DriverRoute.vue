@@ -15,11 +15,18 @@
         </svg>
       </div>
       <div class="px-10 py-2 flex justify-between items-center my-2">
-        <h1 class="py-2 px-2 border-b border-purple-500 inline-block">
+        <h1 class="py-2 px-2 border-b border-btn-purple inline-block">
           Route Plan
         </h1>
         <button
-          class="bg-transparent border border-purple-600 text-purple-600 rounded-sm-sm px-6 py-2"
+          class="
+            bg-transparent
+            border border-btn-purple
+            text-btn-purple
+            rounded-sm
+            px-6
+            py-2
+          "
         >
           Edit
         </button>
@@ -45,14 +52,21 @@
           <p class="text-gray-400 text-sm font-medium">
             Aug 23, 2019 @ 05:45pm
           </p>
-          <button class="text-purple-700 text-sm font-medium">
+          <button class="text-btn-purple text-sm font-medium">
             Change Driver
           </button>
         </div>
       </div>
       <div class="w-11/12 px-4 mx-auto my-6">
         <div
-          class="flex bg-white text-black font-medium items-center justify-evenly"
+          class="
+            flex
+            bg-white
+            text-black
+            font-medium
+            items-center
+            justify-evenly
+          "
         >
           <div class="px-4 py-4">
             <h4>Fuel</h4>

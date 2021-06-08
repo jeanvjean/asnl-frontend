@@ -26,7 +26,7 @@
       <Button
         :button-text="'Reset Password'"
         :loading-status="loading"
-        :button-class="'bg-purple-700 text-white'"
+        :button-class="'bg-btn-purple text-white'"
         @buttonClicked="changePassword"
       />
     </form>

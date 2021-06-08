@@ -6,7 +6,20 @@
       >{{ labelTitle }}</label
     ><select
       v-model="selectedValue"
-      class="appearance-none block w-full px-4 py-3 border-2 border-gray-200 text-black rounded-sm-md focus:outline-none focus:border-purple-300 font-thin bg-white"
+      class="
+        appearance-none
+        block
+        w-full
+        px-4
+        py-3
+        border-2 border-gray-200
+        text-black
+        rounded-sm-md
+        focus:outline-none
+        focus:border-btn-purple
+        font-thin
+        bg-white
+      "
       @change="returnValue"
     >
       <option

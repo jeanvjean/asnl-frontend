@@ -1,8 +1,15 @@
 <template>
-  <div class="flex flex-initial items-center space-x-3 py-1">
+  <div class="flex flex-initial items-center space-x-3 py-1 h-full">
     <h1 class="font-medium text-black text-lg">Filter By</h1>
     <div
-      class="flex items-center border-2 border-gray-300 justify-around space-x-4 text-gray-500"
+      class="
+        flex
+        items-center
+        border-2 border-gray-300
+        justify-around
+        space-x-4
+        text-gray-500
+      "
     >
       <svg
         class="w-4 h-4 ml-2 fill-current"

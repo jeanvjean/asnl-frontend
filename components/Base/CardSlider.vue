@@ -22,7 +22,16 @@
     <div class="absolute flex justify-between items-center w-full inset-y-1/2">
       <div
         :class="currentIndex === 0 ? 'invisible' : ' visible'"
-        class="flex justify-center items-center w-8 h-8 rounded-full bg-dark-blue -ml-10"
+        class="
+          flex
+          justify-center
+          items-center
+          w-8
+          h-8
+          rounded-full
+          bg-dark-blue
+          -ml-10
+        "
       >
         <svg
           class="w-6 h-6 fill-current text-white"
@@ -39,7 +48,16 @@
         :class="
           currentIndex === analytics.length - 1 ? 'invisible' : ' visible'
         "
-        class="flex justify-center items-center w-8 h-8 rounded-full bg-dark-blue mr-3"
+        class="
+          flex
+          justify-center
+          items-center
+          w-8
+          h-8
+          rounded-full
+          bg-dark-blue
+          mr-3
+        "
       >
         <svg
           class="w-6 h-6 fill-current text-white"

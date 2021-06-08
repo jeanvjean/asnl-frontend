@@ -1,14 +1,25 @@
 <template>
   <div class="overflow-x-auto w-full py-4">
     <div class="w-full mb-4">
-      <div class="flex items-center justify-between px-2 py-2 space-x-4 w-full">
+      <div
+        class="
+          flex
+          items-center
+          justify-between
+          px-2
+          py-2
+          space-x-4
+          w-full
+          h-full
+        "
+      >
         <filter-component />
         <search-component :place-holder="'Search for User'" />
         <AddUserButton />
       </div>
     </div>
     <table class="w-full table-auto">
-      <thead class="bg-gray-200">
+      <thead class="bg-gray-100">
         <tr>
           <th class="w-6 px-6 py-4">
             <input type="checkbox" class="border border-gray-500 rounded-sm" />
@@ -16,12 +27,28 @@
           <th
             v-for="(headSingle, index) in head"
             :key="index"
-            class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-left"
+            class="
+              uppercase
+              text-gray-800
+              font-thin
+              text-sm
+              px-4
+              py-2
+              text-left
+            "
           >
             {{ headSingle }}
           </th>
           <th
-            class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-left"
+            class="
+              uppercase
+              text-gray-800
+              font-thin
+              text-sm
+              px-4
+              py-2
+              text-left
+            "
           >
             Actions
           </th>
@@ -68,10 +95,31 @@
               </svg>
             </button>
             <div
-              class="absolute -ml-16 bg-gray-50 border border-gray-300 w-40 font-medium text-sm rounded-sm-md action-menu z-10"
+              class="
+                absolute
+                -ml-16
+                bg-gray-50
+                border border-gray-300
+                w-40
+                font-medium
+                text-sm
+                rounded-sm-md
+                action-menu
+                z-10
+              "
             >
               <button
-                class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
+                class="
+                  block
+                  px-3
+                  py-4
+                  text-black
+                  focus:outline-none
+                  hover:bg-btn-purple
+                  hover:text-white
+                  w-full
+                  overflow-none
+                "
                 @click="
                   changeUser(index)
                   showChangeRole = true
@@ -80,7 +128,17 @@
                 Change Role
               </button>
               <button
-                class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
+                class="
+                  block
+                  px-3
+                  py-4
+                  text-black
+                  focus:outline-none
+                  hover:bg-btn-purple
+                  hover:text-white
+                  w-full
+                  overflow-none
+                "
                 @click="
                   changeUser(index)
                   showDeleteUser = true
@@ -89,12 +147,33 @@
                 Delete User
               </button>
               <button
-                class="block px-3 py-4 text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none"
+                class="
+                  block
+                  px-3
+                  py-4
+                  text-black
+                  focus:outline-none
+                  hover:bg-btn-purple
+                  hover:text-white
+                  w-full
+                  overflow-none
+                "
               >
                 Suspend User
               </button>
               <router-link
-                class="block px-3 py-4 text-center text-black focus:outline-none hover:bg-purple-300 hover:text-purple-500 w-full overflow-none font-medium"
+                class="
+                  block
+                  px-3
+                  py-4
+                  text-center text-black
+                  focus:outline-none
+                  hover:bg-btn-purple
+                  hover:text-white
+                  w-full
+                  overflow-none
+                  font-medium
+                "
                 :to="
                   '/dashboard/user-management/' +
                   bodySingle._id +

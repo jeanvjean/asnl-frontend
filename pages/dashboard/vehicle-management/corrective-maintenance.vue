@@ -8,7 +8,16 @@
           </h1>
           <div class="flex space-x-6">
             <button
-              class="flex items-center bg-purple-600 text-white space-x-4 px-4 py-2 rounded-sm-sm"
+              class="
+                flex
+                items-center
+                bg-btn-purple
+                text-white
+                space-x-4
+                px-4
+                py-2
+                rounded-sm
+              "
               @click="
                 status = 'success'
                 showConfirmation = true
@@ -16,7 +25,7 @@
             >
               <span>Approve</span>
               <svg
-                class="w-6 h-6 fill-current text-purple-600"
+                class="w-6 h-6 fill-current text-btn-purple"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 stroke="white"
@@ -30,7 +39,15 @@
               </svg>
             </button>
             <button
-              class="flex items-center space-x-4 px-4 py-2 rounded-sm-sm border border-purple-600"
+              class="
+                flex
+                items-center
+                space-x-4
+                px-4
+                py-2
+                rounded-sm
+                border border-btn-purple
+              "
               @click="
                 status = 'error'
                 showConfirmation = true
@@ -54,10 +71,18 @@
           </div>
         </div>
         <div
-          class="w-full border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300"
+          class="
+            w-full
+            border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300
+          "
         >
           <div
-            class="grid grid-rows-1 lg:grid-cols-4 divide divide-x-2 divide-black mt-4"
+            class="
+              grid grid-rows-1
+              lg:grid-cols-4
+              divide divide-x-2 divide-black
+              mt-4
+            "
           >
             <div class="flex items-center justify-center">
               <div class="space-y-4">
@@ -93,7 +118,12 @@
             Last Maintenance Details
           </h1>
           <div
-            class="grid grid-rows-1 lg:grid-cols-4 divide divide-x-2 divide-black my-4"
+            class="
+              grid grid-rows-1
+              lg:grid-cols-4
+              divide divide-x-2 divide-black
+              my-4
+            "
           >
             <div class="flex items-center justify-center">
               <div class="space-y-4">
@@ -125,7 +155,13 @@
           </div>
         </div>
         <div
-          class="w-full overflow-x-auto px-8 my-4 border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300"
+          class="
+            w-full
+            overflow-x-auto
+            px-8
+            my-4
+            border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300
+          "
         >
           <h1 class="text-gray-500 font-medium text-lg my-4 customFontBold">
             New Maintenance Details
@@ -135,22 +171,54 @@
               <tr class="customFontBold">
                 <th class="w-auto"></th>
                 <th
-                  class="font-light text-lg px-2 py-2 text-center w-3/12 border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-3/12
+                    border border-gray-400
+                  "
                 >
                   Description
                 </th>
                 <th
-                  class="font-light text-lg px-2 py-2 text-center w-2/12 border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-2/12
+                    border border-gray-400
+                  "
                 >
                   Quantity
                 </th>
                 <th
-                  class="font-light text-lg px-2 py-2 text-center w-3/12 border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-3/12
+                    border border-gray-400
+                  "
                 >
                   Unit Cost
                 </th>
                 <th
-                  class="font-light text-lg px-2 py-2 text-center w-3/12 border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-3/12
+                    border border-gray-400
+                  "
                 >
                   Total Cost
                 </th>
@@ -163,22 +231,46 @@
                   {{ i }}
                 </td>
                 <td
-                  class="font-light text-lg p-2 text-center border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    p-2
+                    text-center
+                    border border-gray-400
+                  "
                 >
                   <input-component :input-placeholder="'Enter Description'" />
                 </td>
                 <td
-                  class="font-light text-lg p-2 text-center border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    p-2
+                    text-center
+                    border border-gray-400
+                  "
                 >
                   <input-component :input-placeholder="'#'" />
                 </td>
                 <td
-                  class="font-light text-lg p-2 text-center border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    p-2
+                    text-center
+                    border border-gray-400
+                  "
                 >
                   <input-component :input-placeholder="'#'" />
                 </td>
                 <td
-                  class="font-light text-lg p-2 text-center border border-gray-400"
+                  class="
+                    font-light
+                    text-lg
+                    p-2
+                    text-center
+                    border border-gray-400
+                  "
                 >
                   <input-component :input-placeholder="'#'" />
                 </td>
@@ -224,7 +316,15 @@
           </div>
         </div>
         <div
-          class="px-10 py-4 grid grid-rows-1 lg:grid-cols-2 gap-y-4 lg:gap-x-4 border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300"
+          class="
+            px-10
+            py-4
+            grid grid-rows-1
+            lg:grid-cols-2
+            gap-y-4
+            lg:gap-x-4
+            border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300
+          "
         >
           <input-component
             :label-title="'Recommended Mechanic'"
@@ -237,7 +337,11 @@
           />
         </div>
         <div
-          class="px-8 py-4 border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300"
+          class="
+            px-8
+            py-4
+            border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300
+          "
         >
           <h1 class="text-gray-500 font-medium text-lg my-4 customFontBold">
             Analytic Section
@@ -303,7 +407,13 @@
         </div>
       </div>
       <div
-        class="lg:col-span-1 w-full px-6 py-4 border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300"
+        class="
+          lg:col-span-1
+          w-full
+          px-6
+          py-4
+          border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300
+        "
       >
         <div v-for="i in 2" :key="i" class="mb-6">
           <p class="text-gray-600 font-light text-sm">

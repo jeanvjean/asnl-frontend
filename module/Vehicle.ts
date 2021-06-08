@@ -27,6 +27,17 @@ class VehicleRepository {
       return response.data.data
     })
   }
+
+  deleteVehicle(id: String) {
+    return new Promise((resolve, reject) => {
+      try {
+        const response = $axios.delete('/vehicle/delete-vehicle/' + id)
+        resolve(response)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 export { VehicleRepository }

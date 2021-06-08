@@ -26,12 +26,12 @@
         <div class="flex-initial">
           <svg
             class="
-              text-purple-600
+              text-btn-purple
               mr-3
               h-10
               w-10
               fill-current
-              bg-purple-200
+              bg-btn-purple
               rounded-full
               p-2
             "
@@ -101,7 +101,7 @@
             <button
               v-if="sections.cylinder"
               class="
-                bg-purple-600
+                bg-btn-purple
                 text-white
                 rounded-sm-md
                 px-6
@@ -114,7 +114,7 @@
             <button
               v-else-if="sections.pickup || sections.pickupForm"
               class="
-                bg-purple-600
+                bg-btn-purple
                 text-white
                 rounded-sm-md
                 px-6
@@ -128,7 +128,7 @@
             <button
               v-else-if="sections.complaint || sections.complaintForm"
               class="
-                bg-purple-600
+                bg-btn-purple
                 text-white
                 rounded-sm-md
                 px-6
@@ -142,7 +142,7 @@
             <button
               v-else
               class="
-                bg-purple-600
+                bg-btn-purple
                 text-white
                 rounded-sm-md
                 px-6
@@ -159,7 +159,7 @@
       <div class="flex justify-between items-center mt-8 px-2 text-lg mb-4">
         <button
           :class="
-            sections.profile ? ' border-0 border-b-2 border-purple-500' : ''
+            sections.profile ? ' border-0 border-b-2 border-btn-purple' : ''
           "
           class="focus:outline-none"
           @click="changeSection('profile')"
@@ -168,7 +168,7 @@
         </button>
         <button
           :class="
-            sections.order ? ' border-0 border-b-2 border-purple-500' : ''
+            sections.order ? ' border-0 border-b-2 border-btn-purple' : ''
           "
           class="focus:outline-none"
           @click="changeSection('order')"
@@ -177,7 +177,7 @@
         </button>
         <button
           :class="
-            sections.transaction ? ' border-0 border-b-2 border-purple-500' : ''
+            sections.transaction ? ' border-0 border-b-2 border-btn-purple' : ''
           "
           class="focus:outline-none"
           @click="changeSection('transaction')"
@@ -187,7 +187,7 @@
         <button
           :class="
             sections.complaint || sections.complaintForm
-              ? ' border-0 border-b-2 border-purple-500'
+              ? ' border-0 border-b-2 border-btn-purple'
               : ''
           "
           class="focus:outline-none"
@@ -198,7 +198,7 @@
         <button
           :class="
             sections.pickup || sections.pickupForm
-              ? ' border-0 border-b-2 border-purple-500'
+              ? ' border-0 border-b-2 border-btn-purple'
               : ''
           "
           class="focus:outline-none"
@@ -208,7 +208,7 @@
         </button>
         <button
           :class="
-            sections.cylinder ? ' border-0 border-b-2 border-purple-500' : ''
+            sections.cylinder ? ' border-0 border-b-2 border-btn-purple' : ''
           "
           class="focus:outline-none"
           @click="changeSection('cylinder')"
@@ -236,7 +236,7 @@
           class="flex justify-between items-center w-full bg-white px-4 py-3"
         >
           <span>Order ASORO985</span>
-          <span class="text-gray-500 bg-gray-200 rounded-sm-sm px-4 py-2"
+          <span class="text-gray-500 bg-gray-200 rounded-sm px-4 py-2"
             >Pending</span
           >
           <span>01 Aug 2019. 04:55pm</span>
@@ -246,7 +246,7 @@
           class="flex justify-between items-center w-full bg-white px-4 py-3"
         >
           <span>Order ASORO985</span>
-          <span class="text-green-500 bg-green-100 rounded-sm-sm px-4 py-2"
+          <span class="text-green-500 bg-green-100 rounded-sm px-4 py-2"
             >Delivered</span
           >
           <span>01 Aug 2019. 04:55pm</span>
@@ -258,7 +258,7 @@
           class="flex justify-between items-center w-full bg-white px-4 py-3"
         >
           <span>#PU2323221</span>
-          <span class="text-gray-500 bg-gray-200 rounded-sm-sm px-4 py-2"
+          <span class="text-gray-500 bg-gray-200 rounded-sm px-4 py-2"
             >Pending</span
           >
           <span>01 Aug 2019. 04:55pm</span>
@@ -268,7 +268,7 @@
           class="flex justify-between items-center w-full bg-white px-4 py-3"
         >
           <span>#PU2323221</span>
-          <span class="text-green-500 bg-green-100 rounded-sm-sm px-4 py-2"
+          <span class="text-green-500 bg-green-100 rounded-sm px-4 py-2"
             >Delivered</span
           >
           <span>01 Aug 2019. 04:55pm</span>
@@ -280,7 +280,7 @@
           class="flex justify-between items-center w-full bg-white px-4 py-3"
         >
           <span>#2323221</span>
-          <span class="text-gray-500 bg-gray-200 rounded-sm-sm px-4 py-2"
+          <span class="text-gray-500 bg-gray-200 rounded-sm px-4 py-2"
             >Pending</span
           >
           <span>01 Aug 2019. 04:55pm</span>
@@ -290,7 +290,7 @@
           class="flex justify-between items-center w-full bg-white px-4 py-2"
         >
           <span>#2323221</span>
-          <span class="text-green-500 bg-green-100 rounded-sm-sm px-4 py-2"
+          <span class="text-green-500 bg-green-100 rounded-sm px-4 py-2"
             >Delivered</span
           >
           <span>01 Aug 2019. 04:55pm</span>
@@ -347,11 +347,11 @@
             <button
               class="
                 text-sm
-                border border-purple-600
-                rounded-sm-sm
+                border border-btn-purple
+                rounded-sm
                 px-4
                 py-2
-                text-purple-500
+                text-btn-purple
               "
               @click="changeSection('pickup')"
             >
@@ -379,7 +379,7 @@
               />
 
               <button-component
-                :button-class="'bg-purple-600 text-white rounded-sm-sm'"
+                :button-class="'bg-btn-purple text-white rounded-sm'"
                 :button-text="'Request Pickup'"
               />
             </div>
@@ -402,11 +402,11 @@
             <button
               class="
                 text-sm
-                border border-purple-600
-                rounded-sm-sm
+                border border-btn-purple
+                rounded-sm
                 px-4
                 py-2
-                text-purple-500
+                text-btn-purple
               "
               @click="changeSection('complaint')"
             >
@@ -432,7 +432,7 @@
               />
 
               <button-component
-                :button-class="'bg-purple-600 text-white rounded-sm-sm'"
+                :button-class="'bg-btn-purple text-white rounded-sm'"
                 :button-text="'Request Pickup'"
               />
             </div>
@@ -449,7 +449,7 @@
           <div class="flex items-center space-x-4">
             <span> Cylinder2-1 </span>
             <svg
-              class="text-purple-600 mr-3 h-4 w-4 fill-current"
+              class="text-btn-purple mr-3 h-4 w-4 fill-current"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 452.608 452.608"
             >
@@ -494,8 +494,8 @@
                   py-4
                   text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-purple-500
+                  hover:bg-btn-purple
+                  hover:text-white
                   w-full
                   overflow-none
                 "
@@ -509,8 +509,8 @@
                   py-4
                   text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-purple-500
+                  hover:bg-btn-purple
+                  hover:text-white
                   w-full
                   overflow-none
                 "
@@ -571,8 +571,8 @@
                   py-4
                   text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-purple-500
+                  hover:bg-btn-purple
+                  hover:text-white
                   w-full
                   overflow-none
                 "
@@ -586,8 +586,8 @@
                   py-4
                   text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-purple-500
+                  hover:bg-btn-purple
+                  hover:text-white
                   w-full
                   overflow-none
                 "

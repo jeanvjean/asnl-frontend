@@ -162,7 +162,7 @@
         <pagination />
       </div>
       <table class="w-full table-auto mt-2">
-        <thead class="bg-gray-200">
+        <thead class="bg-gray-100">
           <tr>
             <th class="w-6 px-6 py-4">
               <input
@@ -173,12 +173,28 @@
             <th
               v-for="(headSingle, index) in headers"
               :key="index"
-              class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-center"
+              class="
+                uppercase
+                text-gray-800
+                font-thin
+                text-sm
+                px-4
+                py-2
+                text-center
+              "
             >
               {{ headSingle }}
             </th>
             <th
-              class="uppercase text-gray-800 font-thin text-sm px-4 py-2 text-center"
+              class="
+                uppercase
+                text-gray-800
+                font-thin
+                text-sm
+                px-4
+                py-2
+                text-center
+              "
             >
               Action
             </th>
@@ -204,7 +220,13 @@
             <td class="px-4 text-center py-4">12/06/2020</td>
             <td class="px-4 text-center py-4">
               <button
-                class="px-2 py-1 border border-purple-500 rounded-sm text-purple-600 text-sm"
+                class="
+                  px-2
+                  py-1
+                  border border-btn-purple
+                  rounded-sm
+                  text-btn-purple text-sm
+                "
                 @click="showIssueProduct = !showIssueProduct"
               >
                 View Details

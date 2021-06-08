@@ -17,7 +17,7 @@
         border-2 border-gray-200
         rounded-sm-md
         focus:outline-none
-        focus:border-purple-400
+        focus:border-btn-purple
         font-thin
         placeholder-gray-500
         focus:placeholder-gray-300

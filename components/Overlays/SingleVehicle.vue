@@ -7,7 +7,14 @@
         </h1>
         <div class="flex items-center space-x-6">
           <button
-            class="bg-transparent text-purple-600 border border-purple-600 px-6 py-2 rounded-sm-sm"
+            class="
+              bg-transparent
+              text-btn-purple
+              border border-btn-purple
+              px-6
+              py-2
+              rounded-sm
+            "
           >
             Download
           </button>
@@ -24,12 +31,19 @@
         </div>
       </div>
       <div
-        class="px-12 flex justify-between items-center my-2 border-b border-gray-300"
+        class="
+          px-12
+          flex
+          justify-between
+          items-center
+          my-2
+          border-b border-gray-300
+        "
       >
         <button
           type="button"
           class="py-2 px-2 focus:outline-none"
-          :class="routePlan ? 'border-b border-purple-500' : ''"
+          :class="routePlan ? 'border-b border-btn-purple' : ''"
           @click="
             routePlan = true
             correctiveMaintenance = false
@@ -42,7 +56,7 @@
         <button
           type="button"
           class="py-2 px-2 focus:outline-none"
-          :class="correctiveMaintenance ? 'border-b border-purple-500' : ''"
+          :class="correctiveMaintenance ? 'border-b border-btn-purple' : ''"
           @click="
             routePlan = false
             correctiveMaintenance = true
@@ -55,7 +69,7 @@
         <button
           type="button"
           class="py-2 px-2 focus:outline-none"
-          :class="inspectionMaintenance ? 'border-b border-purple-500' : ''"
+          :class="inspectionMaintenance ? 'border-b border-btn-purple' : ''"
           @click="
             routePlan = false
             correctiveMaintenance = false
@@ -68,7 +82,7 @@
         <button
           type="button"
           class="py-2 px-2 focus:outline-none"
-          :class="vehiclePerformance ? 'border-b border-purple-500' : ''"
+          :class="vehiclePerformance ? 'border-b border-btn-purple' : ''"
           @click="
             routePlan = false
             correctiveMaintenance = false
@@ -112,10 +126,24 @@
             </div>
             <div class="flex justify-between items-center px-12 py-4">
               <div
-                class="flex space-x-8 items-start text-gray-600 font-medium text-lg"
+                class="
+                  flex
+                  space-x-8
+                  items-start
+                  text-gray-600
+                  font-medium
+                  text-lg
+                "
               >
                 <div
-                  class="border border-purple-500 bg-purple-300 rounded-full w-6 h-6 mt-1"
+                  class="
+                    border border-btn-purple
+                    bg-btn-purple
+                    rounded-full
+                    w-6
+                    h-6
+                    mt-1
+                  "
                 ></div>
                 <div class="space-y-4">
                   <h3 class="text-gray-500 font-light text-sm">Start Date</h3>
@@ -127,7 +155,14 @@
                 </div>
               </div>
               <button
-                class="px-4 py-2 rounded-sm-sm text-purple-500 bg-transparent border border-purple-600"
+                class="
+                  px-4
+                  py-2
+                  rounded-sm
+                  text-btn-purple
+                  bg-transparent
+                  border border-btn-purple
+                "
               >
                 Route Plan
               </button>
@@ -151,10 +186,18 @@
             <div class="flex justify-between items-center px-12 my-4">
               <div class="flex space-x-4">
                 <div
-                  class="bg-purple-200 rounded-full w-8 h-8 flex justify-center items-center"
+                  class="
+                    bg-btn-purple
+                    rounded-full
+                    w-8
+                    h-8
+                    flex
+                    justify-center
+                    items-center
+                  "
                 >
                   <svg
-                    class="w-4 h-4 text-center fill-current text-purple-600"
+                    class="w-4 h-4 text-center fill-current text-btn-purple"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                   >
@@ -165,7 +208,7 @@
                 </div>
                 <div>
                   <div>
-                    <p class="text-left text-purple-500 font-medium text-md">
+                    <p class="text-left text-btn-purple font-medium text-md">
                       #700.00
                     </p>
                     <p class="text-left text-gray-600 font-light text-sm">
@@ -182,10 +225,24 @@
             </div>
             <div class="flex justify-between items-center px-12 py-4">
               <div
-                class="flex space-x-8 items-start text-gray-600 font-medium text-lg"
+                class="
+                  flex
+                  space-x-8
+                  items-start
+                  text-gray-600
+                  font-medium
+                  text-lg
+                "
               >
                 <div
-                  class="border border-purple-500 bg-purple-300 rounded-full w-6 h-6 mt-1"
+                  class="
+                    border border-btn-purple
+                    bg-btn-purple
+                    rounded-full
+                    w-6
+                    h-6
+                    mt-1
+                  "
                 ></div>
                 <div class="space-y-4">
                   <h3 class="text-gray-500 font-light text-sm">
@@ -201,7 +258,14 @@
                 </div>
               </div>
               <button
-                class="px-4 py-2 rounded-sm-sm text-purple-500 bg-transparent border border-purple-600"
+                class="
+                  px-4
+                  py-2
+                  rounded-sm
+                  text-btn-purple
+                  bg-transparent
+                  border border-btn-purple
+                "
               >
                 See Details
               </button>
@@ -220,10 +284,18 @@
           <div class="flex justify-between items-center px-12 my-4">
             <div class="flex space-x-4">
               <div
-                class="bg-purple-200 rounded-full w-8 h-8 flex justify-center items-center"
+                class="
+                  bg-btn-purple
+                  rounded-full
+                  w-8
+                  h-8
+                  flex
+                  justify-center
+                  items-center
+                "
               >
                 <svg
-                  class="w-4 h-4 text-center fill-current text-purple-600"
+                  class="w-4 h-4 text-center fill-current text-btn-purple"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -234,7 +306,7 @@
               </div>
               <div>
                 <div>
-                  <p class="text-left text-purple-500 font-medium text-md">
+                  <p class="text-left text-btn-purple font-medium text-md">
                     #2000.00
                   </p>
                   <p class="text-left text-gray-600 font-light text-sm">
@@ -251,10 +323,24 @@
           </div>
           <div class="flex justify-between items-center px-12 py-4">
             <div
-              class="flex space-x-8 items-start text-gray-600 font-medium text-lg"
+              class="
+                flex
+                space-x-8
+                items-start
+                text-gray-600
+                font-medium
+                text-lg
+              "
             >
               <div
-                class="border border-purple-500 bg-purple-300 rounded-full w-6 h-6 mt-1"
+                class="
+                  border border-btn-purple
+                  bg-btn-purple
+                  rounded-full
+                  w-6
+                  h-6
+                  mt-1
+                "
               ></div>
               <div class="space-y-4">
                 <h3 class="text-gray-500 font-light text-sm">
@@ -270,7 +356,14 @@
               </div>
             </div>
             <button
-              class="px-4 py-2 rounded-sm-sm text-purple-500 bg-transparent border border-purple-600"
+              class="
+                px-4
+                py-2
+                rounded-sm
+                text-btn-purple
+                bg-transparent
+                border border-btn-purple
+              "
             >
               See Details
             </button>
@@ -282,10 +375,18 @@
           <div class="flex justify-between items-center px-12 my-4">
             <div class="flex space-x-4">
               <div
-                class="bg-purple-200 rounded-full w-8 h-8 flex justify-center items-center"
+                class="
+                  bg-btn-purple
+                  rounded-full
+                  w-8
+                  h-8
+                  flex
+                  justify-center
+                  items-center
+                "
               >
                 <svg
-                  class="w-4 h-4 text-center fill-current text-purple-600"
+                  class="w-4 h-4 text-center fill-current text-btn-purple"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -296,7 +397,7 @@
               </div>
               <div>
                 <div>
-                  <p class="text-left text-purple-500 font-medium text-md">
+                  <p class="text-left text-btn-purple font-medium text-md">
                     #2000.00
                   </p>
                   <p class="text-left text-gray-600 font-light text-sm">
@@ -313,10 +414,24 @@
           </div>
           <div class="flex justify-between items-center px-12 py-4">
             <div
-              class="flex space-x-8 items-start text-gray-600 font-medium text-lg"
+              class="
+                flex
+                space-x-8
+                items-start
+                text-gray-600
+                font-medium
+                text-lg
+              "
             >
               <div
-                class="border border-purple-500 bg-purple-300 rounded-full w-6 h-6 mt-1"
+                class="
+                  border border-btn-purple
+                  bg-btn-purple
+                  rounded-full
+                  w-6
+                  h-6
+                  mt-1
+                "
               ></div>
               <div class="space-y-4">
                 <h3 class="text-gray-500 font-light text-sm">
@@ -333,7 +448,14 @@
             </div>
             <router-link
               to="/dashboard/vehicle-management/vehicle-performance"
-              class="px-4 py-2 rounded-sm-sm text-purple-500 bg-transparent border border-purple-600"
+              class="
+                px-4
+                py-2
+                rounded-sm
+                text-btn-purple
+                bg-transparent
+                border border-btn-purple
+              "
             >
               See Details
             </router-link>

@@ -1,5 +1,5 @@
 <template>
-  <div class="py-6 px-6">
+  <div :key="componentKey" class="py-6 px-6">
     <div class="flex justify-between px-6">
       <h1>All Vehicles</h1>
       <div class="flex space-x-4">
@@ -9,8 +9,8 @@
             flex
             space-x-2
             items-center
-            bg-purple-600
-            rounded-sm-sm
+            bg-btn-purple
+            rounded-sm
             px-4
             py-2
             text-white
@@ -34,8 +34,8 @@
             flex
             space-x-2
             items-center
-            bg-purple-600
-            rounded-sm-sm
+            bg-btn-purple
+            rounded-sm
             px-4
             py-2
             text-white
@@ -67,7 +67,7 @@
         <pagination />
       </div>
       <table class="w-full table-auto mt-2">
-        <thead class="bg-gray-200">
+        <thead class="bg-gray-100">
           <tr>
             <th class="w-6 px-6 py-4">
               <input
@@ -144,8 +144,8 @@
                     py-4
                     text-black
                     focus:outline-none
-                    hover:bg-purple-300
-                    hover:text-purple-500
+                    hover:bg-btn-purple
+                    hover:text-white
                     w-full
                     overflow-none
                   "
@@ -161,8 +161,8 @@
                     py-4
                     text-black
                     focus:outline-none
-                    hover:bg-purple-300
-                    hover:text-purple-500
+                    hover:bg-btn-purple
+                    hover:text-white
                     w-full
                     overflow-none
                   "
@@ -178,11 +178,12 @@
                     py-4
                     text-black
                     focus:outline-none
-                    hover:bg-purple-300
-                    hover:text-purple-500
+                    hover:bg-btn-purple
+                    hover:text-white
                     w-full
                     overflow-none
                   "
+                  @click="deleteVehicle(bodySingle._id)"
                 >
                   Delete Vehicle
                 </button>
@@ -194,8 +195,8 @@
                     py-4
                     text-black
                     focus:outline-none
-                    hover:bg-purple-300
-                    hover:text-purple-500
+                    hover:bg-btn-purple
+                    hover:text-white
                     w-full
                     overflow-none
                   "
@@ -379,6 +380,14 @@ export default defineComponent({
           showSingleVehicle.value = true
         })
     }
+
+    const componentKey = ref(0)
+
+    function deleteVehicle(vehicleId: string) {
+      vehicleObject.deleteVehicle(vehicleId).then(() => {
+        fetchVehicles()
+      })
+    }
     onMounted(() => {
       fetchVehicles()
     })
@@ -393,6 +402,8 @@ export default defineComponent({
       drivers,
       fetchVehicle,
       vehicle,
+      deleteVehicle,
+      componentKey,
     }
   },
 })

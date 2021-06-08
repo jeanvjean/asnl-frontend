@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center space-x-4">
-    <span class="text-sm text-purple-500">Page</span>
+    <span class="text-sm text-btn-purple">Page</span>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"

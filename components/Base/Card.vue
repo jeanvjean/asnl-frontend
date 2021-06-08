@@ -1,6 +1,18 @@
 <template>
   <div
-    class="lg:col-span-1 w-full bg-weird-purple text-purple-200 text-sm rounded-sm-sm px-6 py-4 h-full flex flex-col justify-between space-y-2"
+    class="
+      lg:col-span-1
+      w-full
+      bg-weird-purple
+      text-white text-sm
+      rounded-sm
+      px-6
+      py-4
+      h-full
+      flex flex-col
+      justify-between
+      space-y-2
+    "
   >
     <div class="flex justify-between border-b-2 border-gray-300 pb-4">
       <div>{{ headerStat.title }}</div>

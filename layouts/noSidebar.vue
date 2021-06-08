@@ -36,7 +36,7 @@
         class="flex items-center space-x-4"
       >
         <button
-          class="px-6 py-2 text-white bg-purple-600 rounded-sm"
+          class="px-6 py-2 text-white bg-btn-purple rounded-sm"
           @click="showPickup = !showPickup"
         >
           Create Pickup
@@ -48,7 +48,7 @@
         >
           Save as Draft
         </button>
-        <button class="px-6 py-2 text-white bg-purple-600 rounded-sm">
+        <button class="px-6 py-2 text-white bg-btn-purple rounded-sm">
           Complete
         </button>
       </div>

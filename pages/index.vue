@@ -75,7 +75,7 @@ export default defineComponent({
 
     watch(credentials, () => {
       if (credentials.password !== '') {
-        addedClass.value = 'bg-purple-500 text-white'
+        addedClass.value = 'bg-btn-purple text-white'
       } else {
         addedClass.value = 'bg-gray-400 text-white'
       }

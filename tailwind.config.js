@@ -2,6 +2,12 @@ module.exports = {
   purge: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    borderRadius: {
+      none: '0',
+      sm: '0.25rem',
+      md: '0.375rem',
+      lg: '0.5rem',
+    },
     extend: {
       colors: {
         'dark-blue': '#1A1746',

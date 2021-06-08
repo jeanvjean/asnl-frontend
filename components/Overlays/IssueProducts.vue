@@ -1,7 +1,7 @@
 <template>
   <back-drop>
     <div class="w-full lg:w-3/5 bg-white rounded-sm-md">
-      <div class="rounded-sm-sm">
+      <div class="rounded-sm">
         <div class="flex justify-between items-center bg-white py-4 px-8">
           <h1>Issue Products</h1>
           <div class="flex space-x-8 items-center">
@@ -18,7 +18,7 @@
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 fill-current text-purple-600"
+                class="w-4 h-4 fill-current text-btn-purple"
                 viewBox="0 0 24 24"
                 stroke="white"
               >
@@ -252,10 +252,10 @@
               class="
                 px-6
                 py-2
-                rounded-sm-sm
+                rounded-sm
                 bg-white
                 text-purple
-                border border-purple-500
+                border border-btn-purple
                 w-full
               "
             >
