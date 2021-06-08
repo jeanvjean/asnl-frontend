@@ -127,7 +127,6 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      console.log(route.value.params)
       fetchProduct(route.value.params.id)
     })
 
