@@ -16,7 +16,7 @@
         px-4
         py-3
         border-2 border-gray-200
-        rounded-sm-md
+        rounded-sm
         focus:outline-none
         focus:border-btn-purple
         font-thin

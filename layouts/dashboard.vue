@@ -10,7 +10,13 @@
     <div class="flex flex-col w-0 flex-1 overflow-hidden">
       <Header @show="toggleMobileSidebar = true" />
       <main
-        class="flex-1 relative overflow-y-auto overflow-x-hidden focus:outline-none"
+        class="
+          flex-1
+          relative
+          overflow-y-auto overflow-x-hidden
+          focus:outline-none
+          px-4
+        "
         tabindex="0"
       >
         <Nuxt />

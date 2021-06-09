@@ -26,7 +26,15 @@
         To: "-translate-x-full"
     -->
     <div
-      class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-800"
+      class="
+        relative
+        flex-1 flex flex-col
+        max-w-xs
+        w-full
+        pt-5
+        pb-4
+        bg-gray-800
+      "
     >
       <!--
         Close button, show/hide based on off-canvas menu state.
@@ -40,7 +48,17 @@
       -->
       <div class="absolute top-0 right-0 -mr-12 pt-2">
         <button
-          class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+          class="
+            ml-1
+            flex
+            items-center
+            justify-center
+            h-10
+            w-10
+            rounded-full
+            focus:outline-none
+            focus:ring-2 focus:ring-inset focus:ring-white
+          "
           @click="closeModal"
         >
           <span class="sr-only">Close sidebar</span>
@@ -65,7 +83,7 @@
 
       <div class="flex-shrink-0 flex items-center px-4">
         <img
-          class="h-8 w-auto"
+          class="h-8 w-auto rounded-full"
           src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
           alt="Workflow"
         />
@@ -75,7 +93,18 @@
           <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
           <a
             href="#"
-            class="bg-gray-900 text-white group flex items-center px-2 py-2 text-base font-medium rounded-sm-md"
+            class="
+              bg-gray-900
+              text-white
+              group
+              flex
+              items-center
+              px-2
+              py-2
+              text-base
+              font-medium
+              rounded-sm
+            "
           >
             <!--
               Heroicon name: outline/home
@@ -102,7 +131,19 @@
 
           <a
             href="#"
-            class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-sm-md"
+            class="
+              text-gray-300
+              hover:bg-gray-700
+              hover:text-white
+              group
+              flex
+              items-center
+              px-2
+              py-2
+              text-base
+              font-medium
+              rounded-sm
+            "
           >
             <!-- Heroicon name: outline/users -->
             <svg
@@ -125,7 +166,19 @@
 
           <a
             href="#"
-            class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-sm-md"
+            class="
+              text-gray-300
+              hover:bg-gray-700
+              hover:text-white
+              group
+              flex
+              items-center
+              px-2
+              py-2
+              text-base
+              font-medium
+              rounded-sm
+            "
           >
             <!-- Heroicon name: outline/folder -->
             <svg
@@ -148,7 +201,19 @@
 
           <a
             href="#"
-            class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-sm-md"
+            class="
+              text-gray-300
+              hover:bg-gray-700
+              hover:text-white
+              group
+              flex
+              items-center
+              px-2
+              py-2
+              text-base
+              font-medium
+              rounded-sm
+            "
           >
             <!-- Heroicon name: outline/calendar -->
             <svg
@@ -171,7 +236,19 @@
 
           <a
             href="#"
-            class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-sm-md"
+            class="
+              text-gray-300
+              hover:bg-gray-700
+              hover:text-white
+              group
+              flex
+              items-center
+              px-2
+              py-2
+              text-base
+              font-medium
+              rounded-sm
+            "
           >
             <!-- Heroicon name: outline/inbox -->
             <svg
@@ -194,7 +271,19 @@
 
           <a
             href="#"
-            class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-sm-md"
+            class="
+              text-gray-300
+              hover:bg-gray-700
+              hover:text-white
+              group
+              flex
+              items-center
+              px-2
+              py-2
+              text-base
+              font-medium
+              rounded-sm
+            "
           >
             <!-- Heroicon name: outline/chart-bar -->
             <svg

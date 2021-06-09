@@ -216,7 +216,7 @@
                       w-40
                       font-medium
                       text-sm
-                      rounded-sm-md
+                      rounded-sm
                       action-menu
                       z-10
                     "

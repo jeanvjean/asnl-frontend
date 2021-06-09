@@ -36,6 +36,17 @@ class UserRepository {
       subrole,
     })
   }
+
+  fetchActivityLogs(userId: String) {
+    return new Promise<any>((resolve, reject) => {
+      try {
+        const response = $axios.get('/vehicle/fetch-activityLogs/' + userId)
+        resolve(response)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 export { UserRepository }

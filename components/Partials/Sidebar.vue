@@ -21,7 +21,7 @@
               v-for="(nav, index) in navigations"
               :key="index"
               :to="nav.link"
-              class="text-white group px-4 py-4 rounded-sm-md flex items-center space-x-6"
+              class="text-white group px-4 py-4 rounded-sm  flex items-center space-x-6"
             >
               <component :is="nav.icon" class="text-gray-300 mr-3 h-5 w-5" />
               <span class="font-light font-xl">{{ nav.title }}</span>
@@ -37,7 +37,7 @@
                 group
                 px-4
                 py-4
-                rounded-sm-md
+                rounded-sm
                 flex
                 items-center
                 space-x-6
@@ -66,7 +66,7 @@
                 group
                 px-4
                 py-4
-                rounded-sm-md
+                rounded-sm
                 flex
                 items-center
                 space-x-6
@@ -90,7 +90,7 @@
                   text-white
                   px-4
                   py-4
-                  rounded-sm-md
+                  rounded-sm
                   flex
                   justify-between
                   w-full
@@ -166,7 +166,7 @@
                   text-white
                   px-4
                   py-4
-                  rounded-sm-md
+                  rounded-sm
                   flex
                   justify-between
                   w-full
@@ -245,7 +245,7 @@
                   text-white
                   px-4
                   py-4
-                  rounded-sm-md
+                  rounded-sm
                   flex
                   justify-between
                   w-full
@@ -330,7 +330,7 @@
                   text-white
                   px-4
                   py-4
-                  rounded-sm-md
+                  rounded-sm
                   flex
                   justify-between
                   w-full
@@ -407,7 +407,7 @@
                 group
                 px-4
                 py-4
-                rounded-sm-md
+                rounded-sm
                 flex
                 items-center
                 space-x-6
@@ -435,7 +435,7 @@
                 group
                 px-4
                 py-4
-                rounded-sm-md
+                rounded-sm
                 flex
                 items-center
                 space-x-6
@@ -463,7 +463,7 @@
                   text-white
                   px-4
                   py-4
-                  rounded-sm-md
+                  rounded-sm
                   flex
                   justify-between
                   w-full
@@ -553,7 +553,7 @@
                 group
                 px-4
                 py-4
-                rounded-sm-md
+                rounded-sm
                 flex
                 items-center
                 space-x-6

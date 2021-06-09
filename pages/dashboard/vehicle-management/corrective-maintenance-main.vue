@@ -1,119 +1,10 @@
 <template>
-  <div class="px-10 py-6">
-    <div class="flex justify-evenly items-center w-full lg:w-2/3 mb-4 px-4">
-      <h1 class="text-xl text-black font-medium">Transfer Cylinders</h1>
-      <button
-        class="
-          flex
-          justify-between
-          items-center
-          bg-btn-purple
-          text-white
-          px-4
-          py-2
-          rounded-sm
-          space-x-3
-        "
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          class="w-6 h-6 fill-current"
-        >
-          <path
-            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zm10-4a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"
-          />
-        </svg>
-        <span>Within Division </span>
-      </button>
-      <button
-        class="
-          flex
-          justify-between
-          items-center
-          bg-transparent
-          text-btn-purple
-          border border-btn-purple
-          px-4
-          py-2
-          rounded-sm
-          space-x-2
-        "
-      >
-        <svg
-          class="w-6 h-6 fill-current"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M4.5 4H8.79C9.24 4 9.46 4.54 9.15 4.84L7.71 6.28L12.71 11.29C12.89 11.48 13 11.74 13 12V19C13 19.55 12.55 20 12 20C11.45 20 11 19.55 11 19V12.4L6.29 7.7L4.85 9.14C4.54 9.46 4 9.24 4 8.79V4.5C4 4.22 4.22 4 4.5 4ZM16.29 6.29L14.85 4.85C14.54 4.54 14.76 4 15.21 4H19.5C19.78 4 20 4.22 20 4.5V8.79C20 9.24 19.46 9.46 19.15 9.15L17.71 7.71L14.83 10.59L13.41 9.17L16.29 6.29Z"
-            fill="#5C53FF"
-          />
-        </svg>
-        <span>Outright sales/transfer</span>
-      </button>
-      <router-link
-        to="/dashboard/cylinder-management/condemn"
-        class="
-          flex
-          justify-between
-          items-center
-          bg-btn-purple
-          text-white
-          border border-btn-purple
-          px-4
-          py-2
-          rounded-sm
-          space-x-2
-        "
-      >
-        <svg
-          class="w-6 h-6 fill-current"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-            clip-rule="evenodd"
-          /></svg
-        ><span>Condemn</span>
-      </router-link>
-      <router-link
-        to="/dashboard/cylinder-management/cylinder-type"
-        class="
-          flex
-          justify-between
-          items-center
-          bg-transparent
-          text-btn-purple
-          border border-btn-purple
-          px-4
-          py-2
-          rounded-sm
-          space-x-2
-        "
-      >
-        <svg
-          class="w-6 h-6 fill-current"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-            clip-rule="evenodd"
-          /></svg
-        ><span class="text-center">Cylinder Type</span>
-      </router-link>
-    </div>
-    <div class="grid grid-rows-1 lg:grid-cols-4 py-2 px-6">
-      <div class="lg:col-span-3 overflow-x-auto bg-white px-4">
-        <div class="flex justify-between px-6 py-4">
-          <h1 class="flex-1 text-gray-400 font-medium text-lg">
-            Transfer Cylinder within Division
+  <div class="px-6 py-6">
+    <div class="grid grid-rows-1 lg:grid-cols-4 py-2">
+      <div class="lg:col-span-3 overflow-x-auto bg-white">
+        <div class="flex justify-between px-8 py-4">
+          <h1 class="flex-1 text-gray-500 font-medium text-lg customFontBold">
+            Corrective Maintenance
           </h1>
           <div class="flex space-x-6">
             <button
@@ -179,11 +70,106 @@
             </button>
           </div>
         </div>
-        <div class="w-full overflow-x-auto px-4 my-8 border-collapse">
+        <div
+          class="
+            w-full
+            border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300
+          "
+        >
+          <div
+            class="
+              grid grid-rows-1
+              lg:grid-cols-4
+              divide divide-x-2 divide-black
+              mt-4
+            "
+          >
+            <div class="flex items-center justify-center">
+              <div class="space-y-4">
+                <h4 class="text-gray-400 font-medium">Cylinder No</h4>
+                <p>342343234</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-center">
+              <div class="space-y-4">
+                <h4 class="text-gray-400 font-medium">Gas Type</h4>
+                <p>Hydrogen</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-center">
+              <div class="space-y-4">
+                <h4 class="text-gray-400 font-medium">Cylinder Volume</h4>
+                <p>231.32kg</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-center">
+              <div class="space-y-4">
+                <h4 class="text-gray-400 font-medium">Current Height</h4>
+                <p>42</p>
+              </div>
+            </div>
+          </div>
+          <h1
+            class="px-8 text-gray-500 font-medium text-lg my-6 customFontBold"
+          >
+            Last Maintenance Details
+          </h1>
+          <div
+            class="
+              grid grid-rows-1
+              lg:grid-cols-4
+              divide divide-x-2 divide-black
+              my-4
+            "
+          >
+            <div class="flex items-center justify-center">
+              <div class="space-y-4">
+                <h4 class="text-gray-400 font-medium">Cylinder Type</h4>
+                <p>Buffer Cylinder</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-center">
+              <div class="space-y-4">
+                <h4 class="text-gray-400 font-medium">Manufacturing Date</h4>
+                <p>12/05/2020</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-center">
+              <div class="space-y-4">
+                <h4 class="text-gray-400 font-medium">Color Code</h4>
+                <p>Green</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-center">
+              <div class="space-y-4">
+                <h4 class="text-gray-400 font-medium">Water Capacity</h4>
+                <p>2,800 kg</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="
+            w-full
+            overflow-x-auto
+            px-8
+            my-4
+            border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300
+          "
+        >
+          <h1 class="text-gray-500 font-medium text-lg my-4 customFontBold">
+            New Maintenance Details
+          </h1>
           <table class="table table-fixed w-full border-collapse border-0">
             <thead>
-              <tr>
-                <th class="w-auto">#</th>
+              <tr class="customFontBold">
+                <th class="w-auto"></th>
                 <th
                   class="
                     font-light
@@ -191,11 +177,11 @@
                     px-2
                     py-2
                     text-center
-                    w-2/12
+                    w-3/12
                     border border-gray-400
                   "
                 >
-                  Customer Name
+                  Description
                 </th>
                 <th
                   class="
@@ -208,33 +194,7 @@
                     border border-gray-400
                   "
                 >
-                  Cylinder Number
-                </th>
-                <th
-                  class="
-                    font-light
-                    text-lg
-                    px-2
-                    py-2
-                    text-center
-                    w-2/12
-                    border border-gray-400
-                  "
-                >
-                  Volume
-                </th>
-                <th
-                  class="
-                    font-light
-                    text-lg
-                    px-2
-                    py-2
-                    text-center
-                    w-2/12
-                    border border-gray-400
-                  "
-                >
-                  Product
+                  Quantity
                 </th>
                 <th
                   class="
@@ -247,13 +207,26 @@
                     border border-gray-400
                   "
                 >
-                  Type
+                  Unit Cost
+                </th>
+                <th
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-3/12
+                    border border-gray-400
+                  "
+                >
+                  Total Cost
                 </th>
                 <th class="w-auto"></th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="i in count" :key="i">
+              <tr v-for="i in count" :key="i" class="customFontRegular">
                 <td class="font-light text-lg px-3 py-2 text-center">
                   {{ i }}
                 </td>
@@ -261,74 +234,45 @@
                   class="
                     font-light
                     text-lg
-                    px-4
-                    py-2
+                    p-2
                     text-center
                     border border-gray-400
                   "
                 >
-                  <input-component :input-placeholder="'Enter Customer Name'" />
+                  <input-component :input-placeholder="'Enter Description'" />
                 </td>
                 <td
                   class="
                     font-light
                     text-lg
-                    px-4
-                    py-2
+                    p-2
                     text-center
                     border border-gray-400
                   "
                 >
-                  <input-component
-                    :input-placeholder="'Enter Cylinder Number'"
-                  />
+                  <input-component :input-placeholder="'#'" />
                 </td>
                 <td
                   class="
                     font-light
                     text-lg
-                    px-4
-                    py-2
+                    p-2
                     text-center
                     border border-gray-400
                   "
                 >
-                  <input-component :input-placeholder="'Enter Volume'" />
+                  <input-component :input-placeholder="'#'" />
                 </td>
                 <td
                   class="
                     font-light
                     text-lg
-                    px-4
-                    py-2
+                    p-2
                     text-center
                     border border-gray-400
                   "
                 >
-                  <input-component :input-placeholder="'Enter Product Name'" />
-                </td>
-                <td
-                  class="
-                    font-light
-                    text-lg
-                    px-4
-                    py-2
-                    text-center
-                    border border-gray-400
-                  "
-                >
-                  <select
-                    class="
-                      w-full
-                      px-2
-                      py-2
-                      border-0
-                      focus:outline-none
-                      focus:border-0
-                    "
-                  >
-                    <option value="Buffer">Buffer</option>
-                  </select>
+                  <input-component :input-placeholder="'#'" />
                 </td>
 
                 <td class="font-light text-lg px-3 py-2 text-center">
@@ -337,6 +281,7 @@
                     class="w-4 h-4 fill-current text-transparent"
                     viewBox="0 0 24 24"
                     stroke="black"
+                    @click="count--"
                   >
                     <path
                       stroke-linecap="round"
@@ -373,30 +318,73 @@
         <div
           class="
             px-10
-            py-6
+            py-4
             grid grid-rows-1
             lg:grid-cols-2
             gap-y-4
             lg:gap-x-4
-            border-b border-t border-gray-300
+            border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300
           "
         >
-          <select-component
-            :label-title="'Type of Transfer'"
-            :select-array="types"
+          <input-component
+            :label-title="'Recommended Mechanic'"
+            :input-placeholder="'Enter Mechanic Name'"
           />
 
-          <select-component :label-title="'To'" :select-array="reciepients" />
-        </div>
-        <div class="px-10 py-4">
-          <label for="" class="text-black text-lg px-2 py-2">Comments</label>
-          <input
-            type="text"
-            class="w-full px-4 py-3 border-gray-300 mt-4"
-            placeholder="Enter Comment here"
+          <input-component
+            :label-title="'Referrer'"
+            :input-placeholder="'Enter Referrer Name'"
           />
         </div>
-        <div class="flex justify-evenly items-start py-2 px-2">
+        <div
+          class="
+            px-8
+            py-4
+            border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300
+          "
+        >
+          <h1 class="text-gray-500 font-medium text-lg my-4 customFontBold">
+            Analytic Section
+          </h1>
+          <div class="overflow-x-auto w-full mb-8">
+            <table class="table border-collapse table-fixed w-full">
+              <tbody>
+                <tr v-for="i in 4" :key="i">
+                  <td class="w-1/12 text-center">{{ i }}</td>
+                  <td class="w-5/12 border border-black px-4 py-4 text-left">
+                    Authencity of Requests
+                  </td>
+                  <td
+                    class="w-6/12 border border-black px-4 py-4 text-left"
+                  ></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="px-8 py-4 flex items-center space-x-8">
+          <div class="w-full">
+            <label for="" class="text-black text-lg px-2 py-2">Comments</label>
+            <input
+              type="text"
+              class="w-full px-4 py-3 border-gray-300 mt-4"
+              placeholder="Enter Comment here"
+            />
+          </div>
+          <div class="flex items-center justify-center space-x-4 py-4 w-full">
+            <img
+              class="h-10 w-10 rounded-full"
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              alt=""
+            />
+            <div>
+              <p class="text-black text-lg">Chimerem Egbuson</p>
+              <p class="text-gray-600 text-sm">Driver</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between items-start py-2 px-8 mt-6">
           <div v-for="i in 3" :key="i">
             <p class="text-gray-500 text-sm font-medium leading-6">
               Initiated at
@@ -418,7 +406,15 @@
           </div>
         </div>
       </div>
-      <div class="lg:col-span-1 w-full px-6 py-4 border-b border-gray-300">
+      <div
+        class="
+          lg:col-span-1
+          w-full
+          px-6
+          py-4
+          border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-300
+        "
+      >
         <div v-for="i in 2" :key="i" class="mb-6">
           <p class="text-gray-600 font-light text-sm">
             <span>24/02/2020</span> <span>13:04</span>
@@ -461,17 +457,16 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, watch } from '@nuxtjs/composition-api'
-import SelectComponent from '@/components/Form/Select.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import Confirmation from '@/components/Overlays/Confirmation.vue'
 import FinalStep from '@/components/Overlays/finalStep.vue'
 export default defineComponent({
   name: 'Transfer',
-  components: { SelectComponent, Confirmation, FinalStep, InputComponent },
+  components: { Confirmation, FinalStep, InputComponent },
   layout: 'dashboard',
   setup() {
-    const types = ['Temporary Transfer']
-    const reciepients = ['Isaac Babalola']
+    const types = [{ name: 'Assign Cylinder', value: 'temp' }]
+    const reciepients = [{ name: 'Oxygen', value: 'temp' }]
     const showConfirmation = ref(false)
     const showFinalStep = ref(false)
     const status = ref('')
@@ -483,7 +478,7 @@ export default defineComponent({
         message.value = 'You have regretably declined this request'
       }
     })
-    const count = ref(0)
+    const count = ref(1)
     return {
       types,
       reciepients,

@@ -1,6 +1,6 @@
 <template>
   <div :key="keyValue" class="px-6 py-6">
-    <div class="bg-white w-full h-full rounded-sm-md">
+    <div class="bg-white w-full h-full rounded-sm">
       <div class="px-6 py-6">
         <div class="mb-4">
           <h1 class="font-medium text-xl text-black">Create Vehicle</h1>

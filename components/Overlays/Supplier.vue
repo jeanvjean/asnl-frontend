@@ -1,6 +1,6 @@
 <template>
   <back-drop>
-    <div class="w-full lg:w-1/2 bg-white py-10 px-8 rounded-sm-md">
+    <div class="w-full lg:w-1/2 bg-white py-10 px-8 rounded-sm">
       <div class="bg-white rounded-sm">
         <div class="flex justify-between items-center">
           <div>

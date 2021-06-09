@@ -1,16 +1,7 @@
 <template>
   <back-drop>
     <div
-      class="
-        w-full
-        sm:w-full
-        md:w-1/4
-        bg-white
-        py-10
-        px-8
-        rounded-sm-md
-        relative
-      "
+      class="w-full sm:w-full md:w-1/4 bg-white py-10 px-8 rounded-sm relative"
     >
       <div class="my-2">
         <div class="space-y-2">

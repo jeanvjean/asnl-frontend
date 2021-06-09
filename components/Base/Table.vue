@@ -97,13 +97,13 @@
             <div
               class="
                 absolute
-                -ml-16
+                -ml-12
                 bg-gray-50
                 border border-gray-300
                 w-40
                 font-medium
                 text-sm
-                rounded-sm-md
+                rounded-sm
                 action-menu
                 z-10
               "
@@ -112,7 +112,7 @@
                 class="
                   block
                   px-3
-                  py-4
+                  py-2
                   text-black
                   focus:outline-none
                   hover:bg-btn-purple
@@ -131,7 +131,7 @@
                 class="
                   block
                   px-3
-                  py-4
+                  py-2
                   text-black
                   focus:outline-none
                   hover:bg-btn-purple
@@ -150,7 +150,7 @@
                 class="
                   block
                   px-3
-                  py-4
+                  py-2
                   text-black
                   focus:outline-none
                   hover:bg-btn-purple
@@ -165,7 +165,7 @@
                 class="
                   block
                   px-3
-                  py-4
+                  py-2
                   text-center text-black
                   focus:outline-none
                   hover:bg-btn-purple

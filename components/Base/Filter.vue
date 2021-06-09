@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-initial items-center space-x-3 py-1 h-full">
-    <h1 class="font-medium text-black text-lg">Filter By</h1>
+    <h1 class="font-medium text-black text-sm h-full">Filter By</h1>
     <div
       class="
         flex
@@ -9,10 +9,12 @@
         justify-around
         space-x-4
         text-gray-500
+        rounded-sm
+        h-full
       "
     >
       <svg
-        class="w-4 h-4 ml-2 fill-current"
+        class="w-3 h-3 ml-2 fill-current"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
       >
@@ -21,7 +23,13 @@
         />
       </svg>
       <select
-        class="border-l-2 px-8 border-t-0 border-b-0 border-r-0 border-gray-300"
+        class="
+          border-l-2
+          px-8
+          border-0 border-gray-300
+          appearance-none
+          outline-none
+        "
       >
         <option value="">All</option>
       </select>

@@ -74,12 +74,13 @@
         Activity Logs
       </h1>
       <div class="space-y-6">
-        <div v-for="i in 10" :key="i">
+        <div v-for="(log, i) in logs" :key="i">
           <p class="text-md text-black font-light">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dicta non
-            illum ipsum laudantium, necessitatibus.
+            {{ log.activity }}
           </p>
-          <p class="text-gray-700 text-sm font-thin">30 Minutes</p>
+          <p class="text-gray-700 text-sm font-thin">
+            {{ getTimeDifference(log.time) }} ago
+          </p>
         </div>
       </div>
     </div>
@@ -95,6 +96,7 @@ import {
   useRouter,
 } from '@nuxtjs/composition-api'
 import { UserRepository } from '@/module/User'
+import datetimeDifference from 'datetime-difference'
 
 export default defineComponent({
   name: 'Profile',
@@ -118,6 +120,7 @@ export default defineComponent({
     const email = route.value.params.email
     const userObject = new UserRepository()
     const user = ref()
+    const logs = ref([])
     onBeforeMount(() => {
       if (!userId || !email) {
         router.push('/user-management/')
@@ -128,10 +131,45 @@ export default defineComponent({
       userObject.getUser(userId, email).then((response) => {
         user.value = response.data.data
       })
+
+      userObject.fetchActivityLogs(userId).then((response) => {
+        logs.value = response.data.data.activities
+      })
     })
+
+    function getTimeDifference(date: Date) {
+      const now = new Date()
+      const past = new Date(date)
+      const difference = datetimeDifference(now, past)
+      let result: String = ''
+
+      if (difference.years) {
+        result += `${difference.years} years, `
+      }
+
+      if (difference.months) {
+        result += `${difference.months} months, `
+      }
+
+      if (difference.days) {
+        result += `${difference.days} days, `
+      }
+
+      if (difference.hours) {
+        result += `${difference.hours} hours, `
+      }
+
+      if (difference.minutes) {
+        result += `${difference.minutes} minutes `
+      }
+
+      return result
+    }
 
     return {
       user,
+      logs,
+      getTimeDifference,
     }
   },
 })

@@ -125,7 +125,7 @@
               right-0
               mt-2
               w-48
-              rounded-sm-md
+              rounded-sm
               shadow-lg
               py-1
               bg-white

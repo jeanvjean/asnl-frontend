@@ -113,7 +113,7 @@
             </button>
           </form>
         </div>
-        <div class="lg:col-span-2 bg-purple-50 w-full rounded-sm-md py-10">
+        <div class="lg:col-span-2 bg-purple-50 w-full rounded-sm py-10">
           <div>
             <h1 class="font-medium text-2xl px-10 py-4 customFontBold">
               Permission

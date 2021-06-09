@@ -7,7 +7,7 @@
         px-2
         py-2
         border-2 border-gray-200
-        rounded-sm-md
+        rounded-sm
         focus:outline-none
         focus:border-btn-purple
         font-thin

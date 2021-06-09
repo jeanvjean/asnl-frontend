@@ -58,7 +58,7 @@
                 bg-gray-300
                 px-3
                 py-2
-                rounded-sm-md
+                rounded-sm
               "
             >
               <svg
@@ -84,7 +84,7 @@
                 bg-gray-300
                 px-3
                 py-2
-                rounded-sm-md
+                rounded-sm
               "
             >
               <svg
@@ -100,55 +100,27 @@
             </button>
             <button
               v-if="sections.cylinder"
-              class="
-                bg-btn-purple
-                text-white
-                rounded-sm-md
-                px-6
-                py-2
-                font-medium
-              "
+              class="bg-btn-purple text-white rounded-sm px-6 py-2 font-medium"
             >
               Add Cylinder
             </button>
             <button
               v-else-if="sections.pickup || sections.pickupForm"
-              class="
-                bg-btn-purple
-                text-white
-                rounded-sm-md
-                px-6
-                py-2
-                font-medium
-              "
+              class="bg-btn-purple text-white rounded-sm px-6 py-2 font-medium"
               @click="changeSection('pickupForm')"
             >
               Request Pickup
             </button>
             <button
               v-else-if="sections.complaint || sections.complaintForm"
-              class="
-                bg-btn-purple
-                text-white
-                rounded-sm-md
-                px-6
-                py-2
-                font-medium
-              "
+              class="bg-btn-purple text-white rounded-sm px-6 py-2 font-medium"
               @click="changeSection('complaintForm')"
             >
               Create Complaint
             </button>
             <button
               v-else
-              class="
-                bg-btn-purple
-                text-white
-                rounded-sm-md
-                px-6
-                py-2
-                font-medium
-              "
+              class="bg-btn-purple text-white rounded-sm px-6 py-2 font-medium"
             >
               Create Order
             </button>
@@ -482,7 +454,7 @@
                 w-40
                 font-medium
                 text-sm
-                rounded-sm-md
+                rounded-sm
                 action-menu
                 z-10
               "
@@ -559,7 +531,7 @@
                 w-40
                 font-medium
                 text-sm
-                rounded-sm-md
+                rounded-sm
                 action-menu
                 z-10
               "

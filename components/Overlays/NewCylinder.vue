@@ -1,6 +1,6 @@
 <template>
   <back-drop>
-    <div class="w-full sm:w-full md:w-1/2 bg-white py-4 px-8 rounded-sm-md">
+    <div class="w-full sm:w-full md:w-1/2 bg-white py-4 px-8 rounded-sm">
       <div class="flex justify-between items-center my-2">
         <div>
           <p class="text-xl font-medium">Register Gas Cylinder</p>

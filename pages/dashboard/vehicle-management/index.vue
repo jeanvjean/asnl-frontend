@@ -131,7 +131,7 @@
                   w-40
                   font-light
                   text-sm
-                  rounded-sm-md
+                  rounded-sm
                   action-menu
                   z-50
                 "
@@ -141,7 +141,7 @@
                   class="
                     block
                     px-3
-                    py-4
+                    py-2
                     text-black
                     focus:outline-none
                     hover:bg-btn-purple
@@ -158,7 +158,7 @@
                   class="
                     block
                     px-3
-                    py-4
+                    py-2
                     text-black
                     focus:outline-none
                     hover:bg-btn-purple
@@ -175,7 +175,7 @@
                   class="
                     block
                     px-3
-                    py-4
+                    py-2
                     text-black
                     focus:outline-none
                     hover:bg-btn-purple
@@ -192,7 +192,7 @@
                   class="
                     block
                     px-3
-                    py-4
+                    py-2
                     text-black
                     focus:outline-none
                     hover:bg-btn-purple

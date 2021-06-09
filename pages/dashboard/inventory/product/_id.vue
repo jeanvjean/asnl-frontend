@@ -1,6 +1,6 @@
 <template>
   <div :key="keyValue" class="px-6 py-6">
-    <div class="bg-white w-full h-full rounded-sm-md">
+    <div class="bg-white w-full h-full rounded-sm">
       <div class="px-6 py-6">
         <div class="mb-4">
           <h1 class="font-medium text-xl text-black">Create Product</h1>
@@ -88,16 +88,6 @@
             :input-placeholder="'Enter Referrer'"
           />
         </div>
-        <div class="lg:flex w-full lg:space-x-4 lg:w-2/5">
-          <button-component
-            :button-text="'Create Product'"
-            :button-class="'py-2 bg-btn-purple text-white rounded-sm'"
-          />
-          <button-component
-            :button-text="'Cancel'"
-            :button-class="'py-2 bg-white text-btn-purple border border-btn-purple rounded-sm'"
-          />
-        </div>
       </div>
     </div>
   </div>
@@ -111,10 +101,9 @@ import {
 } from '@nuxtjs/composition-api'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
-import ButtonComponent from '@/components/Form/Button.vue'
 import { ProductRepository } from '@/module/Product'
 export default defineComponent({
-  components: { InputComponent, ButtonComponent, SelectComponent },
+  components: { InputComponent, SelectComponent },
   layout: 'dashboard',
   setup() {
     const route = useRoute()

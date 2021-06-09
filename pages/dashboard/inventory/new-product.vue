@@ -1,6 +1,6 @@
 <template>
   <div :key="keyValue" class="px-6 py-6">
-    <div class="bg-white w-full h-full rounded-sm-md">
+    <div class="bg-white w-full h-full rounded-sm">
       <div class="px-6 py-6">
         <div class="mb-4">
           <h1 class="font-medium text-xl text-black">Create Product</h1>
@@ -113,7 +113,7 @@
           <button-component
             :button-text="'Cancel'"
             :button-class="'py-2 bg-white text-btn-purple border border-btn-purple rounded-sm'"
-            @buttonClicked="reset"
+            @buttonClicked="goBack()"
           />
         </div>
       </div>
@@ -127,6 +127,7 @@ import {
   reactive,
   ref,
   useContext,
+  useRouter,
 } from '@nuxtjs/composition-api'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
@@ -158,6 +159,7 @@ export default defineComponent({
     const loading = ref(false)
     const divisions = ref([])
     const suppliers = ref([])
+    const router = useRouter()
 
     function valuesNotEmpty(obj: Object) {
       return Object.values(obj).every(
@@ -174,6 +176,9 @@ export default defineComponent({
           }
         })
       })
+    }
+    const goBack = () => {
+      router.go(-1)
     }
 
     function fetchSuppliers() {
@@ -220,6 +225,7 @@ export default defineComponent({
       loading,
       divisions,
       suppliers,
+      goBack,
     }
   },
 })

@@ -8,7 +8,7 @@
         bg-white
         py-4
         px-8
-        rounded-sm-md
+        rounded-sm
         overflow-y-auto
       "
     >
@@ -163,7 +163,7 @@
 
       <button
         class="
-          rounded-sm-md
+          rounded-sm
           mt-4
           px-8
           py-3

@@ -57,7 +57,7 @@ export class ProductRepository {
   fetchProduct(productId: String) {
     return new Promise<any>((resolve, reject) => {
       try {
-        const response = $axios.get('/inventory/fetch-inventory/' + productId)
+        const response = $axios.get('/inventory/fetch-product/' + productId)
         resolve(response)
       } catch (error) {
         reject(error)
