@@ -15,7 +15,6 @@
           relative
           overflow-y-auto overflow-x-hidden
           focus:outline-none
-          px-4
         "
         tabindex="0"
       >

@@ -53,7 +53,11 @@
             <button class="focus:outline-none focus:border-btn-purple">
               Cylinder 4
             </button>
-            <button class="focus:outline-none text-btn-purple">View All</button>
+            <router-link
+              to="/dashboard/production/cylinders"
+              class="focus:outline-none text-btn-purple"
+              >View All</router-link
+            >
           </div>
           <div
             v-for="(profileDetail, index) in inner"
@@ -79,10 +83,13 @@
           <div class="col-span-2">{{ profileDetail.value }}</div>
         </div>
         <div class="px-4 py-2">
-          <h2>Scan all Cylinder</h2>
-          <button class="px-6 py-2 bg-btn-purple text-white font-semibold">
+          <h2 class="py-4">Scan all Cylinder</h2>
+          <router-link
+            to="/dashboard/production/production-schedule"
+            class="px-6 py-2 bg-btn-purple text-white font-semibold rounded-sm"
+          >
             Schedule for Production
-          </button>
+          </router-link>
         </div>
       </section>
     </div>

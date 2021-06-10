@@ -116,7 +116,7 @@
             </div>
           </div>
           <div class="w-full overflow-x-auto">
-            <table class="w-full table-auto border-separate">
+            <table class="w-full table border-separate">
               <thead>
                 <tr>
                   <th
@@ -345,9 +345,16 @@
                 <div class="underline">Add New Product</div>
               </button>
             </div>
-            <div class="w-full h-full py-1 px-4 mx-auto">
+            <div class="w-full h-full py-2 px-8 mx-auto">
               <button
-                class="w-4/5 h-full border border-gray-500 px-6 py-3 rounded-sm"
+                class="
+                  w-4/5
+                  h-full
+                  border-2 border-gray-300
+                  px-6
+                  py-3
+                  rounded-sm
+                "
               >
                 <div class="text-center mb-2">
                   <svg
@@ -365,8 +372,8 @@
               </button>
             </div>
 
-            <div class="flex items-start py-1 px-4 w-full">
-              <div class="rounded-sm border border-gray-500 px-6 mx-auto">
+            <div class="flex items-start py-2 px-10 w-full">
+              <div class="rounded-sm border border-gray-300 px-10 mx-auto">
                 <p class="text-gray-500 text-sm font-medium leading-6">
                   Inspecting officer
                 </p>

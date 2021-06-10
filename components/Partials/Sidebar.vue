@@ -526,11 +526,6 @@
                   >ERC List</router-link
                 >
                 <router-link
-                  to="/dashboard/production/production-schedule"
-                  class="block px-2 py-2"
-                  >Production Schedule</router-link
-                >
-                <router-link
                   to="/dashboard/production/sales-requisition"
                   class="block px-2 py-2"
                   >Sales Requisition List</router-link

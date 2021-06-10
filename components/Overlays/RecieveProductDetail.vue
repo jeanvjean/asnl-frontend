@@ -253,9 +253,16 @@
                 <div class="underline">Add New Product</div>
               </button>
             </div>
-            <div class="w-full h-full py-1 px-4 mx-auto">
+            <div class="w-full h-full py-2 px-8 mx-auto">
               <button
-                class="w-4/5 h-full border border-gray-500 px-6 py-3 rounded-sm"
+                class="
+                  w-4/5
+                  h-full
+                  border-2 border-gray-300
+                  px-6
+                  py-3
+                  rounded-sm
+                "
               >
                 <div class="text-center mb-2">
                   <svg
@@ -273,8 +280,8 @@
               </button>
             </div>
 
-            <div class="flex items-start py-1 px-4 w-full">
-              <div class="rounded-sm border border-gray-500 px-6 mx-auto">
+            <div class="flex items-start py-2 px-8 w-full">
+              <div class="rounded-sm border-2 border-gray300 px-10 mx-auto">
                 <p class="text-gray-500 text-sm font-medium leading-6">
                   Inspecting officer
                 </p>
@@ -306,13 +313,13 @@
             "
           >
             <button
-              class="px-8 py-2 rounded-sm bg-btn-purple text-white w-full"
+              class="px-4 py-2 rounded-sm bg-btn-purple text-white w-full"
             >
               Recieve Product
             </button>
             <button
               class="
-                px-8
+                px-4
                 py-2
                 rounded-sm
                 bg-white
