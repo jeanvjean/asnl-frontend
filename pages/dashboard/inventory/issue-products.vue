@@ -158,7 +158,31 @@
     <div class="bg-white px-6 py-4 mt-6">
       <div class="flex items-center justify-around px-2 py-2 space-x-4 w-full">
         <filter-component />
-        <search-component :place-holder="'Search for GRN'" />
+        <search-component :place-holder="'Search for MRN'" />
+        <button
+          class="
+            px-4
+            py-2
+            rounded-sm
+            text-white
+            bg-btn-purple
+            flex
+            items-center
+            space-x-4
+          "
+          @click="showIssueProduct = !showIssueProduct"
+        >
+          <svg
+            class="w-3 h-3 fill-current text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 341.4 341.4"
+          >
+            <path
+              d="M192 149.4V0h-42.6v149.4H0V192h149.4v149.4H192V192h149.4v-42.6z"
+            />
+          </svg>
+          <span> Create MRN</span>
+        </button>
         <pagination />
       </div>
       <table class="w-full table-auto mt-2">

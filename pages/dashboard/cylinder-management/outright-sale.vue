@@ -30,8 +30,8 @@
               flex
               space-x-4
               items-center
-              text-white
-              bg-btn-purple
+              text-btn-purple
+              border-btn-purple border
               px-4
               py-2
               rounded-sm
@@ -55,8 +55,8 @@
               flex
               space-x-4
               items-center
-              text-btn-purple
-              border-btn-purple border
+              text-white
+              bg-btn-purple
               px-4
               py-2
               rounded-sm
@@ -64,14 +64,13 @@
             "
           >
             <svg
-              class="w-6 h-6 fill-current"
+              class="w-6 h-6 fill-current text-white"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 fill-rule="evenodd"
                 clip-rule="evenodd"
                 d="M4.5 4H8.79C9.24 4 9.46 4.54 9.15 4.84L7.71 6.28L12.71 11.29C12.89 11.48 13 11.74 13 12V19C13 19.55 12.55 20 12 20C11.45 20 11 19.55 11 19V12.4L6.29 7.7L4.85 9.14C4.54 9.46 4 9.24 4 8.79V4.5C4 4.22 4.22 4 4.5 4ZM16.29 6.29L14.85 4.85C14.54 4.54 14.76 4 15.21 4H19.5C19.78 4 20 4.22 20 4.5V8.79C20 9.24 19.46 9.46 19.15 9.15L17.71 7.71L14.83 10.59L13.41 9.17L16.29 6.29Z"
-                fill="#5C53FF"
               />
             </svg>
             <span>Outright sales/transfer</span>
@@ -135,7 +134,7 @@
       <div class="lg:col-span-3 overflow-x-auto bg-white px-4">
         <div class="md:flex justify-between px-8 py-4">
           <h1 class="flex-1 text-gray-400 font-medium text-lg my-2 md:my-0">
-            Transfer Cylinder within Division
+            Outright Sales
           </h1>
           <div class="flex space-x-6 float-right my-2 md:my-0">
             <button
@@ -149,7 +148,6 @@
                 py-2
                 rounded-sm
               "
-              @click="submit"
             >
               <span>Approve</span>
               <svg
@@ -214,33 +212,7 @@
                     border border-gray-400
                   "
                 >
-                  Customer Name
-                </th>
-                <th
-                  class="
-                    font-light
-                    text-lg
-                    px-2
-                    py-2
-                    text-center
-                    w-3/12
-                    border border-gray-400
-                  "
-                >
-                  Cylinder Number
-                </th>
-                <th
-                  class="
-                    font-light
-                    text-lg
-                    px-2
-                    py-2
-                    text-center
-                    w-3/12
-                    border border-gray-400
-                  "
-                >
-                  Volume
+                  Assigned Number
                 </th>
                 <th
                   class="
@@ -253,7 +225,46 @@
                     border border-gray-400
                   "
                 >
-                  Type
+                  Cylinder Number
+                </th>
+                <th
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-2/12
+                    border border-gray-400
+                  "
+                >
+                  Purchase Date
+                </th>
+                <th
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-2/12
+                    border border-gray-400
+                  "
+                >
+                  Purchase Cost
+                </th>
+                <th
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-3/12
+                    border border-gray-400
+                  "
+                >
+                  Cost of Sale
                 </th>
                 <th class="w-auto"></th>
               </tr>
@@ -275,7 +286,7 @@
                     "
                     @change="setAndFetch($event.target.value, i)"
                   >
-                    <option value="">Select a Customer</option>
+                    <option value="">Select a Cylinder</option>
                     <option
                       v-for="(customer, index) in customers"
                       :key="index"
@@ -286,51 +297,29 @@
                   </select>
                 </td>
                 <td class="font-light text-lg text-center">
-                  <select
-                    v-model="cylinders[i - 1].cylinder"
-                    class="
-                      w-full
-                      border-2 border-gray-200
-                      py-3
-                      rounded-sm
-                      focus:outline-none
-                    "
-                    @change="setVolumeAndType($event.target.value, i)"
-                  >
-                    <option value="">Select a Cylinder</option>
-                    <option
-                      v-for="(cylinder, index) in cylindersArrays[i - 1]"
-                      :key="index"
-                      :value="cylinder._id"
-                    >
-                      {{
-                        cylinder.assignedNumber
-                          ? cylinder.assignedNumber
-                          : 'No Assigned Number Yet'
-                      }}
-                    </option>
-                  </select>
+                  <input-component
+                    :default-value="cylinders[i - 1].cylinder"
+                    :input-placeholder="'Cylinder Number'"
+                  />
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
                     :default-value="cylinders[i - 1].volume"
-                    :input-placeholder="'Enter Volume'"
+                    :input-placeholder="'Select Purchase Date'"
+                    :input-type="'date'"
                   />
                 </td>
                 <td class="font-light text-lg text-center">
-                  <select
-                    v-model="cylinders[i - 1].type"
-                    class="
-                      w-full
-                      border-2 border-gray-200
-                      py-3
-                      rounded-sm
-                      focus:outline-none
-                    "
-                  >
-                    <option value="buffer">Buffer</option>
-                    <option value="assigned">Assigned</option>
-                  </select>
+                  <input-component
+                    :default-value="cylinders[i - 1].volume"
+                    :input-placeholder="'Purchase Cost'"
+                  />
+                </td>
+                <td class="font-light text-lg text-center">
+                  <input-component
+                    :default-value="cylinders[i - 1].volume"
+                    :input-placeholder="'Cost of Sale'"
+                  />
                 </td>
 
                 <td class="font-light text-lg text-center">
@@ -387,15 +376,7 @@
           "
         >
           <select-component
-            :label-title="'Type of Transfer'"
-            :default-option-text="'Select a Transfer Type'"
-            :select-array="types"
-            :init-value="form.type"
-            @get="form.type = $event.value"
-          />
-
-          <select-component
-            :label-title="'To'"
+            :label-title="'Transfer To'"
             :default-option-text="'Select a Reciepient'"
             :select-array="reciepients"
             :init-value="form.reciepient"

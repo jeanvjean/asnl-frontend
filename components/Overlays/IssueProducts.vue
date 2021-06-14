@@ -47,7 +47,10 @@
           <div class="flex justify-between items-center text-md">
             <div>
               <span>MRN:</span>
-              <span>00234</span>
+              <input
+                class="px-4 py-2 rounded-sm border border-gray-200"
+                placeholder="Enter MRN Number"
+              />
             </div>
             <div class="flex space-x-2 items-center">
               <span>Date:</span>
@@ -123,6 +126,18 @@
                       text-sm
                     "
                   >
+                    Product Name
+                  </th>
+                  <th
+                    class="
+                      px-4
+                      py-2
+                      font-medium
+                      text-gray-600
+                      uppercase
+                      text-sm
+                    "
+                  >
                     Qty
                   </th>
                   <th
@@ -135,7 +150,7 @@
                       text-sm
                     "
                   >
-                    Passed
+                    Unit Cost
                   </th>
                   <th
                     class="
@@ -147,7 +162,7 @@
                       text-sm
                     "
                   >
-                    Rejected
+                    Total Cost
                   </th>
                   <th
                     class="
@@ -183,6 +198,9 @@
                     <input-component
                       :input-placeholder="'Enter Product Name'"
                     />
+                  </td>
+                  <td>
+                    <input-component :input-placeholder="'#'" />
                   </td>
                   <td>
                     <input-component :input-placeholder="'#'" />
@@ -283,7 +301,7 @@ export default defineComponent({
     const close = () => {
       ctx.emit('close')
     }
-    const count = ref(2)
+    const count = ref(0)
     return {
       close,
       count,

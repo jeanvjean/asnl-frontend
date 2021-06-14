@@ -5,7 +5,7 @@
       w-full
       bg-weird-purple
       text-white text-sm
-      rounded-sm
+      rounded-md
       px-6
       py-4
       h-full

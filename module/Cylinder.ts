@@ -1,3 +1,4 @@
+/* eslint-disable no-async-promise-executor */
 import { $axios } from '@/utils/api'
 class CylinderRepository {
   async getCylinders() {
@@ -25,6 +26,20 @@ class CylinderRepository {
 
   async registerCylinder(requestParameters: Object) {
     return await $axios.post('/cylinder/register-cylinder', requestParameters)
+  }
+
+  initiateCylinderTransfer(requestParameters: Object) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.post(
+          '/cylinder/transfer-cylinders',
+          requestParameters
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 }
 
