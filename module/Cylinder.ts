@@ -41,6 +41,17 @@ class CylinderRepository {
       }
     })
   }
+
+  fetchBranches() {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get('inventory/fetch-branches')
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 export { CylinderRepository }

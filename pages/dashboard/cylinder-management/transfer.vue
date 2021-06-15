@@ -259,17 +259,17 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="i in count" :key="i">
+              <tr v-for="(cylinder, i) in cylinders" :key="i">
                 <td class="font-light text-lg text-center">
-                  {{ i }}
+                  {{ i + 1 }}
                 </td>
                 <td class="font-light text-lg text-center">
                   <select
-                    v-model="cylinders[i - 1].customer"
+                    v-model="cylinders[i].customer"
                     class="
                       w-full
                       border-2 border-gray-200
-                      py-3
+                      py-2
                       rounded-sm
                       focus:outline-none
                     "
@@ -287,11 +287,11 @@
                 </td>
                 <td class="font-light text-lg text-center">
                   <select
-                    v-model="cylinders[i - 1].cylinder"
+                    v-model="cylinders[i].cylinder"
                     class="
                       w-full
                       border-2 border-gray-200
-                      py-3
+                      py-2
                       rounded-sm
                       focus:outline-none
                     "
@@ -299,13 +299,13 @@
                   >
                     <option value="">Select a Cylinder</option>
                     <option
-                      v-for="(cylinder, index) in cylindersArrays[i - 1]"
+                      v-for="(cylin, index) in cylindersArrays[i]"
                       :key="index"
-                      :value="cylinder._id"
+                      :value="cylin._id"
                     >
                       {{
-                        cylinder.assignedNumber
-                          ? cylinder.assignedNumber
+                        cylin.assignedNumber
+                          ? cylin.assignedNumber
                           : 'No Assigned Number Yet'
                       }}
                     </option>
@@ -313,17 +313,17 @@
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
-                    :default-value="cylinders[i - 1].volume"
+                    :default-value="cylinders[i].volume"
                     :input-placeholder="'Enter Volume'"
                   />
                 </td>
                 <td class="font-light text-lg text-center">
                   <select
-                    v-model="cylinders[i - 1].type"
+                    v-model="cylinders[i].type"
                     class="
                       w-full
                       border-2 border-gray-200
-                      py-3
+                      py-2
                       rounded-sm
                       focus:outline-none
                     "
@@ -339,6 +339,7 @@
                     class="w-4 h-4 fill-current text-transparent"
                     viewBox="0 0 24 24"
                     stroke="black"
+                    @click="decreaseCounter(i)"
                   >
                     <path
                       stroke-linecap="round"
@@ -391,7 +392,7 @@
             :default-option-text="'Select a Transfer Type'"
             :select-array="types"
             :init-value="form.type"
-            @get="form.type = $event.value"
+            @get="changeTransferType($event.value)"
           />
 
           <select-component
@@ -496,8 +497,8 @@ export default defineComponent({
   setup() {
     const types = [
       {
-        name: 'Permanent Transfer',
-        value: 'permanent',
+        name: 'Between Branches',
+        value: 'branch',
       },
       {
         name: 'Temporary Transfer',
@@ -517,7 +518,6 @@ export default defineComponent({
     const customers = ref<any>([])
     const customerValue = ref('')
     const cylinders = ref<any>([])
-    const count = ref<any>(0)
     const cylindersArrays = ref<any>([])
     const context = useContext()
     const cylinderObject = new CylinderRepository()
@@ -525,35 +525,41 @@ export default defineComponent({
     onMounted(() => {
       CustomerController.fetchCustomers().then((response) => {
         customers.value = response
-        reciepients.value = customers.value.map((element: any) => {
-          return {
-            name: element.name,
-            value: element._id,
-          }
-        })
       })
     })
 
     function increaseCounter() {
-      const newValue = count.value + 1
-      cylinders.value[newValue - 1] = {
+      cylinders.value.push({
         customer: '',
         cylinder: '',
         volume: '',
         type: '',
-      }
-      cylindersArrays.value[newValue - 1] = []
-      count.value = newValue
+      })
+      cylindersArrays.value.push([])
+    }
+
+    function decreaseCounter(index: any) {
+      cylinders.value.splice(index, 1)
+      componentKey.value++
+    }
+
+    async function getBranches() {
+      const response = await cylinderObject.fetchBranches()
+      return response
     }
 
     async function setAndFetch(value: String, index: any) {
+      cylindersArrays.value[index] = []
+      cylinders.value[index].cylinder = ''
+      setVolumeAndType('', index)
+
       if (value !== '') {
         const customerCylinders = await fetchCustomerCylinders(value)
-        cylinders.value[index - 1].customer = value
-        cylindersArrays.value[index - 1] = customerCylinders
+        cylinders.value[index].customer = value
+        cylindersArrays.value[index] = customerCylinders
       } else {
-        cylindersArrays.value[index - 1] = []
-        cylinders.value[index - 1].cylinder = ''
+        cylindersArrays.value[index] = []
+        cylinders.value[index].cylinder = ''
         setVolumeAndType('', index)
       }
       componentKey.value++
@@ -561,22 +567,43 @@ export default defineComponent({
 
     function setVolumeAndType(cylinderId: String, index: any) {
       if (cylinderId !== '') {
-        cylindersArrays.value[index - 1].forEach((element: any) => {
+        cylindersArrays.value[index].forEach((element: any) => {
           if (element._id === cylinderId) {
-            cylinders.value[index - 1].volume = element.gasVolumeContent
-            cylinders.value[index - 1].type = element.cylinderType
-            cylinders.value[index - 1].cylinder = element._id
+            cylinders.value[index].volume = element.gasVolumeContent
+            cylinders.value[index].type = element.cylinderType
+            cylinders.value[index].cylinder = element._id
           }
         })
       } else {
-        cylinders.value[index - 1].volume = ''
-        cylinders.value[index - 1].type = ''
+        cylinders.value[index].volume = ''
+        cylinders.value[index].type = ''
       }
       componentKey.value++
     }
 
     function returnValue(index: any) {
       return cylinders.value[index]
+    }
+
+    async function changeTransferType(type: string) {
+      form.type = type
+      reciepients.value = []
+      if (type === 'branch') {
+        const branches = await getBranches()
+        reciepients.value = branches.map((element: any) => {
+          return {
+            name: `${element.name} - ${element.location}`,
+            value: element._id,
+          }
+        })
+      } else if (type === 'temporary') {
+        reciepients.value = customers.value.map((element: any) => {
+          return {
+            name: element.name,
+            value: element._id,
+          }
+        })
+      }
     }
 
     const submit = () => {
@@ -608,7 +635,6 @@ export default defineComponent({
         cylinderObject.initiateCylinderTransfer(requestBody).then(() => {
           form.type = form.comment = form.reciepient = ''
           cylinders.value = []
-          count.value = 0
         })
       }
     }
@@ -635,7 +661,6 @@ export default defineComponent({
       showFinalStep,
       status,
       message,
-      count,
       customers,
       form,
       setAndFetch,
@@ -647,6 +672,9 @@ export default defineComponent({
       cylinders,
       setVolumeAndType,
       submit,
+      getBranches,
+      changeTransferType,
+      decreaseCounter,
     }
   },
 })

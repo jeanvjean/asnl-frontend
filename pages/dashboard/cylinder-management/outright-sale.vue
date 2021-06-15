@@ -148,6 +148,7 @@
                 py-2
                 rounded-sm
               "
+              @click="submit"
             >
               <span>Approve</span>
               <svg
@@ -225,7 +226,7 @@
                     border border-gray-400
                   "
                 >
-                  Cylinder Number
+                  Cylinder Type
                 </th>
                 <th
                   class="
@@ -238,7 +239,7 @@
                     border border-gray-400
                   "
                 >
-                  Purchase Date
+                  Manufacture Date
                 </th>
                 <th
                   class="
@@ -251,7 +252,7 @@
                     border border-gray-400
                   "
                 >
-                  Purchase Cost
+                  Gas Type
                 </th>
                 <th
                   class="
@@ -260,64 +261,68 @@
                     px-2
                     py-2
                     text-center
-                    w-3/12
+                    w-2/12
                     border border-gray-400
                   "
                 >
-                  Cost of Sale
+                  Volume
                 </th>
                 <th class="w-auto"></th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="i in count" :key="i">
+              <tr v-for="(cylinder, i) in cylinders" :key="i">
                 <td class="font-light text-lg text-center">
-                  {{ i }}
+                  {{ i + 1 }}
                 </td>
                 <td class="font-light text-lg text-center">
                   <select
-                    v-model="cylinders[i - 1].customer"
+                    v-model="cylinder.cylinder"
                     class="
                       w-full
                       border-2 border-gray-200
-                      py-3
+                      py-2
                       rounded-sm
                       focus:outline-none
                     "
-                    @change="setAndFetch($event.target.value, i)"
+                    @change="setOtherValues(cylinder.cylinder, i)"
                   >
                     <option value="">Select a Cylinder</option>
                     <option
-                      v-for="(customer, index) in customers"
+                      v-for="(cylin, index) in cylinderResponse"
                       :key="index"
-                      :value="customer._id"
+                      :value="cylin._id"
                     >
-                      {{ customer.contactPerson }}
+                      {{
+                        cylin.assignedNumber
+                          ? cylin.assignedNumber
+                          : 'No Assigned Number Yet'
+                      }}
                     </option>
                   </select>
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
-                    :default-value="cylinders[i - 1].cylinder"
-                    :input-placeholder="'Cylinder Number'"
+                    :default-value="cylinder.type"
+                    :input-placeholder="'Cylinder Type'"
                   />
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
-                    :default-value="cylinders[i - 1].volume"
-                    :input-placeholder="'Select Purchase Date'"
+                    :default-value="cylinder.date"
+                    :input-placeholder="'Manufacture Date'"
                     :input-type="'date'"
                   />
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
-                    :default-value="cylinders[i - 1].volume"
-                    :input-placeholder="'Purchase Cost'"
+                    :default-value="cylinder.gasType"
+                    :input-placeholder="'Gas Type'"
                   />
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
-                    :default-value="cylinders[i - 1].volume"
+                    :default-value="cylinder.volume"
                     :input-placeholder="'Cost of Sale'"
                   />
                 </td>
@@ -475,18 +480,7 @@ export default defineComponent({
   components: { SelectComponent, Confirmation, FinalStep, InputComponent },
   layout: 'dashboard',
   setup() {
-    const types = [
-      {
-        name: 'Permanent Transfer',
-        value: 'permanent',
-      },
-      {
-        name: 'Temporary Transfer',
-        value: 'temporary',
-      },
-    ]
     const form = reactive({
-      type: '',
       reciepient: '',
       comment: '',
     })
@@ -496,16 +490,20 @@ export default defineComponent({
     const status = ref('')
     const message = ref('')
     const customers = ref<any>([])
-    const customerValue = ref('')
     const cylinders = ref<any>([])
-    const count = ref<any>(0)
-    const cylindersArrays = ref<any>([])
+    const cylinderResponse = ref<any>([])
     const context = useContext()
     const cylinderObject = new CylinderRepository()
+    const componentKey = ref(0)
 
     onMounted(() => {
-      CustomerController.fetchCustomers().then((response) => {
-        customers.value = response
+      Promise.all([
+        CustomerController.fetchCustomers(),
+        cylinderObject.getRegisteredCylinders(),
+      ]).then((response) => {
+        customers.value = response[0]
+        cylinderResponse.value = response[1].data.data.cylinders
+
         reciepients.value = customers.value.map((element: any) => {
           return {
             name: element.name,
@@ -516,48 +514,43 @@ export default defineComponent({
     })
 
     function increaseCounter() {
-      const newValue = count.value + 1
-      cylinders.value[newValue - 1] = {
-        customer: '',
-        cylinder: '',
-        volume: '',
+      cylinders.value.push({
         type: '',
-      }
-      cylindersArrays.value[newValue - 1] = []
-      count.value = newValue
+        cylinder: '',
+        date: '',
+        volume: '',
+        gasType: '',
+      })
     }
 
-    async function setAndFetch(value: String, index: any) {
-      if (value !== '') {
-        const customerCylinders = await fetchCustomerCylinders(value)
-        cylinders.value[index - 1].customer = value
-        cylindersArrays.value[index - 1] = customerCylinders
-      } else {
-        cylindersArrays.value[index - 1] = []
-        cylinders.value[index - 1].cylinder = ''
-        setVolumeAndType('', index)
-      }
-      componentKey.value++
-    }
-
-    function setVolumeAndType(cylinderId: String, index: any) {
-      if (cylinderId !== '') {
-        cylindersArrays.value[index - 1].forEach((element: any) => {
-          if (element._id === cylinderId) {
-            cylinders.value[index - 1].volume = element.gasVolumeContent
-            cylinders.value[index - 1].type = element.cylinderType
-            cylinders.value[index - 1].cylinder = element._id
+    function setOtherValues(cylinderId: string, index: any) {
+      cylinderResponse.value.forEach((element: any) => {
+        if (element._id === cylinderId) {
+          cylinders.value[index].volume = element.gasVolumeContent
+          cylinders.value[index].type = element.cylinderType
+          cylinders.value[index].gasType = element.gasType.gasName
+          const newDate = new Date(element.dateManufactured)
+          const dateValue = {
+            year: newDate.getFullYear(),
+            day:
+              getlength(newDate.getDay()) > 1
+                ? newDate.getDay()
+                : `0${newDate.getDay()}`,
+            month:
+              getlength(newDate.getMonth()) > 1
+                ? newDate.getMonth()
+                : `0${newDate.getMonth()}`,
           }
-        })
-      } else {
-        cylinders.value[index - 1].volume = ''
-        cylinders.value[index - 1].type = ''
-      }
+
+          const initDate = `${dateValue.year}-${dateValue.month}-${dateValue.day}`
+          cylinders.value[index].date = initDate
+        }
+      })
       componentKey.value++
     }
 
-    function returnValue(index: any) {
-      return cylinders.value[index]
+    function getlength(number: number) {
+      return number.toString().length
     }
 
     const submit = () => {
@@ -571,7 +564,7 @@ export default defineComponent({
       }
       if (!validation || !cylinders.value.length) {
         context.$toast.error('Cylinders are required')
-      } else if (!form.type || !form.reciepient || !form.comment) {
+      } else if (!form.reciepient || !form.comment) {
         context.$toast.error('All Fields are Required')
       } else {
         const requestCylinders = cylinders.value.map((element: any) => {
@@ -579,7 +572,7 @@ export default defineComponent({
         })
 
         const requestBody = {
-          type: form.type,
+          type: 'permanent',
           comment: form.comment,
           to: form.reciepient,
           cylinders: requestCylinders,
@@ -587,18 +580,10 @@ export default defineComponent({
         }
 
         cylinderObject.initiateCylinderTransfer(requestBody).then(() => {
-          form.type = form.comment = form.reciepient = ''
+          form.comment = form.reciepient = ''
           cylinders.value = []
-          count.value = 0
         })
       }
-    }
-
-    const componentKey = ref(0)
-
-    async function fetchCustomerCylinders(customerId: String) {
-      const response = await CustomerController.fetchCylinders(customerId)
-      return response
     }
 
     watch(status, (currentValue) => {
@@ -610,24 +595,19 @@ export default defineComponent({
     })
 
     return {
-      types,
       reciepients,
       showConfirmation,
       showFinalStep,
       status,
       message,
-      count,
       customers,
       form,
-      setAndFetch,
-      customerValue,
-      returnValue,
       increaseCounter,
-      cylindersArrays,
       componentKey,
       cylinders,
-      setVolumeAndType,
       submit,
+      cylinderResponse,
+      setOtherValues,
     }
   },
 })
