@@ -204,7 +204,11 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(detail, index) in inventory.products" :key="index">
+                <tr
+                  v-for="(detail, index) in inventory.products"
+                  :key="index"
+                  class="hover:bg-gray-100"
+                >
                   <td class="text-center">{{ Number(index) + 1 }}</td>
                   <td class="px-4 py-3 border border-gray-600">
                     {{ detail.productNumber }}

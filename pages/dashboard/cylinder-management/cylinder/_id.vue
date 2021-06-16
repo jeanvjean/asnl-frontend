@@ -231,7 +231,7 @@ export default defineComponent({
           Testing_Pressure: cylinderResponse.testingPresure,
           Filling_Preasure: cylinderResponse.fillingPreasure,
           GasVolume_Content: cylinderResponse.gasVolumeContent,
-          Assigned_To: cylinderResponse.assignedTo,
+          Assigned_To: cylinderResponse.assignedTo.name,
           Assigned_Number: cylinderResponse.assignedNumber,
         }
       })

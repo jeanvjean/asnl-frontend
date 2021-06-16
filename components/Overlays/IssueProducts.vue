@@ -189,7 +189,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="i in count" :key="i">
+                <tr v-for="i in count" :key="i" class="hover:bg-gray-100">
                   <td class="text-center">{{ i }}</td>
                   <td>
                     <input-component :input-placeholder="'######'" />

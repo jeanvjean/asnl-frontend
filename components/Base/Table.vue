@@ -58,7 +58,7 @@
         <tr
           v-for="(bodySingle, index) in body"
           :key="index"
-          class="font-light hover:bg-gray-200"
+          class="font-light hover:bg-gray-100"
         >
           <td class="w-6 px-6 py-4">
             <input
@@ -78,9 +78,13 @@
           <td class="px-4 text-left py-4">{{ bodySingle.phoneNumber }}</td>
           <td class="px-4 text-left py-4">{{ bodySingle.email }}</td>
           <td class="px-4 text-left py-4">
-            <span class="px-8 py-2 bg-green-100 text-green-400">{{
-              bodySingle.role
-            }}</span>
+            <div class="w-40">
+              <span
+                class="px-8 py-2 w-full block text-center capitalize"
+                :class="getColorCode(bodySingle.role)"
+                >{{ bodySingle.role }}</span
+              >
+            </div>
           </td>
           <td class="px-4 py-4 icon-button">
             <button class="mx-auto text-black w-6 h-6 relative">
@@ -115,7 +119,7 @@
                   py-2
                   text-black
                   focus:outline-none
-                  hover:bg-btn-purple
+                  hover:bg-purple-300
                   hover:text-white
                   w-full
                   overflow-none
@@ -134,7 +138,7 @@
                   py-2
                   text-black
                   focus:outline-none
-                  hover:bg-btn-purple
+                  hover:bg-purple-300
                   hover:text-white
                   w-full
                   overflow-none
@@ -153,7 +157,7 @@
                   py-2
                   text-black
                   focus:outline-none
-                  hover:bg-btn-purple
+                  hover:bg-purple-300
                   hover:text-white
                   w-full
                   overflow-none
@@ -168,7 +172,7 @@
                   py-2
                   text-center text-black
                   focus:outline-none
-                  hover:bg-btn-purple
+                  hover:bg-purple-300
                   hover:text-white
                   w-full
                   overflow-none
@@ -246,6 +250,16 @@ export default defineComponent({
       getRoles()
     })
 
+    const rolesColor: any = {
+      security: 'bg-role-orange text-role-orange bg-opacity-25',
+      admin: 'bg-green-100 text-green-400',
+      sales: 'bg-role-purple text-role-purple bg-opacity-25',
+    }
+
+    function getColorCode(role: any) {
+      return rolesColor[role]
+    }
+
     const getRoles = () => {
       userObject.fetchRoles().then((response: any) => {
         const allRoles: any = response.data.data
@@ -287,6 +301,7 @@ export default defineComponent({
       changeUser,
       emitToParent,
       showChangeRole,
+      getColorCode,
       roles,
     }
   },

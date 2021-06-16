@@ -156,7 +156,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="i in 8" :key="i" class="font-light hover:bg-gray-200">
+              <tr v-for="i in 8" :key="i" class="font-light hover:bg-gray-100">
                 <td class="w-6 px-6 py-4">
                   <input
                     type="checkbox"
@@ -229,14 +229,3 @@ export default defineComponent({
   },
 })
 </script>
-<style scoped>
-.action-menu {
-  display: none;
-}
-.icon-button:hover > .action-menu {
-  display: block;
-}
-.icon-button:focus > .action-menu {
-  display: block;
-}
-</style>

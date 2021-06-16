@@ -14,7 +14,7 @@
       "
     >
       <svg
-        class="w-3 h-3 ml-2 fill-current"
+        class="w-4 h-4 ml-2 fill-current font-medium filterTransform"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
       >
@@ -36,3 +36,8 @@
     </div>
   </div>
 </template>
+<style scoped>
+.filterTransform {
+  transform: rotate(90deg);
+}
+</style>

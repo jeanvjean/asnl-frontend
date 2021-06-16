@@ -120,7 +120,66 @@
         </div>
       </div>
     </div>
-    <div class="bg-white px-4 py-6">
+    <div class="bg-white">
+      <div class="py-2">
+        <div
+          class="
+            flex
+            justify-between
+            items-center
+            pr-6
+            pl-4
+            border-0 border-l-4 border-black
+            mt-4
+          "
+        >
+          <h1 class="font-semibold text-black text-lg">Cylinders</h1>
+          <div class="flex items-center space-x-6">
+            <pagination />
+            <button
+              class="
+                text-purple-500
+                underline
+                uppercase
+                focus:outline-none
+                font-medium
+                text-sm
+              "
+            >
+              View All
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full mb-4 px-4">
+        <div
+          class="flex items-center justify-around px-2 py-2 space-x-4 w-full"
+        >
+          <filter-component />
+          <search-component
+            :place-holder="'Search for Users, Cylinder no,gas type, Cylinder Volume'"
+          />
+
+          <button
+            class="
+              flex
+              justify-between
+              items-end
+              bg-btn-purple
+              px-4
+              py-2
+              text-white
+              font-semibold
+              text-md
+              rounded-sm
+            "
+            @click="showRegister = !showRegister"
+          >
+            Register Cylinder
+          </button>
+        </div>
+      </div>
       <table-component
         :head="headers"
         :body="registeredCylinders"
@@ -143,9 +202,19 @@ import {
 import TableComponent from '@/components/Base/Table3.vue'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
 import { CylinderRepository } from '@/module/Cylinder'
+import SearchComponent from '@/components/Base/Search.vue'
+import FilterComponent from '@/components/Base/Filter.vue'
+import Pagination from '@/components/Base/Pagination.vue'
+
 export default defineComponent({
   name: 'Analytics',
-  components: { TableComponent, NewCylinder },
+  components: {
+    TableComponent,
+    NewCylinder,
+    SearchComponent,
+    FilterComponent,
+    Pagination,
+  },
   layout: 'dashboard',
   setup() {
     const headers = [

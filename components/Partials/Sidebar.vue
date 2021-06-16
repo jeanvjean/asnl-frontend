@@ -151,12 +151,7 @@
                 <router-link
                   to="/dashboard/cylinder-management/transfer-list"
                   class="block px-2 py-2"
-                  >Cylinder Transfer Analytics</router-link
-                >
-                <router-link
-                  to="/dashboard/cylinder-management/transfer"
-                  class="block px-2 py-2"
-                  >Cylinder Transfer</router-link
+                  >Transfer Analytics</router-link
                 >
               </div>
             </div>

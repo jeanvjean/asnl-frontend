@@ -50,7 +50,7 @@
       </div>
       <h1
         v-else
-        class="uppercase font-medium tracking-wide customFontRegular pl-4"
+        class="capitalize font-semibold tracking-wide customFontRegular pl-4"
       >
         {{ String(title).replace(/-/gi, ' ') }}
       </h1>

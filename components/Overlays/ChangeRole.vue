@@ -1,8 +1,28 @@
 <template>
   <back-drop>
     <div class="w-1/5 bg-white rounded-sm px-4 py-4 text-black font-light z-20">
-      <div>
+      <div class="relative">
         <h1 class="text-lg font-medium">Change Role</h1>
+        <svg
+          class="
+            w-5
+            h-5
+            fill-current
+            text-gray-400
+            absolute
+            top-0
+            right-0
+            mr-2
+            mt-2
+          "
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          @click="close"
+        >
+          <path
+            d="M2.93 17.07A10 10 0 1117.07 2.93 10 10 0 012.93 17.07zM11.4 10l2.83-2.83-1.41-1.41L10 8.59 7.17 5.76 5.76 7.17 8.59 10l-2.83 2.83 1.41 1.41L10 11.41l2.83 2.83 1.41-1.41L11.41 10z"
+          />
+        </svg>
       </div>
       <div
         class="
@@ -48,19 +68,13 @@
           />
         </div>
       </div>
-      <div class="flex items-center space-x-4">
+      <div>
         <button-component
           :button-text="'Change Role'"
           :loading-status="loading"
           :loading-text="loadingText"
           :button-class="'text-white bg-btn-purple'"
           @buttonClicked="updateUserRole"
-        />
-
-        <button-component
-          :button-text="'Cancel'"
-          :button-class="'text-black bg-white border border-btn-purple'"
-          @buttonClicked="close"
         />
       </div>
     </div>

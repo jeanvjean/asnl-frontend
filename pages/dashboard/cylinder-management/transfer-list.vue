@@ -157,6 +157,66 @@
       </div>
     </div>
     <div class="bg-white px-4 py-6">
+      <div class="w-full mb-4 px-4">
+        <div
+          class="flex items-center justify-between px-2 py-2 w-full space-x-4"
+        >
+          <div>
+            <button
+              class="
+                flex
+                space-x-4
+                items-center
+                bg-gray-200
+                rounded-sm
+                px-5
+                py-2.5
+              "
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="w-6 h-6 fill-current text-transparent"
+                stroke="black"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                />
+              </svg>
+              <span>Filter</span>
+            </button>
+          </div>
+          <search-component :place-holder="'Search'" />
+          <router-link
+            to="/dashboard/cylinder-management/transfer"
+            class="
+              px-4
+              py-2
+              rounded-sm
+              text-white
+              bg-btn-purple
+              flex
+              items-center
+              space-x-4
+            "
+          >
+            <svg
+              class="w-3 h-3 fill-current text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 341.4 341.4"
+            >
+              <path
+                d="M192 149.4V0h-42.6v149.4H0V192h149.4v149.4H192V192h149.4v-42.6z"
+              />
+            </svg>
+            <span> Initiate Transfer</span>
+          </router-link>
+        </div>
+      </div>
       <table-component
         :head="headers"
         :body="body"
@@ -174,11 +234,13 @@
 import { defineComponent, onBeforeMount, ref } from '@nuxtjs/composition-api'
 import TableComponent from '@/components/Base/Table3.vue'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
+import SearchComponent from '@/components/Base/Search.vue'
+
 import { CylinderRepository } from '@/module/Cylinder'
 
 export default defineComponent({
   name: 'Analytics',
-  components: { TableComponent, NewCylinder },
+  components: { TableComponent, NewCylinder, SearchComponent },
   layout: 'dashboard',
   setup() {
     const headers = [
@@ -191,11 +253,11 @@ export default defineComponent({
     ]
 
     const cylinderObject = new CylinderRepository()
-    const body = ref<Object[]>()
+    const body = ref<any>([])
 
     onBeforeMount(() => {
-      cylinderObject.getRegisteredCylinders().then((responses: any) => {
-        body.value = responses.data.data.cylinders
+      cylinderObject.getRegisteredCylinders().then((response: any) => {
+        body.value = response.data.data.cylinders
       })
     })
 

@@ -146,7 +146,7 @@
             <tr
               v-for="(bodySingle, index) in body"
               :key="index"
-              class="font-light"
+              class="font-light hover:bg-gray-100"
             >
               <td class="w-6 px-6 py-4">
                 <input

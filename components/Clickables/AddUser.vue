@@ -11,7 +11,7 @@
       h-full
       space-x-4
       text-white
-      font-semibold
+      font-medium
       text-md
       rounded-sm
     "

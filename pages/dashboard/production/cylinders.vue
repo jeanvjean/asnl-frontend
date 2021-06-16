@@ -65,7 +65,7 @@
               <tr
                 v-for="(cylinder, index) in body"
                 :key="index"
-                class="font-light hover:bg-gray-200"
+                class="font-light hover:bg-gray-100"
               >
                 <td class="w-6 px-6 py-4">
                   <input

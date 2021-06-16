@@ -45,7 +45,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(bodySingle, index) in body" :key="index" class="font-light">
+        <tr
+          v-for="(bodySingle, index) in body"
+          :key="index"
+          class="font-light hover:bg-gray-100"
+        >
           <td class="w-6 px-6 py-4">
             <input
               type="checkbox"
@@ -59,9 +63,21 @@
           <td class="px-4 text-left py-4">{{ bodySingle.gasVolumeContent }}</td>
           <td class="px-4 text-left py-4">{{ bodySingle.waterCapacity }}</td>
           <td class="px-4 text-left py-4">
-            <span class="px-4 py-2 bg-green-100 text-green-400 capitalize"
-              >{{ bodySingle.cylinderType }} Cylinder</span
-            >
+            <div class="w-40">
+              <span
+                class="
+                  px-8
+                  py-2
+                  w-full
+                  block
+                  text-center
+                  bg-green-100
+                  text-green-400
+                  capitalize
+                "
+                >{{ bodySingle.cylinderType }}</span
+              >
+            </div>
           </td>
           <td class="px-4 text-left py-4">
             {{ formatDate(bodySingle.dateManufactured) }}
@@ -129,15 +145,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style scoped>
-.action-menu {
-  display: none;
-}
-.icon-button:hover ~ .action-menu {
-  display: block;
-}
-.icon-button:focus ~ .action-menu {
-  display: block;
-}
-</style>

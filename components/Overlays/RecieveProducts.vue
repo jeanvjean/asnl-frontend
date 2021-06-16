@@ -240,7 +240,11 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(product, i) in products" :key="i">
+                <tr
+                  v-for="(product, i) in products"
+                  :key="i"
+                  class="hover:bg-gray-100"
+                >
                   <td class="text-center">{{ Number(i) + 1 }}</td>
                   <td>
                     <input-component

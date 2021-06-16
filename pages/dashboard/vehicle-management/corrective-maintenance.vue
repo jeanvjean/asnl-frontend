@@ -327,14 +327,3 @@ export default defineComponent({
   },
 })
 </script>
-<style scoped>
-.action-menu {
-  display: none;
-}
-.icon-button:hover > .action-menu {
-  display: block;
-}
-.icon-button:focus > .action-menu {
-  display: block;
-}
-</style>

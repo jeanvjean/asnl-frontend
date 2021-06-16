@@ -271,7 +271,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(cylinder, i) in cylinders" :key="i">
+              <tr
+                v-for="(cylinder, i) in cylinders"
+                :key="i"
+                class="hover:bg-gray-100"
+              >
                 <td class="font-light text-lg text-center">
                   {{ i + 1 }}
                 </td>

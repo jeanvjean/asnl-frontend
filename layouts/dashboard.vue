@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen flex overflow-hidden bg-gray-200 customFontRegular">
+  <div class="h-screen flex overflow-hidden bg-gray-100 customFontRegular">
     <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
     <MobileSidebar
       :show-modal="toggleMobileSidebar"

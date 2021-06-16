@@ -7,7 +7,7 @@
         items-center
         w-full
         h-auto
-        border-b border-gray-300
+        border-b border-gray-100
         px-6
         py-3
         bg-white
@@ -93,7 +93,6 @@ export default defineComponent({
     const goBack = () => {
       router.go(-1)
     }
-
     return {
       title,
       goBack,

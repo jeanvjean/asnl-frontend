@@ -4,7 +4,7 @@
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
-      class="w-6 h-6 fill-current text-gray-600"
+      class="w-5 h-5 fill-current text-gray-500"
     >
       <path
         fill-rule="evenodd"
@@ -16,7 +16,7 @@
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
-      class="w-6 h-6 fill-current text-gray-600"
+      class="w-5 h-5 fill-current text-gray-500"
     >
       <path
         fill-rule="evenodd"

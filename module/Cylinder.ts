@@ -42,6 +42,17 @@ class CylinderRepository {
     })
   }
 
+  fetchPendingTransfers() {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get('/cylinder/pending-approval')
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
   fetchBranches() {
     return new Promise<any>(async (resolve, reject) => {
       try {
