@@ -98,8 +98,9 @@
                 fill-rule="evenodd"
                 d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                 clip-rule="evenodd"
-              /></svg
-            ><span>Condemn</span>
+              />
+            </svg>
+            <span>Condemn</span>
           </router-link>
           <router-link
             to="/dashboard/cylinder-management/cylinder-type"
@@ -124,8 +125,9 @@
                 fill-rule="evenodd"
                 d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                 clip-rule="evenodd"
-              /></svg
-            ><span class="text-center">Cylinder Type</span>
+              />
+            </svg>
+            <span class="text-center">Cylinder Type</span>
           </router-link>
         </div>
       </div>
@@ -174,10 +176,7 @@
                 rounded-sm
                 border border-btn-purple
               "
-              @click="
-                status = 'error'
-                showConfirmation = true
-              "
+              @click=";(status = 'error'), (showConfirmation = true)"
             >
               <span>Decline</span
               ><svg
@@ -385,7 +384,7 @@
             <div class="flex items-start space-x-4 py-2">
               <img
                 class="h-10 w-10 rounded-full"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                src="@/assets/images/default-avatar.jpg"
                 alt=""
               />
               <div>
@@ -410,7 +409,7 @@
           <div class="flex items-start space-x-4 py-2">
             <img
               class="h-10 w-10 rounded-full"
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              src="@/assets/images/default-avatar.jpg"
               alt=""
             />
             <div>
@@ -424,10 +423,7 @@
     <confirmation
       v-if="showConfirmation"
       @close="showConfirmation = false"
-      @approve="
-        showConfirmation = false
-        showFinalStep = true
-      "
+      @approve=";(showConfirmation = false), (showFinalStep = true)"
     />
     <final-step
       v-if="showFinalStep"
@@ -450,7 +446,7 @@ import InputComponent from '@/components/Form/Input.vue'
 import Confirmation from '@/components/Overlays/Confirmation.vue'
 import FinalStep from '@/components/Overlays/finalStep.vue'
 import { CustomerController } from '@/module/Customer'
-import { CylinderRepository } from '@/module/Cylinder'
+import { CylinderController } from '@/module/Cylinder'
 export default defineComponent({
   name: 'Transfer',
   components: { Confirmation, FinalStep, InputComponent },
@@ -482,10 +478,9 @@ export default defineComponent({
     const count = ref<any>(0)
     const cylindersArrays = ref<any>([])
     const context = useContext()
-    const cylinderObject = new CylinderRepository()
 
     onMounted(() => {
-      CustomerController.fetchCustomers().then((response) => {
+      CustomerController.fetchUnPaginatedCustomers().then((response) => {
         customers.value = response
         reciepients.value = customers.value.map((element: any) => {
           return {
@@ -567,7 +562,7 @@ export default defineComponent({
           holdingTime: 30,
         }
 
-        cylinderObject.initiateCylinderTransfer(requestBody).then(() => {
+        CylinderController.initiateCylinderTransfer(requestBody).then(() => {
           form.type = form.comment = form.reciepient = ''
           cylinders.value = []
           count.value = 0

@@ -64,7 +64,7 @@
       <div class="flex items-center justify-around px-2 py-2 space-x-4 w-full">
         <filter-component />
         <search-component :place-holder="'Search for Vehicles'" />
-        <pagination />
+        <pagination :pagination-details="paginationProp" />
       </div>
       <table class="w-full table-auto mt-2">
         <thead class="bg-gray-100">
@@ -166,7 +166,7 @@
                     w-full
                     overflow-none
                   "
-                  @click="fetchDrivers()"
+                  @click="fetchDrivers"
                 >
                   Assign Driver
                 </button>
@@ -289,10 +289,7 @@
       v-if="showAssignDriver"
       :drivers="drivers"
       @close="showAssignDriver = false"
-      @approve="
-        showAssignDriver = false
-        showFinalStep = true
-      "
+      @approve="changeState"
     />
     <final-step
       v-if="showFinalStep"
@@ -309,15 +306,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+} from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
 import AssignDriver from '@/components/Overlays/AssignDriver.vue'
 import finalStep from '@/components/Overlays/finalStep.vue'
 import singleVehicle from '@/components/Overlays/SingleVehicle.vue'
-import { VehicleRepository } from '@/module/Vehicle'
-import { DriverRepository } from '@/module/Driver'
+import { VehicleController } from '@/module/Vehicle'
+import { DriverObject } from '@/module/Driver'
 export default defineComponent({
   name: 'Reports',
   components: {
@@ -330,8 +332,6 @@ export default defineComponent({
   },
   layout: 'dashboard',
   setup() {
-    const vehicleObject = new VehicleRepository()
-    const driverObject = new DriverRepository()
     const defaultState = ref(false)
     const showAssignDriver = ref(false)
     const showFinalStep = ref(false)
@@ -346,33 +346,46 @@ export default defineComponent({
       'Latest Mileage',
       'Action',
     ]
+
+    const changeState = () => {
+      showAssignDriver.value = false
+      showFinalStep.value = true
+    }
+
     const body = ref()
     const drivers = ref()
-    const fetchVehicles = () => {
-      vehicleObject.fetchVehicles().then((response: any) => {
-        body.value = response
+
+    const page = ref<number>(1)
+    const paginationProp = reactive({
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: 1,
+    })
+
+    function fetchVehicles(pageValue: number) {
+      VehicleController.fetchVehicles(pageValue).then((response: any) => {
+        body.value = response.docs
+        paginationProp.hasNextPage = response.hasNextPage
+        paginationProp.hasPrevPage = response.hasPrevPage
+        paginationProp.currentPage = response.page
       })
     }
-    const fetchDrivers = () => {
-      driverObject
-        .getDrivers()
-        .then((response: any) => {
-          const driverResponse = response.data.data
-          drivers.value = driverResponse.map((el: any) => {
-            return {
-              name: el.name,
-              value: el._id,
-            }
-          })
-        })
-        .finally(() => {
+    function fetchDrivers() {
+      DriverObject.getUnPaginatedDrivers().then((response: any) => {
+        const driverResponse = response
+
+        drivers.value = driverResponse.map((el: any) => {
           showAssignDriver.value = true
+          return {
+            name: el.name,
+            value: el._id,
+          }
         })
+      })
     }
 
     function fetchVehicle(vehicleId: string) {
-      vehicleObject
-        .fetchVehicle(vehicleId)
+      VehicleController.fetchVehicle(vehicleId)
         .then((response) => {
           vehicle.value = response
         })
@@ -384,12 +397,12 @@ export default defineComponent({
     const componentKey = ref(0)
 
     function deleteVehicle(vehicleId: string) {
-      vehicleObject.deleteVehicle(vehicleId).then(() => {
-        fetchVehicles()
+      VehicleController.deleteVehicle(vehicleId).then(() => {
+        fetchVehicles(page.value)
       })
     }
     onMounted(() => {
-      fetchVehicles()
+      fetchVehicles(page.value)
     })
     return {
       headers,
@@ -404,6 +417,8 @@ export default defineComponent({
       vehicle,
       deleteVehicle,
       componentKey,
+      paginationProp,
+      changeState,
     }
   },
 })

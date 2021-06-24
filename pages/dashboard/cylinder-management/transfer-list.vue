@@ -1,6 +1,6 @@
 <template>
   <div class="py-6 px-8">
-    <h1 class="text-black font-semibold text-xl mb-4">Cylinder Analytics</h1>
+    <h1 class="text-black font-medium text-xl mb-4">Cylinder Analytics</h1>
     <div class="grid grid-rows-1 xl:grid-cols-3 gap-4 mb-6">
       <div class="bg-white px-10 pt-10 pb-24">
         <p class="font-medium text-black tracking-wide pb-4">
@@ -236,7 +236,7 @@ import TableComponent from '@/components/Base/Table3.vue'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 
-import { CylinderRepository } from '@/module/Cylinder'
+import { CylinderController } from '@/module/Cylinder'
 
 export default defineComponent({
   name: 'Analytics',
@@ -252,14 +252,17 @@ export default defineComponent({
       'Date Cylinder',
     ]
 
-    const cylinderObject = new CylinderRepository()
     const body = ref<any>([])
 
     onBeforeMount(() => {
-      cylinderObject.getRegisteredCylinders().then((response: any) => {
-        body.value = response.data.data.cylinders
-      })
+      fetchPendingList()
     })
+
+    function fetchPendingList() {
+      CylinderController.fetchPendingTransfers().then((response) => {
+        console.log(response)
+      })
+    }
 
     const showRegister = ref(false)
     return {

@@ -73,6 +73,7 @@
             <input-component
               :label-title="'Supplier'"
               :input-placeholder="'Enter Supplier'"
+              :default-value="form.supplier"
               @get="form.supplier = $event.value"
             />
             <div
@@ -92,6 +93,7 @@
                 <p class="text-left">LPO Number</p>
                 <input-component
                   :input-placeholder="'Enter LPO Number'"
+                  :default-value="form.LPOnumber"
                   @get="form.LPOnumber = $event.value"
                 />
               </div>
@@ -101,6 +103,7 @@
                 <p class="text-left">Waybill Number</p>
                 <input-component
                   :input-placeholder="'000000000000'"
+                  :default-value="form.wayBillNumber"
                   @get="form.wayBillNumber = $event.value"
                 />
               </div>
@@ -110,6 +113,7 @@
                 <p class="text-left">Invoice Number</p>
                 <input-component
                   :input-placeholder="'000000000000'"
+                  :default-value="form.invoiceNumber"
                   @get="form.invoiceNumber = $event.value"
                 />
               </div>
@@ -249,62 +253,66 @@
                   <td>
                     <input-component
                       :input-placeholder="'Enter Product Number'"
-                      :default-value="products[i].productNumber"
-                      @get="products[i].productNumber = $event.value"
+                      :default-value="product.productNumber"
+                      @get="product.productNumber = $event.value"
                     />
                   </td>
                   <td>
                     <input-component
                       :input-placeholder="'Enter Product Name'"
-                      :default-value="products[i].productName"
-                      @get="products[i].productName = $event.value"
+                      :default-value="product.productName"
+                      @get="product.productName = $event.value"
                     />
                   </td>
                   <td>
                     <input-component
                       :input-placeholder="'Enter Quantity'"
-                      :default-value="products[i].quantity"
+                      :default-value="product.quantity"
                       :input-type="'number'"
-                      @get="products[i].quantity = $event.value"
+                      @get="
+                        ;(product.quantity = $event.value), changeTotalCost()
+                      "
                     />
                   </td>
                   <td>
                     <input-component
                       :input-placeholder="'#'"
-                      :default-value="products[i].passed"
+                      :default-value="product.passed"
                       :input-type="'number'"
-                      @get="products[i].passed = $event.value"
+                      @get="product.passed = $event.value"
                     />
                   </td>
                   <td>
                     <input-component
                       :input-placeholder="'#'"
-                      :default-value="products[i].rejected"
+                      :default-value="product.rejected"
                       :input-type="'number'"
-                      @get="products[i].rejected = $event.value"
+                      @get="product.rejected = $event.value"
                     />
                   </td>
                   <td>
                     <input-component
                       :input-placeholder="'#'"
-                      :default-value="products[i].unitCost"
+                      :default-value="product.unitCost"
                       :input-type="'number'"
-                      @get="products[i].unitCost = $event.value"
+                      @get="
+                        ;(product.unitCost = $event.value), changeTotalCost()
+                      "
                     />
                   </td>
                   <td>
                     <input-component
-                      :input-placeholder="'Enter Total Cost'"
-                      :default-value="products[i].totalCost"
+                      :input-placeholder="'#'"
+                      :default-value="product.totalCost"
                       :input-type="'number'"
-                      @get="products[i].totalCost = $event.value"
+                      :is-disabled="true"
                     />
                   </td>
                   <td>
                     <input-component
                       :input-placeholder="'Enter Comment'"
-                      :default-value="products[i].comment"
-                      @get="products[i].comment = $event.value"
+                      :default-value="product.comment"
+                      @get="product.comment = $event.value"
                     />
                   </td>
                   <td class="text-center">
@@ -384,7 +392,7 @@
                 <div class="flex items-start space-x-2 py-2">
                   <img
                     class="h-10 w-10 rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    src="@/assets/images/default-avatar.jpg"
                     alt=""
                   />
                   <div>
@@ -443,7 +451,7 @@ import {
 } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
-import { ProductRepository } from '@/module/Product'
+import { ProductObject } from '@/module/Product'
 import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
@@ -466,7 +474,6 @@ export default defineComponent({
     const appStore = mainStore()
     const user: any = appStore.getLoggedInUser
 
-    const productObject = new ProductRepository()
     const products = ref<any>([])
 
     const componentKey = ref<number>(0)
@@ -491,6 +498,16 @@ export default defineComponent({
       componentKey.value++
     }
 
+    function changeTotalCost() {
+      products.value.forEach((element: any) => {
+        const totalCost = String(
+          Number(element.quantity) * Number(element.unitCost)
+        )
+        element.totalCost = totalCost
+      })
+      componentKey.value++
+    }
+
     const submitForm = async () => {
       if (
         !form.supplier ||
@@ -511,21 +528,19 @@ export default defineComponent({
         })
 
         if (result) {
-          await productObject
-            .registerInventory({
-              products: products.value,
-              supplier: form.supplier,
-              LPOnumber: form.LPOnumber,
-              invoiceNumber: form.invoiceNumber,
-              wayBillNumber: form.wayBillNumber,
-              dateReceived: new Date(),
-              direction: 'out-going',
-            })
-            .then(() => {
-              componentKey.value = 0
-              ctx.emit('reload')
-              close()
-            })
+          await ProductObject.registerInventory({
+            products: products.value,
+            supplier: form.supplier,
+            LPOnumber: form.LPOnumber,
+            invoiceNumber: form.invoiceNumber,
+            wayBillNumber: form.wayBillNumber,
+            dateReceived: new Date(),
+            direction: 'out-going',
+          }).then(() => {
+            componentKey.value = 0
+            ctx.emit('reload')
+            close()
+          })
         } else {
           context.$toast.error('All Fields are Required')
         }
@@ -542,6 +557,7 @@ export default defineComponent({
       submitForm,
       componentKey,
       user,
+      changeTotalCost,
     }
   },
 })

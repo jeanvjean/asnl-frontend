@@ -177,7 +177,11 @@
           </svg>
           <span> Create GRN</span>
         </button>
-        <pagination />
+        <pagination
+          :pagination-details="paginationProp"
+          @next="changePage($event.value)"
+          @prev="changePage($event.value)"
+        />
       </div>
       <table class="w-full table-auto mt-2">
         <thead class="bg-gray-100">
@@ -230,13 +234,15 @@
                 class="border-2 border-gray-400 rounded-sm"
               />
             </td>
-            <td class="px-4 text-center py-4">1020333343AS</td>
+            <td class="px-4 text-center py-4">
+              {{ inventory.grn ? inventory.grn : 'Not Specified' }}
+            </td>
             <td class="px-4 text-center py-4">{{ inventory.supplier }}</td>
             <td class="px-4 text-center py-4">{{ inventory.LPOnumber }}</td>
             <td class="px-4 text-center py-4">{{ inventory.wayBillNumber }}</td>
             <td class="px-4 text-center py-4">{{ inventory.invoiceNumber }}</td>
-            <td class="px-4 text-left py-4">
-              <span class="px-8 py-2 bg-yellow-100 text-red-400">
+            <td class="px-4 text-center py-4">
+              <span class="px-4 py-2 bg-yellow-100 text-red-400">
                 Pending
               </span>
             </td>
@@ -263,7 +269,7 @@
     </div>
     <recieve-product
       v-if="showRecieveProduct"
-      @reload="componentKey++"
+      @reload="getInventories(1)"
       @close="showRecieveProduct = false"
     />
     <recieve-product-detail
@@ -274,13 +280,18 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, onMounted } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  ref,
+  onMounted,
+  reactive,
+} from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
 import RecieveProduct from '@/components/Overlays/RecieveProducts.vue'
 import RecieveProductDetail from '@/components/Overlays/RecieveProductDetail.vue'
-import { ProductRepository } from '@/module/Product'
+import { ProductObject } from '@/module/Product'
 
 export default defineComponent({
   name: 'Analytics',
@@ -310,19 +321,35 @@ export default defineComponent({
 
     const componentKey = ref(0)
 
-    const productObject = new ProductRepository()
+    const paginationProp = reactive({
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: 1,
+    })
 
-    async function getInventory(value: String) {
-      await productObject.fetchInventory(value).then((response) => {
+    function changePage(nextPage: number) {
+      getInventories(nextPage)
+    }
+
+    function getInventories(pageNumber: number) {
+      ProductObject.fetchInventories(pageNumber).then((response) => {
+        const myResponse = response.data.inventory
+        inventories.value = myResponse.docs
+        paginationProp.hasNextPage = myResponse.hasNextPage
+        paginationProp.hasPrevPage = myResponse.hasPrevPage
+        paginationProp.currentPage = myResponse.page
+      })
+    }
+
+    function getInventory(value: String) {
+      ProductObject.fetchInventory(value).then((response) => {
         inventoryDetails.value = response.data.data
         showRecieveDetails.value = !showRecieveDetails.value
       })
     }
 
-    onMounted(async () => {
-      await productObject.fetchInventories().then((response) => {
-        inventories.value = response.data.data.inventory
-      })
+    onMounted(() => {
+      getInventories(1)
     })
 
     return {
@@ -333,6 +360,9 @@ export default defineComponent({
       showRecieveDetails,
       inventoryDetails,
       componentKey,
+      paginationProp,
+      changePage,
+      getInventories,
     }
   },
 })

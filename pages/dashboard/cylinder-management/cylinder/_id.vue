@@ -201,7 +201,7 @@ import {
   useRoute,
   useRouter,
 } from '@nuxtjs/composition-api'
-import { CylinderRepository } from '@/module/Cylinder'
+import { CylinderController } from '@/module/Cylinder'
 export default defineComponent({
   name: 'SingleCylinder',
   layout: 'dashboard',
@@ -216,9 +216,9 @@ export default defineComponent({
       }
     })
     const details = ref({})
-    const cylinderObject = new CylinderRepository()
+
     onMounted(() => {
-      cylinderObject.getCylinder(cylinderId.value).then((response) => {
+      CylinderController.getCylinder(cylinderId.value).then((response) => {
         const cylinderResponse = response.data.data
         details.value = {
           Cylinder_Type: cylinderResponse.cylinderType,

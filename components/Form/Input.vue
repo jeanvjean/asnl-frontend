@@ -8,6 +8,7 @@
       v-model="inputValue"
       :type="inputType"
       :placeholder="inputPlaceholder"
+      :disabled="isDisabled"
       class="
         appearance-none
         block
@@ -49,6 +50,10 @@ export default defineComponent({
       type: String,
       required: false,
       default: '',
+    },
+    isDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(_props, ctx) {

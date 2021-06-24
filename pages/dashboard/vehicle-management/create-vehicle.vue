@@ -152,16 +152,17 @@ import {
   reactive,
   ref,
   useContext,
+  useRouter,
 } from '@nuxtjs/composition-api'
 import InputComponent from '@/components/Form/Input.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
-import { VehicleRepository } from '@/module/Vehicle'
+import { VehicleController } from '@/module/Vehicle'
 export default defineComponent({
   components: { InputComponent, ButtonComponent },
   layout: 'dashboard',
   setup() {
     const context = useContext()
-    const vehicleObj = new VehicleRepository()
+
     const form = reactive({
       vehicleType: '',
       manufacturer: '',
@@ -199,6 +200,11 @@ export default defineComponent({
       const parseDate = new Date(date)
       return parseDate.toISOString()
     }
+    const router = useRouter()
+
+    const goBack = () => {
+      router.go(-1)
+    }
 
     const createVehicle = () => {
       if (valuesNotEmpty(form) && valuesNotEmpty(disposal)) {
@@ -226,10 +232,10 @@ export default defineComponent({
           },
         }
         loading.value = true
-        vehicleObj
-          .createVehicle(requestParams)
+        VehicleController.createVehicle(requestParams)
           .then(() => {
             reset()
+            goBack()
           })
           .finally(() => {
             loading.value = false

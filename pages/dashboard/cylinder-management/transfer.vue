@@ -99,8 +99,10 @@
                 fill-rule="evenodd"
                 d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                 clip-rule="evenodd"
-              /></svg
-            ><span>Condemn</span>
+              />
+            </svg>
+
+            <span>Condemn</span>
           </router-link>
           <router-link
             to="/dashboard/cylinder-management/cylinder-type"
@@ -125,8 +127,10 @@
                 fill-rule="evenodd"
                 d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                 clip-rule="evenodd"
-              /></svg
-            ><span class="text-center">Cylinder Type</span>
+              />
+            </svg>
+
+            <span class="text-center">Cylinder Type</span>
           </router-link>
         </div>
       </div>
@@ -176,10 +180,7 @@
                 rounded-sm
                 border border-btn-purple
               "
-              @click="
-                status = 'error'
-                showConfirmation = true
-              "
+              @click=";(status = 'error'), (showConfirmation = true)"
             >
               <span>Decline</span
               ><svg
@@ -265,7 +266,7 @@
                 class="hover:bg-gray-100"
               >
                 <td class="font-light text-lg text-center">
-                  {{ i + 1 }}
+                  {{ Number(i) + 1 }}
                 </td>
                 <td class="font-light text-lg text-center">
                   <select
@@ -291,7 +292,7 @@
                 </td>
                 <td class="font-light text-lg text-center">
                   <select
-                    v-model="cylinders[i].cylinder"
+                    v-model="cylinder.cylinder"
                     class="
                       w-full
                       border-2 border-gray-200
@@ -317,13 +318,13 @@
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
-                    :default-value="cylinders[i].volume"
+                    :default-value="cylinder.volume"
                     :input-placeholder="'Enter Volume'"
                   />
                 </td>
                 <td class="font-light text-lg text-center">
                   <select
-                    v-model="cylinders[i].type"
+                    v-model="cylinder.type"
                     class="
                       w-full
                       border-2 border-gray-200
@@ -427,7 +428,7 @@
             <div class="flex items-start space-x-4 py-2">
               <img
                 class="h-10 w-10 rounded-full"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                src="@/assets/images/default-avatar.jpg"
                 alt=""
               />
               <div>
@@ -439,25 +440,25 @@
         </div>
       </div>
       <div class="lg:col-span-1 w-full px-6 py-4 border-b border-gray-300">
-        <div v-for="i in 2" :key="i" class="mb-6">
+        <div class="mb-6">
           <p class="text-gray-600 font-light text-sm">
-            <span>24/02/2020</span> <span>13:04</span>
+            <span>{{ new Date().toDateString() }}</span> @
+            <span>{{ new Date().toLocaleTimeString() }}</span>
           </p>
           <p class="py-2 text-gray-700 leading-6">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatum
-            corrupti minus, nobis harum saepe, vitae eius veniam deleniti velit
-            esse ad, dolorem ipsum inventore omnis beatae blanditiis asperiores
-            soluta maxime.
+            {{ form.comment }}
           </p>
           <div class="flex items-start space-x-4 py-2">
             <img
               class="h-10 w-10 rounded-full"
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              src="@/assets/images/default-avatar.jpg"
               alt=""
             />
             <div>
-              <p class="text-black text-lg">Chimerem Egbuson</p>
-              <p class="text-gray-600 text-sm">Operations Manager</p>
+              <p class="text-black text-lg capitalize">{{ auth.name }}</p>
+              <p class="text-gray-600 text-sm capitalize">
+                {{ auth.subrole }} - {{ auth.role }}
+              </p>
             </div>
           </div>
         </div>
@@ -466,10 +467,7 @@
     <confirmation
       v-if="showConfirmation"
       @close="showConfirmation = false"
-      @approve="
-        showConfirmation = false
-        showFinalStep = true
-      "
+      @approve=";(showConfirmation = false), (showFinalStep = true)"
     />
     <final-step
       v-if="showFinalStep"
@@ -493,12 +491,16 @@ import InputComponent from '@/components/Form/Input.vue'
 import Confirmation from '@/components/Overlays/Confirmation.vue'
 import FinalStep from '@/components/Overlays/finalStep.vue'
 import { CustomerController } from '@/module/Customer'
-import { CylinderRepository } from '@/module/Cylinder'
+import { CylinderController } from '@/module/Cylinder'
+import { mainStore } from '@/module/Pinia'
+
 export default defineComponent({
   name: 'Transfer',
   components: { SelectComponent, Confirmation, FinalStep, InputComponent },
   layout: 'dashboard',
   setup() {
+    const appStore = mainStore()
+    const auth: any = appStore.getLoggedInUser
     const types = [
       {
         name: 'Between Branches',
@@ -524,10 +526,9 @@ export default defineComponent({
     const cylinders = ref<any>([])
     const cylindersArrays = ref<any>([])
     const context = useContext()
-    const cylinderObject = new CylinderRepository()
 
     onMounted(() => {
-      CustomerController.fetchCustomers().then((response) => {
+      CustomerController.fetchUnPaginatedCustomers().then((response) => {
         customers.value = response
       })
     })
@@ -548,7 +549,7 @@ export default defineComponent({
     }
 
     async function getBranches() {
-      const response = await cylinderObject.fetchBranches()
+      const response = await CylinderController.fetchBranches()
       return response
     }
 
@@ -636,9 +637,10 @@ export default defineComponent({
           holdingTime: 30,
         }
 
-        cylinderObject.initiateCylinderTransfer(requestBody).then(() => {
+        CylinderController.initiateCylinderTransfer(requestBody).then(() => {
           form.type = form.comment = form.reciepient = ''
           cylinders.value = []
+          componentKey.value++
         })
       }
     }
@@ -647,7 +649,8 @@ export default defineComponent({
 
     async function fetchCustomerCylinders(customerId: String) {
       const response = await CustomerController.fetchCylinders(customerId)
-      return response
+
+      return response.docs
     }
 
     watch(status, (currentValue) => {
@@ -679,6 +682,7 @@ export default defineComponent({
       getBranches,
       changeTransferType,
       decreaseCounter,
+      auth,
     }
   },
 })

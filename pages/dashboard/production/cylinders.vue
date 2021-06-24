@@ -114,7 +114,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref } from '@nuxtjs/composition-api'
-import { CylinderRepository } from '@/module/Cylinder'
+import { CylinderController } from '@/module/Cylinder'
 import FilterButton from '@/components/Base/FilterButton.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 
@@ -130,12 +130,12 @@ export default defineComponent({
       'Water Capacity',
       'Date Manufactured',
     ]
-    const cylinderObject = new CylinderRepository()
+
     const body = ref<Object[]>()
 
     onBeforeMount(() => {
-      cylinderObject.getRegisteredCylinders().then((responses: any) => {
-        body.value = responses.data.data.cylinders
+      CylinderController.getRegisteredCylinders(1).then((responses: any) => {
+        body.value = responses.data.cylinders
       })
     })
 

@@ -44,12 +44,7 @@
           type="button"
           class="py-2 px-2 focus:outline-none"
           :class="routePlan ? 'border-b border-btn-purple' : ''"
-          @click="
-            routePlan = true
-            correctiveMaintenance = false
-            inspectionMaintenance = false
-            vehiclePerformance = false
-          "
+          @click="changeStatus(true, false, false, false)"
         >
           Route Plan
         </button>
@@ -57,12 +52,7 @@
           type="button"
           class="py-2 px-2 focus:outline-none"
           :class="correctiveMaintenance ? 'border-b border-btn-purple' : ''"
-          @click="
-            routePlan = false
-            correctiveMaintenance = true
-            inspectionMaintenance = false
-            vehiclePerformance = false
-          "
+          @click="changeStatus(false, true, false, false)"
         >
           Corrective Maintenance
         </button>
@@ -70,12 +60,7 @@
           type="button"
           class="py-2 px-2 focus:outline-none"
           :class="inspectionMaintenance ? 'border-b border-btn-purple' : ''"
-          @click="
-            routePlan = false
-            correctiveMaintenance = false
-            inspectionMaintenance = true
-            vehiclePerformance = false
-          "
+          @click="changeStatus(false, false, true, false)"
         >
           Pre-inspection Maintenance
         </button>
@@ -83,12 +68,7 @@
           type="button"
           class="py-2 px-2 focus:outline-none"
           :class="vehiclePerformance ? 'border-b border-btn-purple' : ''"
-          @click="
-            routePlan = false
-            correctiveMaintenance = false
-            inspectionMaintenance = false
-            vehiclePerformance = true
-          "
+          @click="changeStatus(false, false, false, true)"
         >
           Vehicle Performance
         </button>
@@ -104,7 +84,7 @@
               <div class="flex space-x-4">
                 <img
                   class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  src="@/assets/images/default-avatar.jpg"
                   alt=""
                 />
                 <div>
@@ -479,13 +459,25 @@ export default defineComponent({
     },
   },
   setup(_props, ctx) {
-    const routePlan = ref(true)
-    const correctiveMaintenance = ref(false)
-    const inspectionMaintenance = ref(false)
-    const vehiclePerformance = ref(false)
+    const routePlan = ref<Boolean>(true)
+    const correctiveMaintenance = ref<Boolean>(false)
+    const inspectionMaintenance = ref<Boolean>(false)
+    const vehiclePerformance = ref<Boolean>(false)
 
     const close = () => {
       ctx.emit('close')
+    }
+
+    function changeStatus(
+      routePlanStatus: Boolean,
+      correctiveMaintenanceStatus: Boolean,
+      inspectionMaintenanceStatus: Boolean,
+      vehiclePerformanceStatus: Boolean
+    ) {
+      routePlan.value = routePlanStatus
+      correctiveMaintenance.value = correctiveMaintenanceStatus
+      inspectionMaintenance.value = inspectionMaintenanceStatus
+      vehiclePerformance.value = vehiclePerformanceStatus
     }
 
     return {
@@ -494,6 +486,7 @@ export default defineComponent({
       correctiveMaintenance,
       inspectionMaintenance,
       vehiclePerformance,
+      changeStatus,
     }
   },
 })

@@ -1,23 +1,5 @@
 <template>
-  <div class="overflow-x-auto w-full py-4">
-    <div class="w-full mb-4">
-      <div
-        class="
-          flex
-          items-center
-          justify-between
-          px-2
-          py-2
-          space-x-4
-          w-full
-          h-full
-        "
-      >
-        <filter-component />
-        <search-component :place-holder="'Search for User'" />
-        <AddUserButton />
-      </div>
-    </div>
+  <div class="overflow-x-auto w-full">
     <table class="w-full table-auto">
       <thead class="bg-gray-100">
         <tr>
@@ -32,7 +14,7 @@
               text-gray-800
               font-thin
               text-sm
-              px-4
+              px-6
               py-2
               text-left
             "
@@ -45,7 +27,7 @@
               text-gray-800
               font-thin
               text-sm
-              px-4
+              px-6
               py-2
               text-left
             "
@@ -70,7 +52,7 @@
             <div class="flex items-center space-x-4">
               <img
                 class="h-8 w-8 rounded-full"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                src="@/assets/images/default-avatar.jpg"
                 alt=""
               /><span>{{ bodySingle.name }}</span>
             </div>
@@ -83,6 +65,32 @@
                 class="px-8 py-2 w-full block text-center capitalize"
                 :class="getColorCode(bodySingle.role)"
                 >{{ bodySingle.role }}</span
+              >
+            </div>
+          </td>
+          <td class="px-4 text-left py-4">
+            <div class="w-40">
+              <span
+                class="px-8 py-2 w-full block text-center capitalize"
+                :class="
+                  bodySingle.status === 'verified'
+                    ? 'bg-green-100 text-green-400'
+                    : 'bg-red-100 text-red-400'
+                "
+                >{{ bodySingle.status }}</span
+              >
+            </div>
+          </td>
+          <td class="px-4 text-left py-4">
+            <div class="w-40">
+              <span
+                class="px-8 py-2 w-full block text-center capitalize"
+                :class="
+                  !bodySingle.deactivated
+                    ? 'bg-green-100 text-green-400'
+                    : 'bg-red-100 text-red-400'
+                "
+                >{{ bodySingle.deactivated ? 'Suspended' : 'Activated' }}</span
               >
             </div>
           </td>
@@ -162,8 +170,10 @@
                   w-full
                   overflow-none
                 "
+                @click="suspendUser(bodySingle.id, bodySingle.deactivated)"
               >
-                Suspend User
+                <span v-if="bodySingle.deactivated">Activate User</span>
+                <span v-else>Suspend User</span>
               </button>
               <router-link
                 class="
@@ -180,7 +190,7 @@
                 "
                 :to="
                   '/dashboard/user-management/' +
-                  bodySingle._id +
+                  bodySingle.id +
                   '/' +
                   bodySingle.email
                 "
@@ -210,20 +220,14 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
-import AddUserButton from '@/components/Clickables/AddUser.vue'
-import SearchComponent from '@/components/Base/Search.vue'
-import FilterComponent from '@/components/Base/Filter.vue'
 import DeleteUser from '@/components/Overlays/DeleteUser.vue'
 import ChangeRole from '@/components/Overlays/ChangeRole.vue'
-import { UserRepository } from '@/module/User'
+import { UserController } from '@/module/User'
 
 export default defineComponent({
   components: {
-    AddUserButton,
-    SearchComponent,
     DeleteUser,
     ChangeRole,
-    FilterComponent,
   },
   props: {
     head: {
@@ -240,7 +244,6 @@ export default defineComponent({
     const showChangeRole = ref(false)
     const hoverUser = ref()
     const roles = ref<any>([])
-    const userObject = new UserRepository()
 
     function changeUser(i: number) {
       hoverUser.value = _props.body[i]
@@ -260,8 +263,14 @@ export default defineComponent({
       return rolesColor[role]
     }
 
+    function suspendUser(userId: String, status: Boolean) {
+      UserController.suspendUser(userId, status).then(() => {
+        ctx.emit('refresh')
+      })
+    }
+
     const getRoles = () => {
-      userObject.fetchRoles().then((response: any) => {
+      UserController.fetchRoles().then((response: any) => {
         const allRoles: any = response.data.data
 
         allRoles.forEach((element: any) => {
@@ -303,6 +312,7 @@ export default defineComponent({
       showChangeRole,
       getColorCode,
       roles,
+      suspendUser,
     }
   },
 })

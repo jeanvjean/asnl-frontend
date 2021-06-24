@@ -2,16 +2,27 @@
 import { $axios } from '@/utils/api'
 
 class Customer {
-  fetchCustomers() {
+  fetchUnPaginatedCustomers() {
     return new Promise<any>(async (resolve, reject) => {
       try {
-        const response: any = await $axios.get('/customer/fetch-customers')
+        const response: any = await $axios.get('/customer/fetch-all-customers')
         resolve(response.data.data)
       } catch (error) {
         reject(error)
       }
     })
   }
+
+  // fetchCustomers() {
+  //   return new Promise<any>(async (resolve, reject) => {
+  //     try {
+  //       const response: any = await $axios.get('/customer/fetch-customers')
+  //       resolve(response.data.data)
+  //     } catch (error) {
+  //       reject(error)
+  //     }
+  //   })
+  // }
 
   fetchCylinders(customerId: String) {
     return new Promise<any>(async (resolve, reject) => {

@@ -39,7 +39,7 @@
       >
         <img
           class="h-20 w-20 rounded-full"
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+          src="@/assets/images/default-avatar.jpg"
           alt=""
         />
         <div class="flex-1 capitalize">
@@ -91,7 +91,7 @@ import {
 import BackDrop from '@/components/Base/Backdrop.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import SelectComponent from '@/components/Form/Select.vue'
-import { UserRepository } from '@/module/User'
+import { UserController } from '@/module/User'
 export default defineComponent({
   components: { BackDrop, ButtonComponent, SelectComponent },
   props: {
@@ -110,7 +110,6 @@ export default defineComponent({
     }
     const loading = ref(false)
     const loadingText = 'Updating'
-    const userObject = new UserRepository()
     const subroles = ref<any>([])
     const context = useContext()
 
@@ -129,6 +128,7 @@ export default defineComponent({
           subroles.value = element.subroles
         }
       })
+      console.log(_props.user)
     })
 
     function changeSubroles(role: String) {
@@ -147,8 +147,7 @@ export default defineComponent({
         context.$toast.error('All Fields are Required')
       } else {
         loading.value = true
-        userObject
-          .updateUserRole(form.id, form.role, form.subrole)
+        UserController.updateUserRole(form.id, form.role, form.subrole)
           .then(() => {
             ctx.emit('refresh')
             close()

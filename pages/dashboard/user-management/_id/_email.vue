@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-rows-1 lg:grid-cols-5 w-full h-auto py-6 px-6 gap-4">
+  <div class="grid grid-rows-1 lg:grid-cols-5 w-full py-6 px-6 gap-4 h-screen">
     <div class="lg:col-span-2 bg-white px-6 py-4 h-full">
       <h1
         class="
@@ -14,11 +14,15 @@
       </h1>
 
       <div class="w-full px-4 py-10 space-y-2 border-b-2 border-gray-200">
-        <img
-          class="h-40 w-40 rounded-full mx-auto"
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-          alt=""
-        />
+        <div class="w-full">
+          <div class="h-40 w-40 mx-auto">
+            <img
+              class="w-full"
+              src="@/assets/images/default-avatar.jpg"
+              alt=""
+            />
+          </div>
+        </div>
         <div class="w-full">
           <h2
             v-if="user"
@@ -95,7 +99,7 @@ import {
   useRoute,
   useRouter,
 } from '@nuxtjs/composition-api'
-import { UserRepository } from '@/module/User'
+import { UserController } from '@/module/User'
 import datetimeDifference from 'datetime-difference'
 
 export default defineComponent({
@@ -118,7 +122,7 @@ export default defineComponent({
     const router = useRouter()
     const userId = route.value.params.id
     const email = route.value.params.email
-    const userObject = new UserRepository()
+
     const user = ref()
     const logs = ref([])
     onBeforeMount(() => {
@@ -128,11 +132,11 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      userObject.getUser(userId, email).then((response) => {
+      UserController.getUser(userId, email).then((response) => {
         user.value = response.data.data
       })
 
-      userObject.fetchActivityLogs(userId).then((response) => {
+      UserController.fetchActivityLogs(userId).then((response) => {
         logs.value = response.data.data.activities
       })
     })

@@ -132,7 +132,7 @@ import {
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
-import { ProductRepository } from '@/module/Product'
+import { ProductObject } from '@/module/Product'
 export default defineComponent({
   components: { InputComponent, ButtonComponent, SelectComponent },
   layout: 'dashboard',
@@ -155,7 +155,7 @@ export default defineComponent({
       supplier: '',
     })
     const context = useContext()
-    const productObj = new ProductRepository()
+
     const loading = ref(false)
     const divisions = ref([])
     const suppliers = ref([])
@@ -168,7 +168,7 @@ export default defineComponent({
     }
 
     function fetchBranches() {
-      productObj.fetchBranches().then((response) => {
+      ProductObject.fetchBranches().then((response) => {
         divisions.value = response.map((element: any) => {
           return {
             name: element.location,
@@ -182,8 +182,8 @@ export default defineComponent({
     }
 
     function fetchSuppliers() {
-      productObj.fetchSuppliers().then((response) => {
-        suppliers.value = response.data.map((element: any) => {
+      ProductObject.fetchSuppliers(1).then((response: any) => {
+        suppliers.value = response.docs.map((element: any) => {
           return {
             name: element.name,
             value: element._id,
@@ -200,10 +200,10 @@ export default defineComponent({
     const createProduct = () => {
       if (valuesNotEmpty(form)) {
         loading.value = true
-        productObj
-          .createProduct(form)
+        ProductObject.createProduct(form)
           .then(() => {
             reset()
+            goBack()
           })
           .finally(() => {
             loading.value = false

@@ -1,10 +1,10 @@
 <template>
   <div class="overflow-x-auto w-full py-2 px-4">
     <div class="overflow-x-auto w-full">
-      <table class="table-auto w-full">
+      <table class="table-fixed w-full">
         <thead class="bg-gray-100">
-          <tr>
-            <th class="w-6 px-6 py-4">
+          <tr class="space-x-4">
+            <th class="w-10 px-6 py-4">
               <input
                 type="checkbox"
                 class="border border-gray-500 rounded-sm"
@@ -21,6 +21,7 @@
                 px-4
                 py-2
                 text-left
+                w-40
               "
             >
               {{ headSingle }}
@@ -34,6 +35,8 @@
                 px-4
                 py-2
                 text-center
+                sm:w-40
+                2xl:w-32
               "
             >
               Actions
@@ -46,7 +49,7 @@
             :key="index"
             class="font-light hover:bg-gray-100"
           >
-            <td class="w-6 px-6 py-4">
+            <td class="px-6 py-4">
               <input
                 type="checkbox"
                 class="border-2 border-gray-400 rounded-sm"
@@ -62,8 +65,8 @@
               {{ bodySingle.gasVolumeContent }}
             </td>
             <td class="px-4 text-left py-4">{{ bodySingle.waterCapacity }}</td>
-            <td class="px-4 text-left py-4">
-              <div class="w-40">
+            <td class="px-4 text-left py-4 w-full">
+              <div>
                 <span
                   class="
                     px-8
@@ -92,12 +95,12 @@
                   py-2
                   border border-btn-purple
                   rounded-sm
-                  text-btn-purple text-sm
-                  inline-block
+                  text-btn-purple text-xs
+                  block
                   w-full
                 "
               >
-                View Details
+                <span class="block w-full"> View Details </span>
               </router-link>
             </td>
           </tr>

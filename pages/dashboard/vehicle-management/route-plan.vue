@@ -35,7 +35,7 @@
       >
         <filter-component />
         <search-component :place-holder="'Search for Vehicles'" />
-        <pagination />
+        <pagination :pagination-details="paginationProp" />
       </div>
       <div class="overflow-auto">
         <table class="w-96 lg:w-full table table-auto mt-2">
@@ -89,7 +89,7 @@
               >
                 <img
                   class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  src="@/assets/images/default-avatar.jpg"
                   alt=""
                 /><span> {{ bodySingle.name }} </span>
               </td>
@@ -121,7 +121,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, reactive, ref } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
@@ -147,10 +147,18 @@ export default defineComponent({
         end: 'In Progress ',
       },
     ]
+
     const active = () => {
       pickUp.value = !pickUp.value
       delivery.value = !delivery.value
     }
+
+    const paginationProp = reactive({
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: 1,
+    })
+
     const pickUp = ref(true)
     const delivery = ref(false)
     return {
@@ -160,6 +168,7 @@ export default defineComponent({
       delivery,
       active,
       showRoute,
+      paginationProp,
     }
   },
 })

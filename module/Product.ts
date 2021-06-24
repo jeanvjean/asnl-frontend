@@ -1,14 +1,22 @@
 /* eslint-disable no-async-promise-executor */
 import { $axios } from '@/utils/api'
+import { DisbursalDto } from '~/types/Types'
 
-export class ProductRepository {
+class ProductRespository {
   async createProduct(request: Object) {
     return await $axios.post('/inventory/create-product', request)
   }
 
-  async getProducts() {
-    return await $axios.get('/inventory/fetch-products').then((response) => {
-      return response.data.data
+  getProducts(page: number) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await $axios.get(
+          `/inventory/fetch-products?page=${page}&limit=10`
+        )
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
     })
   }
 
@@ -22,9 +30,16 @@ export class ProductRepository {
     })
   }
 
-  async fetchSuppliers() {
-    return await $axios.get('/inventory/fetch-suppliers').then((response) => {
-      return response.data
+  fetchSuppliers(page: number) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await $axios.get(
+          `/inventory/fetch-suppliers?page=${page}&limit=20`
+        )
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
     })
   }
 
@@ -32,11 +47,13 @@ export class ProductRepository {
     return await $axios.post('/inventory/register-inventory', request)
   }
 
-  fetchInventories() {
-    return new Promise<any>((resolve, reject) => {
+  fetchInventories(page: number) {
+    return new Promise<any>(async (resolve, reject) => {
       try {
-        const response = $axios.get('/inventory/fetch-inventories')
-        resolve(response)
+        const response: any = await $axios.get(
+          `/inventory/fetch-inventories?page=${page}&limit=10`
+        )
+        resolve(response.data)
       } catch (error) {
         reject(error)
       }
@@ -64,4 +81,22 @@ export class ProductRepository {
       }
     })
   }
+
+  registerDisbursal(requestBody: DisbursalDto) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.post(
+          '/inventory/disburse-products',
+          requestBody
+        )
+        resolve(response)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
+
+const ProductObject = new ProductRespository()
+
+export { ProductObject }

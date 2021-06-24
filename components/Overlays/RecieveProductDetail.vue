@@ -95,110 +95,38 @@
                 <tr>
                   <th
                     class="
-                      px-4
+                      px-1
                       py-2
                       font-medium
                       text-gray-600
                       capitalize
-                      text-center text-sm
+                      text-center text-xs
                     "
                   >
                     S/N
                   </th>
-                  <th
-                    class="
-                      px-4
-                      py-2
-                      font-medium
-                      text-gray-600
-                      capitalize
-                      text-sm
-                    "
-                  >
+                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
                     Product Number
                   </th>
-                  <th
-                    class="
-                      px-4
-                      py-2
-                      font-medium
-                      text-gray-600
-                      capitalize
-                      text-sm
-                    "
-                  >
+                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
                     Product Name
                   </th>
-                  <th
-                    class="
-                      px-4
-                      py-2
-                      font-medium
-                      text-gray-600
-                      capitalize
-                      text-sm
-                    "
-                  >
+                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
                     Quantity
                   </th>
-                  <th
-                    class="
-                      px-4
-                      py-2
-                      font-medium
-                      text-gray-600
-                      capitalize
-                      text-sm
-                    "
-                  >
+                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
                     Passed
                   </th>
-                  <th
-                    class="
-                      px-4
-                      py-2
-                      font-medium
-                      text-gray-600
-                      capitalize
-                      text-sm
-                    "
-                  >
+                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
                     Rejected
                   </th>
-                  <th
-                    class="
-                      px-4
-                      py-2
-                      font-medium
-                      text-gray-600
-                      capitalize
-                      text-sm
-                    "
-                  >
+                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
                     Unit Cost
                   </th>
-                  <th
-                    class="
-                      px-4
-                      py-2
-                      font-medium
-                      text-gray-600
-                      capitalize
-                      text-sm
-                    "
-                  >
+                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
                     Total Cost
                   </th>
-                  <th
-                    class="
-                      px-4
-                      py-2
-                      font-medium
-                      text-gray-600
-                      capitalize
-                      text-sm
-                    "
-                  >
+                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
                     Comment
                   </th>
                 </tr>
@@ -210,28 +138,28 @@
                   class="hover:bg-gray-100"
                 >
                   <td class="text-center">{{ Number(index) + 1 }}</td>
-                  <td class="px-4 py-3 border border-gray-600">
+                  <td class="py-3 border border-gray-600 text-center">
                     {{ detail.productNumber }}
                   </td>
-                  <td class="px-4 py-3 border border-gray-600">
+                  <td class="py-3 border border-gray-600 text-center">
                     {{ detail.productName }}
                   </td>
-                  <td class="px-4 py-3 border border-gray-600">
+                  <td class="py-3 border border-gray-600 text-center">
                     {{ detail.quantity }}
                   </td>
-                  <td class="px-4 py-3 border border-gray-600">
+                  <td class="py-3 border border-gray-600 text-center">
                     {{ detail.passed }}
                   </td>
-                  <td class="px-4 py-3 border border-gray-600">
+                  <td class="py-3 border border-gray-600 text-center">
                     {{ detail.rejected }}
                   </td>
-                  <td class="px-4 py-3 border border-gray-600">
+                  <td class="py-3 border border-gray-600 text-center">
                     {{ detail.unitCost }}
                   </td>
-                  <td class="px-4 py-3 border border-gray-600">
+                  <td class="py-3 border border-gray-600 text-center">
                     {{ detail.totalCost }}
                   </td>
-                  <td class="px-4 py-3 border border-gray-600">
+                  <td class="py-3 border border-gray-600 text-center">
                     {{ detail.comment }}
                   </td>
                 </tr>
@@ -292,7 +220,7 @@
                 <div class="flex items-start space-x-2 py-2">
                   <img
                     class="h-10 w-10 rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    src="@/assets/images/default-avatar.jpg"
                     alt=""
                   />
                   <div>

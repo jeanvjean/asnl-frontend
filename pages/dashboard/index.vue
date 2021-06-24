@@ -131,11 +131,17 @@
             pl-4
             border-0 border-l-4 border-black
             mt-4
+            w-full
+            overflow-x-auto
           "
         >
           <h1 class="font-semibold text-black text-lg">Cylinders</h1>
           <div class="flex items-center space-x-6">
-            <pagination />
+            <pagination
+              :pagination-details="paginationProp"
+              @next="changePage($event.value)"
+              @prev="changePage($event.value)"
+            />
             <button
               class="
                 text-purple-500
@@ -152,10 +158,8 @@
         </div>
       </div>
 
-      <div class="w-full mb-4 px-4">
-        <div
-          class="flex items-center justify-around px-2 py-2 space-x-4 w-full"
-        >
+      <div class="mb-4 px-4 w-full overflow-x-auto">
+        <div class="flex items-start px-2 space-x-4 w-full">
           <filter-component />
           <search-component
             :place-holder="'Search for Users, Cylinder no,gas type, Cylinder Volume'"
@@ -196,12 +200,12 @@
 import {
   defineComponent,
   ref,
-  onBeforeMount,
   reactive,
+  onMounted,
 } from '@nuxtjs/composition-api'
 import TableComponent from '@/components/Base/Table3.vue'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
-import { CylinderRepository } from '@/module/Cylinder'
+import { CylinderController } from '@/module/Cylinder'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
 import Pagination from '@/components/Base/Pagination.vue'
@@ -223,9 +227,15 @@ export default defineComponent({
       'Gas Volume Content',
       'Water Capacity',
       'Cylinder Type',
-      'Date of Manufacture',
+      'Manufacture Date',
     ]
-    const cylinderObject = new CylinderRepository()
+
+    const page = ref<number>(1)
+
+    function changePage(nextPage: number) {
+      getCylinders(nextPage)
+    }
+
     const registeredCylinders = ref([])
     const stat = reactive({
       totalCylinders: 0,
@@ -233,58 +243,33 @@ export default defineComponent({
       totalAssignedCylinders: 0,
     })
 
-    onBeforeMount(() => {
-      cylinderObject.getRegisteredCylinders().then((responses: any) => {
-        const myResponse = responses.data.data
-        stat.totalCylinders = myResponse.counts.totalCylinders
-        stat.totalBufferCylinders = myResponse.counts.totalBufferCylinders
-        stat.totalBufferCylinders = myResponse.counts.totalAssignedCylinders
-        registeredCylinders.value = responses.data.data.cylinders
-      })
+    const paginationProp = reactive({
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: 1,
     })
 
-    const body = [
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-      {
-        cylinder_number: 'ASNL-LUTH-1209',
-        gas_type: 'Gas type',
-        volume: 'Gas Volume Content',
-        capacity: '19kg',
-        type: 'Assigned Cylinder',
-        date: 'August 23, 2019',
-      },
-    ]
+    onMounted(() => {
+      getCylinders(page.value)
+    })
+
+    function getCylinders(pageValue: number) {
+      CylinderController.getRegisteredCylinders(pageValue).then(
+        (responses: any) => {
+          const myResponse = responses.data
+          stat.totalCylinders = myResponse.counts.totalCylinders
+          stat.totalBufferCylinders = myResponse.counts.totalBufferCylinders
+          stat.totalBufferCylinders = myResponse.counts.totalAssignedCylinders
+          registeredCylinders.value = myResponse.cylinders.docs
+          paginationProp.hasNextPage = myResponse.cylinders.hasNextPage
+          paginationProp.hasPrevPage = myResponse.cylinders.hasPrevPage
+          paginationProp.currentPage = myResponse.cylinders.page
+        }
+      )
+    }
+
+    const body = ref([])
+
     const showRegister = ref(false)
     return {
       headers,
@@ -292,6 +277,8 @@ export default defineComponent({
       showRegister,
       stat,
       registeredCylinders,
+      paginationProp,
+      changePage,
     }
   },
 })

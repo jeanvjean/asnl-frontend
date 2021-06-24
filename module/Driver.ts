@@ -1,8 +1,31 @@
+/* eslint-disable no-async-promise-executor */
 import { $axios } from '@/utils/api'
 class DriverRepository {
-  async getDrivers() {
-    return await $axios.get('/driver/fetch-drivers')
+  getDrivers(page: Number) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await $axios.get(
+          `/driver/fetch-drivers?page=${page}&limit=10`
+        )
+        resolve(response)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  getUnPaginatedDrivers() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await $axios.get(`/driver/fetch-all-drivers`)
+        resolve(response)
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 }
 
-export { DriverRepository }
+const DriverObject = new DriverRepository()
+
+export { DriverObject }

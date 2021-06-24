@@ -134,7 +134,7 @@
       >
         <filter-component />
         <search-component :place-holder="'Search for Vehicles'" />
-        <pagination />
+        <pagination :pagination-details="paginationProp" />
       </div>
       <table class="w-full table-auto mt-2">
         <thead class="bg-gray-100">
@@ -196,7 +196,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, reactive } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
@@ -207,6 +207,12 @@ export default defineComponent({
   layout: 'dashboard',
   setup() {
     const headers = ['Date', 'Report No', 'Status']
+    const paginationProp = reactive({
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: 1,
+    })
+
     const body = [
       {
         date: '10/06/2020',
@@ -237,6 +243,7 @@ export default defineComponent({
     return {
       headers,
       body,
+      paginationProp,
     }
   },
 })

@@ -84,34 +84,135 @@
       </div>
     </div>
     <div v-else class="mx-auto px-4 sm:px-6 md:px-8 w-full">
-      <div class="bg-white shadow-sm rounded-sm h-full px-4">
-        <TableComponent :head="headers" :body="body" @refresh="getUsers" />
+      <div class="bg-white shadow-sm rounded-sm h-full">
+        <div class="py-2">
+          <div
+            class="
+              flex
+              justify-between
+              items-center
+              pr-6
+              pl-4
+              border-0 border-l-4 border-black
+              mt-4
+            "
+          >
+            <h1 class="font-semibold text-black text-lg">Users</h1>
+            <div class="flex items-center space-x-6">
+              <pagination
+                :pagination-details="paginationProp"
+                @next="changePage($event.value)"
+                @prev="changePage($event.value)"
+              />
+              <button
+                class="
+                  text-purple-500
+                  underline
+                  uppercase
+                  focus:outline-none
+                  font-medium
+                  text-sm
+                "
+              >
+                View All
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="w-full px-4">
+          <div
+            class="
+              flex
+              items-center
+              justify-between
+              px-6
+              py-2
+              space-x-4
+              w-full
+              h-full
+            "
+          >
+            <filter-component />
+            <search-component :place-holder="'Search for User'" />
+            <AddUserButton />
+          </div>
+        </div>
+        <TableComponent :head="headers" :body="body" @refresh="getUsers(1)" />
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onBeforeMount,
+  reactive,
+  ref,
+} from '@nuxtjs/composition-api'
 import TableComponent from '@/components/Base/Table.vue'
 import AddUserButton from '@/components/Clickables/AddUser.vue'
-import { UserRepository } from '@/module/User'
+import { UserController } from '@/module/User'
+import Pagination from '@/components/Base/Pagination.vue'
+import SearchComponent from '@/components/Base/Search.vue'
+import FilterComponent from '@/components/Base/Filter.vue'
+
 export default defineComponent({
   name: 'Home',
-  components: { TableComponent, AddUserButton },
+  components: {
+    TableComponent,
+    AddUserButton,
+    Pagination,
+    SearchComponent,
+    FilterComponent,
+  },
   layout: 'dashboard',
   setup() {
-    const headers = ['Name', 'Phone No', 'Email Address', 'Department']
-    const userObject = new UserRepository()
+    const headers = [
+      'Name',
+      'Phone No',
+      'Email Address',
+      'Department',
+      'Verified Status',
+      'Activation Status',
+    ]
+    const page = ref<number>(1)
+
+    const paginationProp = reactive({
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: 1,
+    })
+
     const body = ref([])
-    const getUsers = () => {
-      userObject.getUsers().then((response: any) => {
+    function changePage(nextPage: number) {
+      getUsers(nextPage)
+    }
+
+    function getUsers(pageValue: number) {
+      UserController.getUsers(pageValue).then((response: any) => {
         const myResponse = response.data.data
-        body.value = myResponse
+
+        paginationProp.hasNextPage = myResponse.hasNextPage
+        paginationProp.hasPrevPage = myResponse.hasPrevPage
+        paginationProp.currentPage = myResponse.page
+
+        body.value = myResponse.docs.map((element: any) => {
+          return {
+            name: element.name,
+            phoneNumber: element.phoneNumber,
+            email: element.email,
+            role: element.role,
+            id: element._id,
+            subrole: element.subrole,
+            status: element.isVerified ? 'verified' : 'Not-Verified',
+            deactivated: element.deactivated,
+          }
+        })
       })
     }
 
-    onMounted(() => {
-      getUsers()
+    onBeforeMount(() => {
+      getUsers(page.value)
     })
 
     const defaultState = ref(false)
@@ -120,6 +221,8 @@ export default defineComponent({
       body,
       defaultState,
       getUsers,
+      paginationProp,
+      changePage,
     }
   },
 })

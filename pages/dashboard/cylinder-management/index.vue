@@ -1,12 +1,49 @@
 <template>
   <div class="py-6 px-6">
     <card-slider :analytics="statistics" />
-    <div class="bg-white px-6 mt-8">
-      <table-component
-        :head="headers"
-        :body="body"
-        @show="showType = true"
-      ></table-component>
+    <div class="bg-white mt-8">
+      <div class="py-2">
+        <div
+          class="
+            flex
+            justify-between
+            items-center
+            px-6
+            border-0 border-l-4 border-black
+            mt-4
+            w-full
+            overflow-x-auto
+          "
+        >
+          <h1 class="font-semibold text-black text-lg">Cylinders</h1>
+          <div class="flex items-center space-x-6">
+            <pagination
+              :pagination-details="paginationProp"
+              @next="changePage($event.value)"
+              @prev="changePage($event.value)"
+            />
+            <button
+              class="
+                text-purple-500
+                underline
+                uppercase
+                focus:outline-none
+                font-medium
+                text-sm
+              "
+            >
+              View All
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <table-component
+          :head="headers"
+          :body="body"
+          @show="showType = true"
+        ></table-component>
+      </div>
     </div>
     <new-cylinder-type
       v-if="showType"
@@ -15,15 +52,21 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onBeforeMount,
+  reactive,
+  ref,
+} from '@nuxtjs/composition-api'
 import TableComponent from '@/components/Base/Table2.vue'
 import NewCylinderType from '@/components/Overlays/NewCylinderType.vue'
 import CardSlider from '@/components/Base/CardSlider.vue'
-import { CylinderRepository } from '@/module/Cylinder'
+import { CylinderController } from '@/module/Cylinder'
+import Pagination from '@/components/Base/Pagination.vue'
 
 export default defineComponent({
   name: 'CylinderPool',
-  components: { TableComponent, NewCylinderType, CardSlider },
+  components: { TableComponent, NewCylinderType, CardSlider, Pagination },
   layout: 'dashboard',
   setup() {
     const headers = [
@@ -34,13 +77,32 @@ export default defineComponent({
       'Cylinder Type',
       'Date Cylinder',
     ]
-    const cylinderObject = new CylinderRepository()
-    const body = ref<Object[]>()
+
+    const body = ref<any>([])
+    const paginationProp = reactive({
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: 1,
+    })
+
+    function changePage(nextPage: number) {
+      getCylinders(nextPage)
+    }
+
+    function getCylinders(pageValue: number) {
+      CylinderController.getRegisteredCylinders(pageValue).then(
+        (responses: any) => {
+          const myResponse = responses.data
+          body.value = myResponse.cylinders.docs
+          paginationProp.hasNextPage = myResponse.cylinders.hasNextPage
+          paginationProp.hasPrevPage = myResponse.cylinders.hasPrevPage
+          paginationProp.currentPage = myResponse.cylinders.page
+        }
+      )
+    }
 
     onBeforeMount(() => {
-      cylinderObject.getRegisteredCylinders().then((responses: any) => {
-        body.value = responses.data.data.cylinders
-      })
+      getCylinders(1)
     })
 
     const statistics = [
@@ -257,6 +319,8 @@ export default defineComponent({
       body,
       showType,
       statistics,
+      paginationProp,
+      changePage,
     }
   },
 })

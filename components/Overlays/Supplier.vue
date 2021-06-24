@@ -105,7 +105,7 @@ import { defineComponent, reactive, useContext } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
-import { ProductRepository } from '@/module/Product'
+import { ProductObject } from '@/module/Product'
 export default defineComponent({
   components: {
     BackDrop,
@@ -124,7 +124,7 @@ export default defineComponent({
   },
   setup(_props, ctx) {
     const context = useContext()
-    const productObject = new ProductRepository()
+
     const close = () => {
       ctx.emit('close')
     }
@@ -146,7 +146,8 @@ export default defineComponent({
     }
     const createSupplier = () => {
       if (valuesNotEmpty(formInputs)) {
-        productObject.createSupplier(formInputs).then(() => {
+        ProductObject.createSupplier(formInputs).then(() => {
+          ctx.emit('refresh')
           close()
         })
       } else {

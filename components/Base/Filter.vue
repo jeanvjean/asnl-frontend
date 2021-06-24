@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-initial items-center space-x-3 py-1 h-full">
+  <div class="flex flex-initial items-center space-x-3 h-full">
     <h1 class="font-medium text-black text-sm h-full">Filter By</h1>
     <div
       class="

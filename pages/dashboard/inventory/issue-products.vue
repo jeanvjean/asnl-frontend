@@ -183,7 +183,7 @@
           </svg>
           <span> Create MRN</span>
         </button>
-        <pagination />
+        <pagination :pagination-details="paginationProp" />
       </div>
       <table class="w-full table-auto mt-2">
         <thead class="bg-gray-100">
@@ -265,7 +265,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, reactive, ref } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
@@ -287,10 +287,17 @@ export default defineComponent({
     const body = ref([])
     const showIssueProduct = ref(false)
 
+    const paginationProp = reactive({
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: 1,
+    })
+
     return {
       headers,
       body,
       showIssueProduct,
+      paginationProp,
     }
   },
 })

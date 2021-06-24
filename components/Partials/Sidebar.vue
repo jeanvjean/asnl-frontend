@@ -4,11 +4,11 @@
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div class="flex flex-col h-0 flex-1">
         <div class="h-20 px-4 flex items-center justify-between">
-          <h2 class="text-white text-left font-semibold text-2xl">
+          <h2 class="text-left font-semibold text-2xl text-white">
             Air Separation
           </h2>
           <svg
-            class="w-6 h-6 fill-current text-white"
+            class="w-6 h-6 fill-current"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
           >
@@ -21,30 +21,21 @@
               v-for="(nav, index) in navigations"
               :key="index"
               :to="nav.link"
-              class="text-white group px-4 py-4 rounded-sm  flex items-center space-x-6"
+              class=" group px-4 py-4 rounded-sm  flex items-center space-x-6"
             >
-              <component :is="nav.icon" class="text-gray-300 mr-3 h-5 w-5" />
+              <component :is="nav.icon" class="fill-current mr-3 h-5 w-5" />
               <span class="font-light font-xl">{{ nav.title }}</span>
             </router-link>
           </nav>
         </div> -->
         <div class="flex-1 flex flex-col overflow-y-auto">
-          <nav class="flex-1 px-4 py-4 bg-bg-sidebar space-y-4">
+          <nav class="flex-1 px-4 py-4 bg-bg-sidebar space-y-4 text-gray-400">
             <router-link
               to="/dashboard/"
-              class="
-                text-white
-                group
-                px-4
-                py-4
-                rounded-sm
-                flex
-                items-center
-                space-x-6
-              "
+              class="group px-4 py-4 rounded-sm flex items-center space-x-6"
             >
               <svg
-                class="text-gray-300 mr-3 h-5 w-5"
+                class="mr-3 h-5 w-5"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -61,20 +52,11 @@
             </router-link>
             <router-link
               to="/dashboard/user-management/"
-              class="
-                text-white
-                group
-                px-4
-                py-4
-                rounded-sm
-                flex
-                items-center
-                space-x-6
-              "
+              class="group px-4 py-4 rounded-sm flex items-center space-x-6"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="text-gray-300 mr-3 h-5 w-5"
+                class="fill-current mr-3 h-5 w-5"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -87,7 +69,6 @@
             <div class="w-full">
               <button
                 class="
-                  text-white
                   px-4
                   py-4
                   rounded-sm
@@ -101,7 +82,7 @@
               >
                 <div class="flex space-x-6">
                   <svg
-                    class="text-gray-300 mr-3 h-5 w-5 fill-current"
+                    class="fill-current mr-3 h-5 w-5"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 452.608 452.608"
                   >
@@ -114,7 +95,7 @@
                 </div>
                 <svg
                   v-if="!toggleCylinder"
-                  class="w-6 h-6 fill-current text-white"
+                  class="w-6 h-6 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -124,7 +105,7 @@
                 </svg>
                 <svg
                   v-else
-                  class="w-6 h-6 fill-current text-white"
+                  class="w-6 h-6 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -133,16 +114,7 @@
                   />
                 </svg>
               </button>
-              <div
-                v-if="toggleCylinder"
-                class="
-                  text-white
-                  ml-16
-                  px-2
-                  bg-dark-blue bg-opacity-50
-                  link-list
-                "
-              >
+              <div v-if="toggleCylinder" class="ml-16 px-2 link-list main">
                 <router-link
                   to="/dashboard/cylinder-management/"
                   class="block px-2 py-2"
@@ -158,7 +130,6 @@
             <div class="w-full">
               <button
                 class="
-                  text-white
                   px-4
                   py-4
                   rounded-sm
@@ -172,7 +143,7 @@
               >
                 <div class="flex space-x-6">
                   <svg
-                    class="text-gray-300 mr-3 h-5 w-5 fill-current"
+                    class="fill-current mr-3 h-5 w-5"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                   >
@@ -185,7 +156,7 @@
                 </div>
                 <svg
                   v-if="!toggleInventory"
-                  class="w-6 h-6 fill-current text-white"
+                  class="w-6 h-6 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -195,7 +166,7 @@
                 </svg>
                 <svg
                   v-else
-                  class="w-6 h-6 fill-current text-white"
+                  class="w-6 h-6 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -204,16 +175,7 @@
                   />
                 </svg>
               </button>
-              <div
-                v-if="toggleInventory"
-                class="
-                  text-white
-                  ml-16
-                  px-2
-                  bg-dark-blue bg-opacity-50
-                  link-list
-                "
-              >
+              <div v-if="toggleInventory" class="ml-16 px-2 link-list">
                 <router-link to="/dashboard/inventory/" class="block px-2 py-2"
                   >Analytics</router-link
                 >
@@ -237,7 +199,6 @@
             <div class="w-full">
               <button
                 class="
-                  text-white
                   px-4
                   py-4
                   rounded-sm
@@ -252,7 +213,7 @@
                 <div class="flex space-x-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="text-gray-300 mr-3 h-5 w-5 fill-current"
+                    class="fill-current mr-3 h-5 w-5"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -268,7 +229,7 @@
                 </div>
                 <svg
                   v-if="!toggleVehicle"
-                  class="w-6 h-6 fill-current text-white"
+                  class="w-6 h-6 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -278,7 +239,7 @@
                 </svg>
                 <svg
                   v-else
-                  class="w-6 h-6 fill-current text-gray-300"
+                  class="w-6 h-6 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -287,16 +248,7 @@
                   />
                 </svg>
               </button>
-              <div
-                v-if="toggleVehicle"
-                class="
-                  text-white
-                  ml-16
-                  px-2
-                  bg-dark-blue bg-opacity-50
-                  link-list
-                "
-              >
+              <div v-if="toggleVehicle" class="ml-16 px-2 link-list">
                 <router-link
                   to="/dashboard/vehicle-management/"
                   class="block px-2 py-2"
@@ -322,7 +274,6 @@
             <div class="w-full">
               <button
                 class="
-                  text-white
                   px-4
                   py-4
                   rounded-sm
@@ -336,7 +287,7 @@
               >
                 <div class="flex space-x-6">
                   <svg
-                    class="w-8 h-8 fill-current text-gray-300"
+                    class="w-8 h-8 fill-current"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
@@ -351,7 +302,7 @@
                 </div>
                 <svg
                   v-if="!toggleReport"
-                  class="w-6 h-6 fill-current text-white"
+                  class="w-6 h-6 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -361,7 +312,7 @@
                 </svg>
                 <svg
                   v-else
-                  class="w-6 h-6 fill-current text-white"
+                  class="w-6 h-6 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -370,16 +321,7 @@
                   />
                 </svg>
               </button>
-              <div
-                v-if="toggleReport"
-                class="
-                  text-white
-                  ml-16
-                  px-2
-                  bg-dark-blue bg-opacity-50
-                  link-list
-                "
-              >
+              <div v-if="toggleReport" class="ml-16 px-2 link-list">
                 <router-link to="/dashboard/reports/" class="block px-2 py-2"
                   >All Reports</router-link
                 >
@@ -397,19 +339,10 @@
             </div>
             <router-link
               to="/dashboard/drivers"
-              class="
-                text-white
-                group
-                px-4
-                py-4
-                rounded-sm
-                flex
-                items-center
-                space-x-6
-              "
+              class="group px-4 py-4 rounded-sm flex items-center space-x-6"
             >
               <svg
-                class="mr-3 h-5 w-5 fill-current text-gray-300"
+                class="mr-3 h-5 w-5 fill-current"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 490.667 490.667"
               >
@@ -425,20 +358,11 @@
 
             <router-link
               to="/dashboard/customer-management/"
-              class="
-                text-white
-                group
-                px-4
-                py-4
-                rounded-sm
-                flex
-                items-center
-                space-x-6
-              "
+              class="group px-4 py-4 rounded-sm flex items-center space-x-6"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="mr-3 h-5 w-5 fill-current text-transparent"
+                class="mr-3 h-5 w-5 text-transparent"
                 viewBox="0 0 24 24"
                 stroke="rgba(209, 213, 219, 1)"
               >
@@ -455,7 +379,6 @@
             <div class="w-full">
               <button
                 class="
-                  text-white
                   px-4
                   py-4
                   rounded-sm
@@ -486,7 +409,7 @@
                 </div>
                 <svg
                   v-if="!toggleProduction"
-                  class="w-6 h-6 fill-current text-white"
+                  class="w-6 h-6 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -496,7 +419,7 @@
                 </svg>
                 <svg
                   v-else
-                  class="w-6 h-6 fill-current text-white"
+                  class="w-6 h-6 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -505,16 +428,7 @@
                   />
                 </svg>
               </button>
-              <div
-                v-if="toggleProduction"
-                class="
-                  text-white
-                  ml-16
-                  px-2
-                  bg-dark-blue bg-opacity-50
-                  link-list
-                "
-              >
+              <div v-if="toggleProduction" class="ml-16 px-2 link-list">
                 <router-link
                   to="/dashboard/production/erc-list"
                   class="block px-2 py-2"
@@ -538,16 +452,7 @@
               </div>
             </div>
             <router-link
-              class="
-                text-white
-                group
-                px-4
-                py-4
-                rounded-sm
-                flex
-                items-center
-                space-x-6
-              "
+              class="group px-4 py-4 rounded-sm flex items-center space-x-6"
               to="/auth/logout"
             >
               <svg

@@ -1,18 +1,42 @@
 <template>
   <div class="px-6 py-6">
-    <div class="bg-white px-6 py-4">
-      <h1
-        class="
-          text-black
-          py-2
-          border-b-2
-          font-medium
-          border-btn-purple
-          inline-block
-        "
-      >
-        All Drivers
-      </h1>
+    <div class="bg-white py-4">
+      <div class="py-1">
+        <div
+          class="
+            flex
+            justify-between
+            items-center
+            pr-6
+            pl-6
+            border-0 border-l-4 border-black
+            mt-4
+            w-full
+            overflow-x-auto
+          "
+        >
+          <h1 class="font-semibold text-black text-lg">Drivers</h1>
+          <div class="flex items-center space-x-6">
+            <pagination
+              :pagination-details="paginationProp"
+              @next="changePage($event.value)"
+              @prev="changePage($event.value)"
+            />
+            <button
+              class="
+                text-purple-500
+                underline
+                uppercase
+                focus:outline-none
+                font-medium
+                text-sm
+              "
+            >
+              View All
+            </button>
+          </div>
+        </div>
+      </div>
       <div
         class="
           grid grid-rows-1
@@ -21,6 +45,7 @@
           gap-y-4
           lg:gap-x-6
           mt-6
+          px-8
         "
       >
         <button
@@ -41,7 +66,7 @@
         >
           <img
             class="h-12 w-12 rounded-full"
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+            src="@/assets/images/default-avatar.jpg"
             alt=""
           />
           <div>
@@ -62,11 +87,19 @@
               </p>
             </div>
             <div>
-              <p class="text-left text-black font-medium text-lg tracking-wide">
+              <p
+                class="
+                  text-left text-black
+                  font-medium
+                  text-lg
+                  tracking-wide
+                  capitalize
+                "
+              >
                 {{ driver.phoneNumber }}
               </p>
-              <p class="text-left text-gray-600 font-light text-sm">
-                Air Separation, Jos.
+              <p class="text-left text-gray-600 font-light text-sm capitalize">
+                {{ driver.location }}
               </p>
             </div>
           </div>
@@ -81,21 +114,53 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+} from '@nuxtjs/composition-api'
 import Driver from '@/components/Overlays/Driver.vue'
-import { DriverRepository } from '@/module/Driver'
+import { DriverObject } from '@/module/Driver'
+import { DriverDto } from '@/types/Types'
+import Pagination from '@/components/Base/Pagination.vue'
+
 export default defineComponent({
   name: 'Drivers',
-  components: { Driver },
+  components: { Driver, Pagination },
   layout: 'dashboard',
   setup() {
     const showDriver = ref(false)
-    const drivers = ref([])
-    const driverObject = new DriverRepository()
+    const drivers = ref<Array<DriverDto>>([])
+
+    const paginationProp = reactive({
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: 1,
+    })
+
+    function changePage(nextPage: number) {
+      getDrivers(nextPage)
+    }
+
+    const page = ref<number>(1)
+
     const clickedUser = ref()
-    const getDrivers = () => {
-      driverObject.getDrivers().then((response: any) => {
-        drivers.value = response.data.data
+
+    function getDrivers(pageNumber: number) {
+      DriverObject.getDrivers(pageNumber).then((response: any) => {
+        const driverResponse = response.data.data
+        drivers.value = driverResponse.docs.map((element: DriverDto) => {
+          return {
+            name: element.name ?? 'Not Specified',
+            phoneNumber: element.phoneNumber ?? 'Not Specified',
+            subrole: element.subrole ?? 'Not Specified',
+            location: element.location ?? 'Not Specified',
+          }
+        })
+        paginationProp.hasNextPage = driverResponse.hasNextPage
+        paginationProp.hasPrevPage = driverResponse.hasPrevPage
+        paginationProp.currentPage = driverResponse.page
       })
     }
 
@@ -104,12 +169,18 @@ export default defineComponent({
       showDriver.value = true
     }
 
-    onMounted(getDrivers)
+    onMounted(() => {
+      getDrivers(page.value)
+    })
+
     return {
       showDriver,
       drivers,
       getDriver,
       clickedUser,
+      getDrivers,
+      paginationProp,
+      changePage,
     }
   },
 })

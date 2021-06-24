@@ -173,13 +173,12 @@ import {
 } from '@nuxtjs/composition-api'
 import SelectInput from '@/components/Form/Select.vue'
 import InputField from '@/components/Form/Input.vue'
-import { UserRepository } from '@/module/User'
+import { UserController } from '@/module/User'
 export default defineComponent({
   name: 'NewUser',
   components: { SelectInput, InputField },
   layout: 'dashboard',
   setup() {
-    const userObject = new UserRepository()
     const context = useContext()
     const departments = ref([])
     const myResponse: any = ref(null)
@@ -234,7 +233,7 @@ export default defineComponent({
             subrole: subrole.value,
             permissions: requestPermissions.value,
           }
-          userObject.inviteUser(form).then(() => {
+          UserController.inviteUser(form).then(() => {
             email.value = role.value = subrole.value = ''
             key.value++
           })
@@ -272,7 +271,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      userObject.fetchRoles().then((response: any) => {
+      UserController.fetchRoles().then((response: any) => {
         myResponse.value = response.data.data
         const filterRoles = myResponse.value.map((element: any) => {
           return { name: element.role, value: element.role }
@@ -280,7 +279,7 @@ export default defineComponent({
         departments.value = filterRoles
       })
 
-      userObject.fetchPermissions().then((response: any) => {
+      UserController.fetchPermissions().then((response: any) => {
         permissions.value = response.data.data
         requestPermissions.value = []
       })

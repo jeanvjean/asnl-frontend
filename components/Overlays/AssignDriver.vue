@@ -55,7 +55,7 @@ import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
-import { VehicleRepository } from '@/module/Vehicle'
+import { VehicleController } from '@/module/Vehicle'
 export default defineComponent({
   components: {
     BackDrop,
@@ -70,7 +70,6 @@ export default defineComponent({
     },
   },
   setup(_props, ctx) {
-    const vehicleObject = new VehicleRepository()
     const context = useContext()
     const close = () => {
       ctx.emit('close')
@@ -88,8 +87,7 @@ export default defineComponent({
         context.$toast.global.required()
       } else {
         loading.value = true
-        vehicleObject
-          .assignDriver(form)
+        VehicleController.assignDriver(form)
           .then(() => {
             approve()
           })

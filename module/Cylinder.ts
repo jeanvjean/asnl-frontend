@@ -5,19 +5,32 @@ class CylinderRepository {
     return await $axios.get('/cylinder/fetch-cylinders')
   }
 
-  async getRegisteredCylinders() {
-    return await $axios.get('/cylinder/fetch-registered-cylinders')
+  getRegisteredCylinders(page: number) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get(
+          `/cylinder/fetch-registered-cylinders?page=${page}&limit=10`
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  getRegisteredCylindersUnPaginated() {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get(`/cylinder/fetch-reg-cylinders`)
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 
   async getCylinder(id: number) {
     return await $axios.get('/cylinder/registered-cylinder-details/' + id)
-  }
-
-  async getEverythingCylinder() {
-    return await Promise.all([
-      this.getCylinders(),
-      this.getRegisteredCylinders(),
-    ])
   }
 
   async createCylinder(requestParameters: Object) {
@@ -57,7 +70,7 @@ class CylinderRepository {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get('inventory/fetch-branches')
-        resolve(response.data.data)
+        resolve(response.data.data.docs)
       } catch (error) {
         reject(error)
       }
@@ -65,4 +78,6 @@ class CylinderRepository {
   }
 }
 
-export { CylinderRepository }
+const CylinderController = new CylinderRepository()
+
+export { CylinderController }

@@ -51,7 +51,7 @@ import {
 import Input from '@/components/Form/Input.vue'
 import Button from '@/components/Form/Button.vue'
 import { Auth } from '@/module/Auth'
-import { UserRepository } from '@/module/User'
+import { UserController } from '@/module/User'
 import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
@@ -61,7 +61,7 @@ export default defineComponent({
   setup() {
     const AuthObject = new Auth()
     const appStore = mainStore()
-    const userObject = new UserRepository()
+
     const confirmPassword = ref(null)
     const requestParamaeters = reactive({
       oldPassword: null,
@@ -91,7 +91,7 @@ export default defineComponent({
             const userId: String = loggedInUser._id
             const email: String = loggedInUser.email
             loading.text = 'Retrieving user'
-            userObject.getUser(userId, email).then((response: any) => {
+            UserController.getUser(userId, email).then((response: any) => {
               appStore.saveUser(response.data.data)
               router.push('/auth/account-setup')
             })

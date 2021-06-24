@@ -1,7 +1,42 @@
 <template>
   <div class="px-6 py-6">
-    <div class="bg-white w-full px-6 py-6 h-full">
-      <div class="flex justify-between mb-2">
+    <div class="bg-white w-full h-full">
+      <div class="py-4">
+        <div
+          class="
+            flex
+            justify-between
+            items-center
+            px-6
+            border-0 border-l-4 border-black
+            mt-4
+            w-full
+            overflow-x-auto
+          "
+        >
+          <h1 class="font-semibold text-black text-lg">Suppliers</h1>
+          <div class="flex items-center space-x-6">
+            <pagination
+              :pagination-details="paginationProp"
+              @next="changePage($event.value)"
+              @prev="changePage($event.value)"
+            />
+            <button
+              class="
+                text-purple-500
+                underline
+                uppercase
+                focus:outline-none
+                font-medium
+                text-sm
+              "
+            >
+              View All
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between mb-4 px-6">
         <div class="flex space-x-6 items-center font-medium text-black">
           <h1 class="py-2 border-b-2 border-btn-purple">General Inventory</h1>
           <h1 class="py-2">Gas (Refill)</h1>
@@ -32,7 +67,7 @@
           <span>Add New</span>
         </button>
       </div>
-      <div class="grid grid-rows-1 lg:grid-cols-5 gap-y-4 md:gap-x-4 py-4">
+      <div class="grid grid-rows-1 lg:grid-cols-5 gap-y-4 md:gap-x-4 py-4 px-6">
         <div
           v-for="(supplier, i) in suppliers"
           :key="i"
@@ -76,33 +111,54 @@
       :supplier-types="supplierTypes"
       :gas-types="gasTypes"
       @close="show = false"
+      @refresh="fetchSuppliers(1)"
     />
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+} from '@nuxtjs/composition-api'
 import CreateSupplier from '@/components/Overlays/Supplier.vue'
-import { ProductRepository } from '@/module/Product'
-import { CylinderRepository } from '@/module/Cylinder'
+import { ProductObject } from '@/module/Product'
+import { CylinderController } from '@/module/Cylinder'
+import { SupplierDto } from '@/types/Types'
+import Pagination from '@/components/Base/Pagination.vue'
+
 export default defineComponent({
   name: 'Suppliers',
-  components: { CreateSupplier },
+  components: { CreateSupplier, Pagination },
   layout: 'dashboard',
   setup() {
     const show = ref(false)
     const gasTypes = ref([])
-    const productObject = new ProductRepository()
-    const cylinderObject = new CylinderRepository()
-    const suppliers = ref([])
 
-    const fetchSuppliers = () => {
-      productObject.fetchSuppliers().then((response) => {
-        suppliers.value = response.data
+    const suppliers = ref<Array<SupplierDto>>([])
+
+    function fetchSuppliers(pageValue: number) {
+      ProductObject.fetchSuppliers(pageValue).then((response: any) => {
+        suppliers.value = response.docs
+        paginationProp.hasNextPage = response.hasNextPage
+        paginationProp.hasPrevPage = response.hasPrevPage
+        paginationProp.currentPage = response.page
       })
     }
 
+    const paginationProp = reactive({
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: 1,
+    })
+
+    function changePage(nextPage: number) {
+      fetchSuppliers(nextPage)
+    }
+
     const fetchCylinders = () => {
-      cylinderObject.getCylinders().then((response) => {
+      CylinderController.getCylinders().then((response) => {
         gasTypes.value = response.data.data.cylinders.map((el: any) => {
           return {
             name: el.gasName + ' - ' + el.colorCode,
@@ -114,7 +170,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      fetchSuppliers()
+      fetchSuppliers(1)
     })
 
     const supplierTypes = [
@@ -133,6 +189,9 @@ export default defineComponent({
       gasTypes,
       fetchCylinders,
       suppliers,
+      changePage,
+      paginationProp,
+      fetchSuppliers,
     }
   },
 })

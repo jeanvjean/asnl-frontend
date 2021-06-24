@@ -108,7 +108,7 @@
           v-if="formInputs.cylinderType === 'assigned'"
           :label-title="'Cylinder Assigned To'"
           :default-option-text="'Select Customer'"
-          :select-array="assignedTypes"
+          :select-array="customers"
           @get="assignedTo = $event.value"
         />
         <input-component
@@ -187,19 +187,19 @@ import {
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
-import { CylinderRepository } from '@/module/Cylinder'
+import { CylinderController } from '@/module/Cylinder'
+import { CustomerController } from '@/module/Customer'
 export default defineComponent({
   components: { BackDrop, InputComponent, SelectComponent },
   setup(_props, ctx) {
     const context = useContext()
-    const cylinderObject = new CylinderRepository()
+
     const cylinderTypes = [
       { name: 'Buffer', value: 'buffer' },
       { name: 'Assigned', value: 'assigned' },
     ]
-    const assignedTypes = [
-      { value: '6088187058037a28fcdc56fe', name: 'Daniella Michael' },
-    ]
+
+    const customers = ref([])
     const gasTypes = ref([])
     const close = () => {
       ctx.emit('close')
@@ -221,11 +221,20 @@ export default defineComponent({
     const assignedNumber = ref()
 
     onMounted(() => {
-      cylinderObject.getCylinders().then((response) => {
-        const myResponse = response.data.data.cylinders
+      CylinderController.getCylinders().then((response) => {
+        const myResponse = response.data.data.cylinders.docs
         gasTypes.value = myResponse.map((element: any) => {
           return {
             name: element.gasName + ' - ' + element.colorCode,
+            value: element._id,
+          }
+        })
+      })
+
+      CustomerController.fetchUnPaginatedCustomers().then((response) => {
+        customers.value = response.map((element: any) => {
+          return {
+            name: element.name,
             value: element._id,
           }
         })
@@ -249,9 +258,9 @@ export default defineComponent({
             testingPresure: formInputs.testingPresure,
             fillingPreasure: formInputs.fillingPreasure,
             gasVolumeContent: formInputs.gasVolumeContent,
-            originalCylinderNumber: originalNumber.value,
+            cylinderNumber: originalNumber.value,
           }
-          cylinderObject.registerCylinder(requestBody).then(() => {
+          CylinderController.registerCylinder(requestBody).then(() => {
             close()
           })
         } else if (
@@ -271,7 +280,7 @@ export default defineComponent({
             assignedTo: assignedTo.value,
             assignedNumber: assignedNumber.value,
           }
-          cylinderObject.registerCylinder(requestBody).then(() => {
+          CylinderController.registerCylinder(requestBody).then(() => {
             close()
           })
         } else {
@@ -283,7 +292,7 @@ export default defineComponent({
     }
     return {
       cylinderTypes,
-      assignedTypes,
+      customers,
       gasTypes,
       close,
       formInputs,

@@ -4,7 +4,15 @@
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
-      class="w-5 h-5 fill-current text-gray-500"
+      class="
+        w-6
+        h-6
+        fill-current
+        text-gray-500
+        font-semibold
+        focus:text-purple-600
+      "
+      @click="prev"
     >
       <path
         fill-rule="evenodd"
@@ -12,11 +20,22 @@
         clip-rule="evenodd"
       />
     </svg>
-    <span class="px-2 border border-gray-500">1</span>
+    <span class="px-2 border border-gray-500 w-8 text-center">
+      <span>{{ $props.paginationDetails.currentPage }}</span>
+    </span>
+
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
-      class="w-5 h-5 fill-current text-gray-500"
+      class="
+        w-6
+        h-6
+        fill-current
+        text-gray-500
+        font-semibold
+        focus:text-purple-600
+      "
+      @click="next"
     >
       <path
         fill-rule="evenodd"
@@ -26,3 +45,41 @@
     </svg>
   </div>
 </template>
+<script lang="ts">
+import { defineComponent, ref, useContext } from '@nuxtjs/composition-api'
+
+export default defineComponent({
+  props: {
+    paginationDetails: {
+      type: Object,
+      required: true,
+    },
+  },
+  setup(_props, ctx) {
+    const context = useContext()
+    const nextPage = ref<number>()
+    const prev = () => {
+      if (_props.paginationDetails.hasPrevPage) {
+        nextPage.value = _props.paginationDetails.currentPage - 1
+        ctx.emit('prev', nextPage)
+      } else {
+        context.$toast.info('First Page')
+      }
+    }
+
+    const next = () => {
+      if (_props.paginationDetails.hasNextPage) {
+        nextPage.value = _props.paginationDetails.currentPage + 1
+        ctx.emit('next', nextPage)
+      } else {
+        context.$toast.info('Last Page')
+      }
+    }
+
+    return {
+      prev,
+      next,
+    }
+  },
+})
+</script>

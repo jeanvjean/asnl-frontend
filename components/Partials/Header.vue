@@ -106,7 +106,7 @@
               <span class="sr-only">Open user menu</span>
               <img
                 class="h-8 w-8 rounded-full"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                src="@/assets/images/default-avatar.jpg"
                 alt=""
               />
             </button>
@@ -157,7 +157,7 @@
             aria-labelledby="user-menu"
           >
             <router-link
-              to="/dashboard/user-management/profile"
+              :to="'/dashboard/user-management/' + auth._id + '/' + auth.email"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               role="menuitem"
               >Your Profile</router-link
@@ -219,7 +219,7 @@ export default defineComponent({
       const filterPaths = splitPath.filter((element: String) => {
         return element !== ''
       })
-      const lastPath: String = filterPaths[filterPaths.length - 1]
+      const lastPath: string = filterPaths[filterPaths.length - 1]
       return lastPath
     })
 

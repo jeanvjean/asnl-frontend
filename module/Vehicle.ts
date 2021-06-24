@@ -1,3 +1,4 @@
+/* eslint-disable no-async-promise-executor */
 import { $axios } from '@/utils/api'
 
 class VehicleRepository {
@@ -9,9 +10,16 @@ class VehicleRepository {
       })
   }
 
-  async fetchVehicles() {
-    return await $axios.get('/vehicle/fetch-vehicles').then((response) => {
-      return response.data.data
+  fetchVehicles(page: number) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.get(
+          `/vehicle/fetch-vehicles?page=${page}&limit=10`
+        )
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
     })
   }
 
@@ -29,7 +37,7 @@ class VehicleRepository {
   }
 
   deleteVehicle(id: String) {
-    return new Promise((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       try {
         const response = $axios.delete('/vehicle/delete-vehicle/' + id)
         resolve(response)
@@ -40,4 +48,6 @@ class VehicleRepository {
   }
 }
 
-export { VehicleRepository }
+const VehicleController = new VehicleRepository()
+
+export { VehicleController }

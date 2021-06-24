@@ -64,7 +64,7 @@ import {
 import Input from '@/components/Form/Input.vue'
 import SelectInput from '@/components/Form/Select.vue'
 import Button from '@/components/Form/Button.vue'
-import { UserRepository } from '@/module/User'
+import { UserController } from '@/module/User'
 import { mainStore } from '~/module/Pinia'
 export default defineComponent({
   name: 'Landing',
@@ -76,7 +76,7 @@ export default defineComponent({
       { name: 'Female', value: 'female' },
     ]
     const appStore = mainStore()
-    const userObject = new UserRepository()
+
     const context = useContext()
     const router = useRouter()
     const user: any = appStore.getLoggedInUser
@@ -102,13 +102,14 @@ export default defineComponent({
         context.$toast.global.required()
       } else {
         loading.value = true
-        userObject
-          .updateUser(form, user._id)
+        UserController.updateUser(form, user._id)
           .then(() => {
-            userObject.getUser(user._id, form.email).then((response: any) => {
-              appStore.saveUser(response.data.data)
-              router.push('/dashboard')
-            })
+            UserController.getUser(user._id, form.email).then(
+              (response: any) => {
+                appStore.saveUser(response.data.data)
+                router.push('/dashboard')
+              }
+            )
           })
           .finally(() => {
             loading.value = false

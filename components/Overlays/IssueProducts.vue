@@ -45,11 +45,12 @@
         </div>
         <div class="bg-white py-6 px-8 space-y-6">
           <div class="flex justify-between items-center text-md">
-            <div>
+            <div class="flex space-x-4 items-center">
               <span>MRN:</span>
-              <input
-                class="px-4 py-2 rounded-sm border border-gray-200"
-                placeholder="Enter MRN Number"
+              <input-component
+                :default-value="form.mrn"
+                :input-placeholder="'Enter MRN Number'"
+                @get="form.mrn = $event.value"
               />
             </div>
             <div class="flex space-x-2 items-center">
@@ -74,21 +75,26 @@
           </div>
           <div class="grid grid-rows-1 lg:grid-cols-3 gap-x-4 items-center">
             <select-component
-              :label-title="'Requesting Department'"
-              :select-array="[]"
-              :default-option-text="'Choose Department'"
-            />
-            <select-component
               :label-title="'Customer'"
-              :select-array="[]"
+              :select-array="customers"
               :default-option-text="'Choose Customer'"
+              :init-value="form.customer"
+              @get="form.customer = $event.value"
             />
             <input-component
               :label-title="'Job Tag'"
+              :default-value="form.jobTag"
               :input-placeholder="'Enter Job Tag'"
+              @get="form.jobTag = $event.value"
+            />
+            <input-component
+              :label-title="'Comment'"
+              :default-value="form.comment"
+              :input-placeholder="'Enter Comment'"
+              @get="form.comment = $event.value"
             />
           </div>
-          <div class="w-full overflow-x-auto">
+          <div :key="componentKey" class="w-full overflow-x-auto">
             <table class="w-full table-auto border-separate">
               <thead>
                 <tr>
@@ -138,32 +144,9 @@
                       text-sm
                     "
                   >
-                    Qty
+                    Quantity
                   </th>
-                  <th
-                    class="
-                      px-4
-                      py-2
-                      font-medium
-                      text-gray-600
-                      uppercase
-                      text-sm
-                    "
-                  >
-                    Unit Cost
-                  </th>
-                  <th
-                    class="
-                      px-4
-                      py-2
-                      font-medium
-                      text-gray-600
-                      uppercase
-                      text-sm
-                    "
-                  >
-                    Total Cost
-                  </th>
+
                   <th
                     class="
                       px-4
@@ -189,27 +172,40 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="i in count" :key="i" class="hover:bg-gray-100">
-                  <td class="text-center">{{ i }}</td>
+                <tr
+                  v-for="(product, i) in products"
+                  :key="i"
+                  class="hover:bg-gray-100"
+                >
+                  <td class="text-center">{{ Number(i) + 1 }}</td>
                   <td>
-                    <input-component :input-placeholder="'######'" />
+                    <input-component
+                      :input-placeholder="'Enter Product Number'"
+                      :default-value="product.productNumber"
+                      @get="product.productNumber = $event.value"
+                    />
                   </td>
                   <td>
                     <input-component
                       :input-placeholder="'Enter Product Name'"
+                      :default-value="product.productName"
+                      @get="product.productName = $event.value"
                     />
                   </td>
                   <td>
-                    <input-component :input-placeholder="'#'" />
+                    <input-component
+                      :input-placeholder="'#'"
+                      :default-value="product.quantityRequested"
+                      :input-type="'number'"
+                      @get="product.quantityRequested = $event.value"
+                    />
                   </td>
                   <td>
-                    <input-component :input-placeholder="'#'" />
-                  </td>
-                  <td>
-                    <input-component :input-placeholder="'#'" />
-                  </td>
-                  <td>
-                    <input-component :input-placeholder="'Enter Comment'" />
+                    <input-component
+                      :input-placeholder="'Enter Comment'"
+                      :default-value="product.comment"
+                      @get="product.comment = $event.value"
+                    />
                   </td>
                   <td class="text-center">
                     <svg
@@ -217,7 +213,7 @@
                       class="fill-current text-transparent w-4 h-4"
                       viewBox="0 0 24 24"
                       stroke="black"
-                      @click="count--"
+                      @click="decreaseCounter(i)"
                     >
                       <path
                         stroke-linecap="round"
@@ -233,7 +229,10 @@
           </div>
           <div class="w-auto px-12 mb-10">
             <div class="w-full mx-auto">
-              <button class="flex items-center space-x-1" @click="count++">
+              <button
+                class="flex items-center space-x-1"
+                @click="increaseCounter()"
+              >
                 <div>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -263,6 +262,7 @@
           >
             <button
               class="px-6 py-2 rounded-sm bg-btn-purple text-white w-full"
+              @click="submitForm"
             >
               Disburse Stock
             </button>
@@ -286,10 +286,19 @@
   </back-drop>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+  useContext,
+} from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import InputComponent from '@/components/Form/Input.vue'
+import { CustomerController } from '@/module/Customer'
+import { ProductObject } from '@/module/Product'
+import { ProductDto } from '~/types/Types'
 
 export default defineComponent({
   components: {
@@ -301,10 +310,90 @@ export default defineComponent({
     const close = () => {
       ctx.emit('close')
     }
-    const count = ref(0)
+
+    const products = ref<Array<ProductDto>>([])
+
+    const componentKey = ref<number>(0)
+    const customers = ref<any>([])
+
+    const form = reactive({
+      jobTag: '',
+      mrn: '',
+      comment: '',
+      customer: '',
+    })
+
+    const context = useContext()
+
+    const increaseCounter = () => {
+      products.value.push({
+        productNumber: '',
+        productName: '',
+        quantityRequested: '0',
+        comment: '',
+      })
+    }
+
+    function fetchCustomers() {
+      CustomerController.fetchUnPaginatedCustomers().then((response) => {
+        customers.value = response.map((element: any) => {
+          return {
+            name: element.name,
+            value: element._id,
+          }
+        })
+      })
+    }
+
+    function decreaseCounter(index: any) {
+      products.value.splice(index, 1)
+      componentKey.value++
+    }
+
+    const submitForm = () => {
+      if (!form.mrn || !form.comment || !form.customer || !form.jobTag) {
+        context.$toast.error('All Fields are Required')
+      } else if (!products.value.length) {
+        context.$toast.error('Minimum of One Product should be added')
+      } else {
+        let result = false
+        products.value.forEach((element: any) => {
+          const values = Object.values(element)
+          result = values.every((val) => {
+            return val !== ''
+          })
+        })
+
+        if (result) {
+          ProductObject.registerDisbursal({
+            products: products.value,
+            jobTag: form.jobTag,
+            mrn: form.mrn,
+            comment: form.comment,
+            customer: form.customer,
+          }).then(() => {
+            componentKey.value = 0
+            ctx.emit('reload')
+            close()
+          })
+        } else {
+          context.$toast.error('All Fields are Required')
+        }
+      }
+    }
+
+    onMounted(() => {
+      fetchCustomers()
+    })
     return {
       close,
-      count,
+      decreaseCounter,
+      increaseCounter,
+      products,
+      form,
+      componentKey,
+      customers,
+      submitForm,
     }
   },
 })

@@ -1,3 +1,4 @@
+/* eslint-disable no-async-promise-executor */
 import { $axios } from '@/utils/api'
 class UserRepository {
   async getUser(userId: String, email: String) {
@@ -10,12 +11,36 @@ class UserRepository {
     })
   }
 
+  suspendUser(userId: String, suspendStatus: Boolean) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.get(
+          `/user/suspend/${userId}?suspend=${!suspendStatus}`
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
   async updateUser(requestParameters: Object, userId: String) {
     return await $axios.post('/user/update-user/' + userId, requestParameters)
   }
 
-  async getUsers() {
-    return await $axios.get('/user/get-users')
+  async getUsers(page: number) {
+    return await $axios.get('/user/get-users?page=' + page + '&limit=' + 10)
+  }
+
+  fetchUserUnPaginated() {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.get('/user/fetch-all-users')
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 
   async fetchPermissions() {
@@ -38,9 +63,11 @@ class UserRepository {
   }
 
   fetchActivityLogs(userId: String) {
-    return new Promise<any>((resolve, reject) => {
+    return new Promise<any>(async (resolve, reject) => {
       try {
-        const response = $axios.get('/vehicle/fetch-activityLogs/' + userId)
+        const response = await $axios.get(
+          '/vehicle/fetch-activityLogs/' + userId
+        )
         resolve(response)
       } catch (error) {
         reject(error)
@@ -49,4 +76,6 @@ class UserRepository {
   }
 }
 
-export { UserRepository }
+const UserController = new UserRepository()
+
+export { UserController }

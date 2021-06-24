@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-x-auto w-full py-4">
-    <div class="w-full mb-4">
+    <div class="w-full mb-4 px-6">
       <div class="flex items-center justify-between py-1 w-full">
         <filter-component />
         <div class="w-1/4">
@@ -106,6 +106,7 @@
 import { defineComponent } from '@nuxtjs/composition-api'
 import FilterComponent from '@/components/Base/Filter.vue'
 import SearchComponent from '@/components/Base/Search.vue'
+// import { CylinderDto } from '@/types/Types'
 
 export default defineComponent({
   components: { FilterComponent, SearchComponent },

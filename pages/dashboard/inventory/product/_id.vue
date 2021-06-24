@@ -101,16 +101,15 @@ import {
 } from '@nuxtjs/composition-api'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
-import { ProductRepository } from '@/module/Product'
+import { ProductObject } from '@/module/Product'
 export default defineComponent({
   components: { InputComponent, SelectComponent },
   layout: 'dashboard',
   setup() {
     const route = useRoute()
-    const productObj = new ProductRepository()
 
     async function fetchProduct(productId: String) {
-      await productObj.fetchProduct(productId).then((response) => {
+      await ProductObject.fetchProduct(productId).then((response) => {
         console.log(response)
       })
     }

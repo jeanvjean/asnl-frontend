@@ -43,7 +43,7 @@ import { defineComponent, reactive, useContext } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
-import { CylinderRepository } from '@/module/Cylinder'
+import { CylinderController } from '@/module/Cylinder'
 
 export default defineComponent({
   components: {
@@ -64,15 +64,13 @@ export default defineComponent({
       gasName: '',
       colorCode: '',
     })
-    const cylinderObject = new CylinderRepository()
 
     const createCylinder = () => {
       if (!form.gasName && !form.colorCode) {
         mainContext.$toast.global.required()
       } else {
         loading.status = true
-        cylinderObject
-          .createCylinder(form)
+        CylinderController.createCylinder(form)
           .then(() => {
             ctx.emit('close')
             form.gasName = ''

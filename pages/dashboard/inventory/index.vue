@@ -1,11 +1,44 @@
 <template>
   <div class="py-6 px-6">
     <card-slider :analytics="statistics" />
-    <div class="bg-white px-6 mt-8">
+    <div class="bg-white mt-8">
       <div class="overflow-x-auto w-full py-4">
+        <div>
+          <div
+            class="
+              flex
+              justify-between
+              items-center
+              px-6
+              border-0 border-l-4 border-black
+              mt-4
+            "
+          >
+            <h1 class="font-semibold text-black text-lg">Inventories</h1>
+            <div class="flex items-center space-x-6">
+              <pagination
+                :pagination-details="paginationProp"
+                @next="changePage($event.value)"
+                @prev="changePage($event.value)"
+              />
+              <button
+                class="
+                  text-purple-500
+                  underline
+                  uppercase
+                  focus:outline-none
+                  font-medium
+                  text-sm
+                "
+              >
+                View All
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="w-full mb-4">
           <div
-            class="flex items-center justify-around px-2 py-2 space-x-4 w-full"
+            class="flex items-center justify-around px-8 py-2 space-x-4 w-full"
           >
             <filter-component />
             <search-component />
@@ -189,16 +222,22 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+} from '@nuxtjs/composition-api'
 
 import CardSlider from '@/components/Base/CardSlider.vue'
-import { ProductRepository } from '@/module/Product'
+import { ProductObject } from '@/module/Product'
 import FilterComponent from '@/components/Base/Filter.vue'
 import SearchComponent from '@/components/Base/Search.vue'
+import Pagination from '@/components/Base/Pagination.vue'
 
 export default defineComponent({
   name: 'CylinderPool',
-  components: { CardSlider, FilterComponent, SearchComponent },
+  components: { CardSlider, FilterComponent, SearchComponent, Pagination },
   layout: 'dashboard',
   setup() {
     const headers = [
@@ -213,15 +252,31 @@ export default defineComponent({
       'Action',
     ]
 
-    const productObject = new ProductRepository()
+    function changePage(nextPage: number) {
+      getProducts(nextPage)
+    }
 
     const body = ref()
 
     onMounted(() => {
-      productObject.getProducts().then((response) => {
-        body.value = response
-      })
+      getProducts(1)
     })
+
+    function getProducts(pageValue: number) {
+      ProductObject.getProducts(pageValue).then((response: any) => {
+        body.value = response.docs
+        paginationProp.hasNextPage = response.hasNextPage
+        paginationProp.hasPrevPage = response.hasPrevPage
+        paginationProp.currentPage = response.page
+      })
+    }
+
+    const paginationProp = reactive({
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: 1,
+    })
+
     const showType = ref(false)
 
     const defaultState = ref(false)
@@ -283,6 +338,8 @@ export default defineComponent({
       showType,
       statistics,
       defaultState,
+      paginationProp,
+      changePage,
     }
   },
 })

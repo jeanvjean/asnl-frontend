@@ -20,7 +20,7 @@
       >
         <img
           class="h-20 w-20 rounded-full"
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=ZIOeP15SMT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+          src="@/assets/images/default-avatar.jpg"
           alt=""
         />
         <div class="flex-1 capitalize">
@@ -51,7 +51,7 @@
 import { defineComponent, ref } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
-import { UserRepository } from '@/module/User'
+import { UserController } from '@/module/User'
 export default defineComponent({
   components: { BackDrop, ButtonComponent },
   props: {
@@ -66,11 +66,9 @@ export default defineComponent({
     }
     const loading = ref(false)
     const loadingText = 'Deleting'
-    const userObject = new UserRepository()
     const deleteUser = () => {
       loading.value = true
-      userObject
-        .deleteUser(_props.user._id)
+      UserController.deleteUser(_props.user._id)
         .then(() => {
           ctx.emit('refresh')
           close()
