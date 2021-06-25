@@ -26,3 +26,21 @@ export type DisbursalDto = {
   comment: String
   products: Array<ProductDto>
 }
+
+export type ProductDetail = {
+  division: String
+  supplier: String
+  description: String
+  model: String
+  type: String
+  specialization: String
+  asnlNumber: String
+  partNo: String
+  serialNo: String
+  reorderLevel: String
+  unitCost: String
+  totalCost: String
+  quantity: String
+  location: String
+  referrer: String
+}

@@ -1,13 +1,5 @@
 <template>
   <div class="overflow-x-auto w-full py-4">
-    <div class="w-full mb-4 px-6">
-      <div class="flex items-center justify-between py-1 w-full">
-        <filter-component />
-        <div class="w-1/4">
-          <search-component :place-holder="'Search'" />
-        </div>
-      </div>
-    </div>
     <table class="w-full table-auto">
       <thead class="bg-gray-100">
         <tr>
@@ -104,12 +96,9 @@
 
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-import FilterComponent from '@/components/Base/Filter.vue'
-import SearchComponent from '@/components/Base/Search.vue'
 // import { CylinderDto } from '@/types/Types'
 
 export default defineComponent({
-  components: { FilterComponent, SearchComponent },
   props: {
     head: {
       type: Array,
@@ -121,9 +110,6 @@ export default defineComponent({
     },
   },
   setup(_props, ctx) {
-    const show = () => {
-      ctx.emit('show')
-    }
     function formatDate(dateValue: string) {
       const date = new Date(dateValue)
       const year = date.getFullYear()
@@ -140,7 +126,6 @@ export default defineComponent({
       return year + '-' + month + '-' + dt
     }
     return {
-      show,
       formatDate,
     }
   },

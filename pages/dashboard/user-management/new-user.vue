@@ -1,7 +1,7 @@
 <template>
   <div :key="key" class="py-6 space-y-2">
     <div class="px-4 sm:px-6 md:px-8 w-full text-black font-semibold text-lg">
-      User Management
+      New User
     </div>
     <div class="mx-auto px-4 sm:px-6 lg:px-8 w-full">
       <div

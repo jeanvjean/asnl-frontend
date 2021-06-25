@@ -132,10 +132,7 @@
                   w-full
                   overflow-none
                 "
-                @click="
-                  changeUser(index)
-                  showChangeRole = true
-                "
+                @click="changeUser(index), (showChangeRole = true)"
               >
                 Change Role
               </button>
@@ -151,10 +148,7 @@
                   w-full
                   overflow-none
                 "
-                @click="
-                  changeUser(index)
-                  showDeleteUser = true
-                "
+                @click="changeUser(index), (showDeleteUser = true)"
               >
                 Delete User
               </button>
@@ -174,6 +168,22 @@
               >
                 <span v-if="bodySingle.deactivated">Activate User</span>
                 <span v-else>Suspend User</span>
+              </button>
+              <button
+                class="
+                  block
+                  px-3
+                  py-2
+                  text-black
+                  focus:outline-none
+                  hover:bg-purple-300
+                  hover:text-white
+                  w-full
+                  overflow-none
+                "
+                @click="resendInvite(bodySingle)"
+              >
+                <span>Resend Invite</span>
               </button>
               <router-link
                 class="
@@ -257,16 +267,32 @@ export default defineComponent({
       security: 'bg-role-orange text-role-orange bg-opacity-25',
       admin: 'bg-green-100 text-green-400',
       sales: 'bg-role-purple text-role-purple bg-opacity-25',
+      default: 'bg-blue-100 text-blue-400',
     }
 
     function getColorCode(role: any) {
-      return rolesColor[role]
+      return rolesColor[role] ?? rolesColor.default
     }
 
     function suspendUser(userId: String, status: Boolean) {
       UserController.suspendUser(userId, status).then(() => {
         ctx.emit('refresh')
       })
+    }
+
+    function resendInvite(user: any) {
+      const requestBody = {
+        email: user.email,
+        role: user.role,
+        subrole: user.subrole,
+        permissions: user.permissions.map((el: any) => {
+          return {
+            name: el.name,
+            sub_permissions: el.sub_permissions,
+          }
+        }),
+      }
+      UserController.inviteUser(requestBody)
     }
 
     const getRoles = () => {
@@ -313,6 +339,7 @@ export default defineComponent({
       getColorCode,
       roles,
       suspendUser,
+      resendInvite,
     }
   },
 })

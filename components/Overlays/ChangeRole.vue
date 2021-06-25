@@ -55,10 +55,7 @@
           <select-component
             :select-array="roles"
             :init-value="form.role"
-            @get="
-              form.role = $event.value
-              changeSubroles(form.role)
-            "
+            @get=";(form.role = $event.value), changeSubroles(form.role)"
           />
 
           <select-component
@@ -120,7 +117,7 @@ export default defineComponent({
     })
 
     onBeforeMount(() => {
-      form.id = _props.user._id
+      form.id = _props.user.id
       form.role = _props.user.role
       form.subrole = _props.user.subrole
       _props.roles.forEach((element: any) => {
@@ -128,7 +125,6 @@ export default defineComponent({
           subroles.value = element.subroles
         }
       })
-      console.log(_props.user)
     })
 
     function changeSubroles(role: String) {

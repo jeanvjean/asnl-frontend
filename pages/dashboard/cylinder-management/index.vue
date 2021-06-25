@@ -38,11 +38,29 @@
         </div>
       </div>
       <div>
-        <table-component
-          :head="headers"
-          :body="body"
-          @show="showType = true"
-        ></table-component>
+        <div class="w-full mb-4 px-6">
+          <div
+            class="
+              flex
+              items-center
+              justify-between
+              space-x-4
+              py-1
+              w-full
+              h-full
+            "
+          >
+            <filter-component />
+            <search-component :place-holder="'Search'" />
+            <button
+              class="bg-btn-purple px-4 py-2 rounded-sm h-full text-white"
+              @click="showType = true"
+            >
+              Create Gas Type
+            </button>
+          </div>
+        </div>
+        <table-component :head="headers" :body="body"></table-component>
       </div>
     </div>
     <new-cylinder-type
@@ -63,10 +81,19 @@ import NewCylinderType from '@/components/Overlays/NewCylinderType.vue'
 import CardSlider from '@/components/Base/CardSlider.vue'
 import { CylinderController } from '@/module/Cylinder'
 import Pagination from '@/components/Base/Pagination.vue'
+import FilterComponent from '@/components/Base/Filter.vue'
+import SearchComponent from '@/components/Base/Search.vue'
 
 export default defineComponent({
   name: 'CylinderPool',
-  components: { TableComponent, NewCylinderType, CardSlider, Pagination },
+  components: {
+    TableComponent,
+    NewCylinderType,
+    CardSlider,
+    Pagination,
+    FilterComponent,
+    SearchComponent,
+  },
   layout: 'dashboard',
   setup() {
     const headers = [

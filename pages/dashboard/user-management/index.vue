@@ -206,6 +206,7 @@ export default defineComponent({
             subrole: element.subrole,
             status: element.isVerified ? 'verified' : 'Not-Verified',
             deactivated: element.deactivated,
+            permissions: element.permissions,
           }
         })
       })

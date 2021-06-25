@@ -222,7 +222,7 @@ export default defineComponent({
 
     onMounted(() => {
       CylinderController.getCylinders().then((response) => {
-        const myResponse = response.data.data.cylinders.docs
+        const myResponse = response.data.data.cylinders
         gasTypes.value = myResponse.map((element: any) => {
           return {
             name: element.gasName + ' - ' + element.colorCode,

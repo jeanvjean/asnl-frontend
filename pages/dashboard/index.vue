@@ -1,6 +1,6 @@
 <template>
   <div class="py-6 px-8">
-    <h1 class="text-black font-semibold text-xl mb-4">Cylinder Analytics</h1>
+    <h1 class="text-black font-thin text-xl mb-4">Cylinder Analytics</h1>
     <div class="grid grid-rows-1 xl:grid-cols-3 gap-4 mb-6">
       <div class="bg-white px-10 pt-10 pb-24">
         <p class="font-medium text-black tracking-wide pb-4">
