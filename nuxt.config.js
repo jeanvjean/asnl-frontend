@@ -50,7 +50,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'http://178.62.127.157:81',
+    baseURL: 'https://asnl.natterbase.com',
   },
   toast: {
     position: 'top-right',

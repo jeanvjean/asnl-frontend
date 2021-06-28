@@ -10,14 +10,12 @@ const isAuthenticated: Middleware = ({ redirect }) => {
   if (auth && token) {
     if (!auth.isVerified) {
       path = '/auth/change-password'
+      redirect(path)
     } else if (!auth.name) {
       path = '/auth/account-setup'
-    } else {
-      path = '/dashboard'
+      redirect(path)
     }
   }
-
-  redirect(path)
 }
 
 export default isAuthenticated

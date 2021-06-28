@@ -30,11 +30,11 @@ class ProductRespository {
     })
   }
 
-  fetchSuppliers(page: number) {
+  fetchSuppliers(page: number, filter: string = '') {
     return new Promise(async (resolve, reject) => {
       try {
         const response = await $axios.get(
-          `/inventory/fetch-suppliers?page=${page}&limit=20`
+          `/inventory/fetch-suppliers?page=${page}&limit=20&search=${filter}`
         )
         resolve(response.data.data)
       } catch (error) {
@@ -90,6 +90,17 @@ class ProductRespository {
           requestBody
         )
         resolve(response)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  fetchProductsUnPaginated() {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get('/inventory/fetch-all-products')
+        resolve(response.data.data)
       } catch (error) {
         reject(error)
       }

@@ -3,7 +3,12 @@
     <label
       v-if="labelTitle"
       class="block w-full px-1 text-gray-800 text-md mb-1"
-      >{{ labelTitle }}</label
+      ><div class="flex items-center space-x-3">
+        <span>
+          {{ labelTitle }}
+        </span>
+        <span v-if="isRequired" class="text-red-600 text-xl">*</span>
+      </div></label
     ><select
       v-model="selectedValue"
       class="
@@ -62,6 +67,11 @@ export default defineComponent({
       type: String,
       required: false,
       default: '',
+    },
+    isRequired: {
+      type: Boolean,
+      default: true,
+      required: false,
     },
   },
   setup(_props, ctx) {

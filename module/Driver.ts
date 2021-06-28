@@ -18,7 +18,7 @@ class DriverRepository {
     return new Promise(async (resolve, reject) => {
       try {
         const response = await $axios.get(`/driver/fetch-all-drivers`)
-        resolve(response)
+        resolve(response.data.data)
       } catch (error) {
         reject(error)
       }

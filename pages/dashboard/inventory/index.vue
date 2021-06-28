@@ -21,18 +21,6 @@
                 @next="changePage($event.value)"
                 @prev="changePage($event.value)"
               />
-              <button
-                class="
-                  text-purple-500
-                  underline
-                  uppercase
-                  focus:outline-none
-                  font-medium
-                  text-sm
-                "
-              >
-                View All
-              </button>
             </div>
           </div>
         </div>

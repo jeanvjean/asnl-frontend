@@ -4,7 +4,7 @@
       <h1>All Vehicles</h1>
       <div class="flex space-x-4">
         <router-link
-          to="/dashboard/vehicle-management/maintenance"
+          to="/dashboard/vehicle-management/corrective-maintenance-main"
           class="
             flex
             space-x-2
@@ -373,11 +373,10 @@ export default defineComponent({
     function fetchDrivers() {
       DriverObject.getUnPaginatedDrivers().then((response: any) => {
         const driverResponse = response
-
         drivers.value = driverResponse.map((el: any) => {
           showAssignDriver.value = true
           return {
-            name: el.name,
+            name: el.name ?? 'Not Specified',
             value: el._id,
           }
         })

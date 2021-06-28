@@ -3,7 +3,13 @@
     <label
       v-if="labelTitle"
       class="block w-full px-1 text-gray-800 text-md mb-1"
-      >{{ labelTitle }}</label
+    >
+      <div class="flex items-center space-x-3">
+        <span>
+          {{ labelTitle }}
+        </span>
+        <span v-if="isRequired" class="text-red-600 text-xl">*</span>
+      </div> </label
     ><input
       v-model="inputValue"
       :type="inputType"
@@ -39,7 +45,8 @@ export default defineComponent({
     },
     inputPlaceholder: {
       type: String,
-      required: true,
+      required: false,
+      default: 'Enter Value',
     },
     inputType: {
       type: String,
@@ -54,6 +61,11 @@ export default defineComponent({
     isDisabled: {
       type: Boolean,
       default: false,
+    },
+    isRequired: {
+      type: Boolean,
+      default: true,
+      required: false,
     },
   },
   setup(_props, ctx) {

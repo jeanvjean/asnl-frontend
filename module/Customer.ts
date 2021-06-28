@@ -13,16 +13,18 @@ class Customer {
     })
   }
 
-  // fetchCustomers() {
-  //   return new Promise<any>(async (resolve, reject) => {
-  //     try {
-  //       const response: any = await $axios.get('/customer/fetch-customers')
-  //       resolve(response.data.data)
-  //     } catch (error) {
-  //       reject(error)
-  //     }
-  //   })
-  // }
+  fetchCustomers(page: number) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get(
+          `/customer/fetch-customers?page=${page}&limit=10`
+        )
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 
   fetchCylinders(customerId: String) {
     return new Promise<any>(async (resolve, reject) => {
@@ -31,6 +33,25 @@ class Customer {
           '/cylinder/fetch-customer-cylinders/' + customerId
         )
         resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  registerCustomer(requestBody: FormData) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.post(
+          '/customer/create-customer',
+          requestBody,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        )
+        resolve(response)
       } catch (error) {
         reject(error)
       }

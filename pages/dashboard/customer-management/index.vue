@@ -1,8 +1,32 @@
 <template>
   <div class="py-6">
     <div class="mx-auto px-4 sm:px-6 md:px-8 w-full">
-      <div class="bg-white shadow-sm rounded-sm h-full px-4">
-        <div class="overflow-x-auto w-full py-4">
+      <div class="bg-white shadow-sm rounded-sm h-full">
+        <div class="py-2">
+          <div
+            class="
+              flex
+              justify-between
+              items-center
+              pr-6
+              pl-4
+              border-0 border-l-4 border-black
+              mt-4
+              w-full
+              overflow-x-auto
+            "
+          >
+            <h1 class="font-semibold text-black text-lg">Customers</h1>
+            <div class="flex items-center space-x-6">
+              <pagination
+                :pagination-details="paginationProp"
+                @next="changePage($event.value)"
+                @prev="changePage($event.value)"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="overflow-x-auto w-full py-4 px-4">
           <div class="w-full mb-4">
             <div
               class="
@@ -165,7 +189,7 @@
                     text-center
                   "
                 >
-                  Company Cyl
+                  Actions
                 </th>
               </tr>
             </thead>
@@ -190,7 +214,7 @@
                 </td>
 
                 <td class="px-4 text-left py-4">
-                  {{ bodySingle.phone }}
+                  {{ bodySingle.phoneNumber }}
                 </td>
 
                 <td class="px-4 text-left py-4">{{ bodySingle.address }}</td>
@@ -210,7 +234,7 @@
                   <div
                     class="
                       absolute
-                      ml-4
+                      -ml-4
                       bg-gray-50
                       border border-gray-300
                       w-40
@@ -233,7 +257,7 @@
                         w-full
                         overflow-none
                       "
-                      @click="showSingleCustomer = !showSingleCustomer"
+                      @click="showCustomerDetail(bodySingle)"
                     >
                       View Details
                     </button>
@@ -265,7 +289,7 @@
                         overflow-none
                       "
                     >
-                      Delete User
+                      Delete Customer
                     </button>
                   </div>
                 </td>
@@ -281,72 +305,83 @@
     />
     <customer
       v-if="showSingleCustomer"
+      :customer="customerProp"
       @close="showSingleCustomer = !showSingleCustomer"
     ></customer>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+} from '@nuxtjs/composition-api'
 import SearchComponent from '@/components/Base/Search.vue'
 import NewCustomer from '@/components/Overlays/NewCustomer.vue'
 import Customer from '@/components/Overlays/Customer.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
+import { CustomerController } from '@/module/Customer'
+import Pagination from '@/components/Base/Pagination.vue'
+import { CustomerDto } from '@/types/Types'
 
 export default defineComponent({
   name: 'Home',
-  components: { SearchComponent, NewCustomer, Customer, FilterComponent },
+  components: {
+    SearchComponent,
+    NewCustomer,
+    Customer,
+    FilterComponent,
+    Pagination,
+  },
   layout: 'dashboard',
   setup() {
     const headers = ['Customer Name', 'Email Address', 'Phone No.', 'Address']
 
-    const body = [
-      {
-        name: 'Lagos University (LUTH)',
-        email: 'gas@luth.edu.ng',
-        phone: '08178907234',
-        address: '12, Kudirat Abiola Way, Yaba, Lagos.',
-      },
-      {
-        name: 'Lagos University (LUTH)',
-        email: 'gas@luth.edu.ng',
-        phone: '08178907234',
-        address: '12, Kudirat Abiola Way, Yaba, Lagos.',
-      },
-      {
-        name: 'Lagos University (LUTH)',
-        email: 'gas@luth.edu.ng',
-        phone: '08178907234',
-        address: '12, Kudirat Abiola Way, Yaba, Lagos.',
-      },
-      {
-        name: 'Lagos University (LUTH)',
-        email: 'gas@luth.edu.ng',
-        phone: '08178907234',
-        address: '12, Kudirat Abiola Way, Yaba, Lagos.',
-      },
-      {
-        name: 'Lagos University (LUTH)',
-        email: 'gas@luth.edu.ng',
-        phone: '08178907234',
-        address: '12, Kudirat Abiola Way, Yaba, Lagos.',
-      },
-      {
-        name: 'Lagos University (LUTH)',
-        email: 'gas@luth.edu.ng',
-        phone: '08178907234',
-        address: '12, Kudirat Abiola Way, Yaba, Lagos.',
-      },
-    ]
+    const paginationProp = reactive({
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: 1,
+    })
+
+    const body = ref<any>([])
+    const customerProp = ref<CustomerDto>()
+
+    function showCustomerDetail(customer: CustomerDto) {
+      customerProp.value = customer
+      showSingleCustomer.value = !showSingleCustomer.value
+    }
 
     const defaultState = ref<Boolean>(false)
     const showNewCustomer = ref<Boolean>(false)
     const showSingleCustomer = ref<Boolean>(false)
+
+    function fetchCustomers(page: number) {
+      CustomerController.fetchCustomers(page).then((response) => {
+        body.value = response.docs
+        paginationProp.hasNextPage = response.hasNextPage
+        paginationProp.hasPrevPage = response.hasPrevPage
+        paginationProp.currentPage = response.page
+      })
+    }
+
+    function changePage(pageValue: number) {
+      fetchCustomers(pageValue)
+    }
+
+    onMounted(() => {
+      fetchCustomers(1)
+    })
     return {
       headers,
       body,
       defaultState,
       showNewCustomer,
       showSingleCustomer,
+      paginationProp,
+      changePage,
+      customerProp,
+      showCustomerDetail,
     }
   },
 })

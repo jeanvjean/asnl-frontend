@@ -228,7 +228,9 @@ export default defineComponent({
       'corrective-maintenance-main',
       'new-product',
       'cylinder-type',
+      'outright-sale',
       'new-user',
+      'transfer',
     ]
 
     const goBack = () => {

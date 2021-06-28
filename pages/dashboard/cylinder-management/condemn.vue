@@ -275,7 +275,6 @@
                 </td>
                 <td class="font-light text-lg text-center">
                   <select
-                    v-model="cylinders[i - 1].customer"
                     class="
                       w-full
                       border-2 border-gray-200
@@ -283,15 +282,14 @@
                       rounded-sm
                       focus:outline-none
                     "
-                    @change="setAndFetch($event.target.value, i)"
                   >
                     <option value="">Select a Cylinder</option>
                     <option
-                      v-for="(customer, index) in customers"
+                      v-for="(cylinder, index) in cylindersArrays"
                       :key="index"
-                      :value="customer._id"
+                      :value="cylinder.value"
                     >
-                      {{ customer.contactPerson }}
+                      {{ cylinder.name }}
                     </option>
                   </select>
                 </td>
@@ -480,15 +478,22 @@ export default defineComponent({
     const context = useContext()
 
     onMounted(() => {
-      CustomerController.fetchUnPaginatedCustomers().then((response) => {
-        customers.value = response
-        reciepients.value = customers.value.map((element: any) => {
-          return {
-            name: element.name,
-            value: element._id,
-          }
-        })
-      })
+      CylinderController.getRegisteredCylindersUnPaginated().then(
+        (response: any) => {
+          cylindersArrays.value = response.data.map((element: any) => {
+            return {
+              name: element.assignedNumber
+                ? element.assignedNumber
+                : 'Not Specified yet',
+              value: element._id,
+              cylinderNumber: element.cylinderNumber
+                ? element.cylinderNumber
+                : 'Not Specified yet',
+              gas: `${element.gasType.gasName} - ${element.gasType.colorCode}`,
+            }
+          })
+        }
+      )
     })
 
     function increaseCounter() {

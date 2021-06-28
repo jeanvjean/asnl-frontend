@@ -3,7 +3,7 @@
     <button
       v-if="!loadingStatus"
       type="button"
-      class="w-full py-3 rounded-sm"
+      class="w-full py-3 rounded-sm text-center"
       :class="buttonClass"
       @click="buttonClicked"
     >

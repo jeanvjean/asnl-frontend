@@ -44,3 +44,21 @@ export type ProductDetail = {
   location: String
   referrer: String
 }
+
+export type CustomerDto = {
+  name: String
+  CAC: String
+  TIN: String
+  address: String
+  contactPerson: String
+  customerType: String
+  cylinderHoldingTime: string
+  email: String
+  nickName: String
+  phoneNumber: Number
+  rcNumber: String
+  territory: String
+  unitPrice: String
+  products: any
+  modeOfService: String
+}

@@ -4,7 +4,7 @@
       <h1>All Vehicles</h1>
       <div class="flex space-x-4">
         <router-link
-          to="/dashboard/vehicle-management/maintenance"
+          to="/dashboard/vehicle-management/corrective-maintenance-main"
           class="
             flex
             space-x-2

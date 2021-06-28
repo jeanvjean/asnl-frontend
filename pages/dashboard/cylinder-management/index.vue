@@ -22,18 +22,6 @@
               @next="changePage($event.value)"
               @prev="changePage($event.value)"
             />
-            <button
-              class="
-                text-purple-500
-                underline
-                uppercase
-                focus:outline-none
-                font-medium
-                text-sm
-              "
-            >
-              View All
-            </button>
           </div>
         </div>
       </div>
@@ -96,43 +84,7 @@ export default defineComponent({
   },
   layout: 'dashboard',
   setup() {
-    const headers = [
-      'Cylinder No',
-      'Gas Type',
-      'Gas Volume Content',
-      'Water Capacity',
-      'Cylinder Type',
-      'Date Cylinder',
-    ]
-
-    const body = ref<any>([])
-    const paginationProp = reactive({
-      hasNextPage: false,
-      hasPrevPage: false,
-      currentPage: 1,
-    })
-
-    function changePage(nextPage: number) {
-      getCylinders(nextPage)
-    }
-
-    function getCylinders(pageValue: number) {
-      CylinderController.getRegisteredCylinders(pageValue).then(
-        (responses: any) => {
-          const myResponse = responses.data
-          body.value = myResponse.cylinders.docs
-          paginationProp.hasNextPage = myResponse.cylinders.hasNextPage
-          paginationProp.hasPrevPage = myResponse.cylinders.hasPrevPage
-          paginationProp.currentPage = myResponse.cylinders.page
-        }
-      )
-    }
-
-    onBeforeMount(() => {
-      getCylinders(1)
-    })
-
-    const statistics = [
+    const statistics = ref<any>([
       [
         [
           {
@@ -338,8 +290,73 @@ export default defineComponent({
           ],
         ],
       ],
-    ]
+    ])
     const showType = ref(false)
+
+    const headers = [
+      'Cylinder No',
+      'Gas Type',
+      'Gas Volume Content',
+      'Water Capacity',
+      'Cylinder Type',
+      'Date Cylinder',
+    ]
+
+    const body = ref<any>([])
+    const paginationProp = reactive({
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: 1,
+    })
+
+    function changePage(nextPage: number) {
+      getCylinders(nextPage)
+    }
+
+    function fetchStat() {
+      CylinderController.getCylinderStatistics().then((response) => {
+        const stat: any = response.data
+        statistics.value[0][0][0].value =
+          stat.assignedCylinder + stat.bufferCylinder
+        statistics.value[0][0][1][0].value = stat.bufferCylinder
+        statistics.value[0][0][1][1].value = stat.assignedCylinder
+
+        statistics.value[0][1][0].value = stat.withCustomer
+
+        statistics.value[0][2][0].value = stat.withAsnl
+        statistics.value[0][2][1][0][0].value =
+          stat.filledAssignedCylinders + stat.filledBufferCylinders
+        statistics.value[0][2][1][0][1].value = stat.filledBufferCylinders
+        statistics.value[0][2][1][0][2].value = stat.filledAssignedCylinders
+
+        statistics.value[0][2][1][1][0].value =
+          stat.emptyAssignedCylinders + stat.emptyBufferCylinders
+        statistics.value[0][2][1][1][1].value = stat.emptyBufferCylinders
+        statistics.value[0][2][1][1][2].value = stat.emptyAssignedCylinders
+
+        statistics.value[1][0][0].value =
+          stat.customerAssignedCylinders + stat.customerBufferCylinders
+        statistics.value[1][0][1][0].value = stat.customerBufferCylinders
+        statistics.value[1][0][1][1].value = stat.customerAssignedCylinders
+      })
+    }
+
+    function getCylinders(pageValue: number) {
+      CylinderController.getRegisteredCylinders(pageValue).then(
+        (responses: any) => {
+          const myResponse = responses.data
+          body.value = myResponse.cylinders.docs
+          paginationProp.hasNextPage = myResponse.cylinders.hasNextPage
+          paginationProp.hasPrevPage = myResponse.cylinders.hasPrevPage
+          paginationProp.currentPage = myResponse.cylinders.page
+        }
+      )
+    }
+
+    onBeforeMount(() => {
+      getCylinders(1)
+      fetchStat()
+    })
 
     return {
       headers,

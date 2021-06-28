@@ -255,7 +255,14 @@ export default defineComponent({
 
     onBeforeMount(() => {
       fetchPendingList()
+      fetchTransferStat()
     })
+
+    function fetchTransferStat() {
+      CylinderController.getTransferStatistics().then((response) => {
+        console.log(response)
+      })
+    }
 
     function fetchPendingList() {
       CylinderController.fetchPendingTransfers().then((response) => {

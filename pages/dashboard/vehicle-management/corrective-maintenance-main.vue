@@ -18,10 +18,7 @@
                 py-2
                 rounded-sm
               "
-              @click="
-                status = 'success'
-                showConfirmation = true
-              "
+              @click=";(status = 'success'), (showConfirmation = true)"
             >
               <span>Approve</span>
               <svg
@@ -48,10 +45,7 @@
                 rounded-sm
                 border border-btn-purple
               "
-              @click="
-                status = 'error'
-                showConfirmation = true
-              "
+              @click=";(status = 'error'), (showConfirmation = true)"
             >
               <span>Decline</span
               ><svg
@@ -442,10 +436,7 @@
     <confirmation
       v-if="showConfirmation"
       @close="showConfirmation = false"
-      @approve="
-        showConfirmation = false
-        showFinalStep = true
-      "
+      @approve=";(showConfirmation = false), (showFinalStep = true)"
     />
     <final-step
       v-if="showFinalStep"

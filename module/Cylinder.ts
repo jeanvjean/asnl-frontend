@@ -29,6 +29,33 @@ class CylinderRepository {
     })
   }
 
+  getCylinderStatistics() {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get(
+          `/cylinder/fetch-cylinder-stats
+`
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  getTransferStatistics() {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get(
+          '/cylinder/cylinder-transfer-stats'
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
   async getCylinder(id: number) {
     return await $axios.get('/cylinder/registered-cylinder-details/' + id)
   }

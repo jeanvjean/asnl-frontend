@@ -33,133 +33,208 @@
       <div class="grid grid-rows-1 md:grid-cols-2 gap-x-4">
         <select-component
           :label-title="'Customer Type'"
-          :select-array="[]"
+          :select-array="customerTypes"
           :default-option-text="'Select a Customer Type'"
+          :init-value="form.customerType"
+          @get="form.customerType = $event.value"
         />
         <input-component
           :label-title="'Mode of Service'"
           :input-placeholder="'Enter Mode of Service'"
+          :default-value="form.modeOfService"
+          @get="form.modeOfService = $event.value"
         />
 
         <input-component
           :label-title="'Customer Name'"
           :input-placeholder="'Enter Customer Name'"
+          :default-value="form.name"
+          @get="form.name = $event.value"
         />
 
         <input-component
           :label-title="'Nick Name'"
           :input-placeholder="'Enter Nick Name'"
+          :default-value="form.nickName"
+          @get="form.nickName = $event.value"
         />
 
         <input-component
           :label-title="'Address'"
           :input-placeholder="'Enter Customer Address'"
+          :default-value="form.address"
+          @get="form.address = $event.value"
         />
 
         <input-component
           :label-title="'Name of Contact Person'"
           :input-placeholder="'Enter Name of Contact Person'"
+          :default-value="form.contactPerson"
+          @get="form.contactPerson = $event.value"
         />
 
         <input-component
           :label-title="'Email Address'"
           :input-placeholder="'Enter Email Address'"
+          :default-value="form.email"
+          @get="form.email = $event.value"
         />
 
         <input-component
           :label-title="'Tax I.D Number (Optional)'"
-          :default-option-text="'Enter Tax I.D Number (Optional)'"
+          :input-placeholder="'Enter Tax I.D Number (Optional)'"
+          :default-value="form.TIN"
+          :is-required="false"
+          @get="form.TIN = $event.value"
         />
 
         <input-component
           :label-title="'Phone Number'"
           :input-placeholder="'Enter Phone Number'"
+          :default-value="form.phoneNumber"
+          @get="form.phoneNumber = $event.value"
         />
 
         <input-component
           :label-title="'R.C Number (Optional)'"
           :input-placeholder="'Enter R.C Number (Optional)'"
+          :default-value="form.rcNumber"
+          :is-required="false"
+          @get="form.rcNumber = $event.value"
         />
 
         <input-component
           :label-title="'Cylinder Holding Time'"
           :input-placeholder="'Enter Cylinder Holding Time'"
+          :default-value="form.cylinderHoldingTime"
+          @get="form.cylinderHoldingTime = $event.value"
         />
 
         <input-component
           :label-title="'Territory'"
-          :input-placeholder="'Enter Cylinder Holding Time'"
+          :input-placeholder="'Enter Territory'"
+          :default-value="form.territory"
+          @get="form.territory = $event.value"
         />
 
-        <input-component
-          :label-title="'Upload CAC Document'"
-          :input-type="'file'"
-          :input-placeholder="'CAC (Companies)'"
-        />
-
-        <input-component
-          :label-title="'Valid ID'"
-          :input-type="'file'"
-          :input-placeholder="'Valid ID (Individual)'"
-        />
-      </div>
-
-      <div
-        class="
-          border-t border-b-0 border-l-0 border-r-0
-          pt-3
-          my-2
-          border-2 border-gray-300
-          flex
-          justify-between
-          items-center
-          px-3
-        "
-      >
-        <h4>Products Section</h4>
-        <button
-          class="
-            flex
-            justify-center
-            items-center
-            bg-btn-purple
-            text-white
-            px-4
-            py-2
-            rounded-sm
-          "
-          @click="count++"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-6 h-6 fill-current"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            /></svg
-          ><span class="text-white">Add Product</span>
-        </button>
-      </div>
-      <div
-        v-for="i in count"
-        :key="i"
-        class="grid grid-rows-1 md:grid-cols-2 gap-x-4"
-      >
-        <select-component
-          :label-title="'Products'"
-          :select-array="[]"
-          :default-option-text="'Select a Product'"
-        />
         <input-component
           :label-title="'Unit Price'"
-          :input-placeholder="'Enter Unit of Price'"
+          :input-placeholder="'Enter Unit Price'"
+          :default-value="form.unitPrice"
+          @get="form.unitPrice = $event.value"
         />
+
+        <div class="w-full py-2">
+          <label class="block w-full px-1 text-gray-800 text-md mb-1"
+            >Upload CAC Document</label
+          >
+          <input
+            type="file"
+            class="
+              appearance-none
+              block
+              w-full
+              px-4
+              py-2
+              border-2 border-gray-200
+              rounded-sm
+              focus:outline-none
+              focus:border-btn-purple
+              font-thin
+              placeholder-gray-500
+              focus:placeholder-gray-300
+            "
+            @change="processFile($event, 'cac')"
+          />
+        </div>
+
+        <div class="w-full py-2">
+          <label class="block w-full px-1 text-gray-800 text-md mb-1"
+            >Valid ID</label
+          >
+          <input
+            type="file"
+            class="
+              appearance-none
+              block
+              w-full
+              px-4
+              py-2
+              border-2 border-gray-200
+              rounded-sm
+              focus:outline-none
+              focus:border-btn-purple
+              font-thin
+              placeholder-gray-500
+              focus:placeholder-gray-300
+            "
+            @change="processFile($event, 'validId')"
+          />
+        </div>
       </div>
+      <span :key="componentKey">
+        <div
+          class="
+            border-t border-b-0 border-l-0 border-r-0
+            pt-3
+            my-2
+            border-2 border-gray-300
+            flex
+            justify-between
+            items-center
+            px-3
+          "
+        >
+          <h4>Products Section</h4>
+          <button
+            class="
+              flex
+              justify-center
+              items-center
+              bg-btn-purple
+              text-white
+              px-4
+              py-2
+              rounded-sm
+            "
+            @click="increment"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6 fill-current"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+            <span class="text-white">Add Product</span>
+          </button>
+        </div>
+        <div
+          v-for="(product, i) in products"
+          :key="i"
+          class="grid grid-rows-1 md:grid-cols-2 gap-x-4"
+        >
+          <select-component
+            :label-title="'Products'"
+            :select-array="productsArray"
+            :default-option-text="'Select a Product'"
+            :init-value="product.id"
+            @get="changePrice($event.value, i)"
+          />
+          <input-component
+            :label-title="'Unit Price'"
+            :input-placeholder="'Enter Unit of Price'"
+            :disabled="true"
+            :default-value="product.price"
+          />
+        </div>
+      </span>
 
       <button
         class="
@@ -175,6 +250,7 @@
           bg-blue-500
           text-white
         "
+        @click="submit"
       >
         Add Customer
       </button>
@@ -182,10 +258,21 @@
   </back-drop>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+  useContext,
+} from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
+import { ProductObject } from '@/module/Product'
+import Validator from 'validatorjs'
+import { CustomerController } from '@/module/Customer'
+
 export default defineComponent({
   components: { BackDrop, InputComponent, SelectComponent },
   setup(_props, ctx) {
@@ -193,11 +280,166 @@ export default defineComponent({
       ctx.emit('close')
     }
 
-    const count = ref<number>(0)
+    const context = useContext()
+
+    const customerTypes = [
+      {
+        name: 'Pick Up',
+        value: 'pick up',
+      },
+    ]
+
+    const form = reactive<any>({
+      name: '',
+      customerType: '',
+      modeOfService: '',
+      nickName: '',
+      address: '',
+      contactPerson: '',
+      email: '',
+      TIN: '',
+      phoneNumber: '',
+      rcNumber: '',
+      cylinderHoldingTime: '',
+      territory: '',
+      unitPrice: '',
+      CAC: '',
+      validId: '',
+    })
+
+    const productsBody = ref<Array<String>>([])
+
+    function fetchProducts() {
+      ProductObject.fetchProductsUnPaginated().then((response: any) => {
+        productsArray.value = response.map((product: any) => {
+          return {
+            name: product.asnlNumber,
+            value: product._id,
+            price: product.unitCost,
+          }
+        })
+      })
+    }
+
+    onMounted(() => {
+      fetchProducts()
+    })
+
+    const products = ref<Array<any>>([])
+    const productsArray = ref([])
+    const componentKey = ref<number>(1)
+
+    const increment = () => {
+      products.value.push({
+        id: '',
+        price: '',
+      })
+    }
+
+    function processFile(event: any, index: any) {
+      const file = event.target.files[0]
+      if (index === 'cac') {
+        form.CAC = file
+      } else {
+        form.validId = file
+      }
+    }
+
+    function changePrice(selectedProduct: any, index: any) {
+      productsArray.value.forEach((prod: any) => {
+        if (prod.value === selectedProduct) {
+          products.value[index].id = String(selectedProduct)
+          products.value[index].price = String(prod.price)
+          productsBody.value.push(selectedProduct)
+        }
+      })
+      changeComponentKey()
+    }
+
+    const changeComponentKey = () => {
+      const random = Math.floor(Math.random() * (1000 - 100 + 1)) + 100
+      componentKey.value = random
+    }
+
+    const requestPayload = computed(() => {
+      const formData = new FormData()
+      formData.append('name', form.name)
+      formData.append('customerType', form.customerType)
+      formData.append('modeOfService', form.modeOfService)
+      formData.append('nickName', form.nickName)
+      formData.append('address', form.address)
+      formData.append('contactPerson', form.contactPerson)
+      formData.append('email', form.email)
+      formData.append('phoneNumber', form.phoneNumber)
+      formData.append('TIN', form.TIN)
+      formData.append('rcNumber', form.rcNumber)
+      formData.append('cylinderHoldingTime', form.cylinderHoldingTime)
+      formData.append('territory', form.territory)
+      formData.append('unitPrice', form.unitPrice)
+      formData.append('CAC', form.CAC)
+      formData.append('validId', form.validId)
+
+      productsBody.value.forEach((element: any) => {
+        formData.append('products', element)
+      })
+
+      return formData
+    })
+
+    onMounted(() => {
+      changeComponentKey()
+    })
+
+    const submit = () => {
+      const rules = {
+        name: 'required',
+        customerType: 'required',
+        modeOfService: 'required',
+        nickName: 'required',
+        address: 'required',
+        contactPerson: 'required',
+        email: 'required',
+        TIN: 'string',
+        phoneNumber: 'required',
+        rcNumber: 'string',
+        cylinderHoldingTime: 'required',
+        territory: 'required',
+        unitPrice: 'required',
+        CAC: 'required',
+        validId: 'required',
+      }
+
+      const validation: any = new Validator(form, rules)
+      if (validation.fails()) {
+        const errors = validation.errors.errors
+        for (const index in errors) {
+          if (Array.isArray(errors[index])) {
+            errors[index].forEach((element: string) => {
+              context.$toast.error(element)
+            })
+          }
+        }
+      } else if (!productsBody.value.length) {
+        context.$toast.error('Products is Required')
+      } else {
+        CustomerController.registerCustomer(requestPayload.value).then(() => {
+          close()
+        })
+      }
+    }
 
     return {
       close,
-      count,
+      form,
+      customerTypes,
+      products,
+      productsArray,
+      increment,
+      changePrice,
+      componentKey,
+      processFile,
+      requestPayload,
+      submit,
     }
   },
 })

@@ -21,25 +21,33 @@
               @next="changePage($event.value)"
               @prev="changePage($event.value)"
             />
-            <button
-              class="
-                text-purple-500
-                underline
-                uppercase
-                focus:outline-none
-                font-medium
-                text-sm
-              "
-            >
-              View All
-            </button>
           </div>
         </div>
       </div>
       <div class="flex justify-between mb-4 px-6">
         <div class="flex space-x-6 items-center font-medium text-black">
-          <h1 class="py-2 border-b-2 border-btn-purple">General Inventory</h1>
-          <h1 class="py-2">Gas (Refill)</h1>
+          <button
+            :class="
+              search == 'general-inventory'
+                ? 'border-b-2 border-btn-purple'
+                : ''
+            "
+            class="py-2 focus:outline-none"
+            @click="changeTab('general-inventory')"
+          >
+            General Inventory
+          </button>
+          <button
+            :class="
+              search == 'product-gas-refill'
+                ? 'border-b-2 border-btn-purple'
+                : ''
+            "
+            class="py-2 focus:outline-none"
+            @click="changeTab('product-gas-refill')"
+          >
+            Gas (Refill)
+          </button>
         </div>
         <button
           class="
@@ -138,13 +146,15 @@ export default defineComponent({
 
     const suppliers = ref<Array<SupplierDto>>([])
 
-    function fetchSuppliers(pageValue: number) {
-      ProductObject.fetchSuppliers(pageValue).then((response: any) => {
-        suppliers.value = response.docs
-        paginationProp.hasNextPage = response.hasNextPage
-        paginationProp.hasPrevPage = response.hasPrevPage
-        paginationProp.currentPage = response.page
-      })
+    function fetchSuppliers(pageValue: number, searchValue: string) {
+      ProductObject.fetchSuppliers(pageValue, searchValue).then(
+        (response: any) => {
+          suppliers.value = response.docs
+          paginationProp.hasNextPage = response.hasNextPage
+          paginationProp.hasPrevPage = response.hasPrevPage
+          paginationProp.currentPage = response.page
+        }
+      )
     }
 
     const paginationProp = reactive({
@@ -153,9 +163,16 @@ export default defineComponent({
       currentPage: 1,
     })
 
-    function changePage(nextPage: number) {
-      fetchSuppliers(nextPage)
+    function changeTab(newTab: string) {
+      search.value = newTab
+      fetchSuppliers(1, search.value)
     }
+
+    function changePage(nextPage: number) {
+      fetchSuppliers(nextPage, search.value)
+    }
+
+    const search = ref<string>('general-inventory')
 
     const fetchCylinders = () => {
       CylinderController.getCylinders().then((response) => {
@@ -170,7 +187,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      fetchSuppliers(1)
+      fetchSuppliers(1, search.value)
     })
 
     const supplierTypes = [
@@ -192,6 +209,8 @@ export default defineComponent({
       changePage,
       paginationProp,
       fetchSuppliers,
+      changeTab,
+      search,
     }
   },
 })

@@ -254,10 +254,7 @@
     <confirmation
       v-if="showConfirmation"
       @close="showConfirmation = false"
-      @approve="
-        showConfirmation = false
-        showFinalStep = true
-      "
+      @approve=";(showConfirmation = false), (showFinalStep = true)"
     />
     <final-step
       v-if="showFinalStep"

@@ -28,10 +28,12 @@ import { defineComponent, ref } from '@nuxtjs/composition-api'
 import Header from '@/components/Partials/Header.vue'
 import MobileSidebar from '@/components/Partials/MobileSidebar.vue'
 import Sidebar from '@/components/Partials/Sidebar.vue'
+import isAuthenticated from '~/middleware/isAuthenticated'
 
 export default defineComponent({
   name: 'Dashboard',
   components: { Header, Sidebar, MobileSidebar },
+  middleware: isAuthenticated,
   setup() {
     const toggleMobileSidebar = ref(true)
 

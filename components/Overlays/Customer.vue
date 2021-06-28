@@ -26,7 +26,7 @@
         <div class="flex-initial">
           <svg
             class="
-              text-btn-purple
+              text-white
               mr-3
               h-10
               w-10
@@ -44,10 +44,8 @@
           </svg>
         </div>
         <div class="flex-1">
-          <h3 class="font-semibold text-lg">Lagos State Teaching Hospital</h3>
-          <span class="font-medium text-sm"
-            >2, Herbert Macauly Way, Yaba, Lagos</span
-          >
+          <h3 class="font-semibold text-lg">{{ customer.name }}</h3>
+          <span class="font-medium text-sm">{{ customer.address }}</span>
           <div class="w-full flex justify-between items-center mt-3">
             <button
               class="
@@ -72,8 +70,10 @@
                 />
                 <path
                   d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
-                /></svg
-              ><span>gas@luth.org</span>
+                />
+              </svg>
+
+              <span>{{ customer.email }}</span>
             </button>
             <button
               class="
@@ -95,8 +95,9 @@
               >
                 <path
                   d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
-                /></svg
-              ><span>09085678987</span>
+                />
+              </svg>
+              <span>{{ customer.phoneNumber }}</span>
             </button>
             <button
               v-if="sections.cylinder"
@@ -582,6 +583,7 @@ import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import TextAreaComponent from '@/components/Form/TextArea.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
+import { CustomerDto } from '@/types/Types'
 
 export default defineComponent({
   components: {
@@ -591,6 +593,12 @@ export default defineComponent({
     ButtonComponent,
     TextAreaComponent,
     FilterComponent,
+  },
+  props: {
+    customer: {
+      required: true,
+      type: Object as () => CustomerDto,
+    },
   },
   setup(_props, ctx) {
     const close = () => {
@@ -636,6 +644,20 @@ export default defineComponent({
       if (accordions.value.length) {
         accordions.value[0].show = true
       }
+      profile.value[0].value = _props.customer.name
+      profile.value[1].value = _props.customer.email
+      profile.value[2].value = _props.customer.phoneNumber
+      profile.value[3].value = _props.customer.address
+      profile.value[4].value = _props.customer.contactPerson
+      profile.value[5].value = _props.customer.rcNumber
+      profile.value[6].value = _props.customer.TIN
+      profile.value[7].value = _props.customer.customerType
+      profile.value[8].value = _props.customer.modeOfService
+      profile.value[9].value = _props.customer.territory
+      profile.value[10].value = new Date(
+        _props.customer.cylinderHoldingTime
+      ).toLocaleDateString()
+      profile.value[12].value = _props.customer.unitPrice
     })
 
     function toggleAccordion(index: number) {
@@ -652,46 +674,46 @@ export default defineComponent({
       sections.value[sectionName] = true
     }
 
-    const profile = [
+    const profile = ref<any>([
       {
         title: 'Customer Name',
-        value: 'Luth Martha',
+        value: '',
       },
       {
         title: 'Email Address',
-        value: 'gas.luth@gmail.com',
+        value: '',
       },
       {
         title: 'Telephone No',
-        value: '09034232342',
+        value: '',
       },
       {
         title: 'Address',
-        value: '2, Herbert Macauly Way, Yaba, Lagos',
+        value: '',
       },
       {
         title: 'Name of Contact Person',
-        value: 'Prince Oghene',
+        value: '',
       },
       {
         title: 'R.C. Number',
-        value: '342423',
+        value: '',
       },
       {
         title: 'Tax I.D Number',
-        value: '233232',
+        value: '',
       },
       {
         title: 'Customer Type',
-        value: 'Premium',
+        value: '',
       },
       {
         title: 'Mode of Service',
-        value: 'Premium',
+        value: '',
       },
       {
         title: 'Territory',
-        value: 'Premium',
+        value: '',
       },
       {
         title: 'Cylinder Holding Time',
@@ -705,7 +727,7 @@ export default defineComponent({
         title: 'Unit Price',
         value: 'Premium',
       },
-    ]
+    ])
 
     return {
       close,

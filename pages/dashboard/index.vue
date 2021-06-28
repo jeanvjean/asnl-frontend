@@ -142,18 +142,6 @@
               @next="changePage($event.value)"
               @prev="changePage($event.value)"
             />
-            <button
-              class="
-                text-purple-500
-                underline
-                uppercase
-                focus:outline-none
-                font-medium
-                text-sm
-              "
-            >
-              View All
-            </button>
           </div>
         </div>
       </div>
@@ -192,7 +180,7 @@
     </div>
     <new-cylinder
       v-if="showRegister"
-      @close="showRegister = false"
+      @close=";(showRegister = false), getCylinders(1)"
     ></new-cylinder>
   </div>
 </template>
@@ -220,6 +208,7 @@ export default defineComponent({
     Pagination,
   },
   layout: 'dashboard',
+
   setup() {
     const headers = [
       'Cylinder No',
@@ -279,6 +268,7 @@ export default defineComponent({
       registeredCylinders,
       paginationProp,
       changePage,
+      getCylinders,
     }
   },
 })
