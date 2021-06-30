@@ -56,7 +56,13 @@
               />
             </td>
             <td class="px-4 text-left py-4">
-              <span>{{ bodySingle.assignedNumber }}</span>
+              <span>{{
+                bodySingle.assignedNumber
+                  ? bodySingle.assignedNumber
+                  : bodySingle.cylinderNumber
+                  ? bodySingle.cylinderNumber
+                  : ''
+              }}</span>
             </td>
             <td class="px-4 text-left py-4">
               {{ bodySingle.gasType.gasName }}

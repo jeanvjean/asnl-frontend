@@ -248,7 +248,7 @@ export default defineComponent({
           const myResponse = responses.data
           stat.totalCylinders = myResponse.counts.totalCylinders
           stat.totalBufferCylinders = myResponse.counts.totalBufferCylinders
-          stat.totalBufferCylinders = myResponse.counts.totalAssignedCylinders
+          stat.totalAssignedCylinders = myResponse.counts.totalAssignedCylinders
           registeredCylinders.value = myResponse.cylinders.docs
           paginationProp.hasNextPage = myResponse.cylinders.hasNextPage
           paginationProp.hasPrevPage = myResponse.cylinders.hasPrevPage

@@ -1,6 +1,9 @@
 <template>
   <back-drop>
-    <div class="w-full sm:w-full md:w-1/2 bg-white py-4 px-8 rounded-sm">
+    <div
+      :key="componentKey"
+      class="w-full sm:w-full md:w-1/2 bg-white py-4 px-8 rounded-sm"
+    >
       <div class="flex justify-between items-center my-2">
         <div>
           <p class="text-xl font-medium">Register Gas Cylinder</p>
@@ -24,18 +27,21 @@
           :label-title="'Cylinder Type'"
           :select-array="cylinderTypes"
           :default-option-text="'Select a Cylinder Type'"
+          :init-value="formInputs.cylinderType"
           @get="formInputs.cylinderType = $event.value"
         />
         <input-component
           v-if="formInputs.cylinderType === 'buffer'"
           :label-title="'Original Cylinder Number'"
           :input-placeholder="'Cylinder number goes here'"
+          :default-value="originalNumber"
           @get="originalNumber = $event.value"
         />
 
         <input-component
           :label-title="'Water Capacity'"
           :input-placeholder="'Capacity'"
+          :default-value="formInputs.waterCapacity"
           @get="formInputs.waterCapacity = $event.value"
         />
 
@@ -80,28 +86,34 @@
           :label-title="'Date of Manufacture'"
           :input-type="'date'"
           :input-placeholder="'Select Date Here'"
+          :default-value="formInputs.dateManufactured"
           @get="formInputs.dateManufactured = $event.value"
         />
         <input-component
           :label-title="'Filling Pressure'"
           :input-placeholder="'Enter Pressure here (bar)'"
+          :default-value="formInputs.fillingPreasure"
           @get="formInputs.fillingPreasure = $event.value"
         />
 
         <input-component
           :label-title="'Testing Pressure'"
           :input-placeholder="'Enter Working Pressure here (bar)'"
+          :default-value="formInputs.testingPresure"
           @get="formInputs.testingPresure = $event.value"
         />
         <select-component
           :label-title="'Gas Type'"
           :select-array="gasTypes"
           :default-option-text="'Select Gas Type'"
-          @get="formInputs.gasType = $event.value"
+          :init-value="formInputs.gasType"
+          @get=";(formInputs.gasType = $event.value), changeColor($event.value)"
         />
         <input-component
           :label-title="'Standard Cylinder Color Code'"
           :input-placeholder="'Green'"
+          :is-disabled="true"
+          :default-value="formInputs.standardColor"
           @get="formInputs.standardColor = $event.value"
         />
         <select-component
@@ -109,41 +121,18 @@
           :label-title="'Cylinder Assigned To'"
           :default-option-text="'Select Customer'"
           :select-array="customers"
+          :init-value="assignedTo"
           @get="assignedTo = $event.value"
         />
         <input-component
           v-if="formInputs.cylinderType === 'assigned'"
           :label-title="'Assigned Number'"
           :input-placeholder="'ASNL BF-103'"
+          :default-value="assignedNumber"
           @get="assignedNumber = $event.value"
         />
       </div>
       <div class="flex justify-center items-center space-x-4 mt-4">
-        <button
-          class="
-            rounded-sm
-            px-4
-            py-2
-            border-2 border-btn-purple
-            text-sm
-            font-light
-            flex
-            justify-between
-            items-center
-            space-x-4
-          "
-        >
-          <span>Add More Cylinders</span>
-          <svg
-            class="w-4 h-4 fill-current"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path
-              d="M11 9h4v2h-4v4H9v-4H5V9h4V5h2v4zm-1 11a10 10 0 110-20 10 10 0 010 20zm0-2a8 8 0 100-16 8 8 0 000 16z"
-            />
-          </svg>
-        </button>
         <button
           class="
             rounded-sm
@@ -227,6 +216,7 @@ export default defineComponent({
           return {
             name: element.gasName + ' - ' + element.colorCode,
             value: element._id,
+            color: element.colorCode,
           }
         })
       })
@@ -240,6 +230,21 @@ export default defineComponent({
         })
       })
     })
+
+    function changeColor(id: string) {
+      gasTypes.value.forEach((el: any) => {
+        if (el.value === id) {
+          formInputs.standardColor = el.color
+        }
+      })
+
+      updateComponent()
+    }
+
+    const updateComponent = () => {
+      componentKey.value++
+    }
+
     function valuesNotEmpty(obj: Object) {
       return Object.values(obj).every(
         (element) => element !== null && element !== ''
@@ -290,6 +295,8 @@ export default defineComponent({
         context.$toast.global.required()
       }
     }
+
+    const componentKey = ref<number>(0)
     return {
       cylinderTypes,
       customers,
@@ -300,6 +307,8 @@ export default defineComponent({
       originalNumber,
       assignedTo,
       assignedNumber,
+      changeColor,
+      componentKey,
     }
   },
 })

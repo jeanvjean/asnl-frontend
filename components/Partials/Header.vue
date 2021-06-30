@@ -197,6 +197,7 @@ import {
   useContext,
   computed,
   useRouter,
+  useRoute,
 } from '@nuxtjs/composition-api'
 import { mainStore } from '@/module/Pinia'
 
@@ -206,6 +207,7 @@ export default defineComponent({
     const context = useContext()
     const userMenu = ref(false)
     const router = useRouter()
+    const route = useRoute()
 
     const showMobileSidebar = () => {
       ctx.emit('show')
@@ -214,12 +216,18 @@ export default defineComponent({
     const auth: any = appStore.getLoggedInUser
 
     const title = computed(() => {
-      const path: String = context.route.value.path
-      const splitPath: any = path.split('/')
-      const filterPaths = splitPath.filter((element: String) => {
-        return element !== ''
-      })
-      const lastPath: string = filterPaths[filterPaths.length - 1]
+      const paramsId = route.value.params.id
+      let lastPath: string
+      if (paramsId) {
+        lastPath = 'id'
+      } else {
+        const path: String = context.route.value.path
+        const splitPath: any = path.split('/')
+        const filterPaths = splitPath.filter((element: String) => {
+          return element !== ''
+        })
+        lastPath = filterPaths[filterPaths.length - 1]
+      }
       return lastPath
     })
 
@@ -231,6 +239,7 @@ export default defineComponent({
       'outright-sale',
       'new-user',
       'transfer',
+      'id',
     ]
 
     const goBack = () => {

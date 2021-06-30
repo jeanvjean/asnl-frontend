@@ -23,7 +23,7 @@
                 showConfirmation = true
               "
             >
-              <span>Approve</span>
+              <span>Save</span>
               <svg
                 class="w-6 h-6 fill-current text-btn-purple"
                 xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +53,7 @@
                 showConfirmation = true
               "
             >
-              <span>Decline</span
+              <span>Cancel</span
               ><svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="w-6 h-6 fill-current text-white"

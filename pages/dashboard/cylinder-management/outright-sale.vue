@@ -154,7 +154,7 @@
               "
               @click="submit"
             >
-              <span>Approve</span>
+              <span>Save</span>
               <svg
                 class="w-6 h-6 fill-current text-btn-purple"
                 xmlns="http://www.w3.org/2000/svg"
@@ -181,7 +181,7 @@
               "
               @click=";(status = 'error'), (showConfirmation = true)"
             >
-              <span>Decline</span
+              <span>Cancel</span
               ><svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="w-6 h-6 fill-current text-white"
@@ -338,6 +338,7 @@
                     class="w-4 h-4 fill-current text-transparent"
                     viewBox="0 0 24 24"
                     stroke="black"
+                    @click="deleteCylinder(i)"
                   >
                     <path
                       stroke-linecap="round"
@@ -525,6 +526,10 @@ export default defineComponent({
       })
     }
 
+    function deleteCylinder(index: number) {
+      cylinders.value.splice(index, 1)
+    }
+
     function increaseCounter() {
       cylinders.value.push({
         type: '',
@@ -621,6 +626,7 @@ export default defineComponent({
       cylinderResponse,
       setOtherValues,
       auth,
+      deleteCylinder,
     }
   },
 })

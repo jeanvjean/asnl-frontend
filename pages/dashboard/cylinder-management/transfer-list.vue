@@ -6,7 +6,9 @@
           Total Transfer Request
         </p>
         <div class="relative space-x-4 flex justify-between">
-          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">834</p>
+          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
+            {{ statistics.totalTransferRequest }}
+          </p>
           <svg
             width="117"
             height="69"
@@ -57,7 +59,9 @@
           Total Approved Request
         </p>
         <div class="relative space-x-4 flex justify-between">
-          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">399</p>
+          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
+            {{ statistics.totalApprovedRequest }}
+          </p>
           <svg
             width="117"
             height="69"
@@ -108,7 +112,9 @@
           Total Pending Request
         </p>
         <div class="relative space-x-4 flex justify-between">
-          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">435</p>
+          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
+            {{ statistics.totalPendingRequest }}
+          </p>
           <svg
             width="117"
             height="69"
@@ -230,7 +236,12 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onBeforeMount,
+  reactive,
+  ref,
+} from '@nuxtjs/composition-api'
 import TableComponent from '@/components/Base/Table3.vue'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
 import SearchComponent from '@/components/Base/Search.vue'
@@ -258,9 +269,18 @@ export default defineComponent({
       fetchTransferStat()
     })
 
+    const statistics = reactive({
+      totalTransferRequest: 0,
+      totalApprovedRequest: 0,
+      totalPendingRequest: 0,
+    })
+
     function fetchTransferStat() {
       CylinderController.getTransferStatistics().then((response) => {
-        console.log(response)
+        const stat = response.data
+        statistics.totalTransferRequest = stat.all_transfers
+        statistics.totalApprovedRequest = stat.approvedTransfers
+        statistics.totalPendingRequest = stat.pendingTransfers
       })
     }
 
@@ -275,6 +295,7 @@ export default defineComponent({
       headers,
       body,
       showRegister,
+      statistics,
     }
   },
 })

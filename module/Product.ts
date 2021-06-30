@@ -33,9 +33,13 @@ class ProductRespository {
   fetchSuppliers(page: number, filter: string = '') {
     return new Promise(async (resolve, reject) => {
       try {
-        const response = await $axios.get(
-          `/inventory/fetch-suppliers?page=${page}&limit=20&search=${filter}`
-        )
+        let url: string
+        if (filter) {
+          url = `/inventory/fetch-suppliers?page=${page}&limit=20&search=${filter}`
+        } else {
+          url = `/inventory/fetch-suppliers?page=${page}&limit=20`
+        }
+        const response = await $axios.get(url)
         resolve(response.data.data)
       } catch (error) {
         reject(error)
@@ -100,6 +104,17 @@ class ProductRespository {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get('/inventory/fetch-all-products')
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  fetchInventoryStatistics() {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get('/inventory/inventory-stats')
         resolve(response.data.data)
       } catch (error) {
         reject(error)

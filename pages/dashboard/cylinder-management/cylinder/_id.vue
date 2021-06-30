@@ -231,8 +231,15 @@ export default defineComponent({
           Testing_Pressure: cylinderResponse.testingPresure,
           Filling_Preasure: cylinderResponse.fillingPreasure,
           GasVolume_Content: cylinderResponse.gasVolumeContent,
-          Assigned_To: cylinderResponse.assignedTo.name,
-          Assigned_Number: cylinderResponse.assignedNumber,
+          Assigned_To:
+            cylinderResponse.assignedTo && cylinderResponse.assignedTo.name
+              ? cylinderResponse.assignedTo.name
+              : 'Not Assigned to anyone',
+          Cylinder_Number: cylinderResponse.assignedNumber
+            ? cylinderResponse.assignedNumber
+            : cylinderResponse.cylinderNumber
+            ? cylinderResponse.cylinderNumber
+            : 'Not Specified',
         }
       })
     })
