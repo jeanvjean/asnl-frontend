@@ -33,6 +33,13 @@
           "
         >
           <select-component
+            :label-title="'Supplier Type'"
+            :default-option-text="'Select Supplier Type'"
+            :select-array="supplierTypes"
+            @get="formInputs.supplierType = $event.value"
+          />
+
+          <select-component
             :label-title="'Product Type'"
             :default-option-text="'Select Product Type'"
             :select-array="gasTypes"
@@ -62,12 +69,6 @@
             :label-title="'Telephone No'"
             :input-placeholder="'Enter Telephone'"
             @get="formInputs.phoneNumber = $event.value"
-          />
-          <select-component
-            :label-title="'Supplier Type'"
-            :default-option-text="'Select Supplier Type'"
-            :select-array="supplierTypes"
-            @get="formInputs.supplierType = $event.value"
           />
         </div>
         <div>

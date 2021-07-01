@@ -185,7 +185,7 @@
                   >Supplier</router-link
                 >
                 <router-link
-                  to="/dashboard/inventory/grn"
+                  to="/dashboard/inventory/goods-recieve-note"
                   class="block px-2 py-2"
                   >GRN</router-link
                 >
