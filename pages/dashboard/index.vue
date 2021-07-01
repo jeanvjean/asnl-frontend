@@ -191,7 +191,7 @@ import {
   reactive,
   onMounted,
 } from '@nuxtjs/composition-api'
-import TableComponent from '@/components/Base/Table3.vue'
+import TableComponent from '@/components/Base/Table2.vue'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
 import { CylinderController } from '@/module/Cylinder'
 import SearchComponent from '@/components/Base/Search.vue'

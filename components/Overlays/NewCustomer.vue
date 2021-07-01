@@ -272,6 +272,7 @@ import SelectComponent from '@/components/Form/Select.vue'
 import { ProductObject } from '@/module/Product'
 import Validator from 'validatorjs'
 import { CustomerController } from '@/module/Customer'
+import { ValidatorObject } from '@/module/Validation'
 
 export default defineComponent({
   components: { BackDrop, InputComponent, SelectComponent },
@@ -411,14 +412,12 @@ export default defineComponent({
 
       const validation: any = new Validator(form, rules)
       if (validation.fails()) {
-        const errors = validation.errors.errors
-        for (const index in errors) {
-          if (Array.isArray(errors[index])) {
-            errors[index].forEach((element: string) => {
-              context.$toast.error(element)
-            })
-          }
-        }
+        let messages: string[] = []
+
+        messages = ValidatorObject.getMessages(validation.errors)
+        messages.forEach((error: string) => {
+          context.$toast.error(error)
+        })
       } else if (!productsBody.value.length) {
         context.$toast.error('Products is Required')
       } else {

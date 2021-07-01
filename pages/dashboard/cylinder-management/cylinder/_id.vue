@@ -125,7 +125,7 @@
                 "
               >
                 <h1 class="font-light">Gas Cylinder:</h1>
-                <span>ASNL BF-103 </span>
+                <span>{{ details.Cylinder_Number }} </span>
               </div>
             </div>
           </div>

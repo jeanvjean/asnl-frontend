@@ -248,6 +248,9 @@ export default defineComponent({
 
     onMounted(() => {
       getProducts(1)
+      ProductObject.fetchInventoryStatistics().then((response) => {
+        console.log(response)
+      })
     })
 
     function getProducts(pageValue: number) {

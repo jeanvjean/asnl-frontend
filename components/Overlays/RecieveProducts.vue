@@ -145,7 +145,7 @@
                       text-sm
                     "
                   >
-                    Product Number
+                    Product Name
                   </th>
                   <th
                     class="
@@ -157,7 +157,7 @@
                       text-sm
                     "
                   >
-                    Product Name
+                    Product Number
                   </th>
                   <th
                     class="
@@ -252,26 +252,26 @@
                   <td class="text-center">{{ Number(i) + 1 }}</td>
                   <td>
                     <input-component
-                      :input-placeholder="'Enter Product Number'"
-                      :default-value="product.productNumber"
-                      @get="product.productNumber = $event.value"
-                    />
-                  </td>
-                  <td>
-                    <input-component
                       :input-placeholder="'Enter Product Name'"
                       :default-value="product.productName"
                       @get="product.productName = $event.value"
                     />
                   </td>
+
+                  <td>
+                    <input-component
+                      :input-placeholder="'Enter Product Number'"
+                      :default-value="product.productNumber"
+                      @get="product.productNumber = $event.value"
+                    />
+                  </td>
+
                   <td>
                     <input-component
                       :input-placeholder="'Enter Quantity'"
                       :default-value="product.quantity"
                       :input-type="'number'"
-                      @get="
-                        ;(product.quantity = $event.value), changeTotalCost()
-                      "
+                      @get="product.quantity = $event.value"
                     />
                   </td>
                   <td>
@@ -279,7 +279,7 @@
                       :input-placeholder="'#'"
                       :default-value="product.passed"
                       :input-type="'number'"
-                      @get="product.passed = $event.value"
+                      @get=";(product.passed = $event.value), changeTotalCost()"
                     />
                   </td>
                   <td>
@@ -366,6 +366,7 @@
                   px-6
                   py-3
                   rounded-sm
+                  file-select
                 "
               >
                 <div class="text-center mb-2">
@@ -381,6 +382,7 @@
                   </svg>
                 </div>
                 <div class="text-center font-medium">Upload an attachment</div>
+                <input type="file" />
               </button>
             </div>
 
@@ -437,6 +439,7 @@
               Cancel
             </button>
           </div>
+          <file-input v-if="false" />
         </div>
       </div>
     </div>
@@ -453,11 +456,13 @@ import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import { ProductObject } from '@/module/Product'
 import { mainStore } from '@/module/Pinia'
+import FileInput from '@/components/Form/FileInput.vue'
 
 export default defineComponent({
   components: {
     BackDrop,
     InputComponent,
+    FileInput,
   },
   setup(_props, ctx) {
     const close = () => {
@@ -501,7 +506,7 @@ export default defineComponent({
     function changeTotalCost() {
       products.value.forEach((element: any) => {
         const totalCost = String(
-          Number(element.quantity) * Number(element.unitCost)
+          Number(element.passed) * Number(element.unitCost)
         )
         element.totalCost = totalCost
       })
@@ -562,3 +567,9 @@ export default defineComponent({
   },
 })
 </script>
+
+<style scoped>
+.file-select > input[type='file'] {
+  display: none;
+}
+</style>

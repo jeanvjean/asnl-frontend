@@ -103,34 +103,6 @@
 
             <span>Condemn</span>
           </router-link>
-          <router-link
-            to="/dashboard/cylinder-management/cylinder-type"
-            class="
-              flex
-              space-x-4
-              items-center
-              text-btn-purple
-              border-btn-purple border
-              px-4
-              py-2
-              rounded-sm
-              md:mx-auto
-            "
-          >
-            <svg
-              class="w-6 h-6 fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                clip-rule="evenodd"
-              />
-            </svg>
-
-            <span class="text-center">Cylinder Type</span>
-          </router-link>
         </div>
       </div>
     </div>
@@ -403,13 +375,14 @@
             placeholder="Enter Comment here"
           />
         </div>
-        <div class="flex justify-evenly items-start py-2 px-2">
-          <div v-for="i in 3" :key="i">
+        <div class="flex justify-between items-start py-2 px-10">
+          <div>
             <p class="text-gray-500 text-sm font-medium leading-6">
-              Initiated at
+              Initiated By
             </p>
             <p class="text-gray-500 text-sm font-medium">
-              <span>24/02/2020</span> <span>11:02</span>
+              <span>{{ new Date().toDateString() }}</span> @
+              <span>{{ new Date().toLocaleTimeString() }}</span>
             </p>
             <div class="flex items-start space-x-4 py-2">
               <img
@@ -418,8 +391,10 @@
                 alt=""
               />
               <div>
-                <p class="text-black text-lg">Chimerem Egbuson</p>
-                <p class="text-gray-600 text-sm">Operations Manager</p>
+                <p class="text-black text-lg capitalize">{{ auth.name }}</p>
+                <p class="text-gray-600 text-sm capitalize">
+                  {{ auth.subrole }} - {{ auth.role }}
+                </p>
               </div>
             </div>
           </div>
@@ -433,7 +408,7 @@
             <span>{{ new Date().toLocaleTimeString() }}</span>
           </p>
           <p class="py-2 text-gray-700 leading-6">
-            {{ form.comment }}
+            {{ form.comment ? form.comment : 'No Comment Entered' }}
           </p>
           <div class="flex items-start space-x-4 py-2">
             <img

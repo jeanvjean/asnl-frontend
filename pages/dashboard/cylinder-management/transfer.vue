@@ -417,13 +417,14 @@
             placeholder="Enter Comment here"
           />
         </div>
-        <div class="flex justify-evenly items-start py-2 px-2">
-          <div v-for="i in 3" :key="i">
+        <div class="flex justify-between items-start py-2 px-10">
+          <div>
             <p class="text-gray-500 text-sm font-medium leading-6">
-              Initiated at
+              Initiated By
             </p>
             <p class="text-gray-500 text-sm font-medium">
-              <span>24/02/2020</span> <span>11:02</span>
+              <span>{{ new Date().toDateString() }}</span> @
+              <span>{{ new Date().toLocaleTimeString() }}</span>
             </p>
             <div class="flex items-start space-x-4 py-2">
               <img
@@ -432,8 +433,10 @@
                 alt=""
               />
               <div>
-                <p class="text-black text-lg">Chimerem Egbuson</p>
-                <p class="text-gray-600 text-sm">Operations Manager</p>
+                <p class="text-black text-lg capitalize">{{ auth.name }}</p>
+                <p class="text-gray-600 text-sm capitalize">
+                  {{ auth.subrole }} - {{ auth.role }}
+                </p>
               </div>
             </div>
           </div>
@@ -446,7 +449,7 @@
             <span>{{ new Date().toLocaleTimeString() }}</span>
           </p>
           <p class="py-2 text-gray-700 leading-6">
-            {{ form.comment }}
+            {{ form.comment ? form.comment : 'No Comment Entered' }}
           </p>
           <div class="flex items-start space-x-4 py-2">
             <img

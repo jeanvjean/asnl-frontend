@@ -3,14 +3,14 @@
     <label
       v-if="labelTitle"
       class="block w-full px-1 text-gray-800 text-md mb-1"
-      ><div class="flex items-center space-x-3">
-        <span>
-          {{ labelTitle }}
-        </span>
-        <span v-if="isRequired" class="text-red-600 text-xl">*</span>
-      </div></label
+    >
+      <span>
+        {{ labelTitle }}
+      </span>
+      <span v-if="isRequired" class="text-red-600 text-base">*</span> </label
     ><select
       v-model="selectedValue"
+      :disabled="isDisabled"
       class="
         appearance-none
         block
@@ -72,6 +72,10 @@ export default defineComponent({
       type: Boolean,
       default: true,
       required: false,
+    },
+    isDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(_props, ctx) {

@@ -120,7 +120,7 @@
                       text-sm
                     "
                   >
-                    Product Number
+                    Product Name
                   </th>
                   <th
                     class="
@@ -132,7 +132,7 @@
                       text-sm
                     "
                   >
-                    Product Name
+                    Product Number
                   </th>
                   <th
                     class="
@@ -180,18 +180,19 @@
                   <td class="text-center">{{ Number(i) + 1 }}</td>
                   <td>
                     <input-component
-                      :input-placeholder="'Enter Product Number'"
-                      :default-value="product.productNumber"
-                      @get="product.productNumber = $event.value"
-                    />
-                  </td>
-                  <td>
-                    <input-component
                       :input-placeholder="'Enter Product Name'"
                       :default-value="product.productName"
                       @get="product.productName = $event.value"
                     />
                   </td>
+                  <td>
+                    <input-component
+                      :input-placeholder="'Enter Product Number'"
+                      :default-value="product.productNumber"
+                      @get="product.productNumber = $event.value"
+                    />
+                  </td>
+
                   <td>
                     <input-component
                       :input-placeholder="'#'"

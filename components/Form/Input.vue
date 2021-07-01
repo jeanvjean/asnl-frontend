@@ -4,12 +4,10 @@
       v-if="labelTitle"
       class="block w-full px-1 text-gray-800 text-md mb-1"
     >
-      <div class="flex items-center space-x-3">
-        <span>
-          {{ labelTitle }}
-        </span>
-        <span v-if="isRequired" class="text-red-600 text-xl">*</span>
-      </div> </label
+      <span>
+        {{ labelTitle }}
+      </span>
+      <span v-if="isRequired" class="text-red-600 text-base">*</span> </label
     ><input
       v-model="inputValue"
       :type="inputType"
@@ -29,6 +27,8 @@
         placeholder-gray-500
         focus:placeholder-gray-300
       "
+      min="0"
+      step="1"
       @keyup="returnValue"
       @change="returnValue"
     />

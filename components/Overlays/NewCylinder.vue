@@ -34,8 +34,9 @@
           v-if="formInputs.cylinderType === 'buffer'"
           :label-title="'Original Cylinder Number'"
           :input-placeholder="'Cylinder number goes here'"
-          :default-value="originalNumber"
-          @get="originalNumber = $event.value"
+          :default-value="formInputs.cylinderNumber"
+          :is-required="false"
+          @get="formInputs.cylinderNumber = $event.value"
         />
 
         <input-component
@@ -45,7 +46,7 @@
           @get="formInputs.waterCapacity = $event.value"
         />
 
-        <div class="w-full py-3 mt-1 relative">
+        <div class="w-full py-2 mt-1 relative">
           <label for="password" class="block w-full px-1 text-gray-800 text-md"
             >Gas Volume Content</label
           ><input
@@ -56,7 +57,7 @@
               block
               w-full
               px-4
-              py-3
+              py-2
               border-2 border-gray-200
               rounded-sm
               focus:outline-none
@@ -71,10 +72,10 @@
               absolute
               top-12
               right-0
-              -mt-2.5
+              -mt-3.5
               bg-gray-200
               border-none
-              py-3
+              py-2
               rounded-sm
             "
           >
@@ -121,15 +122,16 @@
           :label-title="'Cylinder Assigned To'"
           :default-option-text="'Select Customer'"
           :select-array="customers"
-          :init-value="assignedTo"
-          @get="assignedTo = $event.value"
+          :init-value="formInputs.assignedTo"
+          @get="formInputs.assignedTo = $event.value"
         />
         <input-component
           v-if="formInputs.cylinderType === 'assigned'"
           :label-title="'Assigned Number'"
           :input-placeholder="'ASNL BF-103'"
-          :default-value="assignedNumber"
-          @get="assignedNumber = $event.value"
+          :is-required="false"
+          :default-value="formInputs.assignedNumber"
+          @get="formInputs.assignedNumber = $event.value"
         />
       </div>
       <div class="flex justify-center items-center space-x-4 mt-4">
@@ -178,6 +180,9 @@ import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import { CylinderController } from '@/module/Cylinder'
 import { CustomerController } from '@/module/Customer'
+import Validator from 'validatorjs'
+import { ValidatorObject } from '@/module/Validation'
+
 export default defineComponent({
   components: { BackDrop, InputComponent, SelectComponent },
   setup(_props, ctx) {
@@ -203,11 +208,10 @@ export default defineComponent({
       testingPresure: '',
       fillingPreasure: '',
       gasVolumeContent: '',
+      cylinderNumber: '',
+      assignedTo: '',
+      assignedNumber: '',
     })
-
-    const originalNumber = ref()
-    const assignedTo = ref()
-    const assignedNumber = ref()
 
     onMounted(() => {
       CylinderController.getCylinders().then((response) => {
@@ -245,54 +249,44 @@ export default defineComponent({
       componentKey.value++
     }
 
-    function valuesNotEmpty(obj: Object) {
-      return Object.values(obj).every(
-        (element) => element !== null && element !== ''
-      )
-    }
     const createCylinder = () => {
-      if (valuesNotEmpty(formInputs)) {
-        let requestBody
-        if (formInputs.cylinderType === 'buffer' && originalNumber.value) {
-          requestBody = {
-            cylinderType: formInputs.cylinderType,
-            waterCapacity: formInputs.waterCapacity,
-            dateManufactured: formInputs.dateManufactured,
-            gasType: formInputs.gasType,
-            standardColor: formInputs.standardColor,
-            testingPresure: formInputs.testingPresure,
-            fillingPreasure: formInputs.fillingPreasure,
-            gasVolumeContent: formInputs.gasVolumeContent,
-            cylinderNumber: originalNumber.value,
-          }
-          CylinderController.registerCylinder(requestBody).then(() => {
-            close()
-          })
-        } else if (
-          formInputs.cylinderType === 'assigned' &&
-          assignedTo.value &&
-          assignedNumber.value
-        ) {
-          requestBody = {
-            cylinderType: formInputs.cylinderType,
-            waterCapacity: formInputs.waterCapacity,
-            dateManufactured: formInputs.dateManufactured,
-            gasType: formInputs.gasType,
-            standardColor: formInputs.standardColor,
-            testingPresure: formInputs.testingPresure,
-            fillingPreasure: formInputs.fillingPreasure,
-            gasVolumeContent: formInputs.gasVolumeContent,
-            assignedTo: assignedTo.value,
-            assignedNumber: assignedNumber.value,
-          }
-          CylinderController.registerCylinder(requestBody).then(() => {
-            close()
-          })
-        } else {
-          context.$toast.global.required()
-        }
+      const rules = {
+        cylinderType: 'required|string',
+        waterCapacity: 'required|numeric',
+        dateManufactured: 'required|date',
+        gasType: 'required|string',
+        standardColor: 'required|string',
+        testingPresure: 'required|numeric',
+        fillingPreasure: 'required|numeric',
+        gasVolumeContent: 'required|numeric',
+        cylinderNumber: 'string',
+        assignedTo: 'required_if:cylinderType,assigned',
+        assignedNumber: 'string',
+      }
+      const validation = new Validator(formInputs, rules)
+
+      if (validation.fails()) {
+        let messages: string[] = []
+        messages = ValidatorObject.getMessages(validation.errors)
+
+        messages.forEach((error: string) => {
+          context.$toast.error(error)
+        })
       } else {
-        context.$toast.global.required()
+        const requestBody = {
+          cylinderType: formInputs.cylinderType,
+          waterCapacity: formInputs.waterCapacity,
+          dateManufactured: formInputs.dateManufactured,
+          gasType: formInputs.gasType,
+          standardColor: formInputs.standardColor,
+          testingPresure: formInputs.testingPresure,
+          fillingPreasure: formInputs.fillingPreasure,
+          gasVolumeContent: formInputs.gasVolumeContent,
+          cylinderNumber: formInputs.cylinderNumber,
+        }
+        CylinderController.registerCylinder(requestBody).then(() => {
+          close()
+        })
       }
     }
 
@@ -304,9 +298,6 @@ export default defineComponent({
       close,
       formInputs,
       createCylinder,
-      originalNumber,
-      assignedTo,
-      assignedNumber,
       changeColor,
       componentKey,
     }
