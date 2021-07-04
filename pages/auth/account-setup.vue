@@ -102,7 +102,13 @@ export default defineComponent({
         context.$toast.global.required()
       } else {
         loading.value = true
-        UserController.updateUser(form, user._id)
+        const formData = new FormData()
+        formData.append('email', form.email)
+        formData.append('name', form.name)
+        formData.append('gender', form.gender)
+        formData.append('phoneNumber', form.phoneNumber)
+        formData.append('location', form.location)
+        UserController.updateUser(formData, user._id)
           .then(() => {
             UserController.getUser(user._id, form.email).then(
               (response: any) => {

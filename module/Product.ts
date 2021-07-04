@@ -47,8 +47,12 @@ class ProductRespository {
     })
   }
 
-  async registerInventory(request: Object) {
-    return await $axios.post('/inventory/register-inventory', request)
+  async registerInventory(request: FormData) {
+    return await $axios.post('/inventory/register-inventory', request, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
   }
 
   fetchInventories(page: number) {

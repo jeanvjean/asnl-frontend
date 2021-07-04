@@ -151,6 +151,7 @@
                 py-2
                 rounded-sm
               "
+              @click="submit"
             >
               <span>Save</span>
               <svg
@@ -177,7 +178,7 @@
                 rounded-sm
                 border border-btn-purple
               "
-              @click=";(status = 'error'), (showConfirmation = true)"
+              @click="goBack()"
             >
               <span>Cancel</span
               ><svg
@@ -200,7 +201,7 @@
           <table class="table w-full border-collapse border-0">
             <thead>
               <tr>
-                <th class="w-auto"></th>
+                <th class="w-auto px-2"></th>
                 <th
                   class="
                     font-light
@@ -209,19 +210,6 @@
                     py-2
                     text-center
                     w-3/12
-                    border border-gray-400
-                  "
-                >
-                  Assigned Number
-                </th>
-                <th
-                  class="
-                    font-light
-                    text-lg
-                    px-2
-                    py-2
-                    text-center
-                    w-2/12
                     border border-gray-400
                   "
                 >
@@ -234,24 +222,11 @@
                     px-2
                     py-2
                     text-center
-                    w-2/12
+                    w-3/12
                     border border-gray-400
                   "
                 >
-                  Purchase Date
-                </th>
-                <th
-                  class="
-                    font-light
-                    text-lg
-                    px-2
-                    py-2
-                    text-center
-                    w-2/12
-                    border border-gray-400
-                  "
-                >
-                  Purchase Cost
+                  Gas Type
                 </th>
                 <th
                   class="
@@ -264,18 +239,32 @@
                     border border-gray-400
                   "
                 >
-                  Cost of Sale
+                  Cylinder Type
+                </th>
+                <th
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-3/12
+                    border border-gray-400
+                  "
+                >
+                  Date of Manufacture
                 </th>
                 <th class="w-auto"></th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="i in count" :key="i" class="hover:bg-gray-100">
+              <tr v-for="(cylind, i) in cylinders" :key="i">
                 <td class="font-light text-lg text-center">
-                  {{ i }}
+                  {{ i + 1 }}
                 </td>
                 <td class="font-light text-lg text-center">
                   <select
+                    v-model="cylind.id"
                     class="
                       w-full
                       border-2 border-gray-200
@@ -283,11 +272,12 @@
                       rounded-sm
                       focus:outline-none
                     "
+                    @change="setValues(i, cylind.id)"
                   >
                     <option value="">Select a Cylinder</option>
                     <option
-                      v-for="(cylinder, index) in cylindersArrays"
-                      :key="index"
+                      v-for="(cylinder, ii) in cylindersArrays"
+                      :key="ii"
                       :value="cylinder.value"
                     >
                       {{ cylinder.name }}
@@ -295,29 +285,13 @@
                   </select>
                 </td>
                 <td class="font-light text-lg text-center">
-                  <input-component
-                    :default-value="cylinders[i - 1].cylinder"
-                    :input-placeholder="'Cylinder Number'"
-                  />
+                  {{ cylind.gasType }}
                 </td>
                 <td class="font-light text-lg text-center">
-                  <input-component
-                    :default-value="cylinders[i - 1].volume"
-                    :input-placeholder="'Select Purchase Date'"
-                    :input-type="'date'"
-                  />
+                  {{ cylind.cylinderType }}
                 </td>
                 <td class="font-light text-lg text-center">
-                  <input-component
-                    :default-value="cylinders[i - 1].volume"
-                    :input-placeholder="'Purchase Cost'"
-                  />
-                </td>
-                <td class="font-light text-lg text-center">
-                  <input-component
-                    :default-value="cylinders[i - 1].volume"
-                    :input-placeholder="'Cost of Sale'"
-                  />
+                  {{ cylind.dateManufactured }}
                 </td>
 
                 <td class="font-light text-lg text-center">
@@ -372,13 +346,14 @@
             placeholder="Enter Comment here"
           />
         </div>
-        <div class="flex justify-evenly items-start py-2 px-2">
-          <div v-for="i in 3" :key="i">
+        <div class="flex justify-between items-start py-2 px-10">
+          <div>
             <p class="text-gray-500 text-sm font-medium leading-6">
-              Initiated at
+              Initiated By
             </p>
             <p class="text-gray-500 text-sm font-medium">
-              <span>24/02/2020</span> <span>11:02</span>
+              <span>{{ new Date().toDateString() }}</span> @
+              <span>{{ new Date().toLocaleTimeString() }}</span>
             </p>
             <div class="flex items-start space-x-4 py-2">
               <img
@@ -387,23 +362,23 @@
                 alt=""
               />
               <div>
-                <p class="text-black text-lg">Chimerem Egbuson</p>
-                <p class="text-gray-600 text-sm">Operations Manager</p>
+                <p class="text-black text-lg capitalize">{{ auth.name }}</p>
+                <p class="text-gray-600 text-sm capitalize">
+                  {{ auth.subrole }} - {{ auth.role }}
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="lg:col-span-1 w-full px-6 py-4 border-b border-gray-300">
-        <div v-for="i in 2" :key="i" class="mb-6">
+        <div class="mb-6">
           <p class="text-gray-600 font-light text-sm">
-            <span>24/02/2020</span> <span>13:04</span>
+            <span>{{ new Date().toDateString() }}</span> @
+            <span>{{ new Date().toLocaleTimeString() }}</span>
           </p>
           <p class="py-2 text-gray-700 leading-6">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatum
-            corrupti minus, nobis harum saepe, vitae eius veniam deleniti velit
-            esse ad, dolorem ipsum inventore omnis beatae blanditiis asperiores
-            soluta maxime.
+            {{ form.comment ? form.comment : 'No Comment Entered' }}
           </p>
           <div class="flex items-start space-x-4 py-2">
             <img
@@ -412,8 +387,10 @@
               alt=""
             />
             <div>
-              <p class="text-black text-lg">Chimerem Egbuson</p>
-              <p class="text-gray-600 text-sm">Operations Manager</p>
+              <p class="text-black text-lg capitalize">{{ auth.name }}</p>
+              <p class="text-gray-600 text-sm capitalize">
+                {{ auth.subrole }} - {{ auth.role }}
+              </p>
             </div>
           </div>
         </div>
@@ -434,23 +411,30 @@
 </template>
 <script lang="ts">
 import {
+  computed,
   defineComponent,
   onMounted,
   reactive,
   ref,
   useContext,
+  useRouter,
   watch,
 } from '@nuxtjs/composition-api'
-import InputComponent from '@/components/Form/Input.vue'
 import Confirmation from '@/components/Overlays/Confirmation.vue'
 import FinalStep from '@/components/Overlays/finalStep.vue'
-import { CustomerController } from '@/module/Customer'
 import { CylinderController } from '@/module/Cylinder'
+import Validator from 'validatorjs'
+import { ValidatorObject } from '@/module/Validation'
+import { mainStore } from '@/module/Pinia'
+
 export default defineComponent({
   name: 'Transfer',
-  components: { Confirmation, FinalStep, InputComponent },
+  components: { Confirmation, FinalStep },
   layout: 'dashboard',
   setup() {
+    const appStore = mainStore()
+    const auth: any = appStore.getLoggedInUser
+
     const types = [
       {
         name: 'Permanent Transfer',
@@ -461,11 +445,13 @@ export default defineComponent({
         value: 'temporary',
       },
     ]
+
     const form = reactive({
       type: '',
       reciepient: '',
       comment: '',
     })
+
     const reciepients = ref([])
     const showConfirmation = ref(false)
     const showFinalStep = ref(false)
@@ -474,8 +460,8 @@ export default defineComponent({
     const customers = ref<any>([])
     const customerValue = ref('')
     const cylinders = ref<any>([])
-    const count = ref<any>(0)
-    const cylindersArrays = ref<any>([])
+    const router = useRouter()
+    const cylindersArrays = ref<any>()
     const context = useContext()
 
     onMounted(() => {
@@ -485,103 +471,54 @@ export default defineComponent({
             return {
               name: element.assignedNumber
                 ? element.assignedNumber
-                : 'Not Specified yet',
+                : element.cylinderNumber,
               value: element._id,
-              cylinderNumber: element.cylinderNumber
-                ? element.cylinderNumber
-                : 'Not Specified yet',
               gas: `${element.gasType.gasName} - ${element.gasType.colorCode}`,
+              dateManufactured: element.dateManufactured,
+              type: element.cylinderType,
             }
           })
         }
       )
     })
 
-    function increaseCounter() {
-      const newValue = count.value + 1
-      cylinders.value[newValue - 1] = {
-        customer: '',
-        cylinder: '',
-        volume: '',
-        type: '',
-      }
-      cylindersArrays.value[newValue - 1] = []
-      count.value = newValue
+    const increaseCounter = () => {
+      cylinders.value.push({
+        cylinderType: '',
+        id: '',
+        gasType: '',
+        dateManufactured: '',
+      })
     }
 
-    async function setAndFetch(value: String, index: any) {
-      if (value !== '') {
-        const customerCylinders = await fetchCustomerCylinders(value)
-        cylinders.value[index - 1].customer = value
-        cylindersArrays.value[index - 1] = customerCylinders
-      } else {
-        cylindersArrays.value[index - 1] = []
-        cylinders.value[index - 1].cylinder = ''
-        setVolumeAndType('', index)
-      }
-      componentKey.value++
-    }
-
-    function setVolumeAndType(cylinderId: String, index: any) {
-      if (cylinderId !== '') {
-        cylindersArrays.value[index - 1].forEach((element: any) => {
-          if (element._id === cylinderId) {
-            cylinders.value[index - 1].volume = element.gasVolumeContent
-            cylinders.value[index - 1].type = element.cylinderType
-            cylinders.value[index - 1].cylinder = element._id
-          }
-        })
-      } else {
-        cylinders.value[index - 1].volume = ''
-        cylinders.value[index - 1].type = ''
-      }
-      componentKey.value++
-    }
-
-    function returnValue(index: any) {
-      return cylinders.value[index]
-    }
-
-    const submit = () => {
-      let validation = true
-      if (cylinders.value.length) {
-        cylinders.value.forEach((element: any) => {
-          if (element.cylinder === '') {
-            validation = false
-          }
-        })
-      }
-      if (!validation || !cylinders.value.length) {
-        context.$toast.error('Cylinders are required')
-      } else if (!form.type || !form.reciepient || !form.comment) {
-        context.$toast.error('All Fields are Required')
-      } else {
-        const requestCylinders = cylinders.value.map((element: any) => {
-          return element.cylinder
-        })
-
-        const requestBody = {
-          type: form.type,
-          comment: form.comment,
-          to: form.reciepient,
-          cylinders: requestCylinders,
-          holdingTime: 30,
+    function setValues(index: any, cylinderId: string) {
+      cylindersArrays.value.forEach((element: any) => {
+        if (cylinderId === element.value) {
+          cylinders.value[index].gasType = element.gas
+          cylinders.value[index].cylinderType = element.cylinderType
+          cylinders.value[index].cylinderType = element.type
+          cylinders.value[index].dateManufactured = new Date(
+            element.dateManufactured
+          ).toDateString()
         }
-
-        CylinderController.initiateCylinderTransfer(requestBody).then(() => {
-          form.type = form.comment = form.reciepient = ''
-          cylinders.value = []
-          count.value = 0
-        })
-      }
+      })
+      componentKey.value++
     }
+
+    const requestBody = computed(() => {
+      const emptyCylinders: any[] = []
+      cylinders.value.forEach((element: any) => {
+        if (element.id) {
+          emptyCylinders.push(element.id)
+        }
+      })
+      return {
+        cylinders: emptyCylinders,
+        comment: form.comment,
+      }
+    })
 
     const componentKey = ref(0)
-
-    async function fetchCustomerCylinders(customerId: String) {
-      const response = await CustomerController.fetchCylinders(customerId)
-      return response
-    }
 
     watch(status, (currentValue) => {
       if (currentValue === 'success') {
@@ -591,6 +528,34 @@ export default defineComponent({
       }
     })
 
+    const goBack = () => {
+      router.push('/dashboard/cylinder-management/condemn-cylinder')
+    }
+
+    const submit = () => {
+      const rules = {
+        cylinders: 'required|array',
+        comment: 'required|string',
+      }
+
+      const validation: any = new Validator(requestBody.value, rules)
+
+      if (validation.fails()) {
+        let messages: string[] = []
+
+        messages = ValidatorObject.getMessages(validation.errors)
+        messages.forEach((error: string) => {
+          context.$toast.error(error)
+        })
+      } else {
+        CylinderController.condemnCylinder(requestBody.value).then(() => {
+          form.comment = ''
+          cylinders.value = []
+          goBack()
+        })
+      }
+    }
+
     return {
       types,
       reciepients,
@@ -598,18 +563,17 @@ export default defineComponent({
       showFinalStep,
       status,
       message,
-      count,
       customers,
       form,
-      setAndFetch,
       customerValue,
-      returnValue,
+      setValues,
       increaseCounter,
       cylindersArrays,
       componentKey,
       cylinders,
-      setVolumeAndType,
       submit,
+      auth,
+      goBack,
     }
   },
 })

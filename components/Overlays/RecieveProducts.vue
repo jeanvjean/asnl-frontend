@@ -357,16 +357,18 @@
                 <div class="underline">Add New Product</div>
               </button>
             </div>
-            <div class="w-full h-full py-2 px-8 mx-auto">
-              <button
+            <div class="w-full h-full py-2 mx-auto">
+              <label
+                for="file-upload"
                 class="
-                  w-4/5
+                  block
+                  custom-file-upload
+                  w-full
                   h-full
                   border-2 border-gray-300
-                  px-6
                   py-3
                   rounded-sm
-                  file-select
+                  focus:border focus:border-gray-200
                 "
               >
                 <div class="text-center mb-2">
@@ -381,13 +383,25 @@
                     <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
                   </svg>
                 </div>
-                <div class="text-center font-medium">Upload an attachment</div>
-                <input type="file" />
-              </button>
+                <div class="text-center font-medium text-xs w-full">
+                  <span class="inline-block">
+                    {{
+                      form.file.name ? form.file.name : 'Upload an Attachment'
+                    }}
+                  </span>
+                </div>
+              </label>
+              <input
+                id="file-upload"
+                type="file"
+                @change="processFile($event)"
+              />
             </div>
 
-            <div class="flex items-start py-2 px-10 w-full">
-              <div class="rounded-sm border border-gray-300 px-10 mx-auto">
+            <div class="flex items-start py-2 w-full">
+              <div
+                class="rounded-sm border border-gray-300 px-4 mx-auto text-sm"
+              >
                 <p class="text-gray-500 text-sm font-medium leading-6">
                   Inspecting officer
                 </p>
@@ -439,7 +453,6 @@
               Cancel
             </button>
           </div>
-          <file-input v-if="false" />
         </div>
       </div>
     </div>
@@ -447,6 +460,7 @@
 </template>
 <script lang="ts">
 import {
+  computed,
   defineComponent,
   reactive,
   ref,
@@ -456,24 +470,27 @@ import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import { ProductObject } from '@/module/Product'
 import { mainStore } from '@/module/Pinia'
-import FileInput from '@/components/Form/FileInput.vue'
+import Validator from 'validatorjs'
+import { ValidatorObject } from '~/module/Validation'
 
 export default defineComponent({
   components: {
     BackDrop,
     InputComponent,
-    FileInput,
   },
   setup(_props, ctx) {
     const close = () => {
       ctx.emit('close')
     }
-    const count = ref(0)
+
     const form = reactive({
       supplier: '',
       LPOnumber: '',
       wayBillNumber: '',
       invoiceNumber: '',
+      file: '',
+      direction: 'out-going',
+      products: '',
     })
 
     const appStore = mainStore()
@@ -496,11 +513,17 @@ export default defineComponent({
         totalCost: '0',
         comment: '',
       })
+      form.products = products.value
     }
 
     function decreaseCounter(index: any) {
       products.value.splice(index, 1)
       componentKey.value++
+    }
+
+    function processFile(event: any) {
+      const file = event.target.files[0]
+      form.file = file
     }
 
     function changeTotalCost() {
@@ -513,48 +536,64 @@ export default defineComponent({
       componentKey.value++
     }
 
-    const submitForm = async () => {
-      if (
-        !form.supplier ||
-        !form.LPOnumber ||
-        !form.invoiceNumber ||
-        !form.wayBillNumber
-      ) {
-        context.$toast.error('All Fields are Required')
-      } else if (!products.value.length) {
-        context.$toast.error('Minimum of One Product should be added')
-      } else {
-        let result = false
-        products.value.forEach((element: any) => {
-          const values = Object.values(element)
-          result = values.every((val) => {
-            return val !== ''
-          })
-        })
+    const requestBody = computed(() => {
+      const formData = new FormData()
+      formData.append('supplier', form.supplier)
+      formData.append('LPOnumber', form.LPOnumber)
+      formData.append('wayBillNumber', form.wayBillNumber)
+      formData.append('invoiceNumber', form.invoiceNumber)
+      formData.append('dateReceived', new Date().toISOString())
+      formData.append('direction', form.direction)
 
-        if (result) {
-          await ProductObject.registerInventory({
-            products: products.value,
-            supplier: form.supplier,
-            LPOnumber: form.LPOnumber,
-            invoiceNumber: form.invoiceNumber,
-            wayBillNumber: form.wayBillNumber,
-            dateReceived: new Date(),
-            direction: 'out-going',
-          }).then(() => {
+      // products.value.forEach((element: any) => {
+      //   formData.append('products', JSON.stringify(element))
+      // })
+      formData.append('products', form.products)
+      formData.append('grnDocument', form.file)
+      return formData
+    })
+
+    const submitForm = async () => {
+      const rules = {
+        products: 'required|array',
+        'products.*.productNumber': 'required|string',
+        'products.*.productName': 'required|string',
+        'products.*.quantity': 'required|numeric|min:1',
+        'products.*.passed': 'required|numeric:min:1',
+        'products.*.rejected': 'required|numeric:min:0',
+        'products.*.unitCost': 'required|numeric',
+        'products.*.totalCost': 'required|numeric',
+        'products.*.comment': 'required|string',
+        supplier: 'required|string',
+        LPOnumber: 'required|string',
+        invoiceNumber: 'required|string',
+        wayBillNumber: 'required|string',
+        direction: 'required',
+        file: 'required',
+      }
+
+      const validation = new Validator(form, rules)
+
+      if (validation.fails()) {
+        let messages: string[] = []
+
+        messages = ValidatorObject.getMessages(validation.errors)
+        messages.forEach((error: string) => {
+          context.$toast.error(error)
+        })
+      } else {
+        await ProductObject.registerInventory(requestBody.value)
+          .then(() => {
             componentKey.value = 0
             ctx.emit('reload')
             close()
           })
-        } else {
-          context.$toast.error('All Fields are Required')
-        }
+          .catch(() => {})
       }
     }
 
     return {
       close,
-      count,
       form,
       products,
       increaseCounter,
@@ -563,13 +602,17 @@ export default defineComponent({
       componentKey,
       user,
       changeTotalCost,
+      processFile,
     }
   },
 })
 </script>
 
 <style scoped>
-.file-select > input[type='file'] {
+input[type='file'] {
   display: none;
+}
+.custom-file-upload {
+  cursor: pointer;
 }
 </style>

@@ -106,7 +106,9 @@
               <span class="sr-only">Open user menu</span>
               <img
                 class="h-8 w-8 rounded-full"
-                src="@/assets/images/default-avatar.jpg"
+                :src="
+                  auth.image ? auth.image : '@/assets/images/default-avatar.jpg'
+                "
                 alt=""
               />
             </button>

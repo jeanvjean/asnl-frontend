@@ -15,6 +15,7 @@
           relative
           overflow-y-auto overflow-x-hidden
           focus:outline-none
+          h-screen
         "
         tabindex="0"
       >

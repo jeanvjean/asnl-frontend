@@ -76,28 +76,28 @@
             <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Cylinder Number</h4>
-                <p>{{ form.cylinderNumber }}</p>
+                <p>{{ currentValues.cylinderNumber }}</p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Gas Type</h4>
-                <p>{{ form.gasType }}</p>
+                <p>{{ currentValues.gasType }}</p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Cylinder Volume</h4>
-                <p>{{ form.gasVolumeContent }}kg</p>
+                <p>{{ currentValues.gasVolumeContent }}kg</p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Filling Pressure</h4>
-                <p>{{ form.fillingPreasure }}</p>
+                <p>{{ currentValues.fillingPreasure }}</p>
               </div>
             </div>
           </div>
@@ -120,21 +120,28 @@
             <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Manufacturing Date</h4>
-                <p>12/05/2020</p>
+                <p>
+                  {{
+                    new Date(currentValues.waterCapacity).toLocaleDateString()
+                  }}
+                </p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Color Code</h4>
-                <p>{{ form.colorCode }}</p>
+                <p>{{ currentValues.colorCode }}</p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Water Capacity</h4>
-                <p>{{ form.waterCapacity }} kg</p>
+                <p>
+                  {{ currentValues.waterCapacity }}
+                  kg
+                </p>
               </div>
             </div>
           </div>
@@ -177,7 +184,7 @@
             :label-title="'Change Gas Type to'"
             :select-array="gasTypes"
             :default-option-text="'Select New Gas Type'"
-            @get="form.gasId = $event.value"
+            @get="form.gasType = $event.value"
           />
         </div>
         <div class="px-10 py-4">
@@ -305,6 +312,14 @@ export default defineComponent({
     const currentValues = reactive({
       cylinderType: '',
       gasId: '',
+      cylinderNumber: '',
+      waterCapacity: '',
+      dateManufactured: '',
+      testingPresure: '',
+      fillingPreasure: '',
+      gasVolumeContent: '',
+      colorCode: '',
+      gasType: '',
     })
 
     function fetchGasTypes() {
@@ -325,17 +340,20 @@ export default defineComponent({
       CylinderController.getCylinder(cylinderId.value).then((response) => {
         const cylinderResponse = response.data.data
         currentValues.cylinderType = cylinderResponse.cylinderType
-        form.cylinderNumber = cylinderResponse.assignedNumber
+        currentValues.cylinderNumber = cylinderResponse.assignedNumber
           ? cylinderResponse.assignedNumber
           : cylinderResponse.cylinderNumber
-        form.waterCapacity = cylinderResponse.waterCapacity
-        form.dateManufactured = cylinderResponse.dateManufactured
-        form.gasType = cylinderResponse.gasType.gasName
-        form.testingPresure = cylinderResponse.testingPresure
-        form.fillingPreasure = cylinderResponse.fillingPreasure
-        form.gasVolumeContent = cylinderResponse.gasVolumeContent
-        form.colorCode = cylinderResponse.standardColor
+        currentValues.waterCapacity = cylinderResponse.waterCapacity
+        currentValues.dateManufactured = cylinderResponse.dateManufactured
+        currentValues.gasType = cylinderResponse.gasType.gasName
+        currentValues.testingPresure = cylinderResponse.testingPresure
+        currentValues.fillingPreasure = cylinderResponse.fillingPreasure
+        currentValues.gasVolumeContent = cylinderResponse.gasVolumeContent
+        currentValues.colorCode = cylinderResponse.standardColor
         currentValues.gasId = cylinderResponse.gasType._id
+        form.assignedTo = cylinderResponse.assignedTo
+          ? cylinderResponse.assignedTo._id
+          : ''
         changeComponentKey()
       })
     })
@@ -345,18 +363,13 @@ export default defineComponent({
     const componentKey = ref<number>(0)
     const status = ref('')
     const message = ref('')
-    const form = reactive({
+
+    const form = reactive<any>({
       comment: '',
+      cylinders: [route.value.params.id],
       cylinderType: '',
-      cylinderNumber: '',
-      waterCapacity: '',
-      dateManufactured: '',
       gasType: '',
-      testingPresure: '',
-      fillingPreasure: '',
-      gasVolumeContent: '',
-      colorCode: '',
-      gasId: '',
+      assignedTo: '',
     })
 
     const changeComponentKey = () => {
@@ -372,30 +385,26 @@ export default defineComponent({
     })
 
     const goBack = () => {
-      router.go(-1)
+      router.push('/dashboard/cylinder-management/cylinder-type')
     }
 
     const requestBody = computed(() => {
       return {
         cylinderType: form.cylinderType,
-        waterCapacity: form.waterCapacity,
-        dateManufactured: form.dateManufactured,
-        gasType: form.gasId,
-        testingPresure: form.testingPresure,
-        fillingPreasure: form.fillingPreasure,
-        gasVolumeContent: form.gasVolumeContent,
+        comment: form.comment,
+        gasType: form.gasType,
+        assignedTo: form.assignedTo,
+        cylinders: form.cylinders,
       }
     })
 
     const submit = () => {
       const rules = {
-        cylinderType: 'required|alpha',
-        waterCapacity: 'required|numeric',
-        dateManufactured: 'required',
+        cylinders: 'required|array',
+        comment: 'required|string',
+        cylinderType: 'required|string',
         gasType: 'required|string',
-        testingPresure: 'required|numeric',
-        fillingPreasure: 'required|numeric',
-        gasVolumeContent: 'required|numeric',
+        assignedTo: 'required|string',
       }
 
       const validation = new Validator(requestBody.value, rules)
@@ -406,10 +415,7 @@ export default defineComponent({
           context.$toast.error(error)
         })
       } else {
-        CylinderController.updateCylinder(
-          requestBody.value,
-          cylinderId.value
-        ).then(() => {
+        CylinderController.updateCylinder(requestBody.value).then(() => {
           goBack()
         })
       }

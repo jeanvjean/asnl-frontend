@@ -104,11 +104,11 @@ class CylinderRepository {
     })
   }
 
-  updateCylinder(requestBody: any, cylinderId: string) {
+  updateCylinder(requestBody: any) {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.post(
-          `/cylinder/update-reg-cylinder/${cylinderId}`,
+          `cylinder/change-cylinder-type`,
           requestBody
         )
         resolve(response.data)
@@ -122,7 +122,21 @@ class CylinderRepository {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get(
-          `/cylinder/fetch-changecylinder-requests`
+          `/cylinder/fetch-change_cylinder-requests`
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  condemnCylinder(requestBody: any) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.post(
+          `/cylinder/condemn-cylinders`,
+          requestBody
         )
         resolve(response.data)
       } catch (error) {

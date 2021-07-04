@@ -195,6 +195,7 @@ export default defineComponent({
             status: element.isVerified ? 'verified' : 'Not-Verified',
             deactivated: element.deactivated,
             permissions: element.permissions,
+            image: element.image,
           }
         })
       })

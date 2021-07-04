@@ -24,8 +24,12 @@ class UserRepository {
     })
   }
 
-  async updateUser(requestParameters: Object, userId: String) {
-    return await $axios.post('/user/update-user/' + userId, requestParameters)
+  async updateUser(requestParameters: FormData, userId: String) {
+    return await $axios.post('/user/update-user/' + userId, requestParameters, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
   }
 
   async getUsers(page: number) {

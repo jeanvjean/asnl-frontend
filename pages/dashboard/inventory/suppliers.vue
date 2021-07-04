@@ -165,6 +165,7 @@ export default defineComponent({
 
     function changeTab(newTab: string) {
       search.value = newTab
+      suppliers.value = []
       fetchSuppliers(1, search.value)
     }
 

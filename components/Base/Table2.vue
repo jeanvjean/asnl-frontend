@@ -121,7 +121,7 @@
                     w-full
                     overflow-none
                     font-medium
-                    text-sm
+                    text-xs
                   "
                   :to="
                     '/dashboard/cylinder-management/cylinder/' + bodySingle._id
@@ -141,11 +141,11 @@
                     w-full
                     overflow-none
                     font-medium
-                    text-sm
+                    text-xs
                   "
                   :to="'/dashboard/cylinder-management/type/' + bodySingle._id"
                 >
-                  Update Cylinder</router-link
+                  Change Cylinder Type</router-link
                 >
               </div>
             </td>

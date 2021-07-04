@@ -51,9 +51,16 @@
           <td class="px-4 text-left py-4">
             <div class="flex items-center space-x-4">
               <img
+                v-if="bodySingle.image"
+                class="h-8 w-8 rounded-full"
+                :src="bodySingle.image"
+                alt="Profile Image"
+              />
+              <img
+                v-else
                 class="h-8 w-8 rounded-full"
                 src="@/assets/images/default-avatar.jpg"
-                alt=""
+                alt="Profile Image"
               /><span>{{ bodySingle.name }}</span>
             </div>
           </td>
@@ -94,8 +101,8 @@
               >
             </div>
           </td>
-          <td class="px-4 py-4 icon-button">
-            <button class="mx-auto text-black w-6 h-6 relative">
+          <td class="px-4 py-4 icon-button text-center relative">
+            <button class="mx-auto text-black w-6 h-6">
               <svg
                 class="fill-current"
                 xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +116,6 @@
             <div
               class="
                 absolute
-                -ml-12
                 bg-gray-50
                 border border-gray-300
                 w-40
@@ -117,7 +123,7 @@
                 text-sm
                 rounded-sm
                 action-menu
-                z-10
+                z-30
               "
             >
               <button
@@ -344,15 +350,16 @@ export default defineComponent({
   },
 })
 </script>
-
 <style scoped>
 .action-menu {
   display: none;
 }
 .icon-button:hover > .action-menu {
   display: block;
+  margin-left: -50px;
 }
 .icon-button:focus > .action-menu {
   display: block;
+  margin-left: -50px;
 }
 </style>

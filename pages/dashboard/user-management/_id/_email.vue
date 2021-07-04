@@ -13,19 +13,106 @@
         User Details
       </h1>
 
-      <div class="w-full px-4 py-10 space-y-2 border-b-2 border-gray-200">
+      <div class="w-full px-4 py-10 space-y-2 border-b-2 border-gray-200 my-10">
         <div class="w-full">
-          <div class="h-40 w-40 mx-auto">
-            <img
-              class="w-full"
-              src="@/assets/images/default-avatar.jpg"
-              alt=""
-            />
+          <div class="w-full flex items-center justify-center">
+            <div class="h-42 w-48">
+              <img
+                v-if="userProfile.image"
+                class="w-full h-full"
+                :src="userProfile.image"
+                alt=""
+              />
+              <img
+                v-else
+                class="w-full h-full"
+                src="@/assets/images/default-avatar.jpg"
+                alt=""
+              />
+            </div>
+          </div>
+          <div
+            v-if="userProfile.id === auth._id"
+            class="w-full flex items-center justify-center space-x-3"
+          >
+            <span v-if="!form.image" class="bg-gray-900 text-white px-2 py-3">
+              <label
+                title="Choose an Image"
+                for="file-upload"
+                class="cursor-pointer"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  class="w-6 h-6 fill-current"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"
+                  /></svg
+              ></label>
+            </span>
+            <span
+              v-if="form.image"
+              title="Remove Image"
+              class="bg-red-600 text-white px-2 py-3"
+              @click="removeImage()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                class="w-6 h-6 fill-current"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </span>
+
+            <span
+              v-if="form.image"
+              title="Upload Image"
+              class="bg-green-600 text-white px-2 py-3"
+              @click="submit"
+            >
+              <svg
+                v-if="loading"
+                class="animate-spin w-6 h-6 fill-current"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M14.66 15.66A8 8 0 1117 10h-2a6 6 0 10-1.76 4.24l1.42 1.42zM12 10h8l-4 4-4-4z"
+                />
+              </svg>
+              <svg
+                v-else
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                class="w-6 h-6 fill-current"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </span>
+
+            <span></span>
+            <input id="file-upload" type="file" @change="processFile($event)" />
+          </div>
+          <div class="text-center w-full">
+            {{ form.image.name ? form.image.name : '' }}
           </div>
         </div>
         <div class="w-full">
           <h2
-            v-if="user"
             class="
               text-center text-2xl text-black
               font-medium
@@ -33,13 +120,13 @@
               capitalize
             "
           >
-            {{ user['name'] | isValue }}
+            {{ userProfile.name | isValue }}
           </h2>
         </div>
-        <div v-if="user" class="w-full">
+        <div class="w-full">
           <p class="text-center space-x-2 capitalize">
-            <span class="text-black">{{ user['role'] }} Department</span>
-            <span class="text-btn-purple">{{ user['subrole'] }}</span>
+            <span class="text-black">{{ userProfile.role }} Department</span>
+            <span class="text-btn-purple">{{ userProfile.subrole }}</span>
           </p>
         </div>
       </div>
@@ -49,23 +136,23 @@
 
         <div class="space-y-1">
           <p class="text-gray-400 capitalize">Full Name</p>
-          <p v-if="user" class="text-black capitalize">
-            {{ user['name'] | isValue }}
+          <p class="text-black capitalize">
+            {{ userProfile.name | isValue }}
           </p>
         </div>
         <div class="space-y-1">
           <p class="text-gray-400 capitalize">Email Address</p>
-          <p v-if="user" class="text-black">{{ user['email'] | isValue }}</p>
+          <p class="text-black">{{ userProfile.email | isValue }}</p>
         </div>
         <div class="space-y-1">
           <p class="text-gray-400 capitalize">Phone Number</p>
-          <p v-if="user" class="text-black">
-            {{ user['phoneNumber'] | isValue }}
+          <p class="text-black">
+            {{ userProfile.phone | isValue }}
           </p>
         </div>
       </div>
     </div>
-    <div class="lg:col-span-3 bg-white px-6 py-4">
+    <div class="lg:col-span-3 bg-white px-6 py-4 h-screen overflow-y-auto">
       <h1
         class="
           inline-block
@@ -95,12 +182,14 @@ import {
   defineComponent,
   onBeforeMount,
   onMounted,
+  reactive,
   ref,
   useRoute,
   useRouter,
 } from '@nuxtjs/composition-api'
 import { UserController } from '@/module/User'
 import datetimeDifference from 'datetime-difference'
+import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
   name: 'Profile',
@@ -122,6 +211,8 @@ export default defineComponent({
     const router = useRouter()
     const userId = route.value.params.id
     const email = route.value.params.email
+    const appStore = mainStore()
+    const auth: any = appStore.getLoggedInUser
 
     const user = ref()
     const logs = ref([])
@@ -131,9 +222,62 @@ export default defineComponent({
       }
     })
 
+    const userProfile = reactive({
+      name: '',
+      email: '',
+      phone: '',
+      role: '',
+      subrole: '',
+      image: '',
+      id: userId,
+    })
+
+    const form = reactive({
+      image: '',
+    })
+
+    function processFile(event: any) {
+      const file = event.target.files[0]
+      form.image = file
+    }
+
+    function removeImage() {
+      form.image = ''
+    }
+
+    const loading = ref<Boolean>(false)
+
+    const submit = () => {
+      loading.value = true
+      const formData = new FormData()
+      formData.append('image', form.image)
+      formData.append('name', auth.name)
+      formData.append('email', auth.email)
+      formData.append('location', auth.location)
+      formData.append('gender', auth.gender)
+      formData.append('phoneNumber', `+${auth.phoneNumber}`)
+
+      UserController.updateUser(formData, auth._id)
+        .then((response: any) => {
+          form.image = ''
+          appStore.saveUser(response.data.data)
+          location.reload()
+        })
+        .catch(() => {})
+        .finally(() => {
+          loading.value = false
+        })
+    }
+
     onMounted(() => {
       UserController.getUser(userId, email).then((response) => {
-        user.value = response.data.data
+        const userData = response.data.data
+        userProfile.name = userData.name
+        userProfile.email = userData.email
+        userProfile.phone = userData.phoneNumber
+        userProfile.role = userData.role
+        userProfile.subrole = userData.subrole
+        userProfile.image = userData.image
       })
 
       UserController.fetchActivityLogs(userId).then((response) => {
@@ -174,7 +318,20 @@ export default defineComponent({
       user,
       logs,
       getTimeDifference,
+      auth,
+      processFile,
+      form,
+      removeImage,
+      submit,
+      loading,
+      userProfile,
+      userId,
     }
   },
 })
 </script>
+<style scoped>
+input[type='file'] {
+  display: none;
+}
+</style>
