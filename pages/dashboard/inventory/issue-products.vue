@@ -265,11 +265,17 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+} from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
 import IssueProduct from '@/components/Overlays/IssueProducts.vue'
+import { ProductObject } from '~/module/Product'
 
 export default defineComponent({
   name: 'Analytics',
@@ -291,6 +297,16 @@ export default defineComponent({
       hasNextPage: false,
       hasPrevPage: false,
       currentPage: 1,
+    })
+
+    function fetchPendingDisbursement() {
+      ProductObject.fetchPendingDisbursement().then((response) => {
+        console.log(response)
+      })
+    }
+
+    onMounted(() => {
+      fetchPendingDisbursement()
     })
 
     return {

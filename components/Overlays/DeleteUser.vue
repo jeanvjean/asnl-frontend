@@ -68,7 +68,7 @@ export default defineComponent({
     const loadingText = 'Deleting'
     const deleteUser = () => {
       loading.value = true
-      UserController.deleteUser(_props.user._id)
+      UserController.deleteUser(_props.user.id)
         .then(() => {
           ctx.emit('refresh')
           close()

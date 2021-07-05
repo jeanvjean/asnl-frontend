@@ -120,7 +120,7 @@
                       text-sm
                     "
                   >
-                    Product Name
+                    Product Number
                   </th>
                   <th
                     class="
@@ -132,7 +132,7 @@
                       text-sm
                     "
                   >
-                    Product Number
+                    Product Name
                   </th>
                   <th
                     class="
@@ -179,17 +179,18 @@
                 >
                   <td class="text-center">{{ Number(i) + 1 }}</td>
                   <td>
-                    <input-component
-                      :input-placeholder="'Enter Product Name'"
-                      :default-value="product.productName"
-                      @get="product.productName = $event.value"
+                    <select-component
+                      :default-option-text="'Select Product Number'"
+                      :init-value="product.productNumber"
+                      :select-array="productsArray"
+                      @get="product.productNumber = $event.value"
                     />
                   </td>
                   <td>
                     <input-component
-                      :input-placeholder="'Enter Product Number'"
-                      :default-value="product.productNumber"
-                      @get="product.productNumber = $event.value"
+                      :input-placeholder="'Enter Product Name'"
+                      :default-value="product.productName"
+                      @get="product.productName = $event.value"
                     />
                   </td>
 
@@ -299,7 +300,9 @@ import SelectComponent from '@/components/Form/Select.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import { CustomerController } from '@/module/Customer'
 import { ProductObject } from '@/module/Product'
-import { ProductDto } from '~/types/Types'
+import { ProductDto } from '@/types/Types'
+import Validator from 'validatorjs'
+import { ValidatorObject } from '~/module/Validation'
 
 export default defineComponent({
   components: {
@@ -313,6 +316,7 @@ export default defineComponent({
     }
 
     const products = ref<Array<ProductDto>>([])
+    const productsArray = ref<any>([])
 
     const componentKey = ref<number>(0)
     const customers = ref<any>([])
@@ -346,45 +350,65 @@ export default defineComponent({
       })
     }
 
+    function fetchProducts() {
+      ProductObject.fetchProductsUnPaginated().then((response: any) => {
+        productsArray.value = response.map((product: any) => {
+          return {
+            name: product.asnlNumber,
+            value: product.asnlNumber,
+          }
+        })
+      })
+    }
+
     function decreaseCounter(index: any) {
       products.value.splice(index, 1)
       componentKey.value++
     }
 
     const submitForm = () => {
-      if (!form.mrn || !form.comment || !form.customer || !form.jobTag) {
-        context.$toast.error('All Fields are Required')
-      } else if (!products.value.length) {
-        context.$toast.error('Minimum of One Product should be added')
-      } else {
-        let result = false
-        products.value.forEach((element: any) => {
-          const values = Object.values(element)
-          result = values.every((val) => {
-            return val !== ''
-          })
-        })
+      const data = {
+        products: products.value,
+        jobTag: form.jobTag,
+        mrn: form.mrn,
+        comment: form.comment,
+        customer: form.customer,
+      }
 
-        if (result) {
-          ProductObject.registerDisbursal({
-            products: products.value,
-            jobTag: form.jobTag,
-            mrn: form.mrn,
-            comment: form.comment,
-            customer: form.customer,
-          }).then(() => {
+      const rules = {
+        products: 'required|array',
+        'products.*.productNumber': 'required|string',
+        'products.*.productName': 'required|string',
+        'products.*.quantityRequested': 'required|numeric|min:1',
+        'products.*.comment': 'required|string',
+        jobTag: 'required|string',
+        comment: 'required|string',
+        customer: 'required|string',
+        mrn: 'required|string',
+      }
+
+      const validation = new Validator(data, rules)
+
+      if (validation.fails()) {
+        let messages: string[] = []
+        messages = ValidatorObject.getMessages(validation.errors)
+        messages.forEach((error: string) => {
+          context.$toast.error(error)
+        })
+      } else {
+        ProductObject.registerDisbursal(data)
+          .then(() => {
             componentKey.value = 0
             ctx.emit('reload')
             close()
           })
-        } else {
-          context.$toast.error('All Fields are Required')
-        }
+          .catch(() => {})
       }
     }
 
     onMounted(() => {
       fetchCustomers()
+      fetchProducts()
     })
     return {
       close,
@@ -395,6 +419,7 @@ export default defineComponent({
       componentKey,
       customers,
       submitForm,
+      productsArray,
     }
   },
 })

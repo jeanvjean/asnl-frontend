@@ -348,8 +348,15 @@ export default defineComponent({
       })
     }
 
+    function getInventoryStat() {
+      ProductObject.fetchInventoryStatistics().then((response) => {
+        console.log(response)
+      })
+    }
+
     onMounted(() => {
       getInventories(1)
+      getInventoryStat()
     })
 
     return {

@@ -16,7 +16,7 @@
       <div class="w-full px-4 py-10 space-y-2 border-b-2 border-gray-200 my-10">
         <div class="w-full">
           <div class="w-full flex items-center justify-center">
-            <div class="h-42 w-48">
+            <div class="h-42 w-48 relative">
               <img
                 v-if="userProfile.image"
                 class="w-full h-full"
@@ -29,40 +29,49 @@
                 src="@/assets/images/default-avatar.jpg"
                 alt=""
               />
+              <span
+                class="
+                  bg-gray-700
+                  text-white
+                  px-2
+                  py-3
+                  absolute
+                  left-10
+                  bottom-5
+                  rounded-md
+                "
+              >
+                <label
+                  title="Choose an Image"
+                  for="file-upload"
+                  class="cursor-pointer"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    class="w-3 h-3 fill-current"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12.3 3.7l4 4L4 20H0v-4L12.3 3.7zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z"
+                    /></svg
+                ></label>
+              </span>
             </div>
           </div>
           <div
             v-if="userProfile.id === auth._id"
             class="w-full flex items-center justify-center space-x-3"
           >
-            <span v-if="!form.image" class="bg-gray-900 text-white px-2 py-3">
-              <label
-                title="Choose an Image"
-                for="file-upload"
-                class="cursor-pointer"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  class="w-6 h-6 fill-current"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"
-                  /></svg
-              ></label>
-            </span>
             <span
               v-if="form.image"
               title="Remove Image"
-              class="bg-red-600 text-white px-2 py-3"
+              class="bg-red-600 text-white px-2 py-3 rounded-md"
               @click="removeImage()"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
-                class="w-6 h-6 fill-current"
+                class="w-3 h-3 fill-current"
                 fill="currentColor"
               >
                 <path
@@ -76,12 +85,12 @@
             <span
               v-if="form.image"
               title="Upload Image"
-              class="bg-green-600 text-white px-2 py-3"
+              class="bg-green-600 text-white px-2 py-3 rounded-md"
               @click="submit"
             >
               <svg
                 v-if="loading"
-                class="animate-spin w-6 h-6 fill-current"
+                class="animate-spin w-3 h-3 fill-current"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
               >
@@ -89,11 +98,12 @@
                   d="M14.66 15.66A8 8 0 1117 10h-2a6 6 0 10-1.76 4.24l1.42 1.42zM12 10h8l-4 4-4-4z"
                 />
               </svg>
+
               <svg
                 v-else
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
-                class="w-6 h-6 fill-current"
+                class="w-3 h-3 fill-current"
                 fill="currentColor"
               >
                 <path
@@ -104,7 +114,6 @@
               </svg>
             </span>
 
-            <span></span>
             <input id="file-upload" type="file" @change="processFile($event)" />
           </div>
           <div class="text-center w-full">

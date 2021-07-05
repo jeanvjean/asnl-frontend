@@ -36,6 +36,8 @@ export default {
     '@nuxtjs/tailwindcss',
     '@nuxtjs/composition-api/module',
     'pinia/nuxt',
+    '@nuxt-hero-icons/outline/nuxt',
+    '@nuxt-hero-icons/solid/nuxt',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

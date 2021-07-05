@@ -125,6 +125,19 @@ class ProductRespository {
       }
     })
   }
+
+  fetchPendingDisbursement() {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get(
+          '/inventory/fetch-pending-disburse?approvalStatus=pending'
+        )
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 const ProductObject = new ProductRespository()

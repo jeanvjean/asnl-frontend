@@ -145,7 +145,7 @@
                       text-sm
                     "
                   >
-                    Product Name
+                    Product Number
                   </th>
                   <th
                     class="
@@ -157,7 +157,7 @@
                       text-sm
                     "
                   >
-                    Product Number
+                    Product Name
                   </th>
                   <th
                     class="
@@ -251,6 +251,15 @@
                 >
                   <td class="text-center">{{ Number(i) + 1 }}</td>
                   <td>
+                    <select-component
+                      :default-option-text="'Select Product Number'"
+                      :init-value="product.productNumber"
+                      :select-array="productsArray"
+                      @get="product.productNumber = $event.value"
+                    />
+                  </td>
+
+                  <td>
                     <input-component
                       :input-placeholder="'Enter Product Name'"
                       :default-value="product.productName"
@@ -260,18 +269,12 @@
 
                   <td>
                     <input-component
-                      :input-placeholder="'Enter Product Number'"
-                      :default-value="product.productNumber"
-                      @get="product.productNumber = $event.value"
-                    />
-                  </td>
-
-                  <td>
-                    <input-component
                       :input-placeholder="'Enter Quantity'"
                       :default-value="product.quantity"
                       :input-type="'number'"
-                      @get="product.quantity = $event.value"
+                      @get="
+                        ;(product.quantity = $event.value), changeTotalCost()
+                      "
                     />
                   </td>
                   <td>
@@ -286,6 +289,7 @@
                     <input-component
                       :input-placeholder="'#'"
                       :default-value="product.rejected"
+                      :is-disabled="true"
                       :input-type="'number'"
                       @get="product.rejected = $event.value"
                     />
@@ -462,12 +466,14 @@
 import {
   computed,
   defineComponent,
+  onMounted,
   reactive,
   ref,
   useContext,
 } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
+import SelectComponent from '@/components/Form/Select.vue'
 import { ProductObject } from '@/module/Product'
 import { mainStore } from '@/module/Pinia'
 import Validator from 'validatorjs'
@@ -477,11 +483,14 @@ export default defineComponent({
   components: {
     BackDrop,
     InputComponent,
+    SelectComponent,
   },
   setup(_props, ctx) {
     const close = () => {
       ctx.emit('close')
     }
+
+    const productsArray = ref<any>([])
 
     const form = reactive({
       supplier: '',
@@ -491,6 +500,21 @@ export default defineComponent({
       file: '',
       direction: 'out-going',
       products: '',
+    })
+
+    function fetchProducts() {
+      ProductObject.fetchProductsUnPaginated().then((response: any) => {
+        productsArray.value = response.map((product: any) => {
+          return {
+            name: product.asnlNumber,
+            value: product.asnlNumber,
+          }
+        })
+      })
+    }
+
+    onMounted(() => {
+      fetchProducts()
     })
 
     const appStore = mainStore()
@@ -506,8 +530,8 @@ export default defineComponent({
       products.value.push({
         productNumber: '',
         productName: '',
-        quantity: '0',
-        passed: '0',
+        quantity: '1',
+        passed: '1',
         rejected: '0',
         unitCost: '0',
         totalCost: '0',
@@ -528,6 +552,8 @@ export default defineComponent({
 
     function changeTotalCost() {
       products.value.forEach((element: any) => {
+        element.rejected = (element.quantity - element.passed).toString()
+
         const totalCost = String(
           Number(element.passed) * Number(element.unitCost)
         )
@@ -544,11 +570,7 @@ export default defineComponent({
       formData.append('invoiceNumber', form.invoiceNumber)
       formData.append('dateReceived', new Date().toISOString())
       formData.append('direction', form.direction)
-
-      // products.value.forEach((element: any) => {
-      //   formData.append('products', JSON.stringify(element))
-      // })
-      formData.append('products', form.products)
+      formData.append('products', JSON.stringify(form.products))
       formData.append('grnDocument', form.file)
       return formData
     })
@@ -559,8 +581,8 @@ export default defineComponent({
         'products.*.productNumber': 'required|string',
         'products.*.productName': 'required|string',
         'products.*.quantity': 'required|numeric|min:1',
-        'products.*.passed': 'required|numeric:min:1',
-        'products.*.rejected': 'required|numeric:min:0',
+        'products.*.passed': 'required|numeric|min:1',
+        'products.*.rejected': 'required|numeric|min:0',
         'products.*.unitCost': 'required|numeric',
         'products.*.totalCost': 'required|numeric',
         'products.*.comment': 'required|string',
@@ -603,6 +625,7 @@ export default defineComponent({
       user,
       changeTotalCost,
       processFile,
+      productsArray,
     }
   },
 })

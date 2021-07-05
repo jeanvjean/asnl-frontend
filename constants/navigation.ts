@@ -5,7 +5,7 @@
 //   TagIcon,
 //   TruckIcon,
 //   UserGroupIcon,
-// } from '@heroicons/vue/solid'
+// } from '@nuxt-hero-icons/outline'
 
 // const navigations: any = {
 //   admin: [
