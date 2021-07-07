@@ -1,5 +1,5 @@
 <template>
-  <div :key="keyValue" class="px-6 py-6">
+  <div :key="componentKey" class="px-6 py-6">
     <div class="bg-white w-full h-full rounded-sm">
       <div class="px-6 py-6">
         <div class="mb-4">
@@ -11,6 +11,7 @@
             :label-title="'Division'"
             :default-option-text="'Choose a Division'"
             :select-array="divisions"
+            :init-value="form.division"
             @get="form.division = $event.value"
           />
 
@@ -18,50 +19,44 @@
             :label-title="'Supplier'"
             :default-option-text="'Choose a Supplier'"
             :select-array="suppliers"
+            :init-value="form.supplier"
             @get="form.supplier = $event.value"
           />
 
           <input-component
-            :label-title="'Item Description'"
-            :input-placeholder="'Enter description'"
-            @get="form.itemDescription = $event.value"
+            :label-title="'Product Name'"
+            :input-placeholder="'Enter Product Name'"
+            :default-value="form.productName"
+            @get="form.productName = $event.value"
           />
 
           <input-component
             :label-title="'Equipment Model'"
             :input-placeholder="'Enter Equipment Model'"
+            :default-value="form.equipmentModel"
+            :is-required="false"
             @get="form.equipmentModel = $event.value"
           />
 
           <input-component
             :label-title="'Equipment Type'"
             :input-placeholder="'Enter Equipment Type'"
+            :default-value="form.equipmentType"
+            :is-required="false"
             @get="form.equipmentType = $event.value"
           />
 
           <input-component
-            :label-title="'Area of Specialization'"
-            :input-placeholder="'Enter Area of Specialization'"
-            @get="form.areaOfSpecialization = $event.value"
-          />
-
-          <input-component
-            :label-title="'ASNL Part No'"
+            :label-title="'ASNL Number'"
             :input-placeholder="'#######'"
-            :input-type="'number'"
+            :default-value="form.asnlNumber"
             @get="form.asnlNumber = $event.value"
           />
 
           <input-component
-            :label-title="'Part No'"
+            :label-title="'Part Number'"
             :input-placeholder="'########'"
-            :input-type="'number'"
-            @get="form.partNumber = $event.value"
-          />
-
-          <input-component
-            :label-title="'Serial No'"
-            :input-placeholder="'Enter Serial Number'"
+            :default-value="form.partNumber"
             @get="form.partNumber = $event.value"
           />
 
@@ -69,38 +64,48 @@
             :label-title="'Reorder level'"
             :input-placeholder="'#'"
             :input-type="'number'"
+            :default-value="form.reorderLevel"
             @get="form.reorderLevel = $event.value"
-          />
-
-          <input-component
-            :label-title="'Unit Cost'"
-            :input-placeholder="'#'"
-            :input-type="'number'"
-            @get="form.unitCost = $event.value"
-          />
-
-          <input-component
-            :label-title="'Total Cost'"
-            :input-placeholder="'#'"
-            :input-type="'number'"
-            @get="form.totalCost = $event.value"
           />
 
           <input-component
             :label-title="'Quantity'"
             :input-placeholder="'Enter Quantity'"
             :input-type="'number'"
-            @get="form.quantity = $event.value"
+            :default-value="form.quantity"
+            @get="
+              ;(form.quantity = $event.value),
+                (form.totalCost = String(form.quantity * form.unitCost)),
+                reset()
+            "
           />
+
+          <input-component
+            :label-title="'Unit Cost'"
+            :input-placeholder="'#'"
+            :input-type="'number'"
+            :default-value="form.unitCost"
+            @get="
+              ;(form.unitCost = $event.value),
+                (form.totalCost = String(form.quantity * form.unitCost)),
+                reset()
+            "
+          />
+
+          <input-component
+            :label-title="'Total Cost'"
+            :input-placeholder="'#'"
+            :input-type="'number'"
+            :is-disabled="true"
+            :default-value="form.totalCost"
+            @get="form.totalCost = $event.value"
+          />
+
           <input-component
             :label-title="'Location'"
             :input-placeholder="'Enter Location'"
+            :default-value="form.location"
             @get="form.location = $event.value"
-          />
-          <input-component
-            :label-title="'Referrer'"
-            :input-placeholder="'Enter Referrer'"
-            @get="form.referer = $event.value"
           />
         </div>
         <div class="lg:flex w-full lg:space-x-4 lg:w-2/5">
@@ -133,6 +138,8 @@ import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import { ProductObject } from '@/module/Product'
+import Validator from 'validatorjs'
+import { ValidatorObject } from '~/module/Validation'
 export default defineComponent({
   components: { InputComponent, ButtonComponent, SelectComponent },
   layout: 'dashboard',
@@ -141,18 +148,16 @@ export default defineComponent({
       itemDescription: '',
       equipmentModel: '',
       equipmentType: '',
-      areaOfSpecialization: '',
       asnlNumber: '',
       partNumber: '',
-      serialNumber: '1',
-      quantity: '',
-      unitCost: '',
-      totalCost: '',
+      quantity: '1',
+      unitCost: '1',
+      totalCost: '1',
       reorderLevel: '',
       location: '',
-      referer: '',
       division: '',
       supplier: '',
+      productName: '',
     })
     const context = useContext()
 
@@ -160,12 +165,6 @@ export default defineComponent({
     const divisions = ref([])
     const suppliers = ref([])
     const router = useRouter()
-
-    function valuesNotEmpty(obj: Object) {
-      return Object.values(obj).every(
-        (element) => element !== null && element !== ''
-      )
-    }
 
     function fetchBranches() {
       ProductObject.fetchBranches().then((response) => {
@@ -198,7 +197,29 @@ export default defineComponent({
     })
 
     const createProduct = () => {
-      if (valuesNotEmpty(form)) {
+      const rules = {
+        equipmentModel: 'string',
+        equipmentType: 'string',
+        asnlNumber: 'required|string',
+        partNumber: 'required|string',
+        quantity: 'required|numeric|min:1',
+        unitCost: 'required|numeric|min:0',
+        totalCost: 'required|numeric',
+        reorderLevel: 'required',
+        location: 'required|string',
+        division: 'required|string',
+        supplier: 'required|string',
+        productName: 'required|string',
+      }
+
+      const validation = new Validator(form, rules)
+      if (validation.fails()) {
+        let messages: string[] = []
+        messages = ValidatorObject.getMessages(validation.errors)
+        messages.forEach((error: string) => {
+          context.$toast.error(error)
+        })
+      } else {
         loading.value = true
         ProductObject.createProduct(form)
           .then(() => {
@@ -208,18 +229,16 @@ export default defineComponent({
           .finally(() => {
             loading.value = false
           })
-      } else {
-        context.$toast.global.required()
       }
     }
 
     const reset = () => {
-      keyValue.value++
+      componentKey.value++
     }
-    const keyValue = ref(1)
+    const componentKey = ref(1)
     return {
       form,
-      keyValue,
+      componentKey,
       reset,
       createProduct,
       loading,

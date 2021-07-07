@@ -115,83 +115,76 @@
               </div>
             </div>
           </div>
-
-          <table v-else class="w-full table-auto">
-            <thead class="bg-gray-100">
-              <tr>
-                <th class="w-6 px-6 py-4">
-                  <input
-                    type="checkbox"
-                    class="border border-gray-500 rounded-sm"
-                  />
-                </th>
-                <th
-                  v-for="(headSingle, index) in headers"
-                  :key="index"
-                  class="
-                    uppercase
-                    text-gray-800
-                    font-thin
-                    text-sm
-                    px-4
-                    py-2
-                    text-left
-                  "
-                >
-                  {{ headSingle }}
-                </th>
-                <th
-                  class="
-                    uppercase
-                    text-gray-800
-                    font-thin
-                    text-sm
-                    px-4
-                    py-2
-                    text-center
-                  "
-                >
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="i in 8" :key="i" class="font-light hover:bg-gray-100">
-                <td class="w-6 px-6 py-4">
-                  <input
-                    type="checkbox"
-                    class="border-2 border-gray-400 rounded-sm"
-                  />
-                </td>
-                <td class="px-4 text-left py-4">ASORO985</td>
-
-                <td class="px-4 text-left py-4">Lagos University (LUTH)</td>
-
-                <td class="px-4 text-left py-4">Air Separation</td>
-
-                <td v-if="i % 2 == 0" class="px-4 text-left py-4">
-                  <span class="text-green-500">Progress</span>
-                </td>
-                <td v-else class="px-4 text-left py-4">
-                  <span class="text-yellow-500">Pending</span>
-                </td>
-                <td class="px-4 text-center py-4">
-                  <button
+          <div v-else class="px-4">
+            <table class="w-full table-auto">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th
+                    v-for="(headSingle, index) in headers"
+                    :key="index"
                     class="
-                      px-6
-                      py-1
-                      border border-btn-purple
-                      rounded-sm
-                      text-btn-purple text-sm
+                      uppercase
+                      text-gray-800
+                      font-thin
+                      text-sm
+                      px-4
+                      py-2
+                      text-left
                     "
-                    @click="showErc = true"
                   >
-                    Details
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                    {{ headSingle }}
+                  </th>
+                  <th
+                    class="
+                      uppercase
+                      text-gray-800
+                      font-thin
+                      text-sm
+                      px-4
+                      py-2
+                      text-center
+                    "
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="i in 8"
+                  :key="i"
+                  class="font-light hover:bg-gray-100"
+                >
+                  <td class="px-4 text-left py-4">ASORO985</td>
+
+                  <td class="px-4 text-left py-4">Lagos University (LUTH)</td>
+
+                  <td class="px-4 text-left py-4">Air Separation</td>
+
+                  <td v-if="i % 2 == 0" class="px-4 text-left py-4">
+                    <span class="text-green-500">Progress</span>
+                  </td>
+                  <td v-else class="px-4 text-left py-4">
+                    <span class="text-yellow-500">Pending</span>
+                  </td>
+                  <td class="px-4 text-center py-4">
+                    <button
+                      class="
+                        px-6
+                        py-1
+                        border border-btn-purple
+                        rounded-sm
+                        text-btn-purple text-sm
+                      "
+                      @click="showErc = true"
+                    >
+                      Details
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

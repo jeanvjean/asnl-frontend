@@ -1,15 +1,9 @@
 <template>
-  <div class="overflow-x-auto w-full py-2 px-4">
+  <div class="overflow-x-auto w-full py-2 px-2">
     <div class="overflow-x-auto w-full">
       <table class="table-fixed w-full">
         <thead class="bg-gray-100">
           <tr class="space-x-4">
-            <th class="w-10 px-6 py-4">
-              <input
-                type="checkbox"
-                class="border border-gray-500 rounded-sm"
-              />
-            </th>
             <th
               v-for="(headSingle, index) in head"
               :key="index"
@@ -20,7 +14,7 @@
                 text-sm
                 px-4
                 py-2
-                text-left
+                text-center
                 w-40
               "
             >
@@ -49,13 +43,7 @@
             :key="index"
             class="font-light hover:bg-gray-100"
           >
-            <td class="px-6 py-4">
-              <input
-                type="checkbox"
-                class="border-2 border-gray-400 rounded-sm"
-              />
-            </td>
-            <td class="px-4 text-left py-4">
+            <td class="px-4 text-center py-4">
               <span>{{
                 bodySingle.assignedNumber
                   ? bodySingle.assignedNumber
@@ -64,14 +52,16 @@
                   : ''
               }}</span>
             </td>
-            <td class="px-4 text-left py-4">
+            <td class="px-4 text-center py-4">
               {{ bodySingle.gasType.gasName }}
             </td>
-            <td class="px-4 text-left py-4">
+            <td class="px-4 text-center py-4">
               {{ bodySingle.gasVolumeContent }}
             </td>
-            <td class="px-4 text-left py-4">{{ bodySingle.waterCapacity }}</td>
-            <td class="px-4 text-left py-4 w-full">
+            <td class="px-4 text-center py-4">
+              {{ bodySingle.waterCapacity }}
+            </td>
+            <td class="px-4 text-center py-4 w-full">
               <div>
                 <span
                   :class="getColorCode(bodySingle.cylinderType)"
@@ -80,11 +70,11 @@
                 >
               </div>
             </td>
-            <td class="px-4 text-left py-4">
+            <td class="px-4 text-center py-4">
               {{ formatDate(bodySingle.dateManufactured) }}
             </td>
-            <td class="px-4 py-4 icon-button">
-              <button class="mx-auto text-black w-6 h-6 relative ml-12">
+            <td class="px-4 py-4 icon-button text-center">
+              <button class="mx-auto text-black w-6 h-6 relative">
                 <svg
                   class="fill-current"
                   xmlns="http://www.w3.org/2000/svg"

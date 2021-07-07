@@ -183,89 +183,83 @@
           @prev="changePage($event.value)"
         />
       </div>
-      <table class="w-full table-auto mt-2">
-        <thead class="bg-gray-100">
-          <tr>
-            <th class="w-6 px-6 py-4">
-              <input
-                type="checkbox"
-                class="border border-gray-500 rounded-sm"
-              />
-            </th>
-            <th
-              v-for="(headSingle, index) in headers"
-              :key="index"
-              class="
-                uppercase
-                text-gray-800
-                font-thin
-                text-sm
-                px-4
-                py-2
-                text-center
-              "
-            >
-              {{ headSingle }}
-            </th>
-            <th
-              class="
-                uppercase
-                text-gray-800
-                font-thin
-                text-sm
-                px-4
-                py-2
-                text-center
-              "
-            >
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(inventory, i) in inventories"
-            :key="i"
-            class="font-light hover:bg-gray-100"
-          >
-            <td class="w-6 px-6 py-4">
-              <input
-                type="checkbox"
-                class="border-2 border-gray-400 rounded-sm"
-              />
-            </td>
-            <td class="px-4 text-center py-4">
-              {{ inventory.grn ? inventory.grn : 'Not Specified' }}
-            </td>
-            <td class="px-4 text-center py-4">{{ inventory.supplier }}</td>
-            <td class="px-4 text-center py-4">{{ inventory.LPOnumber }}</td>
-            <td class="px-4 text-center py-4">{{ inventory.wayBillNumber }}</td>
-            <td class="px-4 text-center py-4">{{ inventory.invoiceNumber }}</td>
-            <td class="px-4 text-center py-4">
-              <span class="px-4 py-2 bg-yellow-100 text-red-400">
-                Pending
-              </span>
-            </td>
-            <td class="px-4 text-center py-4">
-              {{ new Date(inventory.dateReceived).toDateString() }}
-            </td>
-            <td class="px-4 text-center py-4">
-              <button
+      <div>
+        <table class="w-full table-auto mt-2">
+          <thead class="bg-gray-100">
+            <tr>
+              <th
+                v-for="(headSingle, index) in headers"
+                :key="index"
                 class="
-                  px-2
-                  py-1
-                  border border-btn-purple
-                  rounded-sm
-                  text-btn-purple text-sm
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-4
+                  py-2
+                  text-center
                 "
-                @click="getInventory(inventory._id)"
               >
-                View Details
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                {{ headSingle }}
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-4
+                  py-2
+                  text-center
+                "
+              >
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(inventory, i) in inventories"
+              :key="i"
+              class="font-light hover:bg-gray-100"
+            >
+              <td class="px-4 text-center py-4">
+                {{ inventory.grn ? inventory.grn : 'Not Specified' }}
+              </td>
+              <td class="px-4 text-center py-4">{{ inventory.supplier }}</td>
+              <td class="px-4 text-center py-4">{{ inventory.LPOnumber }}</td>
+              <td class="px-4 text-center py-4">
+                {{ inventory.wayBillNumber }}
+              </td>
+              <td class="px-4 text-center py-4">
+                {{ inventory.invoiceNumber }}
+              </td>
+              <td class="px-4 text-center py-4">
+                <span class="px-4 py-2 bg-yellow-100 text-red-400">
+                  Pending
+                </span>
+              </td>
+              <td class="px-4 text-center py-4">
+                {{ new Date(inventory.dateReceived).toDateString() }}
+              </td>
+              <td class="px-4 text-center py-4">
+                <button
+                  class="
+                    px-2
+                    py-1
+                    border border-btn-purple
+                    rounded-sm
+                    text-btn-purple text-sm
+                  "
+                  @click="getInventory(inventory._id)"
+                >
+                  View Details
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <recieve-product
       v-if="showRecieveProduct"

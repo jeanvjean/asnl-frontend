@@ -535,7 +535,7 @@ export default defineComponent({
     const submit = () => {
       const rules = {
         cylinders: 'required|array',
-        comment: 'required|string',
+        comment: 'string',
       }
 
       const validation: any = new Validator(requestBody.value, rules)

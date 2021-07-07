@@ -145,7 +145,7 @@
                       text-sm
                     "
                   >
-                    Product Number
+                    Part Number
                   </th>
                   <th
                     class="
@@ -585,7 +585,7 @@ export default defineComponent({
         'products.*.rejected': 'required|numeric|min:0',
         'products.*.unitCost': 'required|numeric',
         'products.*.totalCost': 'required|numeric',
-        'products.*.comment': 'required|string',
+        'products.*.comment': 'string',
         supplier: 'required|string',
         LPOnumber: 'required|string',
         invoiceNumber: 'required|string',

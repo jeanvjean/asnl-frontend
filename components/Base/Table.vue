@@ -1,11 +1,8 @@
 <template>
-  <div class="overflow-x-auto w-full">
+  <div class="overflow-x-auto w-full px-6">
     <table class="w-full table-auto">
       <thead class="bg-gray-100">
         <tr>
-          <th class="w-6 px-6 py-4">
-            <input type="checkbox" class="border border-gray-500 rounded-sm" />
-          </th>
           <th
             v-for="(headSingle, index) in head"
             :key="index"
@@ -29,7 +26,7 @@
               text-sm
               px-6
               py-2
-              text-left
+              text-center
             "
           >
             Actions
@@ -42,12 +39,6 @@
           :key="index"
           class="font-light hover:bg-gray-100"
         >
-          <td class="w-6 px-6 py-4">
-            <input
-              type="checkbox"
-              class="border-2 border-gray-400 rounded-sm"
-            />
-          </td>
           <td class="px-4 text-left py-4">
             <div class="flex items-center space-x-4">
               <img
@@ -75,19 +66,7 @@
               >
             </div>
           </td>
-          <td class="px-4 text-left py-4">
-            <div class="w-40">
-              <span
-                class="px-8 py-2 w-full block text-center capitalize"
-                :class="
-                  bodySingle.status === 'verified'
-                    ? 'bg-green-100 text-green-400'
-                    : 'bg-red-100 text-red-400'
-                "
-                >{{ bodySingle.status }}</span
-              >
-            </div>
-          </td>
+
           <td class="px-4 text-left py-4">
             <div class="w-40">
               <span
@@ -235,7 +214,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  ref,
+  useContext,
+} from '@nuxtjs/composition-api'
 import DeleteUser from '@/components/Overlays/DeleteUser.vue'
 import ChangeRole from '@/components/Overlays/ChangeRole.vue'
 import { UserController } from '@/module/User'
@@ -260,6 +244,7 @@ export default defineComponent({
     const showChangeRole = ref(false)
     const hoverUser = ref()
     const roles = ref<any>([])
+    const context = useContext()
 
     function changeUser(i: number) {
       hoverUser.value = _props.body[i]
@@ -281,7 +266,9 @@ export default defineComponent({
     }
 
     function suspendUser(userId: String, status: Boolean) {
+      const message = status ? 'User Re-activated' : 'User Suspended'
       UserController.suspendUser(userId, status).then(() => {
+        context.$toast.success(message)
         ctx.emit('refresh')
       })
     }

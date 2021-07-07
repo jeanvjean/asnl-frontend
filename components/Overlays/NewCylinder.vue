@@ -30,8 +30,21 @@
           :init-value="formInputs.cylinderType"
           @get="formInputs.cylinderType = $event.value"
         />
+        <select-component
+          :label-title="'Cylinder Assigned To'"
+          :default-option-text="'Select Customer'"
+          :select-array="customers"
+          :init-value="formInputs.assignedTo"
+          @get="formInputs.assignedTo = $event.value"
+        />
         <input-component
-          v-if="formInputs.cylinderType === 'buffer'"
+          :label-title="'Assigned Number'"
+          :input-placeholder="'ASNL BF-103'"
+          :is-required="false"
+          :default-value="formInputs.assignedNumber"
+          @get="formInputs.assignedNumber = $event.value"
+        />
+        <input-component
           :label-title="'Original Cylinder Number'"
           :input-placeholder="'Cylinder number goes here'"
           :default-value="formInputs.cylinderNumber"
@@ -79,13 +92,32 @@
               rounded-sm
             "
           >
-            <option value="KG">KG</option>
+            <option value="KG">Kg</option>
+            <option value="KG">
+              <p>m<sup>3</sup></p>
+            </option>
           </select>
         </div>
+
+        <select-component
+          :label-title="'Gas Type'"
+          :select-array="gasTypes"
+          :default-option-text="'Select Gas Type'"
+          :init-value="formInputs.gasType"
+          @get=";(formInputs.gasType = $event.value), changeColor($event.value)"
+        />
+        <input-component
+          :label-title="'Standard Cylinder Color Code'"
+          :input-placeholder="'Color field will be Populated Automatically'"
+          :is-disabled="true"
+          :default-value="formInputs.standardColor"
+          @get="formInputs.standardColor = $event.value"
+        />
 
         <input-component
           :label-title="'Date of Manufacture'"
           :input-type="'date'"
+          :is-required="false"
           :input-placeholder="'Select Date Here'"
           :default-value="formInputs.dateManufactured"
           @get="formInputs.dateManufactured = $event.value"
@@ -103,35 +135,19 @@
           :default-value="formInputs.testingPresure"
           @get="formInputs.testingPresure = $event.value"
         />
-        <select-component
-          :label-title="'Gas Type'"
-          :select-array="gasTypes"
-          :default-option-text="'Select Gas Type'"
-          :init-value="formInputs.gasType"
-          @get=";(formInputs.gasType = $event.value), changeColor($event.value)"
+        <input-component
+          :label-title="'Purchase Cost'"
+          :input-type="'number'"
+          :input-placeholder="'Select Date Here'"
+          :default-value="formInputs.dateManufactured"
+          @get="formInputs.dateManufactured = $event.value"
         />
         <input-component
-          :label-title="'Standard Cylinder Color Code'"
-          :input-placeholder="'Green'"
-          :is-disabled="true"
-          :default-value="formInputs.standardColor"
-          @get="formInputs.standardColor = $event.value"
-        />
-        <select-component
-          v-if="formInputs.cylinderType === 'assigned'"
-          :label-title="'Cylinder Assigned To'"
-          :default-option-text="'Select Customer'"
-          :select-array="customers"
-          :init-value="formInputs.assignedTo"
-          @get="formInputs.assignedTo = $event.value"
-        />
-        <input-component
-          v-if="formInputs.cylinderType === 'assigned'"
-          :label-title="'Assigned Number'"
-          :input-placeholder="'ASNL BF-103'"
-          :is-required="false"
-          :default-value="formInputs.assignedNumber"
-          @get="formInputs.assignedNumber = $event.value"
+          :label-title="'Purchase Date'"
+          :input-type="'date'"
+          :input-placeholder="'Select Purchase Date'"
+          :default-value="formInputs.dateManufactured"
+          @get="formInputs.dateManufactured = $event.value"
         />
       </div>
       <div class="flex justify-center items-center space-x-4 mt-4">
@@ -218,7 +234,7 @@ export default defineComponent({
         const myResponse = response.data.data.cylinders
         gasTypes.value = myResponse.map((element: any) => {
           return {
-            name: element.gasName + ' - ' + element.colorCode,
+            name: element.gasName,
             value: element._id,
             color: element.colorCode,
           }
@@ -253,15 +269,15 @@ export default defineComponent({
       const rules = {
         cylinderType: 'required|string',
         waterCapacity: 'required|numeric',
-        dateManufactured: 'required|date',
+        dateManufactured: 'date',
         gasType: 'required|string',
         standardColor: 'required|string',
         testingPresure: 'required|numeric',
         fillingPreasure: 'required|numeric',
         gasVolumeContent: 'required|numeric',
-        cylinderNumber: 'string',
-        assignedTo: 'required_if:cylinderType,assigned',
-        assignedNumber: 'string',
+        cylinderNumber: 'required|string',
+        assignedTo: 'required|string',
+        assignedNumber: 'required|string',
       }
       const validation = new Validator(formInputs, rules)
 

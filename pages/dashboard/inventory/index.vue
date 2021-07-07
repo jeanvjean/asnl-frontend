@@ -137,74 +137,63 @@
           </div>
         </div>
 
-        <table v-else class="w-full table-auto">
-          <thead class="bg-gray-100">
-            <tr>
-              <th class="w-6 px-6 py-4">
-                <input
-                  type="checkbox"
-                  class="border border-gray-500 rounded-sm"
-                />
-              </th>
-              <th
-                v-for="(headSingle, index) in headers"
-                :key="index"
-                class="
-                  uppercase
-                  text-gray-800
-                  font-thin
-                  text-sm
-                  px-4
-                  py-2
-                  text-left
-                "
-              >
-                {{ headSingle }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(bodySingle, index) in body"
-              :key="index"
-              class="font-light hover:bg-gray-100"
-            >
-              <td class="w-6 px-6 py-4">
-                <input
-                  type="checkbox"
-                  class="border-2 border-gray-400 rounded-sm"
-                />
-              </td>
-
-              <td class="px-4 text-left py-4">{{ bodySingle.asnlNumber }}</td>
-              <td class="px-4 text-left py-4">
-                {{ bodySingle.itemDescription }}
-              </td>
-              <td class="px-4 text-left py-4">{{ bodySingle.partNumber }}</td>
-              <td class="px-4 text-left py-4">{{ bodySingle.quantity }}</td>
-              <td class="px-4 text-left py-4">
-                {{ bodySingle.reorderLevel }}
-              </td>
-              <td class="px-4 text-left py-4">{{ bodySingle.unitCost }}</td>
-              <td class="px-4 text-left py-4">{{ bodySingle.totalCost }}</td>
-              <td class="px-4 text-left py-4">{{ bodySingle.location }}</td>
-              <td class="px-4 text-center py-4">
-                <router-link
-                  :to="'/dashboard/inventory/product/' + bodySingle._id"
+        <div v-else class="px-6">
+          <table class="w-full table-auto">
+            <thead class="bg-gray-100">
+              <tr>
+                <th
+                  v-for="(headSingle, index) in headers"
+                  :key="index"
                   class="
+                    uppercase
+                    text-gray-800
+                    font-thin
+                    text-sm
                     px-4
                     py-2
-                    border border-btn-purple
-                    rounded-sm
-                    text-btn-purple text-sm
+                    text-left
                   "
                 >
-                  Details
-                </router-link>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                  {{ headSingle }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(bodySingle, index) in body"
+                :key="index"
+                class="font-light hover:bg-gray-100"
+              >
+                <td class="px-4 text-left py-4">{{ bodySingle.asnlNumber }}</td>
+                <td class="px-4 text-left py-4">
+                  {{ bodySingle.itemDescription }}
+                </td>
+                <td class="px-4 text-left py-4">{{ bodySingle.partNumber }}</td>
+                <td class="px-4 text-left py-4">{{ bodySingle.quantity }}</td>
+                <td class="px-4 text-left py-4">
+                  {{ bodySingle.reorderLevel }}
+                </td>
+                <td class="px-4 text-left py-4">{{ bodySingle.unitCost }}</td>
+                <td class="px-4 text-left py-4">{{ bodySingle.totalCost }}</td>
+                <td class="px-4 text-left py-4">{{ bodySingle.location }}</td>
+                <td class="px-4 text-center py-4">
+                  <router-link
+                    :to="'/dashboard/inventory/product/' + bodySingle._id"
+                    class="
+                      px-4
+                      py-2
+                      border border-btn-purple
+                      rounded-sm
+                      text-btn-purple text-sm
+                    "
+                  >
+                    Details
+                  </router-link>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -231,7 +220,7 @@ export default defineComponent({
     const headers = [
       'ASNL Number',
       'item description',
-      'Part no',
+      'Part Number',
       'Quantity',
       'Reorder Level',
       'Unit Cost',

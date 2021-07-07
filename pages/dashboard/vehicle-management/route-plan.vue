@@ -37,16 +37,10 @@
         <search-component :place-holder="'Search for Vehicles'" />
         <pagination :pagination-details="paginationProp" />
       </div>
-      <div class="overflow-auto">
+      <div class="overflow-auto px-4">
         <table class="w-96 lg:w-full table table-auto mt-2">
           <thead class="bg-gray-100">
             <tr>
-              <th class="w-6 px-6 py-4">
-                <input
-                  type="checkbox"
-                  class="border border-gray-500 rounded-sm"
-                />
-              </th>
               <th
                 v-for="(headSingle, index) in headers"
                 :key="index"
@@ -70,12 +64,6 @@
               :key="index"
               class="font-light"
             >
-              <td class="w-6 px-6 py-4">
-                <input
-                  type="checkbox"
-                  class="border-2 border-gray-400 rounded-sm"
-                />
-              </td>
               <td
                 class="
                   px-4

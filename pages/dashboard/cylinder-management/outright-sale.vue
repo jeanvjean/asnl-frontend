@@ -49,7 +49,7 @@
             </svg>
             <span>Within Division</span>
           </router-link>
-          <router-link
+          <!-- <router-link
             to="/dashboard/cylinder-management/outright-sale"
             class="
               flex
@@ -74,7 +74,50 @@
               />
             </svg>
             <span>Outright sales/transfer</span>
-          </router-link>
+          </router-link> -->
+
+          <div class="relative w-full">
+            <svg
+              class="
+                w-6
+                h-6
+                fill-current
+                text-btn-purple
+                absolute
+                top-0
+                mt-4
+                ml-2
+              "
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M4.5 4H8.79C9.24 4 9.46 4.54 9.15 4.84L7.71 6.28L12.71 11.29C12.89 11.48 13 11.74 13 12V19C13 19.55 12.55 20 12 20C11.45 20 11 19.55 11 19V12.4L6.29 7.7L4.85 9.14C4.54 9.46 4 9.24 4 8.79V4.5C4 4.22 4.22 4 4.5 4ZM16.29 6.29L14.85 4.85C14.54 4.54 14.76 4 15.21 4H19.5C19.78 4 20 4.22 20 4.5V8.79C20 9.24 19.46 9.46 19.15 9.15L17.71 7.71L14.83 10.59L13.41 9.17L16.29 6.29Z"
+              />
+            </svg>
+            <select
+              v-model="transferType"
+              class="
+                block
+                w-full
+                h-full
+                text-base
+                focus:outline-none
+                focus:ring-btn-purple
+                border-btn-purple
+                sm:text-sm
+                rounded-md
+                pl-8
+                text-btn-purple
+              "
+            >
+              <option value="">Outright Sales / Transfer</option>
+              <option value="sales">Outright Sales</option>
+              <option value="transfer">Transfer</option>
+            </select>
+          </div>
+
           <router-link
             to="/dashboard/cylinder-management/condemn"
             class="
@@ -138,7 +181,13 @@
       <div class="lg:col-span-3 overflow-x-auto bg-white px-4">
         <div class="md:flex justify-between px-8 py-4">
           <h1 class="flex-1 text-gray-400 font-medium text-lg my-2 md:my-0">
-            Outright Sales
+            {{
+              transferType === 'sales'
+                ? 'Outright Sales'
+                : transferType === 'transfer'
+                ? 'Transfer'
+                : 'Outright Sales / Transfer'
+            }}
           </h1>
           <div class="flex space-x-6 float-right my-2 md:my-0">
             <button
@@ -480,7 +529,6 @@ import SelectComponent from '@/components/Form/Select.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import Confirmation from '@/components/Overlays/Confirmation.vue'
 import FinalStep from '@/components/Overlays/finalStep.vue'
-// import { CustomerController } from '@/module/Customer'
 import { mainStore } from '@/module/Pinia'
 import { CylinderController } from '@/module/Cylinder'
 import { CustomerController } from '~/module/Customer'
@@ -516,6 +564,8 @@ export default defineComponent({
         }
       )
     })
+
+    const transferType = ref<string>('')
 
     function fetchCustomers() {
       CustomerController.fetchUnPaginatedCustomers().then((response) => {
@@ -630,6 +680,7 @@ export default defineComponent({
       setOtherValues,
       auth,
       deleteCylinder,
+      transferType,
     }
   },
 })

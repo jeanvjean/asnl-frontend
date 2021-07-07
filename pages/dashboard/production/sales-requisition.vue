@@ -38,12 +38,6 @@
       <table class="w-full table-auto mt-2">
         <thead class="bg-gray-100">
           <tr>
-            <th class="w-6 px-6 py-4">
-              <input
-                type="checkbox"
-                class="border border-gray-500 rounded-sm"
-              />
-            </th>
             <th
               v-for="(headSingle, index) in headers"
               :key="index"
@@ -63,12 +57,6 @@
         </thead>
         <tbody>
           <tr v-for="i in 6" :key="i" class="font-light hover:bg-gray-100">
-            <td class="w-6 px-6 py-4">
-              <input
-                type="checkbox"
-                class="border-2 border-gray-400 rounded-sm"
-              />
-            </td>
             <td class="px-4 text-left py-4">Sona Gas</td>
             <td class="px-4 text-left py-4">ASORO985</td>
             <td class="px-4 text-left py-4">12/02/2020</td>

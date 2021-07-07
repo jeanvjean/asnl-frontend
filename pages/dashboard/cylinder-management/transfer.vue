@@ -49,6 +49,7 @@
             </svg>
             <span>Within Division</span>
           </router-link>
+
           <router-link
             to="/dashboard/cylinder-management/outright-sale"
             class="
@@ -138,8 +139,18 @@
     <div class="grid grid-rows-1 lg:grid-cols-4 py-2 px-6">
       <div class="lg:col-span-3 overflow-x-auto bg-white px-4">
         <div class="md:flex justify-between px-8 py-4">
-          <h1 class="flex-1 text-gray-400 font-medium text-lg my-2 md:my-0">
-            Transfer Cylinder within Division
+          <h1
+            class="
+              flex-1
+              text-gray-400
+              font-medium
+              text-lg
+              my-2
+              md:my-0
+              capitalize
+            "
+          >
+            {{ transferType }} Transfer within Division
           </h1>
           <div class="flex space-x-6 float-right my-2 md:my-0">
             <button
@@ -506,7 +517,7 @@ export default defineComponent({
     const auth: any = appStore.getLoggedInUser
     const types = [
       {
-        name: 'Between Branches',
+        name: 'Permanent Transfer',
         value: 'branch',
       },
       {
@@ -529,6 +540,8 @@ export default defineComponent({
     const cylinders = ref<any>([])
     const cylindersArrays = ref<any>([])
     const context = useContext()
+
+    const transferType = ref<string>('temporary')
 
     onMounted(() => {
       CustomerController.fetchUnPaginatedCustomers().then((response) => {
@@ -593,25 +606,15 @@ export default defineComponent({
       return cylinders.value[index]
     }
 
-    async function changeTransferType(type: string) {
+    function changeTransferType(type: string) {
       form.type = type
       reciepients.value = []
-      if (type === 'branch') {
-        const branches = await getBranches()
-        reciepients.value = branches.map((element: any) => {
-          return {
-            name: `${element.name} - ${element.location}`,
-            value: element._id,
-          }
-        })
-      } else if (type === 'temporary') {
-        reciepients.value = customers.value.map((element: any) => {
-          return {
-            name: element.name,
-            value: element._id,
-          }
-        })
-      }
+      reciepients.value = customers.value.map((element: any) => {
+        return {
+          name: element.name,
+          value: element._id,
+        }
+      })
     }
 
     const submit = () => {
@@ -686,6 +689,7 @@ export default defineComponent({
       changeTransferType,
       decreaseCounter,
       auth,
+      transferType,
     }
   },
 })

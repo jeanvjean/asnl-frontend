@@ -69,12 +69,6 @@
       <table class="w-full table-auto mt-2">
         <thead class="bg-gray-100">
           <tr>
-            <th class="w-6 px-6 py-4">
-              <input
-                type="checkbox"
-                class="border border-gray-500 rounded-sm"
-              />
-            </th>
             <th
               v-for="(headSingle, index) in headers"
               :key="index"
@@ -98,12 +92,6 @@
             :key="index"
             class="font-light hover:bg-gray-100"
           >
-            <td class="w-6 px-6 py-4">
-              <input
-                type="checkbox"
-                class="border-2 border-gray-400 rounded-sm"
-              />
-            </td>
             <td class="px-4 text-center py-4">{{ bodySingle.vehCategory }}</td>
             <td class="px-4 text-center py-4">{{ bodySingle.regNo }}</td>
             <td class="px-4 text-center py-4">{{ bodySingle.manufacturer }}</td>

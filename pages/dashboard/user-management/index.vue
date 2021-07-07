@@ -160,7 +160,6 @@ export default defineComponent({
       'Phone No',
       'Email Address',
       'Department',
-      'Verified Status',
       'Activation Status',
     ]
     const page = ref<number>(1)
@@ -192,7 +191,6 @@ export default defineComponent({
             role: element.role,
             id: element._id,
             subrole: element.subrole,
-            status: element.isVerified ? 'verified' : 'Not-Verified',
             deactivated: element.deactivated,
             permissions: element.permissions,
             image: element.image,

@@ -153,149 +153,138 @@
               </div>
             </div>
           </div>
-
-          <table v-else class="w-full table-auto">
-            <thead class="bg-gray-200">
-              <tr>
-                <th class="w-6 px-6 py-4">
-                  <input
-                    type="checkbox"
-                    class="border border-gray-500 rounded-sm"
-                  />
-                </th>
-                <th
-                  v-for="(headSingle, index) in headers"
-                  :key="index"
-                  class="
-                    uppercase
-                    text-gray-800
-                    font-thin
-                    text-sm
-                    px-4
-                    py-2
-                    text-left
-                  "
-                >
-                  {{ headSingle }}
-                </th>
-                <th
-                  class="
-                    uppercase
-                    text-gray-800
-                    font-thin
-                    text-sm
-                    px-4
-                    py-2
-                    text-center
-                  "
-                >
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(bodySingle, index) in body"
-                :key="index"
-                class="font-light hover:bg-gray-100"
-              >
-                <td class="w-6 px-6 py-4">
-                  <input
-                    type="checkbox"
-                    class="border-2 border-gray-400 rounded-sm"
-                  />
-                </td>
-                <td class="px-4 text-left py-4">
-                  {{ bodySingle.name }}
-                </td>
-
-                <td class="px-4 text-left py-4">
-                  {{ bodySingle.email }}
-                </td>
-
-                <td class="px-4 text-left py-4">
-                  {{ bodySingle.phoneNumber }}
-                </td>
-
-                <td class="px-4 text-left py-4">{{ bodySingle.address }}</td>
-
-                <td class="px-4 py-4 icon-button text-center">
-                  <button class="mx-auto text-black w-6 h-6 relative">
-                    <svg
-                      class="fill-current"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        d="M4 12a2 2 0 110-4 2 2 0 010 4zm6 0a2 2 0 110-4 2 2 0 010 4zm6 0a2 2 0 110-4 2 2 0 010 4z"
-                      />
-                    </svg>
-                  </button>
-                  <div
+          <div v-else class="px-4">
+            <table class="w-full table-auto">
+              <thead class="bg-gray-200">
+                <tr>
+                  <th
+                    v-for="(headSingle, index) in headers"
+                    :key="index"
                     class="
-                      absolute
-                      -ml-4
-                      bg-gray-50
-                      border border-gray-300
-                      w-40
-                      font-medium
+                      uppercase
+                      text-gray-800
+                      font-thin
                       text-sm
-                      rounded-sm
-                      action-menu
-                      z-10
+                      px-4
+                      py-2
+                      text-left
                     "
                   >
-                    <button
-                      class="
-                        block
-                        px-3
-                        py-2
-                        text-black
-                        focus:outline-none
-                        hover:bg-purple-300
-                        hover:text-white
-                        w-full
-                        overflow-none
-                      "
-                      @click="showCustomerDetail(bodySingle)"
-                    >
-                      View Details
+                    {{ headSingle }}
+                  </th>
+                  <th
+                    class="
+                      uppercase
+                      text-gray-800
+                      font-thin
+                      text-sm
+                      px-4
+                      py-2
+                      text-center
+                    "
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(bodySingle, index) in body"
+                  :key="index"
+                  class="font-light hover:bg-gray-100"
+                >
+                  <td class="px-4 text-left py-4">
+                    {{ bodySingle.name }}
+                  </td>
+
+                  <td class="px-4 text-left py-4">
+                    {{ bodySingle.email }}
+                  </td>
+
+                  <td class="px-4 text-left py-4">
+                    {{ bodySingle.phoneNumber }}
+                  </td>
+
+                  <td class="px-4 text-left py-4">{{ bodySingle.address }}</td>
+
+                  <td class="px-4 py-4 icon-button text-center">
+                    <button class="mx-auto text-black w-6 h-6 relative">
+                      <svg
+                        class="fill-current"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          d="M4 12a2 2 0 110-4 2 2 0 010 4zm6 0a2 2 0 110-4 2 2 0 010 4zm6 0a2 2 0 110-4 2 2 0 010 4z"
+                        />
+                      </svg>
                     </button>
-                    <button
+                    <div
                       class="
-                        block
-                        px-3
-                        py-2
-                        text-black
-                        focus:outline-none
-                        hover:bg-purple-300
-                        hover:text-white
-                        w-full
-                        overflow-none
+                        absolute
+                        -ml-4
+                        bg-gray-50
+                        border border-gray-300
+                        w-40
+                        font-medium
+                        text-sm
+                        rounded-sm
+                        action-menu
+                        z-10
                       "
                     >
-                      Request Pickup
-                    </button>
-                    <button
-                      class="
-                        block
-                        px-3
-                        py-2
-                        text-black
-                        focus:outline-none
-                        hover:bg-purple-300
-                        hover:text-white
-                        w-full
-                        overflow-none
-                      "
-                    >
-                      Delete Customer
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                      <button
+                        class="
+                          block
+                          px-3
+                          py-2
+                          text-black
+                          focus:outline-none
+                          hover:bg-purple-300
+                          hover:text-white
+                          w-full
+                          overflow-none
+                        "
+                        @click="showCustomerDetail(bodySingle)"
+                      >
+                        View Details
+                      </button>
+                      <button
+                        class="
+                          block
+                          px-3
+                          py-2
+                          text-black
+                          focus:outline-none
+                          hover:bg-purple-300
+                          hover:text-white
+                          w-full
+                          overflow-none
+                        "
+                      >
+                        Request Pickup
+                      </button>
+                      <button
+                        class="
+                          block
+                          px-3
+                          py-2
+                          text-black
+                          focus:outline-none
+                          hover:bg-purple-300
+                          hover:text-white
+                          w-full
+                          overflow-none
+                        "
+                      >
+                        Delete Customer
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

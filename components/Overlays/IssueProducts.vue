@@ -382,7 +382,7 @@ export default defineComponent({
         'products.*.quantityRequested': 'required|numeric|min:1',
         'products.*.comment': 'required|string',
         jobTag: 'required|string',
-        comment: 'required|string',
+        comment: 'string',
         customer: 'required|string',
         mrn: 'required|string',
       }

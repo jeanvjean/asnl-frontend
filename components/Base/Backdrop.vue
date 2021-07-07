@@ -1,7 +1,17 @@
 <template>
   <div
     :class="centralize ? 'items-center' : ' items-start'"
-    class="fixed inset-0 bg-black bg-opacity-25 flex justify-center z-10 w-screen h-screen overflow-y-auto"
+    class="
+      fixed
+      inset-0
+      bg-black bg-opacity-25
+      flex
+      justify-center
+      z-50
+      w-screen
+      h-screen
+      overflow-y-auto
+    "
   >
     <slot></slot>
   </div>

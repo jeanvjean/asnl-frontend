@@ -61,7 +61,7 @@
             rounded-sm
             font-medium
           "
-          @click="fetchCylinders"
+          @click="show = !show"
         >
           <svg
             class="w-3 h-3 fill-current"
@@ -117,9 +117,9 @@
     <create-supplier
       v-if="show"
       :supplier-types="supplierTypes"
-      :gas-types="gasTypes"
+      :gas-types="productTypes"
       @close="show = false"
-      @refresh="fetchSuppliers(1)"
+      @refresh="fetchSuppliers(1, search)"
     />
   </div>
 </template>
@@ -132,7 +132,6 @@ import {
 } from '@nuxtjs/composition-api'
 import CreateSupplier from '@/components/Overlays/Supplier.vue'
 import { ProductObject } from '@/module/Product'
-import { CylinderController } from '@/module/Cylinder'
 import { SupplierDto } from '@/types/Types'
 import Pagination from '@/components/Base/Pagination.vue'
 
@@ -175,43 +174,41 @@ export default defineComponent({
 
     const search = ref<string>('general-inventory')
 
-    const fetchCylinders = () => {
-      CylinderController.getCylinders().then((response) => {
-        gasTypes.value = response.data.data.cylinders.map((el: any) => {
-          return {
-            name: el.gasName + ' - ' + el.colorCode,
-            value: el._id,
-          }
-        })
-        show.value = true
-      })
-    }
-
     onMounted(() => {
       fetchSuppliers(1, search.value)
     })
 
     const supplierTypes = [
       {
+        name: 'Local',
+        value: 'local',
+      },
+      {
+        name: 'Foreign',
+        value: 'foreign',
+      },
+    ]
+    const productTypes = [
+      {
         name: 'General Inventory',
         value: 'general-inventory',
       },
       {
         name: 'Product Gas Refill',
-        value: 'product-gas-refill',
+        value: 'gas-refill',
       },
     ]
     return {
       show,
       supplierTypes,
       gasTypes,
-      fetchCylinders,
       suppliers,
       changePage,
       paginationProp,
       fetchSuppliers,
       changeTab,
       search,
+      productTypes,
     }
   },
 })

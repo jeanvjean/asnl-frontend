@@ -76,7 +76,7 @@ export default defineComponent({
       'Equipment Type',
       'Equipment Model',
       'Part Name',
-      'Part No',
+      'Part Number',
       'Quantity',
       'Total',
     ]

@@ -125,6 +125,18 @@
                   class="block px-2 py-2"
                   >Transfer Analytics</router-link
                 >
+                <button
+                  class="block px-2 py-2 focus:outline-none"
+                  @click="showRegiserCylinder = true"
+                >
+                  Register Cylinder
+                </button>
+                <button
+                  class="block px-2 py-2 focus:outline-none"
+                  @click="showRegiserCylinderType = true"
+                >
+                  Register Gas Type
+                </button>
               </div>
             </div>
             <div class="w-full">
@@ -178,6 +190,11 @@
               <div v-if="toggleInventory" class="ml-16 px-2 link-list">
                 <router-link to="/dashboard/inventory/" class="block px-2 py-2"
                   >Analytics</router-link
+                >
+                <router-link
+                  to="/dashboard/inventory/new-product"
+                  class="block px-2 py-2"
+                  >Create Product</router-link
                 >
                 <router-link
                   to="/dashboard/inventory/suppliers"
@@ -473,22 +490,36 @@
           </nav>
         </div>
       </div>
+      <new-cylinder
+        v-if="showRegiserCylinder"
+        @close="showRegiserCylinder = !showRegiserCylinder"
+      />
+      <new-cylinder-type
+        v-if="showRegiserCylinderType"
+        @close="showRegiserCylinderType = !showRegiserCylinderType"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from '@nuxtjs/composition-api'
+import NewCylinder from '@/components/Overlays/NewCylinder.vue'
+import NewCylinderType from '@/components/Overlays/NewCylinderType.vue'
+
 // import { getNavigations } from '@/constants/navigation'
 // import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
+  components: { NewCylinder, NewCylinderType },
   setup() {
     const toggleCylinder = ref(false)
     const toggleInventory = ref(false)
     const toggleReport = ref(false)
     const toggleVehicle = ref(false)
     const toggleProduction = ref(false)
+    const showRegiserCylinder = ref(false)
+    const showRegiserCylinderType = ref(false)
     // const appStore = mainStore()
 
     // const auth: any = appStore.getLoggedInUser
@@ -502,6 +533,8 @@ export default defineComponent({
       toggleReport,
       toggleVehicle,
       toggleProduction,
+      showRegiserCylinder,
+      showRegiserCylinderType,
       // navigations,
     }
   },

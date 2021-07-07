@@ -21,7 +21,7 @@
           />
 
           <input-component
-            :label-title="'Item Description'"
+            :label-title="'Product Name'"
             :input-placeholder="'Enter description'"
             :default-value="product.description"
           />
@@ -45,14 +45,14 @@
           />
 
           <input-component
-            :label-title="'ASNL Part No'"
+            :label-title="'ASNL Part Number'"
             :input-placeholder="'#######'"
             :input-type="'number'"
             :default-value="product.asnlNumber"
           />
 
           <input-component
-            :label-title="'Part No'"
+            :label-title="'Part Number'"
             :input-placeholder="'########'"
             :input-type="'number'"
             :default-value="product.partNo"

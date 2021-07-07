@@ -260,6 +260,7 @@ export default defineComponent({
     const body = ref([])
 
     const showRegister = ref(false)
+    const showCylinderType = ref(false)
     return {
       headers,
       body,
@@ -269,6 +270,7 @@ export default defineComponent({
       paginationProp,
       changePage,
       getCylinders,
+      showCylinderType,
     }
   },
 })
