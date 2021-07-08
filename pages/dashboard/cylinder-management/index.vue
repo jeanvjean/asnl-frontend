@@ -261,7 +261,7 @@ export default defineComponent({
           [
             [
               {
-                title: 'Third Party Cylinders',
+                title: 'ASNL Cylinders',
                 value: 0,
               },
               {
@@ -275,15 +275,7 @@ export default defineComponent({
             ],
             [
               {
-                title: 'Empty',
-                value: 0,
-              },
-              {
-                title: 'Buffer',
-                value: 0,
-              },
-              {
-                title: 'Assigned',
+                title: 'Customer Cylinders',
                 value: 0,
               },
             ],

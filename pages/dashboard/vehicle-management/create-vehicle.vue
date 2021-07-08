@@ -7,23 +7,71 @@
           <p class="text-gray-600 text-sm">Enter Vehicle details below</p>
         </div>
         <div class="grid grid-rows-1 lg:grid-cols-3 gap-4">
-          <input-component
-            :label-title="'Vehicle Type'"
-            :input-placeholder="'Enter Vehicle Type'"
-            @get="form.vehicleType = $event.value"
-          />
+          <div class="py-2">
+            <label
+              class="block w-full px-1 text-gray-800 text-md mb-1"
+              for="vehicle-category"
+              ><span> Vehicle Category </span>
+              <span class="text-red-600 text-base">*</span></label
+            >
+            <multiselect
+              v-model="form.vehCategory"
+              label="name"
+              track-by="value"
+              :options="vehicleCategories"
+              placeholder="Select Vehicle Category"
+              :class="'border-2 border-gray-200 rounded-sm'"
+            />
+          </div>
 
-          <input-component
-            :label-title="'Manufacturer'"
-            :input-placeholder="'Enter Manufacturer'"
-            @get="form.manufacturer = $event.value"
-          />
+          <div class="py-2">
+            <label
+              class="block w-full px-1 text-gray-800 text-md mb-1"
+              for="vehicle-category"
+              ><span> Vehicle Manufacturer </span>
+              <span class="text-red-600 text-base">*</span></label
+            >
+            <multiselect
+              v-model="form.manufacturer"
+              label="name"
+              track-by="value"
+              :options="vehicleManufacturers"
+              placeholder="Select Vehicle Manufacturers"
+              :class="'border-2 border-gray-200 rounded-sm'"
+            />
+          </div>
 
-          <input-component
-            :label-title="'Model'"
-            :input-placeholder="'Enter Model'"
-            @get="form.vModel = $event.value"
-          />
+          <div class="py-2">
+            <label
+              class="block w-full px-1 text-gray-800 text-md mb-1"
+              for="vehicle-category"
+              ><span> Vehicle Type </span>
+              <span class="text-red-600 text-base">*</span></label
+            >
+            <multiselect
+              v-model="form.vehicleType"
+              label="name"
+              track-by="value"
+              :options="vehicleTypes"
+              placeholder="Select Vehicle Type"
+              :class="'border-2 border-gray-200 rounded-sm'"
+            />
+          </div>
+
+          <div class="py-2">
+            <label
+              class="block w-full px-1 text-gray-800 text-md mb-1"
+              for="vehicle-category"
+              ><span> Vehicle Model </span>
+              <span class="text-red-600 text-base">*</span></label
+            >
+            <multiselect
+              v-model="form.vModel"
+              :options="modelNumbers"
+              placeholder="Select Model Number"
+              :class="'border-2 border-gray-200 rounded-sm'"
+            />
+          </div>
 
           <input-component
             :label-title="'Registration Number'"
@@ -39,32 +87,13 @@
           />
 
           <input-component
-            :label-title="'Mileage Date'"
-            :input-type="'date'"
-            :input-placeholder="'Enter Mileage Date'"
-            @get="form.mileageDate = $event.value"
-          />
-
-          <input-component
             :label-title="'Current Mileage'"
             :input-placeholder="'Enter Current Mileage'"
             @get="form.currMile = $event.value"
           />
 
           <input-component
-            :label-title="'Last Mileage'"
-            :input-placeholder="'Enter Last Mileage'"
-            @get="form.lastMileage = $event.value"
-          />
-
-          <input-component
-            :label-title="'Vehicle Category'"
-            :input-placeholder="'Enter Vehicle Category'"
-            @get="form.vehCategory = $event.value"
-          />
-
-          <input-component
-            :label-title="'Batery Capacity (Percentage)'"
+            :label-title="'Battery Capacity (Voltage)'"
             :input-placeholder="'Enter Battery Capacity'"
             :input-type="'number'"
             @get="form.batteryCapacity = $event.value"
@@ -84,8 +113,9 @@
           />
 
           <input-component
-            :label-title="'Gross Height (Foot)'"
-            :input-placeholder="'Enter Gross Height'"
+            :label-title="'Gross Weight (Ton)'"
+            :input-placeholder="'Enter Gross Weight'"
+            :is-required="false"
             :input-type="'number'"
             @get="form.grossHeight = $event.value"
           />
@@ -93,6 +123,7 @@
           <input-component
             :label-title="'Net Weight (Ton)'"
             :input-placeholder="'Enter Net Weight'"
+            :is-required="false"
             :input-type="'number'"
             @get="form.netWeight = $event.value"
           />
@@ -115,18 +146,21 @@
             :label-title="'Disposal Date'"
             :input-type="'date'"
             :input-placeholder="'Enter Disposal Date'"
-            @get="disposal.disposalDate = $event.value"
+            :is-required="false"
+            @get="form.disposalDate = $event.value"
           />
           <input-component
             :label-title="'Disposal Amount'"
             :input-placeholder="'Enter Disposal Amount'"
+            :is-required="false"
             :input-type="'number'"
-            @get="disposal.disposalAmount = $event.value"
+            @get="form.disposalAmount = $event.value"
           />
           <input-component
             :label-title="'Disposal Mileage'"
             :input-placeholder="'Enter Disposal Mileage'"
-            @get="disposal.disposalMileage = $event.value"
+            :is-required="false"
+            @get="form.disposalMileage = $event.value"
           />
         </div>
         <div class="lg:flex w-full lg:space-x-4 lg:w-2/5 my-6">
@@ -149,6 +183,7 @@
 <script lang="ts">
 import {
   defineComponent,
+  onMounted,
   reactive,
   ref,
   useContext,
@@ -157,19 +192,100 @@ import {
 import InputComponent from '@/components/Form/Input.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import { VehicleController } from '@/module/Vehicle'
+import Multiselect from 'vue-multiselect'
+import Validator from 'validatorjs'
+import { ValidatorObject } from '~/module/Validation'
+
 export default defineComponent({
-  components: { InputComponent, ButtonComponent },
+  components: { InputComponent, ButtonComponent, Multiselect },
   layout: 'dashboard',
   setup() {
     const context = useContext()
 
-    const form = reactive({
+    const vehicleCategories = [
+      {
+        name: 'SUV',
+        value: 'suv',
+      },
+      {
+        name: 'Car',
+        value: 'car',
+      },
+      {
+        name: 'Bus',
+        value: 'bus',
+      },
+      {
+        name: 'Truck',
+        value: 'truck',
+      },
+    ]
+
+    const vehicleManufacturers = [
+      {
+        name: 'Ford',
+        value: 'ford',
+      },
+      {
+        name: 'Toyota',
+        value: 'toyota',
+      },
+      {
+        name: 'VolksWagen',
+        value: 'volkswagen',
+      },
+      {
+        name: 'Honda',
+        value: 'honda',
+      },
+      {
+        name: 'Mercedes-Benz',
+        value: 'mercedes-benz',
+      },
+    ]
+
+    const vehicleTypes = [
+      {
+        name: 'Accord',
+        value: 'accord',
+      },
+      {
+        name: 'Camry',
+        value: 'camry',
+      },
+      {
+        name: 'Corolla',
+        value: 'corolla',
+      },
+      {
+        name: 'Spider',
+        value: 'spider',
+      },
+    ]
+
+    const modelNumbers = ref<any>([])
+
+    function populateModel() {
+      const start: number = 2011
+      const end: number = new Date().getFullYear()
+      const difference: number = end - start
+
+      for (let i = 0; i <= difference; i++) {
+        const year = start + i
+        modelNumbers.value.push(year)
+      }
+    }
+
+    onMounted(() => {
+      populateModel()
+    })
+
+    const form = reactive<any>({
       vehicleType: '',
       manufacturer: '',
       vModel: '',
       regNo: '',
       acqisistionDate: '',
-      mileageDate: '',
       currMile: '',
       vehCategory: '',
       tankCapacity: '',
@@ -179,26 +295,20 @@ export default defineComponent({
       netWeight: '',
       licence: '',
       insuranceDate: '',
-      lastMileage: '',
-    })
-
-    const disposal = reactive({
       disposalDate: '',
       disposalAmount: '',
       disposalMileage: '',
     })
 
-    function valuesNotEmpty(obj: Object) {
-      return Object.values(obj).every(
-        (element) => element !== null && element !== ''
-      )
-    }
-
     const loading = ref(false)
 
     function convertToIso(date: string) {
-      const parseDate = new Date(date)
-      return parseDate.toISOString()
+      let result = ''
+      if (date) {
+        const parseDate = new Date(date)
+        result = parseDate.toISOString()
+      }
+      return result
     }
     const router = useRouter()
 
@@ -207,16 +317,43 @@ export default defineComponent({
     }
 
     const createVehicle = () => {
-      if (valuesNotEmpty(form) && valuesNotEmpty(disposal)) {
+      const rules = {
+        vehCategory: 'required',
+        manufacturer: 'required',
+        vehicleType: 'required',
+        vModel: 'required|numeric',
+        regNo: 'required|string',
+        acqisistionDate: 'required|date',
+        currMile: 'required|numeric',
+        tankCapacity: 'required|string',
+        batteryCapacity: 'required|string',
+        fuelType: 'required|string',
+        grossHeight: 'numeric',
+        netWeight: 'numeric',
+        licence: 'required|string',
+        insuranceDate: 'required|date',
+        disposalDate: 'date',
+        disposalAmount: 'numeric',
+        disposalMileage: 'numeric',
+      }
+
+      const validation: any = new Validator(form, rules)
+      if (validation.fails()) {
+        let messages: string[] = []
+
+        messages = ValidatorObject.getMessages(validation.errors)
+        messages.forEach((error: string) => {
+          context.$toast.error(error)
+        })
+      } else {
         const requestParams = {
-          vehicleType: form.vehicleType,
-          manufacturer: form.manufacturer,
+          vehCategory: form.vehCategory.value,
+          manufacturer: form.manufacturer.value,
+          vehicleType: form.vehicleType.value,
           vModel: form.vModel,
           regNo: form.regNo,
           acqisistionDate: convertToIso(form.acqisistionDate),
-          mileageDate: convertToIso(form.mileageDate),
           currMile: form.currMile,
-          vehCategory: form.vehCategory,
           tankCapacity: form.tankCapacity,
           batteryCapacity: form.batteryCapacity,
           fuelType: form.fuelType,
@@ -224,11 +361,10 @@ export default defineComponent({
           netWeight: form.netWeight,
           licence: form.licence,
           insuranceDate: convertToIso(form.insuranceDate),
-          lastMileage: form.lastMileage,
           disposal: {
-            disposalDate: convertToIso(disposal.disposalDate),
-            disposalAmount: disposal.disposalAmount,
-            disposalMileage: disposal.disposalMileage,
+            disposalDate: convertToIso(form.disposalDate),
+            disposalAmount: form.disposalAmount,
+            disposalMileage: form.disposalMileage,
           },
         }
         loading.value = true
@@ -240,8 +376,6 @@ export default defineComponent({
           .finally(() => {
             loading.value = false
           })
-      } else {
-        context.$toast.global.required()
       }
     }
 
@@ -256,9 +390,14 @@ export default defineComponent({
       createVehicle,
       keyValue,
       reset,
-      disposal,
       loading,
+      vehicleCategories,
+      modelNumbers,
+      vehicleManufacturers,
+      vehicleTypes,
     }
   },
 })
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

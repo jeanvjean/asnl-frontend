@@ -145,7 +145,6 @@ export default defineComponent({
   layout: 'dashboard',
   setup() {
     const form = reactive({
-      itemDescription: '',
       equipmentModel: '',
       equipmentType: '',
       asnlNumber: '',
