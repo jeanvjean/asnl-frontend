@@ -56,7 +56,7 @@ class CylinderRepository {
     })
   }
 
-  async getCylinder(id: string) {
+  async fetchCylinder(id: string) {
     return await $axios.get('/cylinder/registered-cylinder-details/' + id)
   }
 
