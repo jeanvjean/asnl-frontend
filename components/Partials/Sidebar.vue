@@ -286,6 +286,11 @@
                   class="block px-2 py-2"
                   >Corrective Maintenace</router-link
                 >
+                <router-link
+                  to="/dashboard/vehicle-management/pre-inspection-maintenance"
+                  class="block px-2 py-2"
+                  >Pre-inspection Maintenace</router-link
+                >
               </div>
             </div>
             <div class="w-full">

@@ -248,7 +248,7 @@
                     px-2
                     py-2
                     text-center
-                    w-3/12
+                    w-2/12
                     border border-gray-400
                   "
                 >
@@ -265,7 +265,20 @@
                     border border-gray-400
                   "
                 >
-                  Type
+                  Cylinder Type
+                </th>
+                <th
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-2/12
+                    border border-gray-400
+                  "
+                >
+                  Gas Type
                 </th>
                 <th class="w-auto"></th>
               </tr>
@@ -348,6 +361,12 @@
                     <option value="assigned">Assigned</option>
                   </select>
                 </td>
+                <td class="font-light text-lg text-center">
+                  <input-component
+                    :default-value="cylinder.gas"
+                    :input-placeholder="'Gas Type'"
+                  />
+                </td>
 
                 <td class="font-light text-lg text-center">
                   <svg
@@ -397,7 +416,7 @@
             px-10
             py-6
             grid grid-rows-1
-            lg:grid-cols-2
+            lg:grid-cols-3
             gap-y-4
             lg:gap-x-4
             border-b border-t border-gray-300
@@ -414,6 +433,14 @@
           <select-component
             :label-title="'To'"
             :default-option-text="'Select a Reciepient'"
+            :select-array="reciepients"
+            :init-value="form.reciepient"
+            @get="form.reciepient = $event.value"
+          />
+
+          <select-component
+            :label-title="'New Gas Type'"
+            :default-option-text="'Select new Gas Type'"
             :select-array="reciepients"
             :init-value="form.reciepient"
             @get="form.reciepient = $event.value"
@@ -555,6 +582,7 @@ export default defineComponent({
         cylinder: '',
         volume: '',
         type: '',
+        gas: '',
       })
       cylindersArrays.value.push([])
     }
@@ -593,6 +621,7 @@ export default defineComponent({
             cylinders.value[index].volume = element.gasVolumeContent
             cylinders.value[index].type = element.cylinderType
             cylinders.value[index].cylinder = element._id
+            cylinders.value[index].gas = element.gasType.gasName
           }
         })
       } else {

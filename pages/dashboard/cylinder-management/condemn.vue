@@ -213,7 +213,7 @@
                     border border-gray-400
                   "
                 >
-                  Cylinder Number
+                  Assigned Number
                 </th>
                 <th
                   class="

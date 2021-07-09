@@ -16,46 +16,48 @@
       <div class="w-full px-4 py-10 space-y-2 border-b-2 border-gray-200 my-10">
         <div class="w-full">
           <div class="w-full flex items-center justify-center">
-            <div class="h-42 w-48 relative">
-              <img
-                v-if="userProfile.image"
-                class="w-full h-full"
-                :src="userProfile.image"
-                alt=""
-              />
-              <img
-                v-else
-                class="w-full h-full"
-                src="@/assets/images/default-avatar.jpg"
-                alt=""
-              />
-              <span
-                class="
-                  bg-gray-700
-                  text-white
-                  px-2
-                  py-3
-                  absolute
-                  left-10
-                  bottom-5
-                  rounded-md
-                "
-              >
-                <label
-                  title="Choose an Image"
-                  for="file-upload"
-                  class="cursor-pointer"
-                  ><svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    class="w-3 h-3 fill-current"
-                    fill="currentColor"
-                  >
-                    <path
-                      d="M12.3 3.7l4 4L4 20H0v-4L12.3 3.7zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z"
-                    /></svg
-                ></label>
-              </span>
+            <div class="w-full flex justify-center items-center">
+              <div class="relative">
+                <img
+                  v-if="userProfile.image"
+                  class="h-40 w-40 rounded-full object-center object-cover"
+                  :src="userProfile.image"
+                  alt=""
+                />
+                <img
+                  v-else
+                  class="h-40 w-40 rounded-full object-center object-cover"
+                  src="@/assets/images/default-avatar.jpg"
+                  alt=""
+                />
+                <span
+                  class="
+                    bg-gray-700
+                    text-white
+                    px-2
+                    py-3
+                    absolute
+                    bottom-1.5
+                    rounded-md
+                    left-1/2
+                  "
+                >
+                  <label
+                    title="Choose an Image"
+                    for="file-upload"
+                    class="cursor-pointer"
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      class="w-3 h-3 fill-current"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M12.3 3.7l4 4L4 20H0v-4L12.3 3.7zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z"
+                      /></svg
+                  ></label>
+                </span>
+              </div>
             </div>
           </div>
           <div

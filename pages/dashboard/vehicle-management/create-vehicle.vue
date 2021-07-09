@@ -7,58 +7,39 @@
           <p class="text-gray-600 text-sm">Enter Vehicle details below</p>
         </div>
         <div class="grid grid-rows-1 lg:grid-cols-3 gap-4">
-          <div class="py-2">
-            <label
-              class="block w-full px-1 text-gray-800 text-md mb-1"
-              for="vehicle-category"
-              ><span> Vehicle Category </span>
-              <span class="text-red-600 text-base">*</span></label
-            >
-            <multiselect
-              v-model="form.vehCategory"
-              label="name"
-              track-by="value"
-              :options="vehicleCategories"
-              placeholder="Select Vehicle Category"
-              :class="'border-2 border-gray-200 rounded-sm'"
-            />
-          </div>
+          <select-component
+            :label-title="'Vehicle Category'"
+            :default-option-text="'Select a Vehicle Category'"
+            :select-array="vehicleCategories"
+            :init-value="form.vehCategory"
+            @get="form.vehCategory = $event.value"
+          />
 
-          <div class="py-2">
-            <label
-              class="block w-full px-1 text-gray-800 text-md mb-1"
-              for="vehicle-category"
-              ><span> Vehicle Manufacturer </span>
-              <span class="text-red-600 text-base">*</span></label
-            >
-            <multiselect
-              v-model="form.manufacturer"
-              label="name"
-              track-by="value"
-              :options="vehicleManufacturers"
-              placeholder="Select Vehicle Manufacturers"
-              :class="'border-2 border-gray-200 rounded-sm'"
-            />
-          </div>
+          <select-component
+            :label-title="'Vehicle Manufacturer'"
+            :default-option-text="'Select a Vehicle Manufacturer'"
+            :select-array="vehicleManufacturers"
+            :init-value="form.manufacturer"
+            @get="form.manufacturer = $event.value"
+          />
 
-          <div class="py-2">
-            <label
-              class="block w-full px-1 text-gray-800 text-md mb-1"
-              for="vehicle-category"
-              ><span> Vehicle Type </span>
-              <span class="text-red-600 text-base">*</span></label
-            >
-            <multiselect
-              v-model="form.vehicleType"
-              label="name"
-              track-by="value"
-              :options="vehicleTypes"
-              placeholder="Select Vehicle Type"
-              :class="'border-2 border-gray-200 rounded-sm'"
-            />
-          </div>
+          <select-component
+            :label-title="'Vehicle Type'"
+            :default-option-text="'Select a Vehicle Type'"
+            :select-array="vehicleTypes"
+            :init-value="form.vehicleType"
+            @get="form.vehicleType = $event.value"
+          />
 
-          <div class="py-2">
+          <select-component
+            :label-title="'Vehicle Model'"
+            :default-option-text="'Select a Vehicle Model'"
+            :select-array="modelNumbers"
+            :init-value="form.vModel"
+            @get="form.vModel = $event.value"
+          />
+
+          <!-- <div class="py-2">
             <label
               class="block w-full px-1 text-gray-800 text-md mb-1"
               for="vehicle-category"
@@ -71,7 +52,7 @@
               placeholder="Select Model Number"
               :class="'border-2 border-gray-200 rounded-sm'"
             />
-          </div>
+          </div> -->
 
           <input-component
             :label-title="'Registration Number'"
@@ -190,14 +171,14 @@ import {
   useRouter,
 } from '@nuxtjs/composition-api'
 import InputComponent from '@/components/Form/Input.vue'
+import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import { VehicleController } from '@/module/Vehicle'
-import Multiselect from 'vue-multiselect'
 import Validator from 'validatorjs'
 import { ValidatorObject } from '~/module/Validation'
 
 export default defineComponent({
-  components: { InputComponent, ButtonComponent, Multiselect },
+  components: { InputComponent, ButtonComponent, SelectComponent },
   layout: 'dashboard',
   setup() {
     const context = useContext()
@@ -266,13 +247,13 @@ export default defineComponent({
     const modelNumbers = ref<any>([])
 
     function populateModel() {
-      const start: number = 2011
+      const start: number = 1999
       const end: number = new Date().getFullYear()
       const difference: number = end - start
 
       for (let i = 0; i <= difference; i++) {
         const year = start + i
-        modelNumbers.value.push(year)
+        modelNumbers.value.push({ name: year, value: year })
       }
     }
 
@@ -347,9 +328,9 @@ export default defineComponent({
         })
       } else {
         const requestParams = {
-          vehCategory: form.vehCategory.value,
-          manufacturer: form.manufacturer.value,
-          vehicleType: form.vehicleType.value,
+          vehCategory: form.vehCategory,
+          manufacturer: form.manufacturer,
+          vehicleType: form.vehicleType,
           vModel: form.vModel,
           regNo: form.regNo,
           acqisistionDate: convertToIso(form.acqisistionDate),

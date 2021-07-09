@@ -76,48 +76,41 @@
               :default-value="form.supplier"
               @get="form.supplier = $event.value"
             />
-            <div
-              class="
-                lg:col-span-3
-                flex
-                justify-between
-                items-center
-                space-x-4
-                w-full
-                h-full
-                px-6
-                py-4
-              "
-            >
-              <div class="px-4 py-1 w-full text-center">
-                <p class="text-left">LPO Number</p>
-                <input-component
-                  :input-placeholder="'Enter LPO Number'"
-                  :default-value="form.LPOnumber"
-                  @get="form.LPOnumber = $event.value"
-                />
-              </div>
-              <div
-                class="px-4 py-1 border-l border-gray-400 w-full text-center"
-              >
-                <p class="text-left">Waybill Number</p>
-                <input-component
-                  :input-placeholder="'000000000000'"
-                  :default-value="form.wayBillNumber"
-                  @get="form.wayBillNumber = $event.value"
-                />
-              </div>
-              <div
-                class="px-4 py-1 border-l border-gray-400 w-full text-center"
-              >
-                <p class="text-left">Invoice Number</p>
-                <input-component
-                  :input-placeholder="'000000000000'"
-                  :default-value="form.invoiceNumber"
-                  @get="form.invoiceNumber = $event.value"
-                />
-              </div>
-            </div>
+
+            <input-component
+              :label-title="'LPO Number'"
+              :input-placeholder="'Enter LPO Number'"
+              :default-value="form.LPOnumber"
+              @get="form.LPOnumber = $event.value"
+            />
+
+            <input-component
+              :label-title="'Waybill Number'"
+              :input-placeholder="'000000000000'"
+              :default-value="form.wayBillNumber"
+              @get="form.wayBillNumber = $event.value"
+            />
+
+            <input-component
+              :label-title="'Invoice Number'"
+              :input-placeholder="'000000000000'"
+              :default-value="form.invoiceNumber"
+              @get="form.invoiceNumber = $event.value"
+            />
+
+            <input-component
+              :label-title="'Equipment Type'"
+              :input-placeholder="'Enter Equipment Type'"
+              :default-value="form.invoiceNumber"
+              @get="form.invoiceNumber = $event.value"
+            />
+
+            <input-component
+              :label-title="'Equipment Model'"
+              :input-placeholder="'Enter Equipment Model'"
+              :default-value="form.invoiceNumber"
+              @get="form.invoiceNumber = $event.value"
+            />
           </div>
           <div class="w-full overflow-x-auto">
             <table class="w-full table border-separate">
@@ -125,7 +118,6 @@
                 <tr>
                   <th
                     class="
-                      px-4
                       py-2
                       font-medium
                       text-gray-600
@@ -145,7 +137,7 @@
                       text-sm
                     "
                   >
-                    Part Number
+                    Product Name
                   </th>
                   <th
                     class="
@@ -157,7 +149,7 @@
                       text-sm
                     "
                   >
-                    Product Name
+                    Part Number
                   </th>
                   <th
                     class="
@@ -232,38 +224,28 @@
                     Comment
                   </th>
                   <th
-                    class="
-                      px-4
-                      py-2
-                      font-medium
-                      text-gray-600
-                      uppercase
-                      text-sm
-                    "
+                    class="py-2 font-medium text-gray-600 uppercase text-sm"
                   ></th>
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  v-for="(product, i) in products"
-                  :key="i"
-                  class="hover:bg-gray-100"
-                >
+                <tr v-for="(product, i) in products" :key="i">
                   <td class="text-center">{{ Number(i) + 1 }}</td>
-                  <td>
-                    <select-component
-                      :default-option-text="'Select Product Number'"
-                      :init-value="product.productNumber"
-                      :select-array="productsArray"
-                      @get="product.productNumber = $event.value"
-                    />
-                  </td>
 
                   <td>
                     <input-component
                       :input-placeholder="'Enter Product Name'"
                       :default-value="product.productName"
                       @get="product.productName = $event.value"
+                    />
+                  </td>
+
+                  <td>
+                    <select-component
+                      :default-option-text="'Select Product Number'"
+                      :init-value="product.productNumber"
+                      :select-array="productsArray"
+                      @get="product.productNumber = $event.value"
                     />
                   </td>
 
@@ -339,7 +321,7 @@
               </tbody>
             </table>
           </div>
-          <div class="flex justify-between items-start w-11/12 h-full mx-auto">
+          <div class="grid grid-cols-3 gap-x-10 w-full h-full mx-auto px-4">
             <div class="w-full mx-auto h-full">
               <button
                 class="flex items-center space-x-1"
@@ -361,66 +343,64 @@
                 <div class="underline">Add New Product</div>
               </button>
             </div>
-            <div class="w-full h-full py-2 mx-auto">
-              <label
-                for="file-upload"
-                class="
-                  block
-                  custom-file-upload
-                  w-full
-                  h-full
-                  border-2 border-gray-300
-                  py-3
-                  rounded-sm
-                  focus:border focus:border-gray-200
-                "
-              >
-                <div class="text-center mb-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    class="w-6 h-6 fill-current text-gray-600 mx-auto"
-                  >
-                    <path
-                      d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"
-                    />
-                    <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
-                  </svg>
-                </div>
-                <div class="text-center font-medium text-xs w-full">
-                  <span class="inline-block">
-                    {{
-                      form.file.name ? form.file.name : 'Upload an Attachment'
-                    }}
-                  </span>
-                </div>
-              </label>
-              <input
-                id="file-upload"
-                type="file"
-                @change="processFile($event)"
-              />
-            </div>
 
-            <div class="flex items-start py-2 w-full">
-              <div
-                class="rounded-sm border border-gray-300 px-4 mx-auto text-sm"
-              >
-                <p class="text-gray-500 text-sm font-medium leading-6">
-                  Inspecting officer
-                </p>
-                <div class="flex items-start space-x-2 py-2">
-                  <img
-                    class="h-10 w-10 rounded-full"
-                    src="@/assets/images/default-avatar.jpg"
-                    alt=""
+            <label
+              for="file-upload"
+              class="
+                block
+                custom-file-upload
+                w-full
+                h-full
+                border-2 border-gray-300
+                py-3
+                rounded-sm
+                focus:border focus:border-gray-200
+              "
+            >
+              <div class="text-center mb-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  class="w-6 h-6 fill-current text-gray-600 mx-auto"
+                >
+                  <path
+                    d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"
                   />
-                  <div>
-                    <p class="text-black text-lg capitalize">{{ user.name }}</p>
-                    <p class="text-gray-600 text-sm capitalize">
-                      {{ user.role }}
-                    </p>
-                  </div>
+                  <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                </svg>
+              </div>
+              <div class="text-center font-medium text-xs w-full">
+                <span class="inline-block">
+                  {{ form.file.name ? form.file.name : 'Upload an Attachment' }}
+                </span>
+              </div>
+            </label>
+            <input id="file-upload" type="file" @change="processFile($event)" />
+
+            <div
+              class="
+                rounded-sm
+                border border-gray-300
+                px-4
+                mx-auto
+                text-sm
+                w-full
+              "
+            >
+              <p class="text-gray-500 text-sm font-medium leading-6">
+                Inspecting officer
+              </p>
+              <div class="flex items-start space-x-2 py-2">
+                <img
+                  class="h-10 w-10 rounded-full"
+                  src="@/assets/images/default-avatar.jpg"
+                  alt=""
+                />
+                <div>
+                  <p class="text-black text-lg capitalize">{{ user.name }}</p>
+                  <p class="text-gray-600 text-sm capitalize">
+                    {{ user.role }}
+                  </p>
                 </div>
               </div>
             </div>

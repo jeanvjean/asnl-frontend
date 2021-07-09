@@ -191,7 +191,7 @@ export default defineComponent({
         ],
         [
           {
-            title: 'Total Bad ASNL Customer Cylinders',
+            title: 'Total Bad ASNL Cylinders',
             value: 0,
           },
           [
