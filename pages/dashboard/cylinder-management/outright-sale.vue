@@ -112,7 +112,6 @@
                 text-btn-purple
               "
             >
-              <option value="">Outright Sales / Transfer</option>
               <option value="sales">Outright Sales</option>
               <option value="transfer">Transfer</option>
             </select>
@@ -567,11 +566,13 @@ export default defineComponent({
     const cylinders = ref<any>([])
     const cylinderResponse = ref<any>([])
     const context = useContext()
+    const branches = ref<any>([])
 
     const componentKey = ref(0)
 
     onMounted(() => {
       fetchCustomers()
+      fetchBranches()
       CylinderController.getRegisteredCylindersUnPaginated().then(
         (response) => {
           cylinderResponse.value = response.data
@@ -579,16 +580,27 @@ export default defineComponent({
       )
     })
 
-    const transferType = ref<string>('')
+    const transferType = ref<string>('sales')
 
     function fetchCustomers() {
       CustomerController.fetchUnPaginatedCustomers().then((response) => {
-        customers.value = response
-        reciepients.value = customers.value.map((element: any) => {
+        customers.value = response.map((element: any) => {
           return {
             name: element.name,
             value: element._id,
           }
+        })
+        reciepients.value = customers.value
+      })
+    }
+
+    function fetchBranches() {
+      CylinderController.fetchBranches().then((response: any) => {
+        response.forEach((branch: any) => {
+          branches.value.push({
+            name: `${branch.name} - ${branch.location}`,
+            value: branch._id,
+          })
         })
       })
     }
@@ -670,11 +682,11 @@ export default defineComponent({
       }
     }
 
-    watch(status, (currentValue) => {
-      if (currentValue === 'success') {
-        message.value = 'You have successfully approved this request'
-      } else if (currentValue === 'error') {
-        message.value = 'You have regretably declined this request'
+    watch(transferType, (currentValue) => {
+      if (currentValue === 'sales') {
+        reciepients.value = customers.value
+      } else {
+        reciepients.value = branches.value
       }
     })
 

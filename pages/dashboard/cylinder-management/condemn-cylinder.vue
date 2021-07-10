@@ -119,7 +119,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      CylinderController.fetchPendingChanges().then((response) => {
+      CylinderController.fetchPendingCylinderChanges().then((response) => {
         console.log(response)
       })
     })
