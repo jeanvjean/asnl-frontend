@@ -38,7 +38,7 @@
               h-full
             "
           >
-            <filter-component />
+            <filter-component @filter="showFilter = !showFilter" />
             <search-component :place-holder="'Search'" />
             <button
               class="bg-btn-purple px-4 py-2 rounded-sm h-full text-white"
@@ -55,6 +55,7 @@
       v-if="showType"
       @close="showType = false"
     ></new-cylinder-type>
+    <cylinder-filter v-if="showFilter" @close="showFilter = !showFilter" />
   </div>
 </template>
 <script lang="ts">
@@ -69,8 +70,9 @@ import NewCylinderType from '@/components/Overlays/NewCylinderType.vue'
 import CardSlider from '@/components/Base/CardSlider.vue'
 import { CylinderController } from '@/module/Cylinder'
 import Pagination from '@/components/Base/Pagination.vue'
-import FilterComponent from '@/components/Base/Filter.vue'
+import FilterComponent from '@/components/Base/FilterButton.vue'
 import SearchComponent from '@/components/Base/Search.vue'
+import CylinderFilter from '@/components/Overlays/CylinderFilter.vue'
 
 export default defineComponent({
   name: 'CylinderPool',
@@ -81,9 +83,11 @@ export default defineComponent({
     Pagination,
     FilterComponent,
     SearchComponent,
+    CylinderFilter,
   },
   layout: 'dashboard',
   setup() {
+    const showFilter = ref<Boolean>(false)
     const statistics = ref<any>([
       [
         [
@@ -357,6 +361,7 @@ export default defineComponent({
       statistics,
       paginationProp,
       changePage,
+      showFilter,
     }
   },
 })

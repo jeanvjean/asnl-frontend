@@ -385,7 +385,7 @@ export default defineComponent({
     })
 
     const goBack = () => {
-      router.push('/dashboard/cylinder-management/cylinder-type')
+      router.push('/dashboard/cylinder-management/cylinder-type-transfer')
     }
 
     const requestBody = computed(() => {

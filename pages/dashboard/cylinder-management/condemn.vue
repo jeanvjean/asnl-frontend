@@ -103,7 +103,7 @@
             <span>Condemn</span>
           </router-link>
           <router-link
-            to="/dashboard/cylinder-management/cylinder-type"
+            to="/dashboard/cylinder-management/cylinder-type-transfer"
             class="
               flex
               space-x-4
@@ -357,6 +357,13 @@
             </p>
             <div class="flex items-start space-x-4 py-2">
               <img
+                v-if="auth.image"
+                class="h-10 w-10 rounded-full"
+                :src="auth.image"
+                alt=""
+              />
+              <img
+                v-else
                 class="h-10 w-10 rounded-full"
                 src="@/assets/images/default-avatar.jpg"
                 alt=""
@@ -382,6 +389,13 @@
           </p>
           <div class="flex items-start space-x-4 py-2">
             <img
+              v-if="auth.image"
+              class="h-10 w-10 rounded-full"
+              :src="auth.image"
+              alt=""
+            />
+            <img
+              v-else
               class="h-10 w-10 rounded-full"
               src="@/assets/images/default-avatar.jpg"
               alt=""

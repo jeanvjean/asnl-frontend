@@ -25,7 +25,7 @@
       <div class="grid grid-rows-1 md:grid-cols-2 gap-x-4">
         <select-component
           :label-title="'Cylinder Type'"
-          :select-array="cylinderTypes"
+          :select-array="CylinderTypes"
           :default-option-text="'Select a Cylinder Type'"
           :init-value="formInputs.cylinderType"
           @get="formInputs.cylinderType = $event.value"
@@ -198,16 +198,12 @@ import { CylinderController } from '@/module/Cylinder'
 import { CustomerController } from '@/module/Customer'
 import Validator from 'validatorjs'
 import { ValidatorObject } from '@/module/Validation'
+import { CylinderTypes } from '@/constants/variables'
 
 export default defineComponent({
   components: { BackDrop, InputComponent, SelectComponent },
   setup(_props, ctx) {
     const context = useContext()
-
-    const cylinderTypes = [
-      { name: 'Buffer', value: 'buffer' },
-      { name: 'Assigned', value: 'assigned' },
-    ]
 
     const customers = ref([])
     const gasTypes = ref([])
@@ -308,7 +304,7 @@ export default defineComponent({
 
     const componentKey = ref<number>(0)
     return {
-      cylinderTypes,
+      CylinderTypes,
       customers,
       gasTypes,
       close,

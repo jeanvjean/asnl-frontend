@@ -125,6 +125,11 @@
                   class="block px-2 py-2"
                   >Transfer Analytics</router-link
                 >
+                <router-link
+                  to="/dashboard/cylinder-management/cylinder-type"
+                  class="block px-2 py-2"
+                  >Cylinder Type Transfers</router-link
+                >
                 <button
                   class="block px-2 py-2 focus:outline-none"
                   @click="showRegiserCylinder = true"

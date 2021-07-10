@@ -245,6 +245,7 @@ export default defineComponent({
       'cylinder-type',
       'outright-sale',
       'create-vehicle',
+      'cylinder-type-transfer',
       'new-user',
       'transfer',
       'id',

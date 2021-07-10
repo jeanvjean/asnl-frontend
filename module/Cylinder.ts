@@ -118,7 +118,7 @@ class CylinderRepository {
     })
   }
 
-  fetchPendingChanges() {
+  fetchPendingCylinderChanges() {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get(

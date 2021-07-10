@@ -1,193 +1,10 @@
 <template>
   <div :key="componentKey" class="px-6 py-6">
-    <div class="grid grid-rows-1 md:grid-cols-4 py-2 px-4">
-      <div
-        class="
-          lg:flex
-          lg:justify-between
-          lg:items-center
-          lg:col-span-3
-          lg:gap-2
-        "
-      >
-        <h1 class="text-xl text-black font-medium px-2 py-2">
-          Transfer Cylinders
-        </h1>
-        <div
-          class="
-            flex
-            space-x-6
-            sm:space-y-3
-            md:space-y-0
-            flex-col
-            md:flex-row
-            text-sm
-          "
-        >
-          <router-link
-            to="/dashboard/cylinder-management/transfer"
-            class="
-              flex
-              space-x-4
-              items-center
-              text-btn-purple
-              border-btn-purple border
-              px-4
-              py-2
-              rounded-sm
-              md:mx-auto
-            "
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              class="w-6 h-6 fill-current"
-            >
-              <path
-                d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zm10-4a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"
-              />
-            </svg>
-            <span>Within Division</span>
-          </router-link>
-          <!-- <router-link
-            to="/dashboard/cylinder-management/outright-sale"
-            class="
-              flex
-              space-x-4
-              items-center
-              text-white
-              bg-btn-purple
-              px-4
-              py-2
-              rounded-sm
-              md:mx-auto
-            "
-          >
-            <svg
-              class="w-6 h-6 fill-current text-white"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M4.5 4H8.79C9.24 4 9.46 4.54 9.15 4.84L7.71 6.28L12.71 11.29C12.89 11.48 13 11.74 13 12V19C13 19.55 12.55 20 12 20C11.45 20 11 19.55 11 19V12.4L6.29 7.7L4.85 9.14C4.54 9.46 4 9.24 4 8.79V4.5C4 4.22 4.22 4 4.5 4ZM16.29 6.29L14.85 4.85C14.54 4.54 14.76 4 15.21 4H19.5C19.78 4 20 4.22 20 4.5V8.79C20 9.24 19.46 9.46 19.15 9.15L17.71 7.71L14.83 10.59L13.41 9.17L16.29 6.29Z"
-              />
-            </svg>
-            <span>Outright sales/transfer</span>
-          </router-link> -->
-
-          <div class="relative w-full">
-            <svg
-              class="
-                w-6
-                h-6
-                fill-current
-                text-btn-purple
-                absolute
-                top-0
-                mt-4
-                ml-2
-              "
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M4.5 4H8.79C9.24 4 9.46 4.54 9.15 4.84L7.71 6.28L12.71 11.29C12.89 11.48 13 11.74 13 12V19C13 19.55 12.55 20 12 20C11.45 20 11 19.55 11 19V12.4L6.29 7.7L4.85 9.14C4.54 9.46 4 9.24 4 8.79V4.5C4 4.22 4.22 4 4.5 4ZM16.29 6.29L14.85 4.85C14.54 4.54 14.76 4 15.21 4H19.5C19.78 4 20 4.22 20 4.5V8.79C20 9.24 19.46 9.46 19.15 9.15L17.71 7.71L14.83 10.59L13.41 9.17L16.29 6.29Z"
-              />
-            </svg>
-            <select
-              v-model="transferType"
-              class="
-                block
-                w-full
-                h-full
-                text-base
-                focus:outline-none
-                focus:ring-btn-purple
-                border-btn-purple
-                sm:text-sm
-                rounded-md
-                pl-8
-                text-btn-purple
-              "
-            >
-              <option value="">Outright Sales / Transfer</option>
-              <option value="sales">Outright Sales</option>
-              <option value="transfer">Transfer</option>
-            </select>
-          </div>
-
-          <router-link
-            to="/dashboard/cylinder-management/condemn"
-            class="
-              flex
-              space-x-4
-              items-center
-              text-btn-purple
-              border-btn-purple border
-              px-4
-              py-2
-              rounded-sm
-              md:mx-auto
-            "
-          >
-            <svg
-              class="w-6 h-6 fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                clip-rule="evenodd"
-              />
-            </svg>
-
-            <span>Condemn</span>
-          </router-link>
-          <router-link
-            to="/dashboard/cylinder-management/cylinder-type-transfer"
-            class="
-              flex
-              space-x-4
-              items-center
-              text-btn-purple
-              border-btn-purple border
-              px-4
-              py-2
-              rounded-sm
-              md:mx-auto
-            "
-          >
-            <svg
-              class="w-6 h-6 fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                clip-rule="evenodd"
-              />
-            </svg>
-
-            <span class="text-center">Cylinder Type</span>
-          </router-link>
-        </div>
-      </div>
-    </div>
     <div class="grid grid-rows-1 lg:grid-cols-4 py-2 px-6">
       <div class="lg:col-span-3 overflow-x-auto bg-white px-4">
         <div class="md:flex justify-between px-8 py-4">
           <h1 class="flex-1 text-gray-400 font-medium text-lg my-2 md:my-0">
-            {{
-              transferType === 'sales'
-                ? 'Outright Sales'
-                : transferType === 'transfer'
-                ? 'Transfer'
-                : 'Outright Sales / Transfer'
-            }}
+            Cylinder Type
           </h1>
           <div class="flex space-x-6 float-right my-2 md:my-0">
             <button
@@ -247,7 +64,7 @@
             </button>
           </div>
         </div>
-        <div class="w-full overflow-x-auto px-6 my-8 border-collapse">
+        <div class="w-full overflow-x-auto px-2 my-8 border-collapse">
           <table class="table w-full border-collapse border-0">
             <thead>
               <tr>
@@ -255,24 +72,22 @@
                 <th
                   class="
                     font-light
-                    text-lg
+                    text-sm
                     px-2
                     py-2
                     text-center
-                    w-3/12
                     border border-gray-400
                   "
                 >
-                  Assigned Number
+                  Cylinder Number
                 </th>
                 <th
                   class="
                     font-light
-                    text-lg
+                    text-sm
                     px-2
                     py-2
                     text-center
-                    w-2/12
                     border border-gray-400
                   "
                 >
@@ -281,24 +96,22 @@
                 <th
                   class="
                     font-light
-                    text-lg
+                    text-sm
                     px-2
                     py-2
                     text-center
-                    w-2/12
                     border border-gray-400
                   "
                 >
-                  Manufacture Date
+                  Manufacturing Date
                 </th>
                 <th
                   class="
                     font-light
-                    text-lg
+                    text-sm
                     px-2
                     py-2
                     text-center
-                    w-2/12
                     border border-gray-400
                   "
                 >
@@ -307,15 +120,50 @@
                 <th
                   class="
                     font-light
-                    text-lg
+                    text-sm
                     px-2
                     py-2
                     text-center
-                    w-2/12
                     border border-gray-400
                   "
                 >
                   Volume
+                </th>
+                <!-- <th
+                  class="
+                    font-light
+                    text-sm
+                    px-2
+                    py-2
+                    text-center
+                    border border-gray-400
+                  "
+                >
+                  Height
+                </th> -->
+                <th
+                  class="
+                    font-light
+                    text-sm
+                    px-2
+                    py-2
+                    text-center
+                    border border-gray-400
+                  "
+                >
+                  Color Code
+                </th>
+                <th
+                  class="
+                    font-light
+                    text-sm
+                    px-2
+                    py-2
+                    text-center
+                    border border-gray-400
+                  "
+                >
+                  Water Capacity
                 </th>
                 <th class="w-auto"></th>
               </tr>
@@ -377,7 +225,25 @@
                 <td class="font-light text-lg text-center">
                   <input-component
                     :default-value="cylinder.volume"
-                    :input-placeholder="'Cost of Sale'"
+                    :input-placeholder="'Volume'"
+                  />
+                </td>
+                <!-- <td class="font-light text-lg text-center">
+                  <input-component
+                    :default-value="cylinder.volume"
+                    :input-placeholder="'Height'"
+                  />
+                </td> -->
+                <td class="font-light text-lg text-center">
+                  <input-component
+                    :default-value="cylinder.colorCode"
+                    :input-placeholder="'Color Code'"
+                  />
+                </td>
+                <td class="font-light text-lg text-center">
+                  <input-component
+                    :default-value="cylinder.waterCapacity"
+                    :input-placeholder="'Water Capacity'"
                   />
                 </td>
 
@@ -436,11 +302,18 @@
           "
         >
           <select-component
-            :label-title="'Transfer To'"
-            :default-option-text="'Select a Reciepient'"
-            :select-array="reciepients"
-            :init-value="form.reciepient"
-            @get="form.reciepient = $event.value"
+            :label-title="'Change Cylinder Type to'"
+            :default-option-text="'Select New Cylinder Type'"
+            :select-array="CylinderTypes"
+            :init-value="form.cylinderType"
+            @get="form.cylinderType = $event.value"
+          />
+          <select-component
+            :label-title="'Change Gas Type to'"
+            :default-option-text="'Select New Gas Type'"
+            :select-array="gasTypes"
+            :init-value="form.gasType"
+            @get="form.gasType = $event.value"
           />
         </div>
         <div class="px-10 py-4">
@@ -537,6 +410,7 @@ import {
   reactive,
   ref,
   useContext,
+  useRouter,
   watch,
 } from '@nuxtjs/composition-api'
 import SelectComponent from '@/components/Form/Select.vue'
@@ -545,7 +419,9 @@ import Confirmation from '@/components/Overlays/Confirmation.vue'
 import FinalStep from '@/components/Overlays/finalStep.vue'
 import { mainStore } from '@/module/Pinia'
 import { CylinderController } from '@/module/Cylinder'
-import { CustomerController } from '~/module/Customer'
+import { CylinderTypes } from '@/constants/variables'
+import Validator from 'validatorjs'
+import { ValidatorObject } from '~/module/Validation'
 
 export default defineComponent({
   name: 'Transfer',
@@ -555,6 +431,8 @@ export default defineComponent({
     const form = reactive({
       reciepient: '',
       comment: '',
+      gasType: '',
+      cylinderType: '',
     })
     const appStore = mainStore()
     const auth: any = appStore.getLoggedInUser
@@ -563,15 +441,16 @@ export default defineComponent({
     const showFinalStep = ref(false)
     const status = ref('')
     const message = ref('')
-    const customers = ref<any>([])
     const cylinders = ref<any>([])
     const cylinderResponse = ref<any>([])
     const context = useContext()
+    const router = useRouter()
+    const gasTypes = ref<any>([])
 
     const componentKey = ref(0)
 
     onMounted(() => {
-      fetchCustomers()
+      getGasType()
       CylinderController.getRegisteredCylindersUnPaginated().then(
         (response) => {
           cylinderResponse.value = response.data
@@ -580,18 +459,6 @@ export default defineComponent({
     })
 
     const transferType = ref<string>('')
-
-    function fetchCustomers() {
-      CustomerController.fetchUnPaginatedCustomers().then((response) => {
-        customers.value = response
-        reciepients.value = customers.value.map((element: any) => {
-          return {
-            name: element.name,
-            value: element._id,
-          }
-        })
-      })
-    }
 
     function deleteCylinder(index: number) {
       cylinders.value.splice(index, 1)
@@ -604,6 +471,20 @@ export default defineComponent({
         date: '',
         volume: '',
         gasType: '',
+        waterCapacity: '',
+        colorCode: '',
+      })
+    }
+
+    function getGasType() {
+      CylinderController.getCylinders().then((response) => {
+        const myResponse = response.data.data.cylinders
+        gasTypes.value = myResponse.map((element: any) => {
+          return {
+            name: element.gasName,
+            value: element._id,
+          }
+        })
       })
     }
 
@@ -613,6 +494,8 @@ export default defineComponent({
           cylinders.value[index].volume = element.gasVolumeContent
           cylinders.value[index].type = element.cylinderType
           cylinders.value[index].gasType = element.gasType.gasName
+          cylinders.value[index].colorCode = element.gasType.colorCode
+          cylinders.value[index].waterCapacity = element.waterCapacity
           const newDate = new Date(element.dateManufactured)
           const dateValue = {
             year: newDate.getFullYear(),
@@ -637,35 +520,37 @@ export default defineComponent({
       return number.toString().length
     }
 
+    const goBack = () => {
+      router.push('/dashboard/cylinder-management/cylinder-type')
+    }
+
     const submit = () => {
-      let validation = true
-      if (cylinders.value.length) {
-        cylinders.value.forEach((element: any) => {
-          if (element.cylinder === '') {
-            validation = false
-          }
-        })
+      const requestCylinders = cylinders.value.map((cylinder: any) => {
+        return cylinder.cylinder
+      })
+      const requestBody = {
+        comment: form.comment,
+        gasType: form.gasType,
+        cylinderType: form.cylinderType,
+        cylinders: requestCylinders,
       }
-      if (!validation || !cylinders.value.length) {
-        context.$toast.error('Cylinders are required')
-      } else if (!form.reciepient || !form.comment) {
-        context.$toast.error('All Fields are Required')
-      } else {
-        const requestCylinders = cylinders.value.map((element: any) => {
-          return element.cylinder
+      const rules = {
+        cylinders: 'required|array',
+        comment: 'string',
+        cylinderType: 'required|string',
+        gasType: 'required|string',
+      }
+
+      const validation = new Validator(requestBody, rules)
+      if (validation.fails()) {
+        let messages: string[] = []
+        messages = ValidatorObject.getMessages(validation.errors)
+        messages.forEach((error: string) => {
+          context.$toast.error(error)
         })
-
-        const requestBody = {
-          type: 'permanent',
-          comment: form.comment,
-          to: form.reciepient,
-          cylinders: requestCylinders,
-          holdingTime: 30,
-        }
-
-        CylinderController.initiateCylinderTransfer(requestBody).then(() => {
-          form.comment = form.reciepient = ''
-          cylinders.value = []
+      } else {
+        CylinderController.updateCylinder(requestBody).then(() => {
+          goBack()
         })
       }
     }
@@ -684,7 +569,6 @@ export default defineComponent({
       showFinalStep,
       status,
       message,
-      customers,
       form,
       increaseCounter,
       componentKey,
@@ -695,6 +579,9 @@ export default defineComponent({
       auth,
       deleteCylinder,
       transferType,
+      CylinderTypes,
+      getGasType,
+      gasTypes,
     }
   },
 })

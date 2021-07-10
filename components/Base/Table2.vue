@@ -119,24 +119,6 @@
                 >
                   View Cylinder</router-link
                 >
-                <router-link
-                  class="
-                    block
-                    px-6
-                    py-2
-                    text-center text-black
-                    focus:outline-none
-                    hover:bg-purple-300
-                    hover:text-white
-                    w-full
-                    overflow-none
-                    font-medium
-                    text-xs
-                  "
-                  :to="'/dashboard/cylinder-management/type/' + bodySingle._id"
-                >
-                  Change Cylinder Type</router-link
-                >
               </div>
             </td>
           </tr>

@@ -1,6 +1,7 @@
 <template>
   <button
     class="flex space-x-4 items-center bg-gray-200 rounded-sm px-5 py-2.5"
+    @click="emitClick"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -19,3 +20,18 @@
     <span>Filter</span>
   </button>
 </template>
+<script lang="ts">
+import { defineComponent } from '@nuxtjs/composition-api'
+
+export default defineComponent({
+  setup(_props, ctx) {
+    const emitClick = () => {
+      ctx.emit('filter')
+    }
+
+    return {
+      emitClick,
+    }
+  },
+})
+</script>

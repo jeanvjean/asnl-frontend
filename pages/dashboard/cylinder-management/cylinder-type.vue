@@ -4,7 +4,7 @@
       <div class="py-2">
         <div class="flex justify-between items-center px-2 border-black mt-4">
           <h1 class="font-semibold text-black text-lg">
-            Pending Cylinder Changes
+            Cylinder Type Transfer Changes
           </h1>
           <div class="flex items-center space-x-6">
             <pagination :pagination-details="paginationProp" />
@@ -53,9 +53,11 @@
                   class="h-10 w-10 rounded-full"
                   src="@/assets/images/default-avatar.jpg"
                   alt=""
-                /><span> {{ bodySingle.name }} </span>
+                /><span> {{ bodySingle.approvalStage }} </span>
               </td>
-              <td class="px-4 text-left py-4">{{ bodySingle.vehicle_no }}</td>
+              <td class="px-4 text-left py-4">
+                {{ bodySingle.transferStatus }}
+              </td>
               <td class="px-4 text-left py-4">{{ bodySingle.start }}</td>
               <td class="px-4 text-left py-4">{{ bodySingle.end }}</td>
               <td class="px-4 text-left py-4">
@@ -97,20 +99,13 @@ export default defineComponent({
   setup() {
     const showRoute = ref(false)
     const headers = [
-      'Driver Name',
-      'Vehicle No',
+      'Transfer Stage',
+      'Approval Stage',
       'Start Date',
       'End Date',
       'Action',
     ]
-    const body = [
-      {
-        name: 'Chinedu Onunyere',
-        vehicle_no: '#AAA456JK',
-        start: '20 August, 2020',
-        end: 'In Progress ',
-      },
-    ]
+    const body = ref<any>([])
 
     const paginationProp = reactive({
       hasNextPage: false,
@@ -119,8 +114,8 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      CylinderController.fetchPendingChanges().then((response) => {
-        console.log(response)
+      CylinderController.fetchPendingCylinderChanges().then((response) => {
+        body.value = response.data.docs
       })
     })
 
