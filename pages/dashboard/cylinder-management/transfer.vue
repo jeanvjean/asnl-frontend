@@ -441,9 +441,9 @@
           <select-component
             :label-title="'New Gas Type'"
             :default-option-text="'Select new Gas Type'"
-            :select-array="reciepients"
-            :init-value="form.reciepient"
-            @get="form.reciepient = $event.value"
+            :select-array="gases"
+            :init-value="form.gas"
+            @get="form.gas = $event.value"
           />
         </div>
         <div class="px-10 py-4">
@@ -570,6 +570,7 @@ export default defineComponent({
       type: '',
       reciepient: '',
       comment: '',
+      gas: '',
     })
     const reciepients = ref([])
     const showConfirmation = ref(false)
@@ -585,6 +586,7 @@ export default defineComponent({
     const transferType = ref<string>('temporary')
 
     onMounted(() => {
+      fetchGases()
       CustomerController.fetchUnPaginatedCustomers().then((response) => {
         customers.value = response
       })
@@ -671,7 +673,7 @@ export default defineComponent({
       }
       if (!validation || !cylinders.value.length) {
         context.$toast.error('Cylinders are required')
-      } else if (!form.type || !form.reciepient || !form.comment) {
+      } else if (!form.type || !form.reciepient || !form.gas) {
         context.$toast.error('All Fields are Required')
       } else {
         const requestCylinders = cylinders.value.map((element: any) => {
@@ -700,6 +702,19 @@ export default defineComponent({
       const response = await CustomerController.fetchCylinders(customerId)
 
       return response.docs
+    }
+
+    const gases = ref<any>([])
+
+    function fetchGases() {
+      CylinderController.getCylinders().then((response: any) => {
+        gases.value = response.data.data.cylinders.map((cylinder: any) => {
+          return {
+            name: cylinder.gasName,
+            value: cylinder._id,
+          }
+        })
+      })
     }
 
     watch(status, (currentValue) => {
@@ -733,6 +748,7 @@ export default defineComponent({
       decreaseCounter,
       auth,
       transferType,
+      gases,
     }
   },
 })

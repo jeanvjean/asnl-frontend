@@ -660,7 +660,7 @@ export default defineComponent({
       }
       if (!validation || !cylinders.value.length) {
         context.$toast.error('Cylinders are required')
-      } else if (!form.reciepient || !form.comment) {
+      } else if (!form.reciepient) {
         context.$toast.error('All Fields are Required')
       } else {
         const requestCylinders = cylinders.value.map((element: any) => {
