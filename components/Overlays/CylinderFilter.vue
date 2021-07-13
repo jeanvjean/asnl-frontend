@@ -135,15 +135,102 @@
           />
         </div>
       </div>
+
+      <div class="my-6">
+        <div
+          class="
+            flex
+            justify-between
+            items-center
+            text-sm
+            border-0 border-b-4 border-gray-200
+            text-gray-500
+            font-bold
+            mb-2
+            pb-1
+          "
+        >
+          <h3>Gas Type</h3>
+          <svg
+            class="w-5 h-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </div>
+        <div class="pt-2 my-1">
+          <multiselect
+            v-model="gasModel"
+            :options="gasesArray"
+            label="gas"
+            track-by="gasId"
+            :multiple="true"
+            :class="'w-full border-2 border-gray-300 text-gray-400'"
+          />
+        </div>
+      </div>
+
+      <div class="my-6">
+        <div
+          class="
+            flex
+            justify-between
+            items-center
+            text-sm
+            border-0 border-b-4 border-gray-200
+            text-gray-500
+            font-bold
+            mb-2
+            pb-1
+          "
+        >
+          <h3>Customers</h3>
+          <svg
+            class="w-5 h-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </div>
+        <div class="pt-2 my-1">
+          <multiselect
+            v-model="customerModel"
+            :options="customerArray"
+            label="name"
+            track-by="value"
+            :multiple="true"
+            :class="'w-full border-2 border-gray-300 text-gray-400'"
+          />
+        </div>
+      </div>
     </div>
   </back-drop>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/SecondBackDrop.vue'
+import Multiselect from 'vue-multiselect'
+import { CylinderController } from '~/module/Cylinder'
+import { CustomerController } from '~/module/Customer'
 
 export default defineComponent({
-  components: { BackDrop },
+  components: { BackDrop, Multiselect },
   setup(_props, ctx) {
     const status = [
       'Cylinder with Air Separation',
@@ -156,6 +243,38 @@ export default defineComponent({
       'Cylinder with External Suppliers',
     ]
 
+    const gasesArray = ref<any>([])
+    const customerArray = ref<any>([])
+
+    function fetchGases() {
+      CylinderController.getCylinders().then((response) => {
+        gasesArray.value = response.data.data.cylinders.map((gas: any) => {
+          return {
+            gas: gas.gasName,
+            gasId: gas._id,
+          }
+        })
+      })
+    }
+
+    function fetchCustomers() {
+      CustomerController.fetchUnPaginatedCustomers().then((response) => {
+        customerArray.value = response.map((element: any) => {
+          return {
+            name: element.name,
+            value: element._id,
+          }
+        })
+      })
+    }
+
+    const gasModel = ref<string>('')
+    const customerModel = ref<string>('')
+
+    onMounted(() => {
+      Promise.all([fetchGases(), fetchCustomers()])
+    })
+
     const types = ['Assigned', 'Buffer']
 
     const close = () => {
@@ -166,7 +285,12 @@ export default defineComponent({
       status,
       types,
       close,
+      gasesArray,
+      gasModel,
+      customerArray,
+      customerModel,
     }
   },
 })
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

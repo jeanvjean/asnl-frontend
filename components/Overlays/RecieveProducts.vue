@@ -233,18 +233,26 @@
                   <td class="text-center">{{ Number(i) + 1 }}</td>
 
                   <td>
-                    <input-component
-                      :input-placeholder="'Enter Product Name'"
-                      :default-value="product.productName"
-                      @get="product.productName = $event.value"
+                    <select-component
+                      :default-option-text="'Select Product'"
+                      :init-value="product.productName"
+                      :select-array="productsArray"
+                      @get="
+                        ;(product.productName = $event.value),
+                          setProductName(product.productName, i)
+                      "
                     />
+                    <!-- <multiselect
+                      label="name"
+                      track-by="value"
+                      :options="productsArray"
+                    /> -->
                   </td>
 
                   <td>
-                    <select-component
-                      :default-option-text="'Select Product Number'"
-                      :init-value="product.productNumber"
-                      :select-array="productsArray"
+                    <input-component
+                      :input-placeholder="'Enter Product Number'"
+                      :default-value="product.productNumber"
                       @get="product.productNumber = $event.value"
                     />
                   </td>
@@ -392,6 +400,13 @@
               </p>
               <div class="flex items-start space-x-2 py-2">
                 <img
+                  v-if="user.image"
+                  class="h-10 w-10 rounded-full"
+                  :src="user.image"
+                  alt=""
+                />
+                <img
+                  v-else
                   class="h-10 w-10 rounded-full"
                   src="@/assets/images/default-avatar.jpg"
                   alt=""
@@ -457,13 +472,15 @@ import SelectComponent from '@/components/Form/Select.vue'
 import { ProductObject } from '@/module/Product'
 import { mainStore } from '@/module/Pinia'
 import Validator from 'validatorjs'
-import { ValidatorObject } from '~/module/Validation'
+import { ValidatorObject } from '@/module/Validation'
+// import Multiselect from 'vue-multiselect'
 
 export default defineComponent({
   components: {
     BackDrop,
     InputComponent,
     SelectComponent,
+    // Multiselect,
   },
   setup(_props, ctx) {
     const close = () => {
@@ -486,11 +503,21 @@ export default defineComponent({
       ProductObject.fetchProductsUnPaginated().then((response: any) => {
         productsArray.value = response.map((product: any) => {
           return {
-            name: product.asnlNumber,
-            value: product.asnlNumber,
+            name: product.productName,
+            value: product.productName,
+            productNumber: product.asnlNumber,
           }
         })
       })
+    }
+
+    function setProductName(id: string, index: any) {
+      productsArray.value.forEach((element: any) => {
+        if (element.name === id) {
+          products.value[index].productNumber = element.productNumber
+        }
+      })
+      componentKey.value++
     }
 
     onMounted(() => {
@@ -606,6 +633,7 @@ export default defineComponent({
       changeTotalCost,
       processFile,
       productsArray,
+      setProductName,
     }
   },
 })
@@ -619,3 +647,4 @@ input[type='file'] {
   cursor: pointer;
 }
 </style>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

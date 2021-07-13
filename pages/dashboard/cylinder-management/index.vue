@@ -165,32 +165,74 @@ export default defineComponent({
           {
             title: 'Total Customer Cylinders',
             value: 0,
+            type: 'other',
           },
           [
-            {
-              title: 'Buffer Cylinders',
-              value: 0,
-            },
-            {
-              title: 'Assigned Cylinders',
-              value: 0,
-            },
+            [
+              {
+                title: 'Filled',
+                value: 0,
+              },
+              {
+                title: 'Good',
+                value: 0,
+              },
+              {
+                title: 'Bad',
+                value: 0,
+              },
+            ],
+            [
+              {
+                title: 'Empty',
+                value: 0,
+              },
+              {
+                title: 'Good',
+                value: 0,
+              },
+              {
+                title: 'Bad',
+                value: 0,
+              },
+            ],
           ],
         ],
         [
           {
             title: 'Total Bad Customer Cylinders',
             value: 0,
+            type: 'other',
           },
           [
-            {
-              title: 'Buffer Cylinders',
-              value: 0,
-            },
-            {
-              title: 'Assigned Cylinders',
-              value: 0,
-            },
+            [
+              {
+                title: 'Filled',
+                value: 0,
+              },
+              {
+                title: 'Good',
+                value: 0,
+              },
+              {
+                title: 'Bad',
+                value: 0,
+              },
+            ],
+            [
+              {
+                title: 'Empty',
+                value: 0,
+              },
+              {
+                title: 'Good',
+                value: 0,
+              },
+              {
+                title: 'Bad',
+                value: 0,
+              },
+            ],
           ],
         ],
         [
@@ -317,23 +359,23 @@ export default defineComponent({
         statistics.value[0][0][1][0].value = stat.bufferCylinder
         statistics.value[0][0][1][1].value = stat.assignedCylinder
 
-        statistics.value[0][1][0].value = stat.withCustomer
+        // statistics.value[0][1][0].value = stat.withCustomer
 
-        statistics.value[0][2][0].value = stat.withAsnl
-        statistics.value[0][2][1][0][0].value =
-          stat.filledAssignedCylinders + stat.filledBufferCylinders
-        statistics.value[0][2][1][0][1].value = stat.filledBufferCylinders
-        statistics.value[0][2][1][0][2].value = stat.filledAssignedCylinders
+        // statistics.value[0][2][0].value = stat.withAsnl
+        // statistics.value[0][2][1][0][0].value =
+        //   stat.filledAssignedCylinders + stat.filledBufferCylinders
+        // statistics.value[0][2][1][0][1].value = stat.filledBufferCylinders
+        // statistics.value[0][2][1][0][2].value = stat.filledAssignedCylinders
 
-        statistics.value[0][2][1][1][0].value =
-          stat.emptyAssignedCylinders + stat.emptyBufferCylinders
-        statistics.value[0][2][1][1][1].value = stat.emptyBufferCylinders
-        statistics.value[0][2][1][1][2].value = stat.emptyAssignedCylinders
+        // statistics.value[0][2][1][1][0].value =
+        //   stat.emptyAssignedCylinders + stat.emptyBufferCylinders
+        // statistics.value[0][2][1][1][1].value = stat.emptyBufferCylinders
+        // statistics.value[0][2][1][1][2].value = stat.emptyAssignedCylinders
 
-        statistics.value[1][0][0].value =
-          stat.customerAssignedCylinders + stat.customerBufferCylinders
-        statistics.value[1][0][1][0].value = stat.customerBufferCylinders
-        statistics.value[1][0][1][1].value = stat.customerAssignedCylinders
+        // statistics.value[1][0][0].value =
+        //   stat.customerAssignedCylinders + stat.customerBufferCylinders
+        // statistics.value[1][0][1][0].value = stat.customerBufferCylinders
+        // statistics.value[1][0][1][1].value = stat.customerAssignedCylinders
       })
     }
 

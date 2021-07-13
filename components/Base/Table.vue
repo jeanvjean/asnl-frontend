@@ -67,7 +67,7 @@
             </div>
           </td>
 
-          <td class="px-4 text-left py-4">
+          <td class="pl-4 text-left py-4 pr-10">
             <div class="w-40">
               <span
                 class="px-8 py-2 w-full block text-center capitalize"
@@ -344,9 +344,11 @@ export default defineComponent({
 .icon-button:hover > .action-menu {
   display: block;
   margin-left: -50px;
+  z-index: 50;
 }
 .icon-button:focus > .action-menu {
   display: block;
   margin-left: -50px;
+  z-index: 50;
 }
 </style>

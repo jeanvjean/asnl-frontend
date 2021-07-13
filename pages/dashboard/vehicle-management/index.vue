@@ -158,6 +158,25 @@
                 >
                   Assign Driver
                 </button>
+                <router-link
+                  class="
+                    block
+                    px-3
+                    py-2
+                    text-black
+                    focus:outline-none
+                    hover:bg-purple-300
+                    hover:text-white
+                    w-full
+                    overflow-none
+                  "
+                  :to="
+                    '/dashboard/vehicle-management/update-vehicle/' +
+                    bodySingle._id
+                  "
+                >
+                  Update Vehicle
+                </router-link>
                 <button
                   type="button"
                   class="

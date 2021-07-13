@@ -166,7 +166,7 @@
               >
                 <td class="px-4 text-left py-4">{{ bodySingle.asnlNumber }}</td>
                 <td class="px-4 text-left py-4">
-                  {{ bodySingle.itemDescription }}
+                  {{ bodySingle.productName }}
                 </td>
                 <td class="px-4 text-left py-4">{{ bodySingle.partNumber }}</td>
                 <td class="px-4 text-left py-4">{{ bodySingle.quantity }}</td>
@@ -219,7 +219,7 @@ export default defineComponent({
   setup() {
     const headers = [
       'ASNL Number',
-      'item description',
+      'Product Name',
       'Part Number',
       'Quantity',
       'Reorder Level',

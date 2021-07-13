@@ -120,7 +120,7 @@
                       text-sm
                     "
                   >
-                    Product Number
+                    Product Name
                   </th>
                   <th
                     class="
@@ -132,7 +132,7 @@
                       text-sm
                     "
                   >
-                    Product Name
+                    Part Name
                   </th>
                   <th
                     class="
@@ -180,17 +180,20 @@
                   <td class="text-center">{{ Number(i) + 1 }}</td>
                   <td>
                     <select-component
-                      :default-option-text="'Select Product Number'"
-                      :init-value="product.productNumber"
+                      :default-option-text="'Select Product Name'"
+                      :init-value="product.productName"
                       :select-array="productsArray"
-                      @get="product.productNumber = $event.value"
+                      @get="
+                        ;(product.productName = $event.value),
+                          setProductName(product.productName, i)
+                      "
                     />
                   </td>
                   <td>
                     <input-component
-                      :input-placeholder="'Enter Product Name'"
-                      :default-value="product.productName"
-                      @get="product.productName = $event.value"
+                      :input-placeholder="'Enter Product Number'"
+                      :default-value="product.productNumber"
+                      @get="product.productNumber = $event.value"
                     />
                   </td>
 
@@ -354,8 +357,9 @@ export default defineComponent({
       ProductObject.fetchProductsUnPaginated().then((response: any) => {
         productsArray.value = response.map((product: any) => {
           return {
-            name: product.asnlNumber,
-            value: product.asnlNumber,
+            name: product.productName,
+            value: product.productName,
+            productNumber: product.asnlNumber,
           }
         })
       })
@@ -363,6 +367,15 @@ export default defineComponent({
 
     function decreaseCounter(index: any) {
       products.value.splice(index, 1)
+      componentKey.value++
+    }
+
+    function setProductName(id: string, index: any) {
+      productsArray.value.forEach((element: any) => {
+        if (element.name === id) {
+          products.value[index].productNumber = element.productNumber
+        }
+      })
       componentKey.value++
     }
 
@@ -420,6 +433,7 @@ export default defineComponent({
       customers,
       submitForm,
       productsArray,
+      setProductName,
     }
   },
 })
