@@ -685,6 +685,7 @@ export default defineComponent({
           comment: form.comment,
           to: form.reciepient,
           cylinders: requestCylinders,
+          gasType: form.gas,
           holdingTime: 30,
         }
 
