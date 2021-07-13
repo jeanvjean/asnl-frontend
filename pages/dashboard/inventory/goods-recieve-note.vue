@@ -224,7 +224,7 @@
               class="font-light hover:bg-gray-100"
             >
               <td class="px-4 text-center py-4">
-                {{ inventory.grn ? inventory.grn : 'Not Specified' }}
+                {{ inventory.grn ? inventory.grnNo : 'Not Specified' }}
               </td>
               <td class="px-4 text-center py-4">{{ inventory.supplier }}</td>
               <td class="px-4 text-center py-4">{{ inventory.LPOnumber }}</td>
