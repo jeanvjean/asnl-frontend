@@ -228,7 +228,7 @@
 
       <section v-if="sections.pickup" class="w-full space-y-3">
         <div
-          v-for="(order, index) in pickupArrays"
+          v-for="(order, index) in pickupArray"
           :key="index"
           class="flex justify-between items-center w-full bg-white px-4 py-3"
         >
@@ -242,17 +242,7 @@
             class="rounded-sm px-4 py-2"
             >{{ order.status }}</span
           >
-          <span>{{ new Date(order.pickupDate).toLocaleDateString() }}m</span>
-        </div>
-
-        <div
-          class="flex justify-between items-center w-full bg-white px-4 py-3"
-        >
-          <span>#PU2323221</span>
-          <span class="text-green-500 bg-green-100 rounded-sm px-4 py-2"
-            >Delivered</span
-          >
-          <span>01 Aug 2019. 04:55pm</span>
+          <span>{{ new Date(order.pickupDate).toDateString() }}m</span>
         </div>
       </section>
 
@@ -756,7 +746,6 @@ export default defineComponent({
     function getPickup(customerId: String) {
       CustomerController.fetchOrder(customerId).then((response) => {
         pickupArray.value = response.docs
-        console.log(pickupArray.value)
       })
     }
 

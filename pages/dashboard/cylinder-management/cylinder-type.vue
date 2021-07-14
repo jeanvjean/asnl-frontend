@@ -49,19 +49,22 @@
                   space-x-2
                 "
               >
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="@/assets/images/default-avatar.jpg"
-                  alt=""
-                /><span> {{ bodySingle.approvalStage }} </span>
+                <span> {{ bodySingle.approvalStage }} </span>
               </td>
               <td class="px-4 text-left py-4">
-                {{ bodySingle.transferStatus }}
+                {{ bodySingle.approvalStatus }}
               </td>
-              <td class="px-4 text-left py-4">{{ bodySingle.start }}</td>
-              <td class="px-4 text-left py-4">{{ bodySingle.end }}</td>
+              <td class="px-4 text-left py-4">{{ bodySingle.gasType.type }}</td>
               <td class="px-4 text-left py-4">
-                <button
+                {{ bodySingle.gasType.gasName }}
+              </td>
+              <td class="px-4 text-left py-4">
+                <router-link
+                  v-if="
+                    bodySingle.nextApprovalOfficer &&
+                    bodySingle.nextApprovalOfficer._id === user._id
+                  "
+                  :to="`/dashboard/cylinder-management/type/${bodySingle._id}`"
                   class="
                     mx-auto
                     text-btn-purple
@@ -72,7 +75,7 @@
                   "
                 >
                   Approve
-                </button>
+                </router-link>
               </td>
             </tr>
           </tbody>
@@ -90,19 +93,22 @@ import {
   ref,
 } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
-import { CylinderController } from '~/module/Cylinder'
+import { CylinderController } from '@/module/Cylinder'
+import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
   name: 'Reports',
   components: { Pagination },
   layout: 'dashboard',
   setup() {
+    const appStore = mainStore()
+    const user: any = appStore.getLoggedInUser
     const showRoute = ref(false)
     const headers = [
-      'Transfer Stage',
       'Approval Stage',
-      'Start Date',
-      'End Date',
+      'Status',
+      'Changed Cylinder Type',
+      'Changed Gas Type',
       'Action',
     ]
     const body = ref<any>([])
@@ -115,7 +121,11 @@ export default defineComponent({
 
     onMounted(() => {
       CylinderController.fetchPendingCylinderChanges().then((response) => {
-        body.value = response.data.docs
+        const myResponse = response.data
+        body.value = myResponse.docs
+        paginationProp.hasNextPage = myResponse.hasNextPage
+        paginationProp.hasPrevPage = myResponse.hasPrevPage
+        paginationProp.currentPage = myResponse.page
       })
     })
 
@@ -124,6 +134,7 @@ export default defineComponent({
       body,
       showRoute,
       paginationProp,
+      user,
     }
   },
 })

@@ -120,11 +120,38 @@ class CylinderRepository {
     })
   }
 
+  approveCylinderChange(requestBody: any) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.post(
+          `/cylinder/approve-change-request`,
+          requestBody
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
   fetchPendingCylinderChanges() {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get(
-          `/cylinder/fetch-change_cylinder-requests`
+          `/cylinder/fetch-change-requests`
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  getCylinderChangeDetail(id: String) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get(
+          `/cylinder/view-cylinder_change/${id}`
         )
         resolve(response.data)
       } catch (error) {

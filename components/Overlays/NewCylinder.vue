@@ -139,15 +139,15 @@
           :label-title="'Purchase Cost'"
           :input-type="'number'"
           :input-placeholder="'Select Date Here'"
-          :default-value="formInputs.dateManufactured"
-          @get="formInputs.dateManufactured = $event.value"
+          :default-value="formInputs.purchaseCost"
+          @get="formInputs.purchaseCost = $event.value"
         />
         <input-component
           :label-title="'Purchase Date'"
           :input-type="'date'"
           :input-placeholder="'Select Purchase Date'"
-          :default-value="formInputs.dateManufactured"
-          @get="formInputs.dateManufactured = $event.value"
+          :default-value="formInputs.purchaseDate"
+          @get="formInputs.purchaseDate = $event.value"
         />
       </div>
       <div class="flex justify-center items-center space-x-4 mt-4">
@@ -223,6 +223,8 @@ export default defineComponent({
       cylinderNumber: '',
       assignedTo: '',
       assignedNumber: '',
+      purchaseCost: '',
+      purchaseDate: '',
     })
 
     onMounted(() => {
@@ -274,6 +276,8 @@ export default defineComponent({
         cylinderNumber: 'required|string',
         assignedTo: 'required|string',
         assignedNumber: 'required|string',
+        purchaseCost: 'numeric',
+        purchaseDate: 'date',
       }
       const validation = new Validator(formInputs, rules)
 
@@ -295,6 +299,10 @@ export default defineComponent({
           fillingPreasure: formInputs.fillingPreasure,
           gasVolumeContent: formInputs.gasVolumeContent,
           cylinderNumber: formInputs.cylinderNumber,
+          purchaseCost: formInputs.purchaseCost,
+          purchaseDate: formInputs.purchaseDate
+            ? new Date(formInputs.purchaseDate).toISOString()
+            : formInputs.purchaseDate,
         }
         CylinderController.registerCylinder(requestBody).then(() => {
           close()

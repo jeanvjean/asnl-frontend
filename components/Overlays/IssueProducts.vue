@@ -132,7 +132,7 @@
                       text-sm
                     "
                   >
-                    Part Name
+                    Part Number
                   </th>
                   <th
                     class="

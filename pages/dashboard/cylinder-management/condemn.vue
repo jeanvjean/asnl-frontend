@@ -222,7 +222,7 @@
                     px-2
                     py-2
                     text-center
-                    w-3/12
+                    w-2/12
                     border border-gray-400
                   "
                 >
@@ -235,7 +235,7 @@
                     px-2
                     py-2
                     text-center
-                    w-3/12
+                    w-2/12
                     border border-gray-400
                   "
                 >
@@ -248,11 +248,24 @@
                     px-2
                     py-2
                     text-center
-                    w-3/12
+                    w-2/12
                     border border-gray-400
                   "
                 >
                   Date of Manufacture
+                </th>
+                <th
+                  class="
+                    font-light
+                    text-lg
+                    px-2
+                    py-2
+                    text-center
+                    w-3/12
+                    border border-gray-400
+                  "
+                >
+                  Comment
                 </th>
                 <th class="w-auto"></th>
               </tr>
@@ -268,7 +281,7 @@
                     class="
                       w-full
                       border-2 border-gray-200
-                      py-3
+                      py-2
                       rounded-sm
                       focus:outline-none
                     "
@@ -285,13 +298,29 @@
                   </select>
                 </td>
                 <td class="font-light text-lg text-center">
-                  {{ cylind.gasType }}
+                  <input-component
+                    :default-value="cylind.gasType"
+                    :is-disabled="true"
+                  />
                 </td>
                 <td class="font-light text-lg text-center">
-                  {{ cylind.cylinderType }}
+                  <input-component
+                    :default-value="cylind.cylinderType"
+                    :is-disabled="true"
+                  />
                 </td>
                 <td class="font-light text-lg text-center">
-                  {{ cylind.dateManufactured }}
+                  <input-component
+                    :default-value="cylind.dateManufactured"
+                    :is-disabled="true"
+                  />
+                </td>
+                <td class="font-light text-lg text-center">
+                  <input-component
+                    :default-value="cylind.comment"
+                    :input-placeholder="'Comment'"
+                    @get="cylind.comment = $event.value"
+                  />
                 </td>
 
                 <td class="font-light text-lg text-center">
@@ -440,10 +469,11 @@ import { CylinderController } from '@/module/Cylinder'
 import Validator from 'validatorjs'
 import { ValidatorObject } from '@/module/Validation'
 import { mainStore } from '@/module/Pinia'
+import InputComponent from '@/components/Form/Input.vue'
 
 export default defineComponent({
   name: 'Transfer',
-  components: { Confirmation, FinalStep },
+  components: { Confirmation, FinalStep, InputComponent },
   layout: 'dashboard',
   setup() {
     const appStore = mainStore()
@@ -502,6 +532,7 @@ export default defineComponent({
         id: '',
         gasType: '',
         dateManufactured: '',
+        comment: '',
       })
     }
 

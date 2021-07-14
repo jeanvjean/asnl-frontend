@@ -204,7 +204,7 @@ export default defineComponent({
         quantity: 'required|numeric|min:1',
         unitCost: 'required|numeric|min:0',
         totalCost: 'required|numeric',
-        reorderLevel: 'required',
+        reorderLevel: 'numeric',
         location: 'required|string',
         division: 'required|string',
         supplier: 'required|string',

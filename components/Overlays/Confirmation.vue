@@ -3,8 +3,8 @@
     <div class="w-full sm:w-full md:w-1/4 bg-white py-10 px-8 rounded-sm">
       <div class="flex justify-between items-center my-2">
         <div class="w-full mb-4">
-          <p class="text-xl font-medium w-full text-center">
-            Please Enter your Password to approve
+          <p class="font-medium w-full text-center text-lg capitalize">
+            Please Enter your Password to {{ displayText }}
           </p>
         </div>
       </div>
@@ -12,6 +12,8 @@
         <input-component
           :label-title="'Password'"
           :input-placeholder="'Enter Password'"
+          :input-type="'password'"
+          @get="form.password = $event.value"
         />
         <div class="space-y-4">
           <div class="w-full mt-2">
@@ -19,7 +21,7 @@
               class="w-full py-3 rounded-sm bg-btn-purple text-white border"
               @click="approve"
             >
-              Approve
+              Continue
             </button>
           </div>
 
@@ -44,7 +46,7 @@
   </back-drop>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, reactive, useContext } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 
@@ -53,18 +55,38 @@ export default defineComponent({
     BackDrop,
     InputComponent,
   },
+  props: {
+    displayText: {
+      type: String,
+      required: true,
+    },
+  },
   setup(_props, ctx) {
     const close = () => {
       ctx.emit('close')
     }
 
+    const context = useContext()
+    const form = reactive({
+      password: '',
+    })
+
     const approve = () => {
-      ctx.emit('approve')
+      if (form.password === '') {
+        context.$toast.error('Password is Required')
+      } else {
+        ctx.emit('approve', {
+          status:
+            _props.displayText === 'approve' ? 'approved' : _props.displayText,
+          password: form.password,
+        })
+      }
     }
 
     return {
       close,
       approve,
+      form,
     }
   },
 })

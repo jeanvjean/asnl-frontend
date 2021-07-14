@@ -313,7 +313,7 @@
                       :class="
                         bodySingle.transferStatus === 'pending'
                           ? 'bg-blue-100 text-blue-400'
-                          : bodySingle.transferStatus === 'approved'
+                          : bodySingle.transferStatus === 'completed'
                           ? 'bg-green-100 text-green-400'
                           : 'bg-red-100 text-red-400'
                       "

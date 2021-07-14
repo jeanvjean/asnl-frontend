@@ -39,12 +39,6 @@
           />
 
           <input-component
-            :label-title="'Area of Specialization'"
-            :input-placeholder="'Enter Area of Specialization'"
-            :default-value="product.specialization"
-          />
-
-          <input-component
             :label-title="'ASNL Part Number'"
             :input-placeholder="'#######'"
             :input-type="'number'"
@@ -65,10 +59,10 @@
           />
 
           <input-component
-            :label-title="'Reorder level'"
-            :input-placeholder="'#'"
+            :label-title="'Quantity'"
+            :input-placeholder="'Enter Quantity'"
             :input-type="'number'"
-            :default-value="product.reorderLevel"
+            :default-value="product.quantity"
           />
 
           <input-component
@@ -86,20 +80,9 @@
           />
 
           <input-component
-            :label-title="'Quantity'"
-            :input-placeholder="'Enter Quantity'"
-            :input-type="'number'"
-            :default-value="product.quantity"
-          />
-          <input-component
             :label-title="'Location'"
             :input-placeholder="'Enter Location'"
             :default-value="product.location"
-          />
-          <input-component
-            :label-title="'Referrer'"
-            :input-placeholder="'Enter Referrer'"
-            :default-value="product.referrer"
           />
         </div>
       </div>
@@ -110,13 +93,14 @@
 import {
   defineComponent,
   onMounted,
+  reactive,
   ref,
   useRoute,
 } from '@nuxtjs/composition-api'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import { ProductObject } from '@/module/Product'
-import { ProductDetail } from '~/types/Types'
+// import { ProductDetail } from '~/types/Types'
 export default defineComponent({
   components: { InputComponent, SelectComponent },
   layout: 'dashboard',
@@ -124,7 +108,7 @@ export default defineComponent({
     const route = useRoute()
     const divisions = ref([])
     const suppliers = ref([])
-    const product = ref<ProductDetail>({
+    const product = reactive({
       division: '',
       supplier: '',
       description: '',
@@ -140,28 +124,27 @@ export default defineComponent({
       quantity: '',
       location: '',
       referrer: '',
+      productName: '',
     })
 
     async function fetchProduct(productId: String) {
       await ProductObject.fetchProduct(productId).then((response) => {
         const productDetail = response.data.data
-        product.value.specialization = String(
-          productDetail.areaOfSpecialization
-        )
-        product.value.asnlNumber = String(productDetail.asnlNumber)
-        product.value.division = productDetail.division
-        product.value.model = String(productDetail.equipmentModel)
-        product.value.type = String(productDetail.equipmentType)
-        product.value.description = String(productDetail.itemDescription)
-        product.value.location = String(productDetail.location)
-        product.value.partNo = String(productDetail.partNumber)
-        product.value.quantity = String(productDetail.quantity)
-        product.value.referrer = String(productDetail.referer)
-        product.value.reorderLevel = String(productDetail.reorderLevel)
-        product.value.serialNo = String(productDetail.serialNumber)
-        product.value.supplier = String(productDetail.supplier._id)
-        product.value.totalCost = String(productDetail.totalCost)
-        product.value.unitCost = String(productDetail.unitCost)
+        product.asnlNumber = String(productDetail.asnlNumber)
+        product.productName = String(productDetail.productName)
+        product.division = productDetail.branch._id
+        product.model = String(productDetail.equipmentModel)
+        product.type = String(productDetail.equipmentType)
+        product.description = String(productDetail.itemDescription)
+        product.location = String(productDetail.location)
+        product.partNo = String(productDetail.partNumber)
+        product.quantity = String(productDetail.quantity)
+        product.referrer = String(productDetail.referer)
+        product.reorderLevel = String(productDetail.reorderLevel)
+        product.serialNo = String(productDetail.serialNumber)
+        // product.supplier = String(productDetail.supplier._id)
+        product.totalCost = String(productDetail.totalCost)
+        product.unitCost = String(productDetail.unitCost)
         reset()
       })
     }
