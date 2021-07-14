@@ -338,22 +338,37 @@
                 :label-title="'Select Pickup Date'"
                 :input-type="'date'"
                 :input-placeholder="'Select Pickup Date'"
+                :default-value="form.pickupDate"
+                @get="form.pickupDate = $event.value"
               />
 
               <input-component
                 :label-title="'Number of Cylinders'"
                 :input-placeholder="'Number of Cylinders'"
+                :default-value="form.numberOfCylinders"
+                @get="form.numberOfCylinders = $event.value"
               />
 
               <select-component
-                :label-title="'Pickup Type'"
-                :select-array="[]"
-                :default-option-text="'Select Pickup Type'"
+                :label-title="'Order Type'"
+                :select-array="orderTypes"
+                :default-option-text="'Select Order Type'"
+                :init-value="form.orderType"
+                @get="form.orderType = $event.value"
+              />
+
+              <select-component
+                :label-title="'Vehicle'"
+                :select-array="vehicles"
+                :default-option-text="'Select Vehicle'"
+                :init-value="form.vehicle"
+                @get="form.vehicle = $event.value"
               />
 
               <button-component
                 :button-class="'bg-btn-purple text-white rounded-sm'"
                 :button-text="'Request Pickup'"
+                @buttonClicked="submit"
               />
             </div>
           </div>
@@ -576,7 +591,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onBeforeMount,
+  onMounted,
+  reactive,
+  ref,
+  useContext,
+} from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/SecondBackDrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
@@ -584,6 +606,10 @@ import ButtonComponent from '@/components/Form/Button.vue'
 import TextAreaComponent from '@/components/Form/TextArea.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
 import { CustomerDto } from '@/types/Types'
+import Validator from 'validatorjs'
+import { ValidatorObject } from '~/module/Validation'
+import { CustomerController } from '~/module/Customer'
+import { VehicleController } from '~/module/Vehicle'
 
 export default defineComponent({
   components: {
@@ -599,10 +625,33 @@ export default defineComponent({
       required: true,
       type: Object as () => CustomerDto,
     },
+    displayedSection: {
+      required: false,
+      default: 'profile',
+      type: String,
+    },
   },
   setup(_props, ctx) {
     const close = () => {
       ctx.emit('close')
+    }
+
+    onBeforeMount(() => {
+      changeSection(_props.displayedSection)
+      fetchVehicle()
+    })
+
+    const vehicles = ref<any>([])
+
+    function fetchVehicle() {
+      VehicleController.fetchVehiclesUnPaginated().then((response: any) => {
+        vehicles.value = response.map((vehicle: any) => {
+          return {
+            name: vehicle.licence,
+            value: vehicle._id,
+          }
+        })
+      })
     }
 
     const sections = ref<any>({
@@ -674,6 +723,60 @@ export default defineComponent({
       sections.value[sectionName] = true
     }
 
+    const form = reactive({
+      pickupType: 'customer',
+      pickupDate: '',
+      numberOfCylinders: '',
+      customer: _props.customer._id,
+      orderType: '',
+      vehicle: '',
+    })
+
+    const orderTypes = [
+      {
+        name: 'Delivery',
+        value: 'delivery',
+      },
+      {
+        name: 'Pickup',
+        value: 'pickup',
+      },
+    ]
+
+    const context = useContext()
+
+    const submit = () => {
+      const rules = {
+        pickupType: 'required',
+        pickupDate: 'required|date',
+        numberOfCylinders: 'required|numeric',
+        customer: 'required|string',
+        orderType: 'required|string',
+        vehicle: 'required|string',
+      }
+
+      const validation = new Validator(form, rules)
+
+      if (validation.fails()) {
+        let messages: string[] = []
+
+        messages = ValidatorObject.getMessages(validation.errors)
+        messages.forEach((error: string) => {
+          context.$toast.error(error)
+        })
+      } else {
+        CustomerController.createPickupOrder(form)
+          .then(() => {
+            form.pickupDate =
+              form.numberOfCylinders =
+              form.orderType =
+              form.vehicle =
+                ''
+            changeSection('pickup')
+          })
+          .catch(() => {})
+      }
+    }
     const profile = ref<any>([
       {
         title: 'Customer Name',
@@ -736,6 +839,10 @@ export default defineComponent({
       changeSection,
       accordions,
       toggleAccordion,
+      form,
+      submit,
+      orderTypes,
+      vehicles,
     }
   },
 })

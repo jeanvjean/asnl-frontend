@@ -57,6 +57,20 @@ class Customer {
       }
     })
   }
+
+  createPickupOrder(requestBody: object) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.post(
+          '/customer/create-order',
+          requestBody
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 const CustomerController = new Customer()

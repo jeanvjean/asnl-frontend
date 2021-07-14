@@ -261,6 +261,7 @@
                           w-full
                           overflow-none
                         "
+                        @click="showCustomerDetail(bodySingle, 'pickupForm')"
                       >
                         Request Pickup
                       </button>
@@ -295,6 +296,7 @@
     <customer
       v-if="showSingleCustomer"
       :customer="customerProp"
+      :displayed-section="section"
       @close="showSingleCustomer = !showSingleCustomer"
     ></customer>
   </div>
@@ -333,11 +335,17 @@ export default defineComponent({
       currentPage: 1,
     })
 
+    const section = ref<String>('profile')
+
     const body = ref<any>([])
     const customerProp = ref<CustomerDto>()
 
-    function showCustomerDetail(customer: CustomerDto) {
+    function showCustomerDetail(
+      customer: CustomerDto,
+      currentSection = 'profile'
+    ) {
       customerProp.value = customer
+      section.value = currentSection
       showSingleCustomer.value = !showSingleCustomer.value
     }
 
@@ -371,6 +379,7 @@ export default defineComponent({
       changePage,
       customerProp,
       showCustomerDetail,
+      section,
     }
   },
 })

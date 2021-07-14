@@ -130,7 +130,7 @@ class ProductRespository {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get(
-          '/inventory/fetch-pending-disburse?approvalStatus=pending'
+          '/inventory/fetch-pending-disburse-requests'
         )
         resolve(response.data.data)
       } catch (error) {

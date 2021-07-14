@@ -1,3 +1,4 @@
+/* eslint-disable vue/no-parsing-error */
 <template>
   <div class="py-6 px-8">
     <div class="grid grid-rows-1 xl:grid-cols-3 gap-4 mb-6">
@@ -161,7 +162,30 @@
         </div>
       </div>
     </div>
-    <div class="bg-white px-4 py-6">
+    <div class="bg-white">
+      <div class="py-2">
+        <div
+          class="
+            flex
+            justify-between
+            items-center
+            px-6
+            border-0 border-l-4 border-black
+            mt-4
+            w-full
+            overflow-x-auto
+          "
+        >
+          <h1 class="font-semibold text-black text-lg">Transfer Request</h1>
+          <div class="flex items-center space-x-6">
+            <pagination
+              :pagination-details="paginationProp"
+              @next="fetchPendingList($event.value)"
+              @prev="fetchPendingList($event.value)"
+            />
+          </div>
+        </div>
+      </div>
       <div class="w-full mb-4 px-4">
         <div
           class="flex items-center justify-between px-2 py-2 w-full space-x-4"
@@ -222,12 +246,109 @@
           </router-link>
         </div>
       </div>
-      <table-component
-        :head="headers"
-        :body="body"
-        :show-main="false"
-        @show="showRegister = true"
-      ></table-component>
+      <div class="overflow-x-auto w-full py-2 px-6">
+        <div class="overflow-x-auto w-full">
+          <table class="table-fixed w-full">
+            <thead class="bg-gray-100">
+              <tr class="space-x-4">
+                <th class="w-2 px-4">#</th>
+                <th
+                  v-for="(headSingle, index) in headers"
+                  :key="index"
+                  class="
+                    uppercase
+                    text-gray-800
+                    font-thin
+                    text-sm
+                    px-4
+                    py-2
+                    text-center
+                    w-40
+                  "
+                >
+                  {{ headSingle }}
+                </th>
+                <th
+                  class="
+                    uppercase
+                    text-gray-800
+                    font-thin
+                    text-sm
+                    px-4
+                    py-2
+                    text-center
+                    sm:w-40
+                    2xl:w-32
+                  "
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(bodySingle, index) in body"
+                :key="index"
+                class="font-light hover:bg-gray-100"
+              >
+                <td class="text-center px-4">{{ index + 1 }}</td>
+                <td class="px-4 text-center py-4 capitalize">
+                  {{ bodySingle.branch.name }}
+                </td>
+                <td class="px-4 text-center py-4 capitalize">
+                  {{ bodySingle.branch.location }}
+                </td>
+                <td class="px-4 text-center py-4 capitalize">
+                  {{ bodySingle.initiator.name }}
+                </td>
+                <td class="px-4 text-center py-4 capitalize">
+                  {{ bodySingle.approvalStage }}
+                </td>
+                <td class="px-4 text-center py-4 capitalize">
+                  {{ bodySingle.type }}
+                </td>
+                <td class="px-4 text-center py-4 w-full">
+                  <div>
+                    <span
+                      :class="
+                        bodySingle.transferStatus === 'pending'
+                          ? 'bg-blue-100 text-blue-400'
+                          : bodySingle.transferStatus === 'approved'
+                          ? 'bg-green-100 text-green-400'
+                          : 'bg-red-100 text-red-400'
+                      "
+                      class="px-8 py-2 w-full block text-center capitalize"
+                      >{{ bodySingle.transferStatus }}</span
+                    >
+                  </div>
+                </td>
+                <td class="px-4 text-center py-4 capitalize">
+                  <span v-if="bodySingle.nextApprovalOfficer">
+                    {{ bodySingle.nextApprovalOfficer.name }}
+                  </span>
+                </td>
+                <td class="px-4 text-center py-4">
+                  <button
+                    v-if="
+                      bodySingle.nextApprovalOfficer &&
+                      bodySingle.nextApprovalOfficer._id === user._id
+                    "
+                    class="
+                      border border-btn-purple
+                      rounded-sm
+                      text-btn-purple
+                      px-4
+                      py-2
+                    "
+                  >
+                    Approve
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
     <new-cylinder
       v-if="showRegister"
@@ -242,31 +363,39 @@ import {
   reactive,
   ref,
 } from '@nuxtjs/composition-api'
-import TableComponent from '@/components/Base/Table2.vue'
-import NewCylinder from '@/components/Overlays/NewCylinder.vue'
 import SearchComponent from '@/components/Base/Search.vue'
-
 import { CylinderController } from '@/module/Cylinder'
+import Pagination from '@/components/Base/Pagination.vue'
+import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
   name: 'Analytics',
-  components: { TableComponent, NewCylinder, SearchComponent },
+  components: { SearchComponent, Pagination },
   layout: 'dashboard',
   setup() {
+    const appStore = mainStore()
+    const user: any = appStore.getLoggedInUser
+
     const headers = [
-      'Cylinder No',
-      'Gas Type',
-      'Gas Volume Content',
-      'Water Capacity',
-      'Cylinder Type',
-      'Date Cylinder',
+      'Branch',
+      'Location',
+      'Transfer Initiator',
+      'Approval Stage',
+      'Transfer Type',
+      'Status',
+      'Next Approval Officer',
     ]
 
     const body = ref<any>([])
 
     onBeforeMount(() => {
-      fetchPendingList()
-      fetchTransferStat()
+      Promise.all([fetchPendingList(1), fetchTransferStat()])
+    })
+
+    const paginationProp = reactive({
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: 1,
     })
 
     const statistics = reactive({
@@ -284,9 +413,13 @@ export default defineComponent({
       })
     }
 
-    function fetchPendingList() {
-      CylinderController.fetchPendingTransfers().then((response) => {
-        console.log(response)
+    function fetchPendingList(pageNumber: Number) {
+      CylinderController.fetchPendingTransfers(pageNumber).then((response) => {
+        const myResponse = response.data.transfer
+        body.value = myResponse.docs
+        paginationProp.hasNextPage = myResponse.hasNextPage
+        paginationProp.hasPrevPage = myResponse.hasPrevPage
+        paginationProp.currentPage = myResponse.page
       })
     }
 
@@ -296,6 +429,9 @@ export default defineComponent({
       body,
       showRegister,
       statistics,
+      paginationProp,
+      fetchPendingList,
+      user,
     }
   },
 })

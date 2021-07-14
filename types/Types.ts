@@ -61,4 +61,5 @@ export type CustomerDto = {
   unitPrice: String
   products: any
   modeOfService: String
+  _id: String
 }

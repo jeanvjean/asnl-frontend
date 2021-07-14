@@ -46,11 +46,13 @@
         <div class="bg-white py-6 px-8 space-y-4">
           <div class="flex justify-between items-center text-md">
             <div>
-              <span>GRN:</span>
-              <span></span>
+              <span class="font-semibold text-lg">GRN:</span>
+              <span class="font-medium text-base text-gray-800">{{
+                inventory.grnNo
+              }}</span>
             </div>
             <div class="flex space-x-2 items-center">
-              <span>Date:</span>
+              <span class="font-semibold text-lg">Date:</span>
               <div class="flex space-x-2 items-center">
                 <span>{{
                   new Date(inventory.dateReceived).toDateString()

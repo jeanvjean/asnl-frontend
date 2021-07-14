@@ -12,6 +12,7 @@
           text-gray-500
           font-semibold
           focus:text-purple-600
+          cursor-pointer
         "
         @click="prev"
       >
@@ -35,6 +36,7 @@
           text-gray-500
           font-semibold
           focus:text-purple-600
+          cursor-pointer
         "
         @click="next"
       >
