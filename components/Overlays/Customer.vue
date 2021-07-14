@@ -228,13 +228,21 @@
 
       <section v-if="sections.pickup" class="w-full space-y-3">
         <div
+          v-for="(order, index) in pickupArrays"
+          :key="index"
           class="flex justify-between items-center w-full bg-white px-4 py-3"
         >
           <span>#PU2323221</span>
-          <span class="text-gray-500 bg-gray-200 rounded-sm px-4 py-2"
-            >Pending</span
+          <span
+            :class="
+              order.status === 'pending'
+                ? 'text-gray-500 bg-gray-200'
+                : 'text-green-500 bg-green-100'
+            "
+            class="rounded-sm px-4 py-2"
+            >{{ order.status }}</span
           >
-          <span>01 Aug 2019. 04:55pm</span>
+          <span>{{ new Date(order.pickupDate).toLocaleDateString() }}m</span>
         </div>
 
         <div
@@ -638,7 +646,7 @@ export default defineComponent({
 
     onBeforeMount(() => {
       changeSection(_props.displayedSection)
-      fetchVehicle()
+      Promise.all([fetchVehicle(), getPickup(_props.customer._id)])
     })
 
     const vehicles = ref<any>([])
@@ -739,9 +747,18 @@ export default defineComponent({
       },
       {
         name: 'Pickup',
-        value: 'pickup',
+        value: 'pick-up',
       },
     ]
+
+    const pickupArray = ref<any>([])
+
+    function getPickup(customerId: String) {
+      CustomerController.fetchOrder(customerId).then((response) => {
+        pickupArray.value = response.docs
+        console.log(pickupArray.value)
+      })
+    }
 
     const context = useContext()
 
@@ -843,6 +860,7 @@ export default defineComponent({
       submit,
       orderTypes,
       vehicles,
+      pickupArray,
     }
   },
 })

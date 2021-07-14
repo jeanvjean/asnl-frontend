@@ -71,6 +71,17 @@ class Customer {
       }
     })
   }
+
+  fetchOrder(customerId: String) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.get(`/customer/fetch-order/${customerId}`)
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 const CustomerController = new Customer()
