@@ -77,7 +77,11 @@ export default defineComponent({
       } else {
         ctx.emit('approve', {
           status:
-            _props.displayText === 'approve' ? 'approved' : _props.displayText,
+            _props.displayText === 'approve'
+              ? 'approved'
+              : _props.displayText === 'reject'
+              ? 'rejected'
+              : '',
           password: form.password,
         })
       }

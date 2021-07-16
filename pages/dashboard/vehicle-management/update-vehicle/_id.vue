@@ -162,6 +162,7 @@
             :button-text="'Update Vehicle'"
             :button-class="'py-2 bg-btn-purple text-white rounded-sm'"
             :loading-status="loading"
+            @buttonClicked="updateVehicle"
           />
           <button-component
             :button-text="'Cancel'"
@@ -267,7 +268,7 @@ export default defineComponent({
 
       for (let i = 0; i <= difference; i++) {
         const year = start + i
-        modelNumbers.value.push({ name: year, value: year })
+        modelNumbers.value.push({ name: year, value: String(year) })
       }
     }
 
@@ -275,7 +276,7 @@ export default defineComponent({
       populateModel()
     })
 
-    function fetchVehicle(id: string) {
+    function fetchVehicle(id: String) {
       VehicleController.fetchVehicle(id).then((response) => {
         form.licence = response.licence
         form.fuelType = response.fuelType
@@ -291,16 +292,24 @@ export default defineComponent({
         form.vModel = response.vModel
         form.licence = response.licence
         form.currMile = response.currMile
+        form.acqisistionDate = formatDate(response.acqisistionDate)
+        form.insuranceDate = formatDate(response.insuranceDate)
+        form.disposalDate = response.disposal.disposalDate
+          ? formatDate(response.disposal.disposalDate)
+          : ''
+        form.disposalAmount = response.disposal.disposalAmount
+        form.disposalMileage = response.disposal.disposalMileage
 
         keyValue.value++
       })
     }
 
     const route = useRoute()
+    const vehicleId = ref<String>('')
 
     onBeforeMount(() => {
-      const vehicleId: string = route.value.params.id
-      fetchVehicle(vehicleId)
+      vehicleId.value = route.value.params.id
+      fetchVehicle(vehicleId.value)
     })
 
     const form = reactive<any>({
@@ -339,7 +348,23 @@ export default defineComponent({
       router.go(-1)
     }
 
-    const createVehicle = () => {
+    function formatDate(dateValue: string) {
+      const date = new Date(dateValue)
+      const year = date.getFullYear()
+      let month: any = date.getMonth() + 1
+      let dt: any = date.getDate()
+
+      if (dt < 10) {
+        dt = '0' + dt
+      }
+      if (month < 10) {
+        month = '0' + month
+      }
+
+      return year + '-' + month + '-' + dt
+    }
+
+    const updateVehicle = () => {
       const rules = {
         vehCategory: 'required',
         manufacturer: 'required',
@@ -391,7 +416,7 @@ export default defineComponent({
           },
         }
         loading.value = true
-        VehicleController.createVehicle(requestParams)
+        VehicleController.updateVehicle(requestParams, vehicleId.value)
           .then(() => {
             reset()
             goBack()
@@ -410,7 +435,7 @@ export default defineComponent({
 
     return {
       form,
-      createVehicle,
+      updateVehicle,
       keyValue,
       reset,
       loading,

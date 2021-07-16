@@ -253,7 +253,7 @@ export default defineComponent({
 
       for (let i = 0; i <= difference; i++) {
         const year = start + i
-        modelNumbers.value.push({ name: year, value: year })
+        modelNumbers.value.push({ name: year, value: String(year) })
       }
     }
 

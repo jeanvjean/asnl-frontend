@@ -130,6 +130,11 @@
                   class="block px-2 py-2"
                   >Cylinder Type Transfers</router-link
                 >
+                <!-- <router-link
+                  to="/dashboard/cylinder-management/condemn-cylinder"
+                  class="block px-2 py-2"
+                  >Pending Condemned Cylinders</router-link
+                > -->
                 <button
                   class="block px-2 py-2 focus:outline-none"
                   @click="showRegiserCylinder = true"

@@ -147,6 +147,19 @@ class CylinderRepository {
     })
   }
 
+  fetchCylinderCondemnation() {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get(
+          `/cylinder/fetch-condemn-requests`
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
   getCylinderChangeDetail(id: String) {
     return new Promise<any>(async (resolve, reject) => {
       try {

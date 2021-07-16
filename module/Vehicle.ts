@@ -10,6 +10,14 @@ class VehicleRepository {
       })
   }
 
+  async updateVehicle(requestParameters: Object, vehicleId: String) {
+    return await $axios
+      .post(`/vehicle/update-vehicle/${vehicleId}`, requestParameters)
+      .then((response) => {
+        return response.data
+      })
+  }
+
   fetchVehicles(page: number) {
     return new Promise<any>(async (resolve, reject) => {
       try {

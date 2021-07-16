@@ -12,12 +12,11 @@
         </div>
       </div>
       <div class="overflow-auto px-4">
-        <table class="w-96 lg:w-full table table-auto mt-2">
+        <table class="table table-fixed mt-2">
           <thead class="bg-gray-100">
             <tr>
+              <th class="w-auto text-center px-4">#</th>
               <th
-                v-for="(headSingle, index) in headers"
-                :key="index"
                 class="
                   uppercase
                   text-gray-800
@@ -26,9 +25,66 @@
                   px-4
                   py-2
                   text-left
+                  w-3/12
                 "
               >
-                {{ headSingle }}
+                Approval Stage
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-4
+                  py-2
+                  text-left
+                  w-3/12
+                "
+              >
+                Status
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-4
+                  py-2
+                  text-left
+                  w-2/12
+                "
+              >
+                Cylinder Type
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-4
+                  py-2
+                  text-left
+                  w-2/12
+                "
+              >
+                Gas Type
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-4
+                  py-2
+                  text-left
+                  w-2/12
+                "
+              >
+                Action
               </th>
             </tr>
           </thead>
@@ -36,8 +92,9 @@
             <tr
               v-for="(bodySingle, index) in body"
               :key="index"
-              class="font-light"
+              class="font-light capitalize w-full"
             >
+              <td class="text-center">{{ index + 1 }}</td>
               <td
                 class="
                   px-4
@@ -52,13 +109,24 @@
                 <span> {{ bodySingle.approvalStage }} </span>
               </td>
               <td class="px-4 text-left py-4">
-                {{ bodySingle.approvalStatus }}
+                <span
+                  class="px-4 py-2"
+                  :class="
+                    bodySingle.approvalStatus === 'pending'
+                      ? 'text-gray-500 bg-gray-200'
+                      : 'text-green-500 bg-green-100'
+                  "
+                >
+                  {{ bodySingle.approvalStatus }}
+                </span>
               </td>
-              <td class="px-4 text-left py-4">{{ bodySingle.gasType.type }}</td>
+              <td class="px-4 text-left py-4">
+                {{ bodySingle.gasType.type }}
+              </td>
               <td class="px-4 text-left py-4">
                 {{ bodySingle.gasType.gasName }}
               </td>
-              <td class="px-4 text-left py-4">
+              <td class="px-4 text-left py-4 w-3/12">
                 <router-link
                   v-if="
                     bodySingle.nextApprovalOfficer &&
@@ -107,8 +175,8 @@ export default defineComponent({
     const headers = [
       'Approval Stage',
       'Status',
-      'Changed Cylinder Type',
-      'Changed Gas Type',
+      'Cylinder Type',
+      'Gas Type',
       'Action',
     ]
     const body = ref<any>([])

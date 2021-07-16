@@ -45,6 +45,7 @@
                 rounded-sm
                 border border-btn-purple
               "
+              @click="confirmationComponent('reject')"
             >
               <span>Reject</span
               ><svg
@@ -128,18 +129,6 @@
                 >
                   Volume
                 </th>
-                <!-- <th
-                  class="
-                    font-light
-                    text-sm
-                    px-2
-                    py-2
-                    text-center
-                    border border-gray-400
-                  "
-                >
-                  Height
-                </th> -->
                 <th
                   class="
                     font-light
@@ -186,7 +175,7 @@
                     text-sm text-gray-700
                   "
                 >
-                  {{ cylinder.assignedNumber }}
+                  {{ cylinder.cylinderNumber }}
                 </td>
                 <td
                   class="
@@ -299,8 +288,8 @@
             placeholder="Enter Comment here"
           />
         </div>
-        <div class="flex justify-between items-start py-2 px-10">
-          <div>
+        <div class="flex space-x-6 items-start py-2 px-10">
+          <div v-if="transferRequest.initiator">
             <p class="text-gray-500 text-sm font-medium leading-6">
               Initiated By
             </p>
@@ -310,9 +299,9 @@
             </p>
             <div class="flex items-start space-x-4 py-2">
               <img
-                v-if="auth.image"
+                v-if="transferRequest.initiator.image"
                 class="h-10 w-10 rounded-full"
-                :src="auth.image"
+                :src="transferRequest.initiator.image"
                 alt=""
               />
               <img
@@ -322,9 +311,52 @@
                 alt=""
               />
               <div>
-                <p class="text-black text-lg capitalize">{{ auth.name }}</p>
+                <p class="text-black text-lg capitalize">
+                  {{ transferRequest.initiator.name }}
+                </p>
                 <p class="text-gray-600 text-sm capitalize">
-                  {{ auth.subrole }} - {{ auth.role }}
+                  {{ transferRequest.initiator.subrole }} -
+                  {{ transferRequest.initiator.role }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            v-for="(
+              approvingOfficer, index
+            ) in transferRequest.approvalOfficers"
+            :key="index"
+          >
+            <p class="text-gray-500 text-sm font-medium leading-6">
+              <span v-if="index + 1 == transferRequest.approvalOfficers.length">
+                Next Approval Officer</span
+              >
+              <span v-else> Approved By</span>
+            </p>
+            <p class="text-gray-500 text-sm font-medium">
+              <span>{{ new Date().toDateString() }}</span> @
+              <span>{{ new Date().toLocaleTimeString() }}</span>
+            </p>
+            <div class="flex items-start space-x-4 py-2">
+              <img
+                v-if="approvingOfficer.image"
+                class="h-10 w-10 rounded-full"
+                :src="approvingOfficer.image"
+                alt=""
+              />
+              <img
+                v-else
+                class="h-10 w-10 rounded-full"
+                src="@/assets/images/default-avatar.jpg"
+                alt=""
+              />
+              <div>
+                <p class="text-black text-lg capitalize">
+                  {{ approvingOfficer.name }}
+                </p>
+                <p class="text-gray-600 text-sm capitalize">
+                  {{ approvingOfficer.office }} -
+                  {{ approvingOfficer.department }}
                 </p>
               </div>
             </div>

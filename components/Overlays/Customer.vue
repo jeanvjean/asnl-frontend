@@ -232,7 +232,8 @@
           :key="index"
           class="flex justify-between items-center w-full bg-white px-4 py-3"
         >
-          <span>#PU2323221</span>
+          <span>#{{ order.orderNumber }}</span>
+          <span class="lowercase">{{ order.orderType }}</span>
           <span
             :class="
               order.status === 'pending'
@@ -242,7 +243,7 @@
             class="rounded-sm px-4 py-2"
             >{{ order.status }}</span
           >
-          <span>{{ new Date(order.pickupDate).toDateString() }}m</span>
+          <span>{{ new Date(order.pickupDate).toDateString() }}</span>
         </div>
       </section>
 
@@ -773,6 +774,7 @@ export default defineComponent({
       } else {
         CustomerController.createPickupOrder(form)
           .then(() => {
+            getPickup(_props.customer._id)
             form.pickupDate =
               form.numberOfCylinders =
               form.orderType =

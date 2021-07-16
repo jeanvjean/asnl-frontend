@@ -4,7 +4,7 @@
       <div class="py-2">
         <div class="flex justify-between items-center px-2 border-black mt-4">
           <h1 class="font-semibold text-black text-lg">
-            Pending Condemned Cylinders
+            Pending Condemn Cylinder
           </h1>
           <div class="flex items-center space-x-6">
             <pagination :pagination-details="paginationProp" />
@@ -12,12 +12,11 @@
         </div>
       </div>
       <div class="overflow-auto px-4">
-        <table class="w-96 lg:w-full table table-auto mt-2">
+        <table class="table table-fixed mt-2">
           <thead class="bg-gray-100">
             <tr>
+              <th class="w-auto text-center px-4">#</th>
               <th
-                v-for="(headSingle, index) in headers"
-                :key="index"
                 class="
                   uppercase
                   text-gray-800
@@ -26,9 +25,66 @@
                   px-4
                   py-2
                   text-left
+                  w-3/12
                 "
               >
-                {{ headSingle }}
+                Approval Stage
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-4
+                  py-2
+                  text-left
+                  w-3/12
+                "
+              >
+                Status
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-4
+                  py-2
+                  text-left
+                  w-2/12
+                "
+              >
+                Cylinder Type
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-4
+                  py-2
+                  text-left
+                  w-2/12
+                "
+              >
+                Gas Type
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-4
+                  py-2
+                  text-left
+                  w-2/12
+                "
+              >
+                Action
               </th>
             </tr>
           </thead>
@@ -36,8 +92,9 @@
             <tr
               v-for="(bodySingle, index) in body"
               :key="index"
-              class="font-light"
+              class="font-light capitalize w-full"
             >
+              <td class="text-center">{{ index + 1 }}</td>
               <td
                 class="
                   px-4
@@ -49,17 +106,33 @@
                   space-x-2
                 "
               >
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="@/assets/images/default-avatar.jpg"
-                  alt=""
-                /><span> {{ bodySingle.name }} </span>
+                <span> {{ bodySingle.approvalStage }} </span>
               </td>
-              <td class="px-4 text-left py-4">{{ bodySingle.vehicle_no }}</td>
-              <td class="px-4 text-left py-4">{{ bodySingle.start }}</td>
-              <td class="px-4 text-left py-4">{{ bodySingle.end }}</td>
               <td class="px-4 text-left py-4">
-                <button
+                <span
+                  class="px-4 py-2"
+                  :class="
+                    bodySingle.approvalStatus === 'pending'
+                      ? 'text-gray-500 bg-gray-200'
+                      : 'text-green-500 bg-green-100'
+                  "
+                >
+                  {{ bodySingle.approvalStatus }}
+                </span>
+              </td>
+              <td class="px-4 text-left py-4">
+                {{ bodySingle.gasType.type }}
+              </td>
+              <td class="px-4 text-left py-4">
+                {{ bodySingle.gasType.gasName }}
+              </td>
+              <td class="px-4 text-left py-4 w-3/12">
+                <router-link
+                  v-if="
+                    bodySingle.nextApprovalOfficer &&
+                    bodySingle.nextApprovalOfficer._id === user._id
+                  "
+                  :to="`/dashboard/cylinder-management/type/${bodySingle._id}`"
                   class="
                     mx-auto
                     text-btn-purple
@@ -70,7 +143,7 @@
                   "
                 >
                   Approve
-                </button>
+                </router-link>
               </td>
             </tr>
           </tbody>
@@ -88,29 +161,25 @@ import {
   ref,
 } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
-import { CylinderController } from '~/module/Cylinder'
+import { CylinderController } from '@/module/Cylinder'
+import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
   name: 'Reports',
   components: { Pagination },
   layout: 'dashboard',
   setup() {
+    const appStore = mainStore()
+    const user: any = appStore.getLoggedInUser
     const showRoute = ref(false)
     const headers = [
-      'Driver Name',
-      'Vehicle No',
-      'Start Date',
-      'End Date',
+      'Approval Stage',
+      'Status',
+      'Cylinder Type',
+      'Gas Type',
       'Action',
     ]
-    const body = [
-      {
-        name: 'Chinedu Onunyere',
-        vehicle_no: '#AAA456JK',
-        start: '20 August, 2020',
-        end: 'In Progress ',
-      },
-    ]
+    const body = ref<any>([])
 
     const paginationProp = reactive({
       hasNextPage: false,
@@ -119,8 +188,12 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      CylinderController.fetchPendingCylinderChanges().then((response) => {
-        console.log(response)
+      CylinderController.fetchCylinderCondemnation().then((response) => {
+        const myResponse = response.data
+        body.value = myResponse.docs
+        paginationProp.hasNextPage = myResponse.hasNextPage
+        paginationProp.hasPrevPage = myResponse.hasPrevPage
+        paginationProp.currentPage = myResponse.page
       })
     })
 
@@ -129,6 +202,7 @@ export default defineComponent({
       body,
       showRoute,
       paginationProp,
+      user,
     }
   },
 })

@@ -680,13 +680,16 @@ export default defineComponent({
           return element.cylinder
         })
 
-        const requestBody = {
-          type: form.type,
+        const requestBody: any = {
+          type: 'temporary',
           comment: form.comment,
           to: form.reciepient,
           cylinders: requestCylinders,
           gasType: form.gas,
-          holdingTime: 30,
+        }
+
+        if (form.type === 'temporary') {
+          requestBody.holdingTime = 30
         }
 
         CylinderController.initiateCylinderTransfer(requestBody).then(() => {
