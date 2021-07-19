@@ -134,6 +134,34 @@ class CylinderRepository {
     })
   }
 
+  approveCylinderTransfer(requestBody: any) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.post(
+          `/cylinder/approve-transfer`,
+          requestBody
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  approveCondemnChange(requestBody: any) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.post(
+          `/cylinder/approve-condemn-cylinder`,
+          requestBody
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
   fetchPendingCylinderChanges() {
     return new Promise<any>(async (resolve, reject) => {
       try {
@@ -180,6 +208,30 @@ class CylinderRepository {
           `/cylinder/condemn-cylinders`,
           requestBody
         )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  getCondemnCylinderDetail(id: String) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get(
+          `/cylinder/fetch-condemn-details/${id}`
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  getTransferCylinderDetail(id: String) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get(`/cylinder/fetch-transfer/${id}`)
         resolve(response.data)
       } catch (error) {
         reject(error)

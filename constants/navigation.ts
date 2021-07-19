@@ -1,11 +1,4 @@
-// import {
-//   ChartBarIcon,
-//   HomeIcon,
-//   LogoutIcon,
-//   TagIcon,
-//   TruckIcon,
-//   UserGroupIcon,
-// } from '@nuxt-hero-icons/outline'
+// import { CylinderIcon } from '@/components/Icons.vue'
 
 // const navigations: any = {
 //   admin: [
@@ -21,7 +14,7 @@
 //     },
 //     {
 //       title: 'Cylinders',
-//       icon: TagIcon,
+//       icon: CylinderIcon,
 //       link: '/dashboard/cylinder-management/',
 //     },
 //     {

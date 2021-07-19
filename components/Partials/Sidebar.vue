@@ -8,66 +8,30 @@
             Air Separation
           </h2>
           <svg
-            class="w-6 h-6 fill-current"
+            class="w-6 h-6 fill-current text-white"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
           >
             <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
           </svg>
         </div>
-        <!-- <div class="flex-1 flex flex-col overflow-y-auto">
-          <nav class="flex-1 px-4 py-4 bg-bg-sidebar space-y-4">
-            <router-link
-              v-for="(nav, index) in navigations"
-              :key="index"
-              :to="nav.link"
-              class=" group px-4 py-4 rounded-sm  flex items-center space-x-6"
-            >
-              <component :is="nav.icon" class="fill-current mr-3 h-5 w-5" />
-              <span class="font-light font-xl">{{ nav.title }}</span>
-            </router-link>
-          </nav>
-        </div> -->
         <div class="flex-1 flex flex-col overflow-y-auto">
           <nav class="flex-1 px-4 py-4 bg-bg-sidebar space-y-4 text-gray-400">
-            <router-link
-              to="/dashboard/"
-              class="group px-4 py-4 rounded-sm flex items-center space-x-6"
+            <div
+              v-for="(nav, index) in roleNavigations"
+              :key="index"
+              class="w-full"
             >
-              <svg
-                class="mr-3 h-5 w-5"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
+              <router-link
+                v-if="!nav.subCategories"
+                :to="nav.link"
+                class="group px-4 py-4 rounded-sm flex items-center space-x-4"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                />
-              </svg>
-              <span class="font-light font-xl">Dashboard</span>
-            </router-link>
-            <router-link
-              to="/dashboard/user-management/"
-              class="group px-4 py-4 rounded-sm flex items-center space-x-6"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="fill-current mr-3 h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  d="M9 6a3 3 0 11-6 0 3 3 0 016 0zm8 0a3 3 0 11-6 0 3 3 0 016 0zm-4.07 11c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"
-                />
-              </svg>
-              <span class="font-light font-xl">User Management</span>
-            </router-link>
-            <div class="w-full">
+                <component :is="nav.icon" />
+                <span class="font-light font-xl">{{ nav.title }}</span>
+              </router-link>
               <button
+                v-else
                 class="
                   px-4
                   py-4
@@ -78,430 +42,71 @@
                   link-block
                   focus:outline-none
                 "
-                @click="toggleCylinder = !toggleCylinder"
+                :class="nav.showSubCategory ? 'text-white' : ''"
+                @click="nav.showSubCategory = !nav.showSubCategory"
               >
-                <div class="flex space-x-6">
-                  <svg
-                    class="fill-current mr-3 h-5 w-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 452.608 452.608"
-                  >
-                    <path
-                      d="M285.184 92.672V63.488h6.656c17.408 0 31.744-14.336 31.744-31.744S309.248 0 291.84 0H160.768c-17.408 0-31.744 14.336-31.744 31.744s14.336 31.744 31.744 31.744h6.656v29.184c-38.912 2.56-69.12 34.816-69.12 73.728v80.384h256V166.4c0-38.912-30.208-71.168-69.12-73.728zm-25.6-.512h-20.48V80.896h-25.6V92.16h-20.48V62.976h66.56V92.16zM98.304 272.384v81.92c0 28.16 15.872 53.76 40.96 66.56v31.744h174.08v-31.744c25.088-12.8 40.96-38.4 40.96-66.56v-81.92h-256z"
-                    />
-                  </svg>
-
-                  <span class="font-light font-xl">Cylinders</span>
+                <div class="flex space-x-4">
+                  <component :is="nav.icon" />
+                  <span class="font-light font-xl">{{ nav.title }}</span>
                 </div>
-                <svg
-                  v-if="!toggleCylinder"
-                  class="w-6 h-6 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                  />
-                </svg>
-                <svg
-                  v-else
-                  class="w-6 h-6 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z"
-                  />
-                </svg>
+                <caret-up v-if="!nav.showSubCategory" />
+                <caret-down v-else />
               </button>
-              <div v-if="toggleCylinder" class="ml-16 px-2 link-list main">
-                <router-link
-                  to="/dashboard/cylinder-management/"
-                  class="block px-2 py-2"
-                  >Analytics</router-link
+              <div v-if="nav.showSubCategory" class="ml-14 link-list text-sm">
+                <div
+                  v-for="(subNav, i) in nav.subCategories"
+                  :key="i"
+                  class="w-full"
                 >
-                <router-link
-                  to="/dashboard/cylinder-management/transfer-list"
-                  class="block px-2 py-2"
-                  >Transfer Analytics</router-link
-                >
-                <router-link
-                  to="/dashboard/cylinder-management/cylinder-type"
-                  class="block px-2 py-2"
-                  >Cylinder Type Transfers</router-link
-                >
-                <!-- <router-link
-                  to="/dashboard/cylinder-management/condemn-cylinder"
-                  class="block px-2 py-2"
-                  >Pending Condemned Cylinders</router-link
-                > -->
-                <button
-                  class="block px-2 py-2 focus:outline-none"
-                  @click="showRegiserCylinder = true"
-                >
-                  Register Cylinder
-                </button>
-                <button
-                  class="block px-2 py-2 focus:outline-none"
-                  @click="showRegiserCylinderType = true"
-                >
-                  Register Gas Type
-                </button>
+                  <button
+                    v-if="subNav.type && subNav.type === 'button'"
+                    class="block px-2 py-2 focus:outline-none focus:text-white"
+                    @click="toggleComponent(subNav.action)"
+                  >
+                    {{ subNav.title }}
+                  </button>
+                  <router-link
+                    v-else-if="!subNav.subCategories"
+                    :to="subNav.link"
+                    class="block px-2 py-2"
+                    >{{ subNav.title }}</router-link
+                  >
+                  <button
+                    v-else
+                    class="
+                      px-2
+                      py-2
+                      rounded-sm
+                      flex
+                      justify-between
+                      w-full
+                      link-block
+                      focus:outline-none
+                    "
+                    :class="subNav.showSubCategory ? 'text-white' : ''"
+                    @click="subNav.showSubCategory = !subNav.showSubCategory"
+                  >
+                    <div class="flex space-x-6">
+                      <span class="font-light font-xl">{{ subNav.title }}</span>
+                    </div>
+                    <caret-up v-if="!subNav.showSubCategory" />
+                    <caret-down v-else />
+                  </button>
+                  <div
+                    v-if="subNav.showSubCategory"
+                    class="ml-2 link-list text-sm"
+                  >
+                    <router-link
+                      v-for="(lowNav, j) in subNav.subCategories"
+                      :key="j"
+                      :to="lowNav.link"
+                      class="block px-2 py-2"
+                      >{{ lowNav.title }}</router-link
+                    >
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="w-full">
-              <button
-                class="
-                  px-4
-                  py-4
-                  rounded-sm
-                  flex
-                  justify-between
-                  w-full
-                  link-block
-                  focus:outline-none
-                "
-                @click="toggleInventory = !toggleInventory"
-              >
-                <div class="flex space-x-6">
-                  <svg
-                    class="fill-current mr-3 h-5 w-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      d="M0 10V2l2-2h8l10 10-10 10L0 10zm4.5-4a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
-                    />
-                  </svg>
-
-                  <span class="font-light font-xl">Inventory</span>
-                </div>
-                <svg
-                  v-if="!toggleInventory"
-                  class="w-6 h-6 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                  />
-                </svg>
-                <svg
-                  v-else
-                  class="w-6 h-6 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z"
-                  />
-                </svg>
-              </button>
-              <div v-if="toggleInventory" class="ml-16 px-2 link-list">
-                <router-link to="/dashboard/inventory/" class="block px-2 py-2"
-                  >Analytics</router-link
-                >
-                <router-link
-                  to="/dashboard/inventory/new-product"
-                  class="block px-2 py-2"
-                  >Create Product</router-link
-                >
-                <router-link
-                  to="/dashboard/inventory/suppliers"
-                  class="block px-2 py-2"
-                  >Supplier</router-link
-                >
-                <router-link
-                  to="/dashboard/inventory/goods-recieve-note"
-                  class="block px-2 py-2"
-                  >GRN</router-link
-                >
-                <router-link
-                  to="/dashboard/inventory/issue-products"
-                  class="block px-2 py-2"
-                  >Issue Products</router-link
-                >
-              </div>
-            </div>
-            <div class="w-full">
-              <button
-                class="
-                  px-4
-                  py-4
-                  rounded-sm
-                  flex
-                  justify-between
-                  w-full
-                  link-block
-                  focus:outline-none
-                "
-                @click="toggleVehicle = !toggleVehicle"
-              >
-                <div class="flex space-x-6">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="fill-current mr-3 h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm7 0a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
-                    />
-                    <path
-                      d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zm11 3a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"
-                    />
-                  </svg>
-
-                  <span class="font-light font-xl">Vehicle</span>
-                </div>
-                <svg
-                  v-if="!toggleVehicle"
-                  class="w-6 h-6 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                  />
-                </svg>
-                <svg
-                  v-else
-                  class="w-6 h-6 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z"
-                  />
-                </svg>
-              </button>
-              <div v-if="toggleVehicle" class="ml-16 px-2 link-list">
-                <router-link
-                  to="/dashboard/vehicle-management/"
-                  class="block px-2 py-2"
-                  >All Vehicles</router-link
-                >
-                <router-link
-                  to="/dashboard/vehicle-management/route-plan"
-                  class="block px-2 py-2"
-                  >Route Plan</router-link
-                >
-                <router-link
-                  to="/dashboard/vehicle-management/vehicle-performance"
-                  class="block px-2 py-2"
-                  >Vehicle Performance</router-link
-                >
-                <router-link
-                  to="/dashboard/vehicle-management/corrective-maintenance"
-                  class="block px-2 py-2"
-                  >Corrective Maintenace</router-link
-                >
-                <router-link
-                  to="/dashboard/vehicle-management/pre-inspection-maintenance"
-                  class="block px-2 py-2"
-                  >Pre-inspection Maintenace</router-link
-                >
-              </div>
-            </div>
-            <div class="w-full">
-              <button
-                class="
-                  px-4
-                  py-4
-                  rounded-sm
-                  flex
-                  justify-between
-                  w-full
-                  link-block
-                  focus:outline-none
-                "
-                @click="toggleReport = !toggleReport"
-              >
-                <div class="flex space-x-6">
-                  <svg
-                    class="w-8 h-8 fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z"
-                      fill="rgba(209, 213, 219, 1)"
-                    />
-                  </svg>
-
-                  <span class="font-light font-xl">Reports</span>
-                </div>
-                <svg
-                  v-if="!toggleReport"
-                  class="w-6 h-6 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                  />
-                </svg>
-                <svg
-                  v-else
-                  class="w-6 h-6 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z"
-                  />
-                </svg>
-              </button>
-              <div v-if="toggleReport" class="ml-16 px-2 link-list">
-                <router-link to="/dashboard/reports/" class="block px-2 py-2"
-                  >All Reports</router-link
-                >
-                <router-link
-                  to="/dashboard/reports/inventory"
-                  class="block px-2 py-2"
-                  >Inventory Mgt. Report</router-link
-                >
-                <router-link
-                  to="/dashboard/reports/cylinder"
-                  class="block px-2 py-2"
-                  >Cylinder Mgt. Report</router-link
-                >
-              </div>
-            </div>
-            <router-link
-              to="/dashboard/drivers"
-              class="group px-4 py-4 rounded-sm flex items-center space-x-6"
-            >
-              <svg
-                class="mr-3 h-5 w-5 fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 490.667 490.667"
-              >
-                <path
-                  d="M245.333 0C110.059 0 0 110.059 0 245.333s110.059 245.333 245.333 245.333 245.333-110.059 245.333-245.333S380.608 0 245.333 0zm0 448c-111.744 0-202.667-90.923-202.667-202.667S133.589 42.667 245.333 42.667 448 133.589 448 245.333 357.077 448 245.333 448z"
-                />
-                <path
-                  d="M359.552 131.136c-3.093-3.115-7.765-4.011-11.755-2.261l-149.333 64c-2.517 1.067-4.523 3.093-5.611 5.611l-64 149.333a10.653 10.653 0 002.261 11.755 10.82 10.82 0 007.552 3.093c1.408 0 2.837-.299 4.203-.853l149.333-64a10.761 10.761 0 005.611-5.611l64-149.333a10.687 10.687 0 00-2.261-11.734zM245.333 266.667c-11.755 0-21.333-9.579-21.333-21.333 0-11.755 9.579-21.333 21.333-21.333 11.755 0 21.333 9.579 21.333 21.333.001 11.754-9.578 21.333-21.333 21.333z"
-                />
-              </svg>
-              <span class="font-light font-xl">Drivers</span>
-            </router-link>
-
-            <router-link
-              to="/dashboard/customer-management/"
-              class="group px-4 py-4 rounded-sm flex items-center space-x-6"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="mr-3 h-5 w-5 text-transparent"
-                viewBox="0 0 24 24"
-                stroke="rgba(209, 213, 219, 1)"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                />
-              </svg>
-              <span class="font-light font-xl">Customers</span>
-            </router-link>
-
-            <div class="w-full">
-              <button
-                class="
-                  px-4
-                  py-4
-                  rounded-sm
-                  flex
-                  justify-between
-                  w-full
-                  link-block
-                  focus:outline-none
-                "
-                @click="toggleProduction = !toggleProduction"
-              >
-                <div class="flex space-x-6">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="mr-3 h-5 w-5 fill-current text-transparent"
-                    viewBox="0 0 24 24"
-                    stroke="rgba(209, 213, 219, 1)"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                    />
-                  </svg>
-
-                  <span class="font-light font-xl">Production</span>
-                </div>
-                <svg
-                  v-if="!toggleProduction"
-                  class="w-6 h-6 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                  />
-                </svg>
-                <svg
-                  v-else
-                  class="w-6 h-6 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z"
-                  />
-                </svg>
-              </button>
-              <div v-if="toggleProduction" class="ml-16 px-2 link-list">
-                <router-link
-                  to="/dashboard/production/erc-list"
-                  class="block px-2 py-2"
-                  >ERC List</router-link
-                >
-                <router-link
-                  to="/dashboard/production/sales-requisition"
-                  class="block px-2 py-2"
-                  >Sales Requisition List</router-link
-                >
-                <router-link
-                  to="/dashboard/production/production-schedule-status"
-                  class="block px-2 py-2"
-                  >Production Schedule Status</router-link
-                >
-                <router-link
-                  to="/dashboard/production/internal-purchase-requisition"
-                  class="block px-2 py-2"
-                  >Internal Purchase Requisition</router-link
-                >
-              </div>
-            </div>
-            <router-link
-              class="group px-4 py-4 rounded-sm flex items-center space-x-6"
-              to="/auth/logout"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="mr-3 h-5 w-5 fill-current text-transparent"
-                viewBox="0 0 24 24"
-                stroke="rgba(209, 213, 219, 1)"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                />
-              </svg>
-              <span class="font-light font-xl">Logout</span>
-            </router-link>
           </nav>
         </div>
       </div>
@@ -518,39 +123,437 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
 import NewCylinderType from '@/components/Overlays/NewCylinderType.vue'
-
-// import { getNavigations } from '@/constants/navigation'
-// import { mainStore } from '@/module/Pinia'
+import DashboardIcon from '@/components/Icons/DashboardIcon.vue'
+import CylinderIcon from '@/components/Icons/CylinderIcon.vue'
+import UserIcon from '@/components/Icons/UserIcon.vue'
+import ReportIcon from '@/components/Icons/ReportIcon.vue'
+import DriverIcon from '@/components/Icons/DriverIcon.vue'
+import InventoryIcon from '@/components/Icons/InventoryIcon.vue'
+import VehicleIcon from '@/components/Icons/VehicleIcon.vue'
+import LogoutIcon from '@/components/Icons/LogoutIcon.vue'
+import CaretDown from '@/components/Icons/CaretDown.vue'
+import CaretUp from '@/components/Icons/CaretUp.vue'
+import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
+import CylinderMaintenanceIcon from '@/components/Icons/CylinderMaintenanceIcon.vue'
+import TimerIcon from '@/components/Icons/TimerIcon.vue'
+import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
-  components: { NewCylinder, NewCylinderType },
+  components: { NewCylinder, NewCylinderType, CaretDown, CaretUp },
   setup() {
-    const toggleCylinder = ref(false)
-    const toggleInventory = ref(false)
-    const toggleReport = ref(false)
-    const toggleVehicle = ref(false)
-    const toggleProduction = ref(false)
     const showRegiserCylinder = ref(false)
     const showRegiserCylinderType = ref(false)
-    // const appStore = mainStore()
+    const appStore = mainStore()
 
-    // const auth: any = appStore.getLoggedInUser
+    const auth: any = appStore.getLoggedInUser
 
-    // const role = auth?.role ?? 'admin'
-    // const navigations = getNavigations(role)
+    const role = auth.role
+    const roleNavigations = ref<any>([])
+
+    function getNavigations(role: string) {
+      const result = navigations[role] ? navigations[role] : navigations.admin
+      return result
+    }
+
+    function toggleComponent(action: String) {
+      if (action === 'register-cylinder') {
+        showRegiserCylinder.value = true
+      } else if (action === 'register-gas-type') {
+        showRegiserCylinderType.value = true
+      }
+    }
+
+    onMounted(() => {
+      roleNavigations.value = getNavigations(role)
+    })
+
+    const logout = {
+      title: 'Logout',
+      icon: LogoutIcon,
+      link: '/auth/logout',
+    }
+
+    const dashboard = {
+      title: 'Dashboard',
+      icon: DashboardIcon,
+      link: '/dashboard/',
+    }
+
+    const navigations: any = {
+      admin: [
+        dashboard,
+        {
+          title: 'User Management',
+          icon: UserIcon,
+          link: '/dashboard/user-management/',
+        },
+        {
+          title: 'Cylinders',
+          icon: CylinderIcon,
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'Analytics',
+              link: '/dashboard/cylinder-management/',
+            },
+            {
+              title: 'Transfer Analytics',
+              link: '/dashboard/cylinder-management/transfer-list',
+            },
+            {
+              title: 'Cylinder Type Transfers',
+              link: '/dashboard/cylinder-management/cylinder-type',
+            },
+            {
+              title: 'Pending Condemn Cylinder',
+              link: '/dashboard/cylinder-management/condemn-cylinder',
+            },
+            {
+              title: 'Register Cylinder',
+              type: 'button',
+              action: 'register-cylinder',
+              link: '/dashboard/cylinder-management/condemn-cylinder',
+            },
+            {
+              title: 'Register Gas Type',
+              type: 'button',
+              action: 'register-gas-type',
+              link: '/dashboard/cylinder-management/condemn-cylinder',
+            },
+          ],
+        },
+        {
+          title: 'Inventory',
+          icon: InventoryIcon,
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'Analytics',
+              link: '/dashboard/inventory/',
+            },
+            {
+              title: 'Create Product',
+              link: '/dashboard/inventory/new-product',
+            },
+            {
+              title: 'Supplier',
+              link: '/dashboard/cylinder-management/suppliers',
+            },
+            {
+              title: 'GRN',
+              link: '/dashboard/cylinder-management/suppliers',
+            },
+            {
+              title: 'Issue Products',
+              link: '/dashboard/cylinder-management/suppliers',
+            },
+          ],
+        },
+        {
+          title: 'Vehicle',
+          icon: VehicleIcon,
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'All Vehicles',
+              link: '/dashboard/vehicle-management/',
+            },
+            {
+              title: 'Route Plan',
+              link: '/dashboard/vehicle-management/route-plan',
+            },
+            {
+              title: 'Vehicle Performance',
+              link: '/dashboard/vehicle-management/vehicle-performance',
+            },
+            {
+              title: 'Corrective Maintenance',
+              link: '/dashboard/vehicle-management/corrective-maintenance',
+            },
+            {
+              title: 'Pre-Inspection Maintenance',
+              link: '/dashboard/cylinder-management/pre-inspection-maintenance',
+            },
+          ],
+        },
+        {
+          title: 'Reports',
+          icon: ReportIcon,
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'All Reports',
+              link: '/dashboard/reports/',
+            },
+            {
+              title: 'Inventory Mgt. Report',
+              link: '/dashboard/reports/inventory',
+            },
+            {
+              title: 'Cylinder Mgt. Report',
+              link: '/dashboard/reports/cylinder',
+            },
+          ],
+        },
+        {
+          title: 'Drivers',
+          icon: DriverIcon,
+          link: '/dashboard/drivers',
+        },
+        logout,
+      ],
+      sales: [
+        dashboard,
+        {
+          title: 'Cylinders',
+          icon: CylinderIcon,
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'Register',
+              link: '#',
+              showSubCategory: false,
+              subCategories: [
+                {
+                  title: "Customer's Cylinders",
+                  link: '#',
+                },
+              ],
+            },
+            {
+              title: 'Transfer',
+              link: '/dashboard/cylinder-management/transfer',
+            },
+            {
+              title: 'Transfer Analytics',
+              link: '/dashboard/cylinder-management/transfer-list',
+            },
+            {
+              title: 'Pending Transfer List',
+              link: '#',
+              showSubCategory: false,
+              subCategories: [
+                {
+                  title: 'Outright Sales/Transfer',
+                  link: '#',
+                },
+                {
+                  title: 'Condemned Cylinders',
+                  link: '/dashboard/cylinder-management/condemn-cylinder',
+                },
+                {
+                  title: 'Cylinder Type Change',
+                  link: '/dashboard/cylinder-management/cylinder-type',
+                },
+              ],
+            },
+            {
+              title: 'Cylinder Pool',
+              link: '/dashboard/cylinder-management/',
+            },
+          ],
+        },
+        {
+          title: 'Sales Orders',
+          icon: CalendarIcon,
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'Customers',
+              link: '/dashboard/customer-management/',
+            },
+            {
+              title: 'Incoming',
+              link: '#',
+              showSubCategory: false,
+              subCategories: [
+                {
+                  title: 'Walk-in Customers',
+                  link: '#',
+                },
+                {
+                  title: 'Driver Pick-ups',
+                  link: '#',
+                },
+                {
+                  title: 'Suppliers',
+                  link: '#',
+                },
+              ],
+            },
+            {
+              title: 'Sales Requisition',
+              link: '#',
+              showSubCategory: false,
+              subCategories: [
+                {
+                  title: 'Customers Cylinders',
+                  link: '#',
+                },
+                {
+                  title: 'Company Cylinders',
+                  link: '#',
+                },
+              ],
+            },
+            {
+              title: 'Outgoing',
+              link: '#',
+              showSubCategory: false,
+              subCategories: [
+                {
+                  title: 'Delivery Waybill',
+                  link: '#',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          title: 'Purchase Orders',
+          icon: InventoryIcon,
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'Suppliers',
+              link: '#',
+            },
+            {
+              title: 'Internal Suppliers',
+              link: '#',
+            },
+            {
+              title: 'External Suppliers',
+              link: '#',
+            },
+          ],
+        },
+        {
+          title: 'Production Scheduling',
+          icon: TimerIcon,
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'Production Schedule',
+              link: '/dashboard/production/production-schedule',
+            },
+            {
+              title: 'Production Delivery',
+              link: '#',
+              showSubCategory: false,
+              subCategories: [
+                {
+                  title: 'Filled',
+                  link: '#',
+                },
+                {
+                  title: 'Work-in Progress',
+                  link: '#',
+                },
+                {
+                  title: 'Faulty',
+                  link: '#',
+                },
+              ],
+            },
+            {
+              title: 'Production Pool',
+              link: '#',
+            },
+          ],
+        },
+        {
+          title: 'Cylinder Maintenance',
+          icon: CylinderMaintenanceIcon,
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'Faulty Cylinders',
+              link: '#',
+            },
+            {
+              title: 'Maintain Cylinders',
+              link: '#',
+            },
+          ],
+        },
+        {
+          title: 'Complaints',
+          icon: UserIcon,
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'Notification',
+              link: '#',
+            },
+            {
+              title: 'Resolve',
+              link: '#',
+            },
+          ],
+        },
+        {
+          title: 'Vehicle',
+          icon: VehicleIcon,
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'Register',
+              link: '/dashboard/vehicle-management/',
+            },
+            {
+              title: 'Route Plan',
+              link: '/dashboard/vehicle-management/route-plan',
+            },
+            {
+              title: 'Vehicle Maintenance',
+              link: '#',
+              showSubCategory: false,
+              subCategories: [
+                {
+                  title: 'Pre-inspection Maintenance',
+                  link: '/dashboard/vehicle-management/pre-inspection-maintenance',
+                },
+                {
+                  title: 'Corrective Maintenance',
+                  link: '/dashboard/vehicle-management/corrective-maintenance',
+                },
+              ],
+            },
+            {
+              title: 'Vehicle Performance',
+              link: '/dashboard/vehicle-management/vehicle-performance',
+            },
+          ],
+        },
+        {
+          title: 'Reports',
+          icon: ReportIcon,
+          link: '/dashboard/reports/',
+        },
+        logout,
+      ],
+    }
 
     return {
-      toggleCylinder,
-      toggleInventory,
-      toggleReport,
-      toggleVehicle,
-      toggleProduction,
       showRegiserCylinder,
       showRegiserCylinderType,
-      // navigations,
+      roleNavigations,
+      toggleComponent,
     }
   },
 })

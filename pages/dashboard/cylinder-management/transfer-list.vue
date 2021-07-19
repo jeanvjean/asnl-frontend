@@ -221,6 +221,7 @@
           </div>
           <search-component :place-holder="'Search'" />
           <router-link
+            v-if="user.role !== 'admin'"
             to="/dashboard/cylinder-management/transfer"
             class="
               px-4
@@ -328,21 +329,26 @@
                   </span>
                 </td>
                 <td class="px-4 text-center py-4">
-                  <button
+                  <div
                     v-if="
                       bodySingle.nextApprovalOfficer &&
                       bodySingle.nextApprovalOfficer._id === user._id
                     "
-                    class="
-                      border border-btn-purple
-                      rounded-sm
-                      text-btn-purple
-                      px-4
-                      py-2
-                    "
                   >
-                    Approve
-                  </button>
+                    <router-link
+                      v-if="bodySingle.type === 'temporary'"
+                      :to="`/dashboard/cylinder-management/within-division/${bodySingle._id}`"
+                      class="
+                        border border-btn-purple
+                        rounded-sm
+                        text-btn-purple
+                        px-4
+                        py-2
+                      "
+                    >
+                      Approve
+                    </router-link>
+                  </div>
                 </td>
               </tr>
             </tbody>

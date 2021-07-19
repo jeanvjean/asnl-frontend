@@ -219,14 +219,20 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="i in 8" :key="i" class="font-light hover:bg-gray-100">
-            <td class="px-4 text-center py-4">MRN1202</td>
-            <td class="px-4 text-center py-4">Production Dept.</td>
-            <td class="px-4 text-center py-4">Johnson Silver</td>
-            <td class="px-4 text-center py-4">Supplies, Inventory</td>
+          <tr
+            v-for="(mrn, i) in body"
+            :key="i"
+            class="font-light hover:bg-gray-100"
+          >
+            <td class="px-4 text-center py-4">{{ mrn.mrn }}</td>
+            <td class="px-4 text-center py-4 capitalize">
+              {{ mrn.requestDepartment }}
+            </td>
+            <td class="px-4 text-center py-4">{{ mrn.customer.name }}</td>
+            <td class="px-4 text-center py-4">{{ mrn.jobTag }}</td>
             <td class="px-4 text-left py-4">
               <span class="px-8 py-2 bg-yellow-100 text-red-400">
-                Pending
+                {{ mrn.requestApproval }}
               </span>
             </td>
             <td class="px-4 text-center py-4">12/06/2020</td>
@@ -289,7 +295,11 @@ export default defineComponent({
 
     function fetchPendingDisbursement() {
       ProductObject.fetchPendingDisbursement().then((response) => {
-        console.log(response)
+        const mrnResponse: any = response
+        body.value = mrnResponse.docs
+        paginationProp.hasNextPage = mrnResponse.hasNextPage
+        paginationProp.hasPrevPage = mrnResponse.hasPrevPage
+        paginationProp.currentPage = mrnResponse.page
       })
     }
 

@@ -25,7 +25,21 @@
                   px-4
                   py-2
                   text-left
-                  w-3/12
+                  w-2/12
+                "
+              >
+                Initiator
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-4
+                  py-2
+                  text-left
+                  w-2/12
                 "
               >
                 Approval Stage
@@ -53,25 +67,12 @@
                   px-4
                   py-2
                   text-left
-                  w-2/12
+                  w-3/12
                 "
               >
-                Cylinder Type
+                Next Approval Officer
               </th>
-              <th
-                class="
-                  uppercase
-                  text-gray-800
-                  font-thin
-                  text-sm
-                  px-4
-                  py-2
-                  text-left
-                  w-2/12
-                "
-              >
-                Gas Type
-              </th>
+
               <th
                 class="
                   uppercase
@@ -95,18 +96,11 @@
               class="font-light capitalize w-full"
             >
               <td class="text-center">{{ index + 1 }}</td>
-              <td
-                class="
-                  px-4
-                  text-left
-                  py-4
-                  flex
-                  justify-start
-                  items-center
-                  space-x-2
-                "
-              >
-                <span> {{ bodySingle.approvalStage }} </span>
+              <td class="px-4 text-left py-4 space-x-2">
+                {{ bodySingle.initiator.name }}
+              </td>
+              <td class="px-4 text-left py-4 space-x-2">
+                {{ bodySingle.approvalStage }}
               </td>
               <td class="px-4 text-left py-4">
                 <span
@@ -121,10 +115,7 @@
                 </span>
               </td>
               <td class="px-4 text-left py-4">
-                {{ bodySingle.gasType.type }}
-              </td>
-              <td class="px-4 text-left py-4">
-                {{ bodySingle.gasType.gasName }}
+                {{ bodySingle.nextApprovalOfficer.name }}
               </td>
               <td class="px-4 text-left py-4 w-3/12">
                 <router-link
@@ -132,7 +123,7 @@
                     bodySingle.nextApprovalOfficer &&
                     bodySingle.nextApprovalOfficer._id === user._id
                   "
-                  :to="`/dashboard/cylinder-management/type/${bodySingle._id}`"
+                  :to="`/dashboard/cylinder-management/condemn-action/${bodySingle._id}`"
                   class="
                     mx-auto
                     text-btn-purple
@@ -172,13 +163,7 @@ export default defineComponent({
     const appStore = mainStore()
     const user: any = appStore.getLoggedInUser
     const showRoute = ref(false)
-    const headers = [
-      'Approval Stage',
-      'Status',
-      'Cylinder Type',
-      'Gas Type',
-      'Action',
-    ]
+
     const body = ref<any>([])
 
     const paginationProp = reactive({
@@ -198,7 +183,6 @@ export default defineComponent({
     })
 
     return {
-      headers,
       body,
       showRoute,
       paginationProp,

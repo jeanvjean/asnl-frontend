@@ -300,6 +300,7 @@ export default defineComponent({
           gasVolumeContent: formInputs.gasVolumeContent,
           cylinderNumber: formInputs.cylinderNumber,
           purchaseCost: formInputs.purchaseCost,
+          assignedTo: formInputs.assignedTo,
           purchaseDate: formInputs.purchaseDate
             ? new Date(formInputs.purchaseDate).toISOString()
             : formInputs.purchaseDate,
