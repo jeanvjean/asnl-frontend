@@ -48,9 +48,9 @@
             <div class="flex space-x-4 items-center">
               <span>MRN:</span>
               <input-component
-                :default-value="form.mrn"
+                :default-value="mrn.mrn"
                 :input-placeholder="'Enter MRN Number'"
-                @get="form.mrn = $event.value"
+                :is-disabled="true"
               />
             </div>
             <div class="flex space-x-2 items-center">
@@ -78,24 +78,29 @@
               :label-title="'Customer'"
               :select-array="customers"
               :default-option-text="'Choose Customer'"
-              :init-value="form.customer"
-              @get="form.customer = $event.value"
+              :is-required="false"
+              :is-disabled="true"
+              :init-value="mrn.customer._id"
             />
             <input-component
               :label-title="'Job Tag'"
-              :default-value="form.jobTag"
+              :default-value="mrn.jobTag"
               :input-placeholder="'Enter Job Tag'"
+              :is-required="false"
+              :is-disabled="true"
               @get="form.jobTag = $event.value"
             />
             <input-component
               :label-title="'Comment'"
-              :default-value="form.comment"
+              :default-value="mrn.comments[0].comment"
+              :is-required="false"
+              :is-disabled="true"
               :input-placeholder="'Enter Comment'"
               @get="form.comment = $event.value"
             />
           </div>
           <div :key="componentKey" class="w-full overflow-x-auto">
-            <table class="w-full table-auto border-separate">
+            <table class="w-full table table-auto border-separate">
               <thead>
                 <tr>
                   <th
@@ -173,7 +178,7 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="(product, i) in products"
+                  v-for="(product, i) in mrn.products"
                   :key="i"
                   class="hover:bg-gray-100"
                 >
@@ -183,16 +188,14 @@
                       :default-option-text="'Select Product Name'"
                       :init-value="product.productName"
                       :select-array="productsArray"
-                      @get="
-                        ;(product.productName = $event.value),
-                          setProductName(product.productName, i)
-                      "
+                      :is-disabled="true"
                     />
                   </td>
                   <td>
                     <input-component
                       :input-placeholder="'Enter Product Number'"
                       :default-value="product.productNumber"
+                      :is-disabled="true"
                       @get="product.productNumber = $event.value"
                     />
                   </td>
@@ -201,6 +204,7 @@
                     <input-component
                       :input-placeholder="'#'"
                       :default-value="product.quantityRequested"
+                      :is-disabled="true"
                       :input-type="'number'"
                       @get="product.quantityRequested = $event.value"
                     />
@@ -208,53 +212,25 @@
                   <td>
                     <input-component
                       :input-placeholder="'Enter Comment'"
+                      :is-disabled="true"
                       :default-value="product.comment"
                       @get="product.comment = $event.value"
                     />
-                  </td>
-                  <td class="text-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="fill-current text-transparent w-4 h-4"
-                      viewBox="0 0 24 24"
-                      stroke="black"
-                      @click="decreaseCounter(i)"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="w-auto px-12 mb-10">
-            <div class="w-full mx-auto">
-              <button
-                class="flex items-center space-x-1"
-                @click="increaseCounter()"
-              >
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    class="w-4 h-4 fill-current text-gray-500"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div class="underline">Add New Product</div>
-              </button>
-            </div>
+
+          <div class="px-4">
+            <input-component
+              :label-title="'Comment'"
+              :input-placeholder="'Enter Comment'"
+              :is-required="false"
+              @get="form.comment = $event.value"
+            />
           </div>
+
           <div
             class="
               w-full
@@ -267,9 +243,9 @@
           >
             <button
               class="px-6 py-2 rounded-sm bg-btn-purple text-white w-full"
-              @click="submitForm"
+              @click="confirmationComponent('approve')"
             >
-              Create MRN
+              Approve
             </button>
             <button
               class="
@@ -281,13 +257,21 @@
                 border border-btn-purple
                 w-full
               "
+              @click="confirmationComponent('reject')"
             >
-              Cancel
+              Reject
             </button>
           </div>
         </div>
       </div>
     </div>
+
+    <confirmation
+      v-if="showConfirmation"
+      :display-text="statusText"
+      @close="showConfirmation = false"
+      @approve="intermediate($event)"
+    />
   </back-drop>
 </template>
 <script lang="ts">
@@ -296,7 +280,6 @@ import {
   onMounted,
   reactive,
   ref,
-  useContext,
 } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import SelectComponent from '@/components/Form/Select.vue'
@@ -304,14 +287,20 @@ import InputComponent from '@/components/Form/Input.vue'
 import { CustomerController } from '@/module/Customer'
 import { ProductObject } from '@/module/Product'
 import { ProductDto } from '@/types/Types'
-import Validator from 'validatorjs'
-import { ValidatorObject } from '~/module/Validation'
+import Confirmation from '@/components/Overlays/Confirmation.vue'
 
 export default defineComponent({
   components: {
     BackDrop,
     SelectComponent,
     InputComponent,
+    Confirmation,
+  },
+  props: {
+    mrn: {
+      type: Object,
+      required: true,
+    },
   },
   setup(_props, ctx) {
     const close = () => {
@@ -320,26 +309,40 @@ export default defineComponent({
 
     const products = ref<Array<ProductDto>>([])
     const productsArray = ref<any>([])
-
     const componentKey = ref<number>(0)
     const customers = ref<any>([])
 
     const form = reactive({
-      jobTag: '',
-      mrn: '',
       comment: '',
-      customer: '',
     })
 
-    const context = useContext()
+    const statusText = ref<String>('')
+    const showConfirmation = ref<Boolean>(false)
 
-    const increaseCounter = () => {
-      products.value.push({
-        productNumber: '',
-        productName: '',
-        quantityRequested: '0',
-        comment: '',
-      })
+    function intermediate(body: any) {
+      const finalBody = {
+        status: body.status,
+        password: body.password,
+        id: _props.mrn._id,
+        comment: form.comment,
+        products: _props.mrn.products,
+        nextApprovalOfficer: _props.mrn.nextApprovalOfficer,
+      }
+      approveCylinder(finalBody)
+    }
+
+    function approveCylinder(requestBody: any) {
+      ProductObject.approveMrn(requestBody)
+        .then(() => {
+          showConfirmation.value = false
+          location.reload()
+        })
+        .catch(() => {})
+    }
+
+    function confirmationComponent(text: String) {
+      statusText.value = text
+      showConfirmation.value = true
     }
 
     function fetchCustomers() {
@@ -365,11 +368,6 @@ export default defineComponent({
       })
     }
 
-    function decreaseCounter(index: any) {
-      products.value.splice(index, 1)
-      componentKey.value++
-    }
-
     function setProductName(id: string, index: any) {
       productsArray.value.forEach((element: any) => {
         if (element.name === id) {
@@ -379,61 +377,22 @@ export default defineComponent({
       componentKey.value++
     }
 
-    const submitForm = () => {
-      const data = {
-        products: products.value,
-        jobTag: form.jobTag,
-        mrn: form.mrn,
-        comment: form.comment,
-        customer: form.customer,
-      }
-
-      const rules = {
-        products: 'required|array',
-        'products.*.productNumber': 'required|string',
-        'products.*.productName': 'required|string',
-        'products.*.quantityRequested': 'required|numeric|min:1',
-        'products.*.comment': 'required|string',
-        jobTag: 'required|string',
-        comment: 'string',
-        customer: 'required|string',
-        mrn: 'required|string',
-      }
-
-      const validation = new Validator(data, rules)
-
-      if (validation.fails()) {
-        let messages: string[] = []
-        messages = ValidatorObject.getMessages(validation.errors)
-        messages.forEach((error: string) => {
-          context.$toast.error(error)
-        })
-      } else {
-        ProductObject.registerDisbursal(data)
-          .then(() => {
-            componentKey.value = 0
-            ctx.emit('reload')
-            close()
-          })
-          .catch(() => {})
-      }
-    }
-
     onMounted(() => {
       fetchCustomers()
       fetchProducts()
     })
+
     return {
       close,
-      decreaseCounter,
-      increaseCounter,
       products,
       form,
       componentKey,
       customers,
-      submitForm,
       productsArray,
       setProductName,
+      showConfirmation,
+      intermediate,
+      confirmationComponent,
     }
   },
 })

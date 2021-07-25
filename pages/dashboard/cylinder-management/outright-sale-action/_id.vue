@@ -4,7 +4,13 @@
       <div class="lg:col-span-3 overflow-x-auto bg-white px-4">
         <div class="md:flex justify-between px-8 py-4">
           <h1 class="flex-1 text-gray-400 font-medium text-lg my-2 md:my-0">
-            Cylinder Type
+            {{
+              transferType === 'sales'
+                ? 'Outright Sales'
+                : transferType === 'transfer'
+                ? 'Transfer'
+                : 'Outright Sales / Transfer'
+            }}
           </h1>
           <div class="flex space-x-6 float-right my-2 md:my-0">
             <button
@@ -18,9 +24,9 @@
                 py-2
                 rounded-sm
               "
-              @click="submit"
+              @click="confirmationComponent('approve')"
             >
-              <span>Save</span>
+              <span>Approve</span>
               <svg
                 class="w-6 h-6 fill-current text-btn-purple"
                 xmlns="http://www.w3.org/2000/svg"
@@ -45,9 +51,9 @@
                 rounded-sm
                 border border-btn-purple
               "
-              @click="goBack"
+              @click="confirmationComponent('reject')"
             >
-              <span>Cancel</span
+              <span>Reject</span
               ><svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="w-6 h-6 fill-current text-white"
@@ -64,7 +70,7 @@
             </button>
           </div>
         </div>
-        <div class="w-full overflow-x-auto px-2 my-8 border-collapse">
+        <div class="w-full overflow-x-auto px-6 my-8 border-collapse">
           <table class="table w-full border-collapse border-0">
             <thead>
               <tr>
@@ -72,22 +78,24 @@
                 <th
                   class="
                     font-light
-                    text-sm
+                    text-lg
                     px-2
                     py-2
                     text-center
+                    w-2/12
                     border border-gray-400
                   "
                 >
-                  Cylinder Number
+                  Assigned Number
                 </th>
                 <th
                   class="
                     font-light
-                    text-sm
+                    text-lg
                     px-2
                     py-2
                     text-center
+                    w-2/12
                     border border-gray-400
                   "
                 >
@@ -96,22 +104,24 @@
                 <th
                   class="
                     font-light
-                    text-sm
+                    text-lg
                     px-2
                     py-2
                     text-center
+                    w-2/12
                     border border-gray-400
                   "
                 >
-                  Manufacturing Date
+                  Manufacture Date
                 </th>
                 <th
                   class="
                     font-light
-                    text-sm
+                    text-lg
                     px-2
                     py-2
                     text-center
+                    w-2/12
                     border border-gray-400
                   "
                 >
@@ -120,52 +130,29 @@
                 <th
                   class="
                     font-light
-                    text-sm
+                    text-lg
                     px-2
                     py-2
                     text-center
+                    w-2/12
                     border border-gray-400
                   "
                 >
                   Volume
                 </th>
-                <!-- <th
-                  class="
-                    font-light
-                    text-sm
-                    px-2
-                    py-2
-                    text-center
-                    border border-gray-400
-                  "
-                >
-                  Height
-                </th> -->
                 <th
                   class="
                     font-light
-                    text-sm
+                    text-lg
                     px-2
                     py-2
                     text-center
+                    w-2/12
                     border border-gray-400
                   "
                 >
-                  Color Code
+                  Purchase Cost
                 </th>
-                <th
-                  class="
-                    font-light
-                    text-sm
-                    px-2
-                    py-2
-                    text-center
-                    border border-gray-400
-                  "
-                >
-                  Water Capacity
-                </th>
-                <th class="w-auto"></th>
               </tr>
             </thead>
             <tbody>
@@ -179,7 +166,8 @@
                 </td>
                 <td class="font-light text-lg text-center">
                   <select
-                    v-model="cylinder.cylinder"
+                    v-model="cylinder._id"
+                    disabled
                     class="
                       w-full
                       border-2 border-gray-200
@@ -187,31 +175,27 @@
                       rounded-sm
                       focus:outline-none
                     "
-                    @change="setOtherValues(cylinder.cylinder, i)"
                   >
-                    <option value="">Select a Cylinder</option>
                     <option
                       v-for="(cylin, index) in cylinderResponse"
                       :key="index"
                       :value="cylin._id"
                     >
-                      {{
-                        cylin.assignedNumber
-                          ? cylin.assignedNumber
-                          : 'No Assigned Number Yet'
-                      }}
+                      {{ cylin.cylinderNumber }}
                     </option>
                   </select>
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
-                    :default-value="cylinder.type"
+                    :default-value="cylinder.cylinderType"
+                    :is-disabled="true"
                     :input-placeholder="'Cylinder Type'"
                   />
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
-                    :default-value="cylinder.date"
+                    :default-value="formatDate(cylinder.dateManufactured)"
+                    :is-disabled="true"
                     :input-placeholder="'Manufacture Date'"
                     :input-type="'date'"
                   />
@@ -219,76 +203,27 @@
                 <td class="font-light text-lg text-center">
                   <input-component
                     :default-value="cylinder.gasType"
+                    :is-disabled="true"
                     :input-placeholder="'Gas Type'"
                   />
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
-                    :default-value="cylinder.volume"
-                    :input-placeholder="'Volume'"
-                  />
-                </td>
-                <!-- <td class="font-light text-lg text-center">
-                  <input-component
-                    :default-value="cylinder.volume"
-                    :input-placeholder="'Height'"
-                  />
-                </td> -->
-                <td class="font-light text-lg text-center">
-                  <input-component
-                    :default-value="cylinder.colorCode"
-                    :input-placeholder="'Color Code'"
+                    :default-value="cylinder.gasVolumeContent"
+                    :is-disabled="true"
+                    :input-placeholder="'Cost of Sale'"
                   />
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
-                    :default-value="cylinder.waterCapacity"
-                    :input-placeholder="'Water Capacity'"
+                    :default-value="cylinder.purchaseCost"
+                    :is-disabled="true"
+                    :input-placeholder="'Cost of Sale'"
                   />
-                </td>
-
-                <td class="font-light text-lg text-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-4 h-4 fill-current text-transparent"
-                    viewBox="0 0 24 24"
-                    stroke="black"
-                    @click="deleteCylinder(i)"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
                 </td>
               </tr>
             </tbody>
           </table>
-          <div class="inline-block px-16 py-4">
-            <button
-              class="flex justify-evenly items-center"
-              @click="increaseCounter()"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 fill-current text-transparent mr-2"
-                viewBox="0 0 24 24"
-                stroke="gray"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <span class="text-md text-gray-400 underline"
-                >Add New Cylinder</span
-              >
-            </button>
-          </div>
         </div>
         <div
           class="
@@ -302,18 +237,12 @@
           "
         >
           <select-component
-            :label-title="'Change Cylinder Type to'"
-            :default-option-text="'Select New Cylinder Type'"
-            :select-array="CylinderTypes"
-            :init-value="form.cylinderType"
-            @get="form.cylinderType = $event.value"
-          />
-          <select-component
-            :label-title="'Change Gas Type to'"
-            :default-option-text="'Select New Gas Type'"
-            :select-array="gasTypes"
-            :init-value="form.gasType"
-            @get="form.gasType = $event.value"
+            :label-title="'Transfer To'"
+            :default-option-text="'Select a Reciepient'"
+            :select-array="reciepients"
+            :init-value="form.reciepient"
+            :is-required="false"
+            :is-disabled="true"
           />
         </div>
         <div class="px-10 py-4">
@@ -325,8 +254,8 @@
             placeholder="Enter Comment here"
           />
         </div>
-        <div class="flex justify-between items-start py-2 px-10">
-          <div>
+        <div class="flex space-x-6 items-start py-2 px-10">
+          <div v-if="transferDetail.initiator">
             <p class="text-gray-500 text-sm font-medium leading-6">
               Initiated By
             </p>
@@ -336,9 +265,9 @@
             </p>
             <div class="flex items-start space-x-4 py-2">
               <img
-                v-if="auth.image"
+                v-if="transferDetail.initiator.image"
                 class="h-10 w-10 rounded-full"
-                :src="auth.image"
+                :src="transferDetail.initiator.image"
                 alt=""
               />
               <img
@@ -348,9 +277,50 @@
                 alt=""
               />
               <div>
-                <p class="text-black text-lg capitalize">{{ auth.name }}</p>
+                <p class="text-black text-lg capitalize">
+                  {{ transferDetail.initiator.name }}
+                </p>
                 <p class="text-gray-600 text-sm capitalize">
-                  {{ auth.subrole }} - {{ auth.role }}
+                  {{ transferDetail.initiator.subrole }} -
+                  {{ transferDetail.initiator.role }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            v-for="(approvingOfficer, index) in transferDetail.approvalOfficers"
+            :key="index"
+          >
+            <p class="text-gray-500 text-sm font-medium leading-6">
+              <span v-if="index + 1 == transferDetail.approvalOfficers.length">
+                Next Approving Officer</span
+              >
+              <span v-else> Approved By</span>
+            </p>
+            <p class="text-gray-500 text-sm font-medium">
+              <span>{{ new Date().toDateString() }}</span> @
+              <span>{{ new Date().toLocaleTimeString() }}</span>
+            </p>
+            <div class="flex items-start space-x-4 py-2">
+              <img
+                v-if="approvingOfficer.image"
+                class="h-10 w-10 rounded-full"
+                :src="approvingOfficer.image"
+                alt=""
+              />
+              <img
+                v-else
+                class="h-10 w-10 rounded-full"
+                src="@/assets/images/default-avatar.jpg"
+                alt=""
+              />
+              <div>
+                <p class="text-black text-lg capitalize">
+                  {{ approvingOfficer.name }}
+                </p>
+                <p class="text-gray-600 text-sm capitalize">
+                  {{ approvingOfficer.office }} -
+                  {{ approvingOfficer.department }}
                 </p>
               </div>
             </div>
@@ -390,6 +360,18 @@
         </div>
       </div>
     </div>
+    <confirmation
+      v-if="showConfirmation"
+      :display-text="statusText"
+      @close="showConfirmation = false"
+      @approve="intermediate($event)"
+    />
+    <final-step
+      v-if="showFinalStep"
+      :status="status"
+      :message="message"
+      @close="showFinalStep = false"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -399,27 +381,26 @@ import {
   reactive,
   ref,
   useContext,
+  useRoute,
   useRouter,
   watch,
 } from '@nuxtjs/composition-api'
 import SelectComponent from '@/components/Form/Select.vue'
 import InputComponent from '@/components/Form/Input.vue'
+import Confirmation from '@/components/Overlays/Confirmation.vue'
+import FinalStep from '@/components/Overlays/finalStep.vue'
 import { mainStore } from '@/module/Pinia'
 import { CylinderController } from '@/module/Cylinder'
-import { CylinderTypes } from '@/constants/variables'
-import Validator from 'validatorjs'
-import { ValidatorObject } from '~/module/Validation'
+import { CustomerController } from '~/module/Customer'
 
 export default defineComponent({
   name: 'Transfer',
-  components: { SelectComponent, InputComponent },
+  components: { SelectComponent, Confirmation, FinalStep, InputComponent },
   layout: 'dashboard',
   setup() {
     const form = reactive({
       reciepient: '',
       comment: '',
-      gasType: '',
-      cylinderType: '',
     })
     const appStore = mainStore()
     const auth: any = appStore.getLoggedInUser
@@ -428,125 +409,164 @@ export default defineComponent({
     const showFinalStep = ref(false)
     const status = ref('')
     const message = ref('')
+    const customers = ref<any>([])
     const cylinders = ref<any>([])
     const cylinderResponse = ref<any>([])
     const context = useContext()
+    const branches = ref<any>([])
+    const route = useRoute()
     const router = useRouter()
-    const gasTypes = ref<any>([])
+    const transferType = ref<string>('')
+    const transferId = ref<String>('')
+    const transferDetail = ref<any>('')
+    const statusText = ref<String>('')
 
     const componentKey = ref(0)
 
+    function formatDate(dateValue: string) {
+      const date = new Date(dateValue)
+      const year = date.getFullYear()
+      let month: any = date.getMonth() + 1
+      let dt: any = date.getDate()
+
+      if (dt < 10) {
+        dt = '0' + dt
+      }
+      if (month < 10) {
+        month = '0' + month
+      }
+
+      return year + '-' + month + '-' + dt
+    }
+
     onMounted(() => {
-      getGasType()
+      transferId.value = route.value.params.id
+      Promise.all([
+        getRegisteredCylinders(),
+        fetchBranches(),
+        fetchCustomers(),
+        getCylinderDetail(transferId.value),
+      ])
+    })
+
+    function getRegisteredCylinders() {
       CylinderController.getRegisteredCylindersUnPaginated().then(
         (response) => {
           cylinderResponse.value = response.data
         }
       )
-    })
-
-    const transferType = ref<string>('')
-
-    function deleteCylinder(index: number) {
-      cylinders.value.splice(index, 1)
     }
 
-    function increaseCounter() {
-      cylinders.value.push({
-        type: '',
-        cylinder: '',
-        date: '',
-        volume: '',
-        gasType: '',
-        waterCapacity: '',
-        colorCode: '',
-      })
-    }
-
-    function getGasType() {
-      CylinderController.getCylinders().then((response) => {
-        const myResponse = response.data.data.cylinders
-        gasTypes.value = myResponse.map((element: any) => {
+    function fetchCustomers() {
+      CustomerController.fetchUnPaginatedCustomers().then((response) => {
+        customers.value = response.map((element: any) => {
           return {
-            name: element.gasName,
+            name: element.name,
             value: element._id,
           }
         })
+        reciepients.value = customers.value
       })
     }
 
-    function setOtherValues(cylinderId: string, index: any) {
-      cylinderResponse.value.forEach((element: any) => {
-        if (element._id === cylinderId) {
-          cylinders.value[index].volume = element.gasVolumeContent
-          cylinders.value[index].type = element.cylinderType
-          cylinders.value[index].gasType = element.gasType.gasName
-          cylinders.value[index].colorCode = element.gasType.colorCode
-          cylinders.value[index].waterCapacity = element.waterCapacity
-          const newDate = new Date(element.dateManufactured)
-          const dateValue = {
-            year: newDate.getFullYear(),
-            day:
-              getlength(newDate.getDay()) > 1
-                ? newDate.getDay()
-                : `0${newDate.getDay()}`,
-            month:
-              getlength(newDate.getMonth()) > 1
-                ? newDate.getMonth()
-                : `0${newDate.getMonth()}`,
+    function confirmationComponent(text: String) {
+      statusText.value = text
+      showConfirmation.value = true
+    }
+
+    function fetchBranches() {
+      CylinderController.fetchBranches().then((response: any) => {
+        response.forEach((branch: any) => {
+          if (auth.branch !== branch._id) {
+            branches.value.push({
+              name: `${branch.name} - ${branch.location}`,
+              value: branch._id,
+            })
           }
-
-          const initDate = `${dateValue.year}-${dateValue.month}-${dateValue.day}`
-          cylinders.value[index].date = initDate
-        }
+        })
+        reciepients.value = branches.value
       })
-      componentKey.value++
     }
 
-    function getlength(number: number) {
-      return number.toString().length
+    function getCylinderDetail(id: String) {
+      CylinderController.getTransferCylinderDetail(id).then((response) => {
+        transferDetail.value = response.data
+        transferType.value = transferDetail.value.type
+        form.reciepient = transferDetail.value.to
+        cylinders.value = transferDetail.value.cylinders
+        componentKey.value++
+      })
+    }
+
+    type ApprovalType = {
+      status: String
+      id: String
+      password: String
+      comment: String
+    }
+
+    function intermediate(body: any) {
+      const finalBody: ApprovalType = {
+        status: body.status,
+        password: body.password,
+        id: transferId.value,
+        comment: form.comment,
+      }
+      approveCylinder(finalBody)
+    }
+
+    function approveCylinder(requestBody: ApprovalType) {
+      CylinderController.approveCylinderTransfer(requestBody)
+        .then(() => {
+          showConfirmation.value = false
+          goBack()
+        })
+        .catch(() => {})
     }
 
     const goBack = () => {
-      router.push('/dashboard/cylinder-management/cylinder-type')
+      router.push('/dashboard/cylinder-management/transfer-list')
     }
 
     const submit = () => {
-      const requestCylinders = cylinders.value.map((cylinder: any) => {
-        return cylinder.cylinder
-      })
-      const requestBody = {
-        comment: form.comment,
-        gasType: form.gasType,
-        cylinderType: form.cylinderType,
-        cylinders: requestCylinders,
-      }
-      const rules = {
-        cylinders: 'required|array',
-        comment: 'string',
-        cylinderType: 'required|string',
-        gasType: 'required|string',
-      }
-
-      const validation = new Validator(requestBody, rules)
-      if (validation.fails()) {
-        let messages: string[] = []
-        messages = ValidatorObject.getMessages(validation.errors)
-        messages.forEach((error: string) => {
-          context.$toast.error(error)
+      let validation = true
+      if (cylinders.value.length) {
+        cylinders.value.forEach((element: any) => {
+          if (element.cylinder === '') {
+            validation = false
+          }
         })
+      }
+      if (!validation || !cylinders.value.length) {
+        context.$toast.error('Cylinders are required')
+      } else if (!form.reciepient) {
+        context.$toast.error('All Fields are Required')
       } else {
-        CylinderController.updateCylinder(requestBody).then(() => {
-          goBack()
+        const requestCylinders = cylinders.value.map((element: any) => {
+          return element.cylinder
         })
+
+        const requestBody = {
+          type: transferType.value,
+          comment: form.comment,
+          to: form.reciepient,
+          cylinders: requestCylinders,
+        }
+
+        CylinderController.initiateCylinderTransfer(requestBody)
+          .then(() => {
+            form.comment = form.reciepient = ''
+            cylinders.value = []
+          })
+          .catch(() => {})
       }
     }
 
-    watch(status, (currentValue) => {
-      if (currentValue === 'success') {
-        message.value = 'You have successfully approved this request'
-      } else if (currentValue === 'error') {
-        message.value = 'You have regretably declined this request'
+    watch(transferType, (currentValue) => {
+      if (currentValue === 'sale') {
+        reciepients.value = customers.value
+      } else if (currentValue === 'division') {
+        reciepients.value = branches.value
       }
     })
 
@@ -556,20 +576,18 @@ export default defineComponent({
       showFinalStep,
       status,
       message,
+      customers,
+      intermediate,
       form,
-      increaseCounter,
       componentKey,
       cylinders,
       submit,
       cylinderResponse,
-      setOtherValues,
       auth,
-      deleteCylinder,
       transferType,
-      CylinderTypes,
-      getGasType,
-      gasTypes,
-      goBack,
+      transferDetail,
+      formatDate,
+      confirmationComponent,
     }
   },
 })

@@ -332,12 +332,26 @@
                   <div
                     v-if="
                       bodySingle.nextApprovalOfficer &&
-                      bodySingle.nextApprovalOfficer._id === user._id
+                      bodySingle.nextApprovalOfficer._id === user._id &&
+                      bodySingle.transferStatus !== 'completed'
                     "
                   >
                     <router-link
                       v-if="bodySingle.type === 'temporary'"
                       :to="`/dashboard/cylinder-management/within-division/${bodySingle._id}`"
+                      class="
+                        border border-btn-purple
+                        rounded-sm
+                        text-btn-purple
+                        px-4
+                        py-2
+                      "
+                    >
+                      Approve
+                    </router-link>
+                    <router-link
+                      else
+                      :to="`/dashboard/cylinder-management/outright-sale-action/${bodySingle._id}`"
                       class="
                         border border-btn-purple
                         rounded-sm

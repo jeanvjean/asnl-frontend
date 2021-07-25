@@ -118,7 +118,18 @@ class ProductRespository {
   fetchInventoryStatistics() {
     return new Promise<any>(async (resolve, reject) => {
       try {
-        const response: any = await $axios.get('/inventory/inventory-stats')
+        const response: any = await $axios.get('/inventory/fetch-grn-stats')
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  fetchDisbursalStatistics() {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get('/inventory/fetch-mrn-stats')
         resolve(response.data.data)
       } catch (error) {
         reject(error)
@@ -133,6 +144,33 @@ class ProductRespository {
           '/inventory/fetch-pending-disburse-requests'
         )
         resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  fetchPendingDisbursementDetail(id: String) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get(
+          `/inventory/fetch-disbursement/${id}`
+        )
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  approveMrn(requestBody: any) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.post(
+          `/inventory/approve-disbursement`,
+          requestBody
+        )
+        resolve(response.data)
       } catch (error) {
         reject(error)
       }

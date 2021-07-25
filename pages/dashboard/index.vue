@@ -148,7 +148,7 @@
 
       <div class="mb-4 px-4 w-full overflow-x-auto">
         <div class="flex items-start px-2 space-x-4 w-full">
-          <filter-component />
+          <filter-component @filter="showFilter = !showFilter" />
           <search-component
             :place-holder="'Search for Users, Cylinder no,gas type, Cylinder Volume'"
           />
@@ -182,6 +182,7 @@
       v-if="showRegister"
       @close=";(showRegister = false), getCylinders(1)"
     ></new-cylinder>
+    <cylinder-filter v-if="showFilter" @close="showFilter = !showFilter" />
   </div>
 </template>
 <script lang="ts">
@@ -195,9 +196,9 @@ import TableComponent from '@/components/Base/Table2.vue'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
 import { CylinderController } from '@/module/Cylinder'
 import SearchComponent from '@/components/Base/Search.vue'
-import FilterComponent from '@/components/Base/Filter.vue'
+import FilterComponent from '@/components/Base/FilterButton.vue'
 import Pagination from '@/components/Base/Pagination.vue'
-
+import CylinderFilter from '@/components/Overlays/CylinderFilter.vue'
 export default defineComponent({
   name: 'Analytics',
   components: {
@@ -206,10 +207,13 @@ export default defineComponent({
     SearchComponent,
     FilterComponent,
     Pagination,
+    CylinderFilter,
   },
   layout: 'dashboard',
 
   setup() {
+    const showFilter = ref<Boolean>(false)
+
     const headers = [
       'Cylinder No',
       'Gas Type',
@@ -271,6 +275,7 @@ export default defineComponent({
       changePage,
       getCylinders,
       showCylinderType,
+      showFilter,
     }
   },
 })

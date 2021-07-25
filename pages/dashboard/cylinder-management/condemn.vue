@@ -439,17 +439,6 @@
         </div>
       </div>
     </div>
-    <confirmation
-      v-if="showConfirmation"
-      @close="showConfirmation = false"
-      @approve=";(showConfirmation = false), (showFinalStep = true)"
-    />
-    <final-step
-      v-if="showFinalStep"
-      :status="status"
-      :message="message"
-      @close="showFinalStep = false"
-    />
   </div>
 </template>
 <script lang="ts">
@@ -463,8 +452,6 @@ import {
   useRouter,
   watch,
 } from '@nuxtjs/composition-api'
-import Confirmation from '@/components/Overlays/Confirmation.vue'
-import FinalStep from '@/components/Overlays/finalStep.vue'
 import { CylinderController } from '@/module/Cylinder'
 import Validator from 'validatorjs'
 import { ValidatorObject } from '@/module/Validation'
@@ -473,7 +460,7 @@ import InputComponent from '@/components/Form/Input.vue'
 
 export default defineComponent({
   name: 'Transfer',
-  components: { Confirmation, FinalStep, InputComponent },
+  components: { InputComponent },
   layout: 'dashboard',
   setup() {
     const appStore = mainStore()

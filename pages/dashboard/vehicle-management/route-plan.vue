@@ -1,7 +1,19 @@
 <template>
   <div class="py-6 px-6">
-    <div class="px-6">
+    <div class="px-6 flex justify-between items-center">
       <h1>Route Plan</h1>
+
+      <div class="flex items-center space-x-6">
+        <button
+          class="bg-btn-purple rounded-sm text-white px-4 py-2"
+          @click="showRoutePlan = true"
+        >
+          Create Route Plan
+        </button>
+        <button class="bg-btn-purple rounded-sm text-white px-4 py-2">
+          Approve
+        </button>
+      </div>
     </div>
 
     <div class="bg-white px-6 py-4 mt-6 overflow-auto">
@@ -105,6 +117,7 @@
       </div>
     </div>
     <single-route v-if="showRoute" @close="showRoute = false" />
+    <route-plan v-if="showRoutePlan" @close="showRoutePlan = false" />
   </div>
 </template>
 
@@ -114,9 +127,16 @@ import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
 import SingleRoute from '@/components/Overlays/DriverRoute.vue'
+import RoutePlan from '@/components/Overlays/RoutePlan.vue'
 export default defineComponent({
   name: 'Reports',
-  components: { Pagination, SearchComponent, SingleRoute, FilterComponent },
+  components: {
+    Pagination,
+    SearchComponent,
+    SingleRoute,
+    FilterComponent,
+    RoutePlan,
+  },
   layout: 'dashboard',
   setup() {
     const showRoute = ref(false)
@@ -147,6 +167,8 @@ export default defineComponent({
       currentPage: 1,
     })
 
+    const showRoutePlan = ref<Boolean>(false)
+
     const pickUp = ref(true)
     const delivery = ref(false)
     return {
@@ -157,6 +179,7 @@ export default defineComponent({
       active,
       showRoute,
       paginationProp,
+      showRoutePlan,
     }
   },
 })

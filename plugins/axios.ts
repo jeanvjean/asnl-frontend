@@ -12,10 +12,12 @@ const accessor: Plugin = ({ $axios, $toast }) => {
     }
   })
   $axios.onRequestError((error: any) => {
+    console.log(error)
     $toast.info(error.message)
   })
 
   $axios.onResponseError((error: any) => {
+    console.log(error)
     $toast.error(error.response.data.message)
   })
 

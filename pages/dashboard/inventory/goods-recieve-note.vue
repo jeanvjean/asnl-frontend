@@ -4,7 +4,9 @@
       <div class="bg-white px-10 pt-10 pb-24">
         <p class="font-medium text-black tracking-wide pb-4">Total GRN</p>
         <div class="relative space-x-4 flex justify-between">
-          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">834</p>
+          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
+            {{ statistics.total }}
+          </p>
           <svg
             width="117"
             height="69"
@@ -53,7 +55,9 @@
       <div class="bg-white px-10 pt-10 pb-24">
         <p class="font-medium text-black tracking-wide pb-4">Approved GRN</p>
         <div class="relative space-x-4 flex justify-between">
-          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">399</p>
+          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
+            {{ statistics.approved }}
+          </p>
           <svg
             width="117"
             height="69"
@@ -102,7 +106,9 @@
       <div class="bg-white px-10 pt-10 pb-24">
         <p class="font-medium text-black tracking-wide pb-4">Pending GRN</p>
         <div class="relative space-x-4 flex justify-between">
-          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">435</p>
+          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
+            {{ statistics.pending }}
+          </p>
           <svg
             width="117"
             height="69"
@@ -321,6 +327,12 @@ export default defineComponent({
       currentPage: 1,
     })
 
+    const statistics = reactive({
+      total: 0,
+      approved: 0,
+      pending: 0,
+    })
+
     function changePage(nextPage: number) {
       getInventories(nextPage)
     }
@@ -343,14 +355,15 @@ export default defineComponent({
     }
 
     function getInventoryStat() {
-      ProductObject.fetchInventoryStatistics().then((response) => {
-        console.log(response)
+      ProductObject.fetchInventoryStatistics().then((response: any) => {
+        statistics.total = response.totalGrn
+        statistics.approved = response.totalApprovedGrn
+        statistics.pending = response.totalPendingGrn
       })
     }
 
     onMounted(() => {
-      getInventories(1)
-      getInventoryStat()
+      Promise.all([getInventories(1), getInventoryStat()])
     })
 
     return {
@@ -364,6 +377,7 @@ export default defineComponent({
       paginationProp,
       changePage,
       getInventories,
+      statistics,
     }
   },
 })

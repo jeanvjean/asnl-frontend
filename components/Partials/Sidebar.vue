@@ -241,16 +241,16 @@ export default defineComponent({
               link: '/dashboard/inventory/new-product',
             },
             {
-              title: 'Supplier',
-              link: '/dashboard/cylinder-management/suppliers',
+              title: 'Suppliers',
+              link: '/dashboard/inventory/suppliers',
             },
             {
               title: 'GRN',
-              link: '/dashboard/cylinder-management/suppliers',
+              link: '/dashboard/inventory/goods-recieve-note',
             },
             {
               title: 'Issue Products',
-              link: '/dashboard/cylinder-management/suppliers',
+              link: '/dashboard/inventory/issue-products',
             },
           ],
         },
@@ -330,10 +330,6 @@ export default defineComponent({
             },
             {
               title: 'Transfer',
-              link: '/dashboard/cylinder-management/transfer',
-            },
-            {
-              title: 'Transfer Analytics',
               link: '/dashboard/cylinder-management/transfer-list',
             },
             {
@@ -415,6 +411,18 @@ export default defineComponent({
                   link: '#',
                 },
               ],
+            },
+          ],
+        },
+        {
+          title: 'Inventory',
+          icon: InventoryIcon,
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'Issue Products',
+              link: '/dashboard/inventory/issue-products',
             },
           ],
         },

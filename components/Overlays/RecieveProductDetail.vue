@@ -91,13 +91,13 @@
               <p>{{ inventory.invoiceNumber }}</p>
             </div>
           </div>
-          <div class="w-full overflow-x-auto">
-            <table class="w-full table-auto border-collapse">
+          <div class="w-full overflow-x-hidden">
+            <table class="w-full table table-auto border-collapse">
               <thead>
                 <tr>
                   <th
                     class="
-                      px-1
+                      px-2
                       py-2
                       font-medium
                       text-gray-600
@@ -107,28 +107,100 @@
                   >
                     S/N
                   </th>
-                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
+                  <th
+                    class="
+                      py-2
+                      font-medium
+                      text-gray-600
+                      capitalize
+                      text-sm
+                      w-2/12
+                    "
+                  >
                     Product Number
                   </th>
-                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
+                  <th
+                    class="
+                      py-2
+                      font-medium
+                      text-gray-600
+                      capitalize
+                      text-sm
+                      w-1/12
+                    "
+                  >
                     Product Name
                   </th>
-                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
+                  <th
+                    class="
+                      py-2
+                      font-medium
+                      text-gray-600
+                      capitalize
+                      text-sm
+                      w-2/12
+                    "
+                  >
                     Quantity
                   </th>
-                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
+                  <th
+                    class="
+                      py-2
+                      font-medium
+                      text-gray-600
+                      capitalize
+                      text-sm
+                      w-1/12
+                    "
+                  >
                     Passed
                   </th>
-                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
+                  <th
+                    class="
+                      py-2
+                      font-medium
+                      text-gray-600
+                      capitalize
+                      text-sm
+                      w-1/12
+                    "
+                  >
                     Rejected
                   </th>
-                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
+                  <th
+                    class="
+                      py-2
+                      font-medium
+                      text-gray-600
+                      capitalize
+                      text-sm
+                      w-1/12
+                    "
+                  >
                     Unit Cost
                   </th>
-                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
+                  <th
+                    class="
+                      py-2
+                      font-medium
+                      text-gray-600
+                      capitalize
+                      text-sm
+                      w-2/12
+                    "
+                  >
                     Total Cost
                   </th>
-                  <th class="py-2 font-medium text-gray-600 capitalize text-sm">
+                  <th
+                    class="
+                      py-2
+                      font-medium
+                      text-gray-600
+                      capitalize
+                      text-sm
+                      w-2/12
+                    "
+                  >
                     Comment
                   </th>
                 </tr>
@@ -234,37 +306,6 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div
-            class="
-              w-full
-              lg:w-3/5
-              lg:flex
-              lg:justify-between
-              lg:items-center
-              lg:space-x-6
-              mt-10
-            "
-          >
-            <button
-              class="px-4 py-2 rounded-sm bg-btn-purple text-white w-full"
-            >
-              Recieve Product
-            </button>
-            <button
-              class="
-                px-4
-                py-2
-                rounded-sm
-                bg-white
-                text-purple
-                border border-btn-purple
-                w-full
-              "
-              @click="close"
-            >
-              Cancel
-            </button>
           </div>
         </div>
       </div>

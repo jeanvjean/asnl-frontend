@@ -191,7 +191,7 @@
                 rounded-sm
                 border border-btn-purple
               "
-              @click=";(status = 'error'), (showConfirmation = true)"
+              @click="goBack"
             >
               <span>Cancel</span
               ><svg
@@ -515,17 +515,6 @@
         </div>
       </div>
     </div>
-    <confirmation
-      v-if="showConfirmation"
-      @close="showConfirmation = false"
-      @approve=";(showConfirmation = false), (showFinalStep = true)"
-    />
-    <final-step
-      v-if="showFinalStep"
-      :status="status"
-      :message="message"
-      @close="showFinalStep = false"
-    />
   </div>
 </template>
 <script lang="ts">
@@ -535,19 +524,18 @@ import {
   reactive,
   ref,
   useContext,
+  useRouter,
   watch,
 } from '@nuxtjs/composition-api'
 import SelectComponent from '@/components/Form/Select.vue'
 import InputComponent from '@/components/Form/Input.vue'
-import Confirmation from '@/components/Overlays/Confirmation.vue'
-import FinalStep from '@/components/Overlays/finalStep.vue'
 import { CustomerController } from '@/module/Customer'
 import { CylinderController } from '@/module/Cylinder'
 import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
   name: 'Transfer',
-  components: { SelectComponent, Confirmation, FinalStep, InputComponent },
+  components: { SelectComponent, InputComponent },
   layout: 'dashboard',
   setup() {
     const appStore = mainStore()
@@ -615,9 +603,24 @@ export default defineComponent({
       setVolumeAndType('', index)
 
       if (value !== '') {
-        const customerCylinders = await fetchCustomerCylinders(value)
+        let customerCylinders = []
+        customerCylinders = await fetchCustomerCylinders(value)
+
+        const availabeCylinders: any = []
+
+        for (let i = 0; i < customerCylinders.length; i++) {
+          if (customerCylinders[i].available) {
+            availabeCylinders.push(customerCylinders[i])
+          }
+        }
+
+        console.log(availabeCylinders.length)
+
+        if (availabeCylinders.length === 0) {
+          context.$toast.info('Customer has no available cylinder')
+        }
         cylinders.value[index].customer = value
-        cylindersArrays.value[index] = customerCylinders
+        cylindersArrays.value[index] = availabeCylinders
       } else {
         cylindersArrays.value[index] = []
         cylinders.value[index].cylinder = ''
@@ -688,11 +691,13 @@ export default defineComponent({
           requestBody.holdingTime = 30
         }
 
-        CylinderController.initiateCylinderTransfer(requestBody).then(() => {
-          form.type = form.comment = form.reciepient = ''
-          cylinders.value = []
-          componentKey.value++
-        })
+        CylinderController.initiateCylinderTransfer(requestBody)
+          .then(() => {
+            form.type = form.comment = form.reciepient = ''
+            cylinders.value = []
+            componentKey.value++
+          })
+          .catch(() => {})
       }
     }
 
@@ -700,11 +705,16 @@ export default defineComponent({
 
     async function fetchCustomerCylinders(customerId: String) {
       const response = await CustomerController.fetchCylinders(customerId)
-
       return response.docs
     }
 
     const gases = ref<any>([])
+
+    const router = useRouter()
+
+    const goBack = () => {
+      router.push('/dashboard/cylinder-management/transfer-list')
+    }
 
     function fetchGases() {
       CylinderController.getCylinders().then((response: any) => {
@@ -749,6 +759,7 @@ export default defineComponent({
       auth,
       transferType,
       gases,
+      goBack,
     }
   },
 })

@@ -112,8 +112,8 @@
                 text-btn-purple
               "
             >
-              <option value="sales">Outright Sales</option>
-              <option value="transfer">Transfer</option>
+              <option value="sale">Outright Sales</option>
+              <option value="division">Transfer</option>
             </select>
           </div>
 
@@ -227,7 +227,7 @@
                 rounded-sm
                 border border-btn-purple
               "
-              @click=";(status = 'error'), (showConfirmation = true)"
+              @click="goBack"
             >
               <span>Cancel</span
               ><svg
@@ -341,16 +341,13 @@
                     @change="setOtherValues(cylinder.cylinder, i)"
                   >
                     <option value="">Select a Cylinder</option>
+
                     <option
                       v-for="(cylin, index) in cylinderResponse"
                       :key="index"
                       :value="cylin._id"
                     >
-                      {{
-                        cylin.assignedNumber
-                          ? cylin.assignedNumber
-                          : 'No Assigned Number Yet'
-                      }}
+                      {{ cylin.cylinderNumber }}
                     </option>
                   </select>
                 </td>
@@ -516,17 +513,6 @@
         </div>
       </div>
     </div>
-    <confirmation
-      v-if="showConfirmation"
-      @close="showConfirmation = false"
-      @approve=";(showConfirmation = false), (showFinalStep = true)"
-    />
-    <final-step
-      v-if="showFinalStep"
-      :status="status"
-      :message="message"
-      @close="showFinalStep = false"
-    />
   </div>
 </template>
 <script lang="ts">
@@ -536,19 +522,18 @@ import {
   reactive,
   ref,
   useContext,
+  useRouter,
   watch,
 } from '@nuxtjs/composition-api'
 import SelectComponent from '@/components/Form/Select.vue'
 import InputComponent from '@/components/Form/Input.vue'
-import Confirmation from '@/components/Overlays/Confirmation.vue'
-import FinalStep from '@/components/Overlays/finalStep.vue'
 import { mainStore } from '@/module/Pinia'
 import { CylinderController } from '@/module/Cylinder'
 import { CustomerController } from '~/module/Customer'
 
 export default defineComponent({
   name: 'Transfer',
-  components: { SelectComponent, Confirmation, FinalStep, InputComponent },
+  components: { SelectComponent, InputComponent },
   layout: 'dashboard',
   setup() {
     const form = reactive({
@@ -571,16 +556,24 @@ export default defineComponent({
     const componentKey = ref(0)
 
     onMounted(() => {
-      fetchCustomers()
-      fetchBranches()
-      CylinderController.getRegisteredCylindersUnPaginated().then(
-        (response) => {
-          cylinderResponse.value = response.data
-        }
-      )
+      Promise.all([getRegisteredCylinders(), fetchBranches(), fetchCustomers()])
     })
 
-    const transferType = ref<string>('sales')
+    function getRegisteredCylinders() {
+      CylinderController.getRegisteredCylindersUnPaginated().then(
+        (response) => {
+          const cylinderResponseFirst = response.data
+
+          for (const i in cylinderResponseFirst) {
+            if (cylinderResponseFirst[i].available) {
+              cylinderResponse.value.push(cylinderResponseFirst[i])
+            }
+          }
+        }
+      )
+    }
+
+    const transferType = ref<string>('division')
 
     function fetchCustomers() {
       CustomerController.fetchUnPaginatedCustomers().then((response) => {
@@ -590,18 +583,21 @@ export default defineComponent({
             value: element._id,
           }
         })
-        reciepients.value = customers.value
+        // reciepients.value = customers.value
       })
     }
 
     function fetchBranches() {
       CylinderController.fetchBranches().then((response: any) => {
         response.forEach((branch: any) => {
-          branches.value.push({
-            name: `${branch.name} - ${branch.location}`,
-            value: branch._id,
-          })
+          if (auth.branch !== branch._id) {
+            branches.value.push({
+              name: `${branch.name} - ${branch.location}`,
+              value: branch._id,
+            })
+          }
         })
+        reciepients.value = branches.value
       })
     }
 
@@ -668,24 +664,30 @@ export default defineComponent({
         })
 
         const requestBody = {
-          type: 'permanent',
+          type: transferType.value,
           comment: form.comment,
           to: form.reciepient,
           cylinders: requestCylinders,
-          holdingTime: 30,
         }
 
-        CylinderController.initiateCylinderTransfer(requestBody).then(() => {
-          form.comment = form.reciepient = ''
-          cylinders.value = []
-        })
+        CylinderController.initiateCylinderTransfer(requestBody)
+          .then(() => {
+            goBack()
+          })
+          .catch(() => {})
       }
     }
 
+    const router = useRouter()
+
+    const goBack = () => {
+      router.push('/dashboard/cylinder-management/transfer-list')
+    }
+
     watch(transferType, (currentValue) => {
-      if (currentValue === 'sales') {
+      if (currentValue === 'sale') {
         reciepients.value = customers.value
-      } else {
+      } else if (currentValue === 'division') {
         reciepients.value = branches.value
       }
     })
@@ -707,6 +709,7 @@ export default defineComponent({
       auth,
       deleteCylinder,
       transferType,
+      goBack,
     }
   },
 })

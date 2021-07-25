@@ -6,7 +6,9 @@
           Total Issued Inventory
         </p>
         <div class="relative space-x-4 flex justify-between">
-          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">834</p>
+          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
+            {{ statistics.total }}
+          </p>
           <svg
             width="117"
             height="69"
@@ -57,7 +59,9 @@
           Approved Issued Inventory
         </p>
         <div class="relative space-x-4 flex justify-between">
-          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">399</p>
+          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
+            {{ statistics.approved }}
+          </p>
           <svg
             width="117"
             height="69"
@@ -108,7 +112,9 @@
           Pending Issued Inventory
         </p>
         <div class="relative space-x-4 flex justify-between">
-          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">435</p>
+          <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
+            {{ statistics.pending }}
+          </p>
           <svg
             width="117"
             height="69"
@@ -245,7 +251,7 @@
                   rounded-sm
                   text-btn-purple text-sm
                 "
-                @click="showIssueProduct = !showIssueProduct"
+                @click="fetchDisbursementDetail(mrn)"
               >
                 View Details
               </button>
@@ -256,6 +262,11 @@
     </div>
 
     <issue-product v-if="showIssueProduct" @close="showIssueProduct = false" />
+    <issue-product-detail
+      v-if="showIssueProductDetail"
+      :mrn="mrnDetail"
+      @close="showIssueProductDetail = false"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -269,11 +280,18 @@ import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
 import IssueProduct from '@/components/Overlays/IssueProducts.vue'
+import IssueProductDetail from '@/components/Overlays/IssueProductDetail.vue'
 import { ProductObject } from '~/module/Product'
 
 export default defineComponent({
   name: 'Analytics',
-  components: { Pagination, SearchComponent, FilterComponent, IssueProduct },
+  components: {
+    Pagination,
+    SearchComponent,
+    FilterComponent,
+    IssueProduct,
+    IssueProductDetail,
+  },
   layout: 'dashboard',
   setup() {
     const headers = [
@@ -286,12 +304,28 @@ export default defineComponent({
     ]
     const body = ref([])
     const showIssueProduct = ref(false)
+    const showIssueProductDetail = ref(false)
+    const mrnDetail = ref<any>()
 
     const paginationProp = reactive({
       hasNextPage: false,
       hasPrevPage: false,
       currentPage: 1,
     })
+
+    const statistics = reactive({
+      total: 0,
+      approved: 0,
+      pending: 0,
+    })
+
+    function getDisbursalStat() {
+      ProductObject.fetchDisbursalStatistics().then((response: any) => {
+        statistics.approved = response.totalApproved
+        statistics.total = response.totalIssuedOut
+        statistics.pending = response.totalPending
+      })
+    }
 
     function fetchPendingDisbursement() {
       ProductObject.fetchPendingDisbursement().then((response) => {
@@ -303,15 +337,24 @@ export default defineComponent({
       })
     }
 
+    function fetchDisbursementDetail(mrn: any) {
+      mrnDetail.value = mrn
+      showIssueProductDetail.value = true
+    }
+
     onMounted(() => {
-      fetchPendingDisbursement()
+      Promise.all([fetchPendingDisbursement(), getDisbursalStat()])
     })
 
     return {
       headers,
       body,
       showIssueProduct,
+      showIssueProductDetail,
       paginationProp,
+      statistics,
+      fetchDisbursementDetail,
+      mrnDetail,
     }
   },
 })

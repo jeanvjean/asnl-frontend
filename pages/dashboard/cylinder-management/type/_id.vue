@@ -329,7 +329,7 @@
           >
             <p class="text-gray-500 text-sm font-medium leading-6">
               <span v-if="index + 1 == transferRequest.approvalOfficers.length">
-                Next Approval Officer</span
+                Next Approving Officer</span
               >
               <span v-else> Approved By</span>
             </p>
