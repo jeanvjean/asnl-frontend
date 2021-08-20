@@ -1,7 +1,7 @@
 <template>
   <back-drop>
-    <div class="w-full h-full bg-gray-200">
-      <div class="flex justify-between items-center px-10 py-6 bg-white">
+    <div class="w-full h-full bg-gray-200 relative">
+      <div class="flex justify-between items-center px-10 py-4 bg-white">
         <h1 class="tracking-wide font-semibold text-black">ASOR0986</h1>
         <div class="flex items-center space-x-6">
           <button
@@ -65,7 +65,7 @@
                 "
               >
                 <svg
-                  class="w-4 h-4 text-center fill-current text-btn-purple"
+                  class="w-4 h-4 text-center fill-current text-white"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -77,16 +77,16 @@
               <div>
                 <div>
                   <p class="text-left text-btn-purple font-medium text-md">
-                    #2000.00
+                    Spare Part name
                   </p>
                   <p class="text-left text-gray-600 font-light text-sm">
-                    1 item
+                    Name of supplier
                   </p>
                 </div>
               </div>
             </div>
             <div>
-              <p class="text-gray-400 text-sm font-medium">
+              <p class="text-gray-400 text-sm font-semibold">
                 Aug 23, 2019 @ 05:45pm
               </p>
             </div>
@@ -105,7 +105,7 @@
               <div
                 class="
                   border border-btn-purple
-                  bg-btn-purple
+                  bg-btn-purple bg-opacity-25
                   rounded-full
                   w-6
                   h-6
@@ -114,29 +114,31 @@
               ></div>
               <div class="space-y-4">
                 <h3 class="text-gray-500 font-light text-sm">
-                  Previous Mileage
+                  Quantity Recieved
                 </h3>
-                <span>1200 miles</span>
+                <span>200</span>
               </div>
               <div class="space-y-4">
                 <h3 class="text-gray-500 font-light text-sm">
-                  Current Mileage
+                  Quantity Passed
                 </h3>
-                <span>1200 miles</span>
+                <span>190</span>
+              </div>
+              <div class="space-y-4">
+                <h3 class="text-gray-500 font-light text-sm">
+                  Quantity Rejected
+                </h3>
+                <span>190</span>
+              </div>
+              <div class="space-y-4">
+                <h3 class="text-gray-500 font-light text-sm">Unit Cost</h3>
+                <span>190</span>
+              </div>
+              <div class="space-y-4">
+                <h3 class="text-gray-500 font-light text-sm">Total Cost</h3>
+                <span>190</span>
               </div>
             </div>
-            <button
-              class="
-                px-4
-                py-2
-                rounded-sm
-                text-btn-purple
-                bg-transparent
-                border border-btn-purple
-              "
-            >
-              See Details
-            </button>
           </div>
         </div>
       </section>
@@ -232,6 +234,36 @@
           </div>
         </div>
       </section>
+      <div class="absolute bottom-2 left-0 w-full">
+        <div class="flex justify-between items-center px-12">
+          <button
+            class="
+              text-btn-purple
+              border-btn-purple
+              font-medium
+              rounded-sm
+              border
+              px-4
+              py-2
+            "
+          >
+            Edit Product
+          </button>
+          <button
+            class="
+              text-btn-purple
+              border-btn-purple
+              font-medium
+              rounded-sm
+              border
+              px-4
+              py-2
+            "
+          >
+            Delete Product
+          </button>
+        </div>
+      </div>
     </div>
   </back-drop>
 </template>
