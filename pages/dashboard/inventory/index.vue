@@ -1,7 +1,6 @@
 <template>
   <div class="py-6 px-6">
-    <card-slider :analytics="statistics" />
-    <div class="bg-white mt-8">
+    <div class="bg-white">
       <div class="overflow-x-auto w-full py-4">
         <div>
           <div
@@ -176,19 +175,64 @@
                 <td class="px-4 text-left py-4">{{ bodySingle.unitCost }}</td>
                 <td class="px-4 text-left py-4">{{ bodySingle.totalCost }}</td>
                 <td class="px-4 text-left py-4">{{ bodySingle.location }}</td>
-                <td class="px-4 text-center py-4">
-                  <router-link
-                    :to="'/dashboard/inventory/product/' + bodySingle._id"
+                <td class="px-4 text-left py-4 icon-button">
+                  <button class="mx-auto text-black w-6 h-6 relative">
+                    <svg
+                      class="fill-current"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M4 12a2 2 0 110-4 2 2 0 010 4zm6 0a2 2 0 110-4 2 2 0 010 4zm6 0a2 2 0 110-4 2 2 0 010 4z"
+                      />
+                    </svg>
+                  </button>
+                  <div
                     class="
-                      px-4
-                      py-2
-                      border border-btn-purple
+                      absolute
+                      bg-gray-50
+                      border border-gray-300
+                      w-32
+                      font-light
+                      text-sm
                       rounded-sm
-                      text-btn-purple text-sm
+                      action-menu
+                      z-50
                     "
                   >
-                    Details
-                  </router-link>
+                    <router-link
+                      class="
+                        block
+                        px-3
+                        py-2
+                        text-black
+                        focus:outline-none
+                        hover:bg-purple-300 hover:text-white
+                        w-full
+                        overflow-none
+                        text-center
+                      "
+                      :to="'/dashboard/inventory/product/' + bodySingle._id"
+                    >
+                      Details
+                    </router-link>
+                    <button
+                      type="button"
+                      class="
+                        block
+                        px-3
+                        py-2
+                        text-black
+                        focus:outline-none
+                        hover:bg-purple-300 hover:text-white
+                        w-full
+                        overflow-none
+                      "
+                      @click="showAuditLog = true"
+                    >
+                      Audit Log
+                    </button>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -196,6 +240,7 @@
         </div>
       </div>
     </div>
+    <audit-log v-if="showAuditLog" @close="showAuditLog = false" />
   </div>
 </template>
 <script lang="ts">
@@ -205,16 +250,15 @@ import {
   reactive,
   ref,
 } from '@nuxtjs/composition-api'
-
-import CardSlider from '@/components/Base/CardSlider.vue'
 import { ProductObject } from '@/module/Product'
 import FilterComponent from '@/components/Base/Filter.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import Pagination from '@/components/Base/Pagination.vue'
+import AuditLog from '@/components/Overlays/AuditLog.vue'
 
 export default defineComponent({
   name: 'CylinderPool',
-  components: { CardSlider, FilterComponent, SearchComponent, Pagination },
+  components: { FilterComponent, SearchComponent, Pagination, AuditLog },
   layout: 'dashboard',
   setup() {
     const headers = [
@@ -234,12 +278,10 @@ export default defineComponent({
     }
 
     const body = ref()
+    const showAuditLog = ref<Boolean>(false)
 
     onMounted(() => {
       getProducts(1)
-      ProductObject.fetchInventoryStatistics().then((response) => {
-        console.log(response)
-      })
     })
 
     function getProducts(pageValue: number) {
@@ -260,72 +302,27 @@ export default defineComponent({
     const showType = ref(false)
 
     const defaultState = ref(false)
-    const statistics = [
-      [
-        [
-          {
-            title: 'Name of Spare Part',
-            value: 0,
-          },
-          [
-            {
-              title: 'Instock',
-              value: 0,
-            },
-            {
-              title: 'Issued Out',
-              value: 0,
-            },
-          ],
-        ],
-        [
-          {
-            title: 'Name of Spare Part',
-            value: 0,
-          },
-          [
-            {
-              title: 'Instock',
-              value: 0,
-            },
-            {
-              title: 'Issued Out',
-              value: 0,
-            },
-          ],
-        ],
-        [
-          {
-            title: 'Name of Spare Part',
-            value: 0,
-          },
-          [
-            {
-              title: 'Instock',
-              value: 0,
-            },
-            {
-              title: 'Issued Out',
-              value: 0,
-            },
-          ],
-        ],
-      ],
-    ]
+
     return {
       headers,
       body,
       showType,
-      statistics,
       defaultState,
       paginationProp,
       changePage,
+      showAuditLog,
     }
   },
 })
 </script>
 <style scoped>
-*:focus {
-  outline: 0 !important;
+.action-menu {
+  display: none;
+}
+.icon-button:hover > .action-menu {
+  display: block;
+}
+.icon-button:focus > .action-menu {
+  display: block;
 }
 </style>

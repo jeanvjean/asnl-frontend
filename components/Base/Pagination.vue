@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center space-x-4">
+  <div class="flex flex-none items-center space-x-4">
     <div class="flex items-center space-x-4">
       <span class="text-sm text-btn-purple">Page</span>
       <svg

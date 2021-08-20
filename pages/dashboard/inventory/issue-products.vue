@@ -166,6 +166,7 @@
         <filter-component />
         <search-component :place-holder="'Search for MRN'" />
         <button
+          v-if="auth.role != 'admin'"
           class="
             px-4
             py-2
@@ -281,8 +282,8 @@ import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
 import IssueProduct from '@/components/Overlays/IssueProducts.vue'
 import IssueProductDetail from '@/components/Overlays/IssueProductDetail.vue'
-import { ProductObject } from '~/module/Product'
-
+import { ProductObject } from '@/module/Product'
+import { mainStore } from '@/module/Pinia'
 export default defineComponent({
   name: 'Analytics',
   components: {
@@ -302,6 +303,9 @@ export default defineComponent({
       'Status',
       'Date',
     ]
+
+    const appStore = mainStore()
+    const auth: any = appStore.getLoggedInUser
     const body = ref([])
     const showIssueProduct = ref(false)
     const showIssueProductDetail = ref(false)
@@ -355,6 +359,7 @@ export default defineComponent({
       statistics,
       fetchDisbursementDetail,
       mrnDetail,
+      auth,
     }
   },
 })

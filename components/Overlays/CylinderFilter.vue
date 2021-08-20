@@ -1,6 +1,17 @@
 <template>
   <back-drop>
-    <div class="w-1/2 float-right h-full bg-white relative pt-6 px-6">
+    <div
+      class="
+        w-1/2
+        float-right
+        h-full
+        bg-white
+        relative
+        pt-6
+        px-6
+        overflow-y-auto
+      "
+    >
       <div class="flex justify-between items-center mb-4 text-gray-400">
         <h1 class="text-lg font-semibold">Filters</h1>
         <svg
@@ -52,6 +63,48 @@
           >
             <input type="checkbox" />
             <h3>{{ stat }}</h3>
+          </span>
+        </div>
+      </div>
+
+      <div class="my-6">
+        <div
+          class="
+            flex
+            justify-between
+            items-center
+            text-sm
+            border-0 border-b-4 border-gray-200
+            text-gray-500
+            font-bold
+            mb-2
+            pb-1
+          "
+        >
+          <h3>STATE</h3>
+          <svg
+            class="w-5 h-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </div>
+        <div class="space-y-2.5 pt-1">
+          <span
+            v-for="(content, index) in cylinderContents"
+            :key="index"
+            class="flex items-center space-x-4 text-gray-600"
+          >
+            <input type="checkbox" />
+            <h3>{{ content }}</h3>
           </span>
         </div>
       </div>
@@ -224,10 +277,10 @@
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
-import BackDrop from '@/components/Base/SecondBackDrop.vue'
 import Multiselect from 'vue-multiselect'
-import { CylinderController } from '~/module/Cylinder'
-import { CustomerController } from '~/module/Customer'
+import BackDrop from '@/components/Base/SecondBackDrop.vue'
+import { CylinderController } from '@/module/Cylinder'
+import { CustomerController } from '@/module/Customer'
 
 export default defineComponent({
   components: { BackDrop, Multiselect },
@@ -235,8 +288,7 @@ export default defineComponent({
     const status = [
       'Cylinder with Air Separation',
       'Cylinder with Customer',
-      'Empty Cylinder',
-      'Filled Cylinder',
+      'Customer Cylinders with ASNL',
       'Marked for Maintenance',
       'Cylinder with Suppliers',
       'Cylinder with Internal Suppliers',
@@ -277,6 +329,8 @@ export default defineComponent({
 
     const types = ['Assigned', 'Buffer']
 
+    const cylinderContents = ['Filled', 'Empty']
+
     const close = () => {
       ctx.emit('close')
     }
@@ -289,6 +343,7 @@ export default defineComponent({
       gasModel,
       customerArray,
       customerModel,
+      cylinderContents,
     }
   },
 })

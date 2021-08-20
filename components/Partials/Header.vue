@@ -5,8 +5,7 @@
         px-4
         border-r border-gray-200
         text-gray-500
-        focus:outline-none
-        focus:ring-2 focus:ring-inset focus:ring-indigo-500
+        focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500
         md:hidden
       "
       @click="showMobileSidebar"
@@ -63,7 +62,9 @@
             text-gray-400
             hover:text-gray-500
             focus:outline-none
-            focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+            focus:ring-2
+            focus:ring-offset-2
+            focus:ring-indigo-500
           "
         >
           <span class="sr-only">View notifications</span>

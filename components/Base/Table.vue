@@ -112,8 +112,7 @@
                   py-2
                   text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-white
+                  hover:bg-purple-300 hover:text-white
                   w-full
                   overflow-none
                 "
@@ -128,8 +127,7 @@
                   py-2
                   text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-white
+                  hover:bg-purple-300 hover:text-white
                   w-full
                   overflow-none
                 "
@@ -144,12 +142,11 @@
                   py-2
                   text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-white
+                  hover:bg-purple-300 hover:text-white
                   w-full
                   overflow-none
                 "
-                @click="suspendUser(bodySingle.id, bodySingle.deactivated)"
+                @click="initiateReason('Suspending User')"
               >
                 <span v-if="bodySingle.deactivated">Activate User</span>
                 <span v-else>Suspend User</span>
@@ -161,8 +158,7 @@
                   py-2
                   text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-white
+                  hover:bg-purple-300 hover:text-white
                   w-full
                   overflow-none
                 "
@@ -177,8 +173,7 @@
                   py-2
                   text-center text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-white
+                  hover:bg-purple-300 hover:text-white
                   w-full
                   overflow-none
                   font-medium
@@ -210,6 +205,11 @@
       @refresh="emitToParent"
       @close="showChangeRole = false"
     />
+    <reason-component
+      v-if="showReason"
+      :action="reasonAction"
+      @close="showReason = !showReason"
+    />
   </div>
 </template>
 
@@ -223,11 +223,13 @@ import {
 import DeleteUser from '@/components/Overlays/DeleteUser.vue'
 import ChangeRole from '@/components/Overlays/ChangeRole.vue'
 import { UserController } from '@/module/User'
+import ReasonComponent from '@/components/Overlays/Reason.vue'
 
 export default defineComponent({
   components: {
     DeleteUser,
     ChangeRole,
+    ReasonComponent,
   },
   props: {
     head: {
@@ -245,6 +247,8 @@ export default defineComponent({
     const hoverUser = ref()
     const roles = ref<any>([])
     const context = useContext()
+    const showReason = ref<Boolean>(false)
+    const reasonAction = ref<String>('')
 
     function changeUser(i: number) {
       hoverUser.value = _props.body[i]
@@ -253,6 +257,11 @@ export default defineComponent({
     onMounted(() => {
       getRoles()
     })
+
+    function initiateReason(text: String) {
+      reasonAction.value = text
+      showReason.value = true
+    }
 
     const rolesColor: any = {
       security: 'bg-role-orange text-role-orange bg-opacity-25',
@@ -333,6 +342,9 @@ export default defineComponent({
       roles,
       suspendUser,
       resendInvite,
+      showReason,
+      reasonAction,
+      initiateReason,
     }
   },
 })

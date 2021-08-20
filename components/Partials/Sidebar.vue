@@ -245,7 +245,7 @@ export default defineComponent({
               link: '/dashboard/inventory/suppliers',
             },
             {
-              title: 'GRN',
+              title: 'Recieved Goods',
               link: '/dashboard/inventory/goods-recieve-note',
             },
             {

@@ -260,11 +260,11 @@ export default defineComponent({
           },
           [
             {
-              title: 'Buffer Cylinders',
+              title: 'Internal Suppliers',
               value: 0,
             },
             {
-              title: 'Assigned Cylinders',
+              title: 'External Suppliers',
               value: 0,
             },
           ],

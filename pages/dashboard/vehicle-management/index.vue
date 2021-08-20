@@ -132,8 +132,7 @@
                     py-2
                     text-black
                     focus:outline-none
-                    hover:bg-purple-300
-                    hover:text-white
+                    hover:bg-purple-300 hover:text-white
                     w-full
                     overflow-none
                   "
@@ -149,8 +148,7 @@
                     py-2
                     text-black
                     focus:outline-none
-                    hover:bg-purple-300
-                    hover:text-white
+                    hover:bg-purple-300 hover:text-white
                     w-full
                     overflow-none
                   "
@@ -165,8 +163,7 @@
                     py-2
                     text-black
                     focus:outline-none
-                    hover:bg-purple-300
-                    hover:text-white
+                    hover:bg-purple-300 hover:text-white
                     w-full
                     overflow-none
                   "
@@ -185,8 +182,7 @@
                     py-2
                     text-black
                     focus:outline-none
-                    hover:bg-purple-300
-                    hover:text-white
+                    hover:bg-purple-300 hover:text-white
                     w-full
                     overflow-none
                   "
@@ -202,8 +198,7 @@
                     py-2
                     text-black
                     focus:outline-none
-                    hover:bg-purple-300
-                    hover:text-white
+                    hover:bg-purple-300 hover:text-white
                     w-full
                     overflow-none
                   "
