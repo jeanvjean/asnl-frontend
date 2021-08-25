@@ -3,7 +3,11 @@
     <div class="w-1/5 bg-white rounded-sm px-4 py-4 text-black font-light">
       <div>
         <label for="">Reason for {{ action }}</label>
-        <textarea class="w-full border-2 border-gray-400" rows="5"></textarea>
+        <textarea
+          v-model="reasonString"
+          class="w-full border-2 border-gray-400"
+          rows="5"
+        ></textarea>
       </div>
       <div class="flex space-x-2">
         <button
@@ -16,6 +20,7 @@
             mt-4
             font-semibold
           "
+          @click="submitAction"
         >
           Submit
         </button>
@@ -40,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, ref, useContext } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 
 export default defineComponent({
@@ -57,8 +62,21 @@ export default defineComponent({
       ctx.emit('close')
     }
 
+    const reasonString = ref<String>('')
+    const context = useContext()
+
+    const submitAction = () => {
+      if (!reasonString.value) {
+        context.$toast.error('Reason is Required')
+      } else {
+        ctx.emit('reasonGiven', reasonString.value)
+      }
+    }
+
     return {
       close,
+      reasonString,
+      submitAction,
     }
   },
 })

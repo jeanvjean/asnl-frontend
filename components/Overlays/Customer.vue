@@ -481,8 +481,7 @@
                   py-4
                   text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-white
+                  hover:bg-purple-300 hover:text-white
                   w-full
                   overflow-none
                 "
@@ -496,8 +495,7 @@
                   py-4
                   text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-white
+                  hover:bg-purple-300 hover:text-white
                   w-full
                   overflow-none
                 "
@@ -558,8 +556,7 @@
                   py-4
                   text-black
                   focus:outline-none
-                  hover:bg-btn-purple
-                  hover:text-white
+                  hover:bg-btn-purple hover:text-white
                   w-full
                   overflow-none
                 "
@@ -573,8 +570,7 @@
                   py-4
                   text-black
                   focus:outline-none
-                  hover:bg-btn-purple
-                  hover:text-white
+                  hover:bg-btn-purple hover:text-white
                   w-full
                   overflow-none
                 "
@@ -598,6 +594,7 @@ import {
   ref,
   useContext,
 } from '@nuxtjs/composition-api'
+import Validator from 'validatorjs'
 import BackDrop from '@/components/Base/SecondBackDrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
@@ -605,7 +602,6 @@ import ButtonComponent from '@/components/Form/Button.vue'
 import TextAreaComponent from '@/components/Form/TextArea.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
 import { CustomerDto } from '@/types/Types'
-import Validator from 'validatorjs'
 import { ValidatorObject } from '~/module/Validation'
 import { CustomerController } from '~/module/Customer'
 import { VehicleController } from '~/module/Vehicle'

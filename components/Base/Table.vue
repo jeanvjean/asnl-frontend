@@ -146,7 +146,7 @@
                   w-full
                   overflow-none
                 "
-                @click="initiateReason('Suspending User')"
+                @click="initiateReason(bodySingle)"
               >
                 <span v-if="bodySingle.deactivated">Activate User</span>
                 <span v-else>Suspend User</span>
@@ -209,6 +209,7 @@
       v-if="showReason"
       :action="reasonAction"
       @close="showReason = !showReason"
+      @reasonGiven="suspendUser(selectedUser.id, selectedUser.status, $event)"
     />
   </div>
 </template>
@@ -217,6 +218,7 @@
 import {
   defineComponent,
   onMounted,
+  reactive,
   ref,
   useContext,
 } from '@nuxtjs/composition-api'
@@ -249,6 +251,10 @@ export default defineComponent({
     const context = useContext()
     const showReason = ref<Boolean>(false)
     const reasonAction = ref<String>('')
+    const selectedUser = reactive({
+      id: '',
+      status: false,
+    })
 
     function changeUser(i: number) {
       hoverUser.value = _props.body[i]
@@ -258,8 +264,18 @@ export default defineComponent({
       getRoles()
     })
 
-    function initiateReason(text: String) {
-      reasonAction.value = text
+    function initiateReason(user: any) {
+      selectedUser.id = user.id
+      selectedUser.status = !user.deactivated
+      reasonAction.value = !user.deactivated
+        ? 'Suspending User'
+        : 'Activating User'
+      showReason.value = true
+    }
+
+    function initiateDeleteReason(user: any) {
+      selectedUser.id = user.id
+      reasonAction.value = 'Deleting User'
       showReason.value = true
     }
 
@@ -274,10 +290,11 @@ export default defineComponent({
       return rolesColor[role] ?? rolesColor.default
     }
 
-    function suspendUser(userId: String, status: Boolean) {
-      const message = status ? 'User Re-activated' : 'User Suspended'
-      UserController.suspendUser(userId, status).then(() => {
+    function suspendUser(userId: String, status: Boolean, reason: String) {
+      const message = status === false ? 'User Re-activated' : 'User Suspended'
+      UserController.suspendUser(userId, !status, reason).then(() => {
         context.$toast.success(message)
+        showReason.value = false
         ctx.emit('refresh')
       })
     }
@@ -345,6 +362,8 @@ export default defineComponent({
       showReason,
       reasonAction,
       initiateReason,
+      selectedUser,
+      initiateDeleteReason,
     }
   },
 })

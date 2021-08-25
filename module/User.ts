@@ -11,11 +11,11 @@ class UserRepository {
     })
   }
 
-  suspendUser(userId: String, suspendStatus: Boolean) {
+  suspendUser(userId: String, suspendStatus: Boolean, reason: String) {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response = await $axios.get(
-          `/user/suspend/${userId}?suspend=${!suspendStatus}`
+          `/user/suspend/${userId}?suspend=${!suspendStatus}&reason=${reason}`
         )
         resolve(response.data)
       } catch (error) {
@@ -55,8 +55,8 @@ class UserRepository {
     return await $axios.get('/user/get-roles')
   }
 
-  async deleteUser(userId: number) {
-    return await $axios.delete('/user/delete-user/' + userId)
+  async deleteUser(userId: number, reason: String) {
+    return await $axios.delete(`/user/delete-user/${userId}?reason=${reason}`)
   }
 
   async updateUserRole(userId: String, role: String, subrole: String) {
