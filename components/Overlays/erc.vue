@@ -39,7 +39,9 @@
             <button
               class="
                 focus:outline-none
-                focus:border focus:border-0 focus:border-btn-purple
+                focus:border
+                focus:border-0
+                focus:border-btn-purple
               "
             >
               Cylinder 1
@@ -54,7 +56,7 @@
               Cylinder 4
             </button>
             <router-link
-              to="/dashboard/production/cylinders"
+              to="/dashboard/cylinder-management"
               class="focus:outline-none text-btn-purple"
               >View All</router-link
             >

@@ -453,6 +453,10 @@ export default defineComponent({
           showSubCategory: false,
           subCategories: [
             {
+              title: 'ERC List',
+              link: '/dashboard/production/erc-list',
+            },
+            {
               title: 'Production Schedule',
               link: '/dashboard/production/production-schedule',
             },

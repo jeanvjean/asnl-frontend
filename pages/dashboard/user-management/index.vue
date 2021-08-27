@@ -6,7 +6,9 @@
         <div class="bg-white px-10 pt-10 pb-24">
           <p class="font-medium text-black tracking-wide pb-4">Total Staff</p>
           <div class="relative space-x-4 flex justify-between">
-            <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">0</p>
+            <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
+              {{ userStatistics.totalUser }}
+            </p>
             <svg
               width="120"
               height="69"
@@ -34,7 +36,9 @@
         <div class="bg-white px-10 pt-10 pb-24">
           <p class="font-medium text-black tracking-wide pb-4">Active Staff</p>
           <div class="relative space-x-4 flex justify-between">
-            <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">0</p>
+            <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
+              {{ userStatistics.activeUser }}
+            </p>
             <svg
               width="120"
               height="69"
@@ -62,7 +66,9 @@
         <div class="bg-white px-10 pt-10 pb-24">
           <p class="font-medium text-black tracking-wide pb-4">Deleted Staff</p>
           <div class="relative space-x-4 flex justify-between">
-            <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">0</p>
+            <p class="absolute bottom-0 left-0 top-4 font-medium text-5xl">
+              {{ userStatistics.deletedUser }}
+            </p>
             <svg
               width="120"
               height="69"
@@ -280,6 +286,12 @@ export default defineComponent({
       currentPage: 1,
     })
 
+    const userStatistics = reactive({
+      totalUser: 0,
+      activeUser: 0,
+      deletedUser: 0,
+    })
+
     const body = ref([])
     function changePage(nextPage: number) {
       getUsers(nextPage)
@@ -309,8 +321,17 @@ export default defineComponent({
       })
     }
 
+    function fetchUserStat() {
+      UserController.fetchUserStatistics().then((response) => {
+        const mainResponse: any = response.data
+        userStatistics.totalUser = mainResponse.totalUsers
+        userStatistics.deletedUser = mainResponse.deletedUsers
+        userStatistics.activeUser = mainResponse.activeUsers
+      })
+    }
+
     onBeforeMount(() => {
-      getUsers(page.value)
+      Promise.all([getUsers(page.value), fetchUserStat()])
     })
 
     const defaultState = ref(false)
@@ -321,6 +342,7 @@ export default defineComponent({
       getUsers,
       paginationProp,
       changePage,
+      userStatistics,
     }
   },
 })

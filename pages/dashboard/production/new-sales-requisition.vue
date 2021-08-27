@@ -83,9 +83,18 @@
         <div
           v-for="(cylinder, index) in cylinders"
           :key="index"
-          class="w-full flex items-center space-x-1"
+          class="w-full flex items-center"
         >
-          <div class="grid grid-rows-1 md:grid-cols-4 gap-y-2 md:gap-x-0">
+          <div
+            class="
+              grid grid-rows-1
+              md:grid-cols-4
+              gap-y-2
+              md:gap-x-0
+              w-full
+              space-x-2
+            "
+          >
             <input
               type="number"
               class="py-3 rounded border border-gray-300 text-sm text-black"

@@ -78,6 +78,17 @@ class UserRepository {
       }
     })
   }
+
+  fetchUserStatistics() {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.get('/user/user-stats')
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 const UserController = new UserRepository()
