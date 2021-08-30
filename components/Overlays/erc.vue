@@ -56,7 +56,7 @@
               Cylinder 4
             </button>
             <router-link
-              to="/dashboard/cylinder-management"
+              to="/dashboard/production/cylinders"
               class="focus:outline-none text-btn-purple"
               >View All</router-link
             >

@@ -97,7 +97,11 @@
             >
               <td class="text-center">{{ index + 1 }}</td>
               <td class="px-4 text-left py-4 space-x-2">
-                {{ bodySingle.initiator.name }}
+                {{
+                  bodySingle.initiator && bodySingle.initiator.name
+                    ? bodySingle.initiator.name
+                    : 'No Initiator'
+                }}
               </td>
               <td class="px-4 text-left py-4 space-x-2">
                 {{ bodySingle.approvalStage }}

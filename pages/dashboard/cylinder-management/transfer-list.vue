@@ -300,7 +300,11 @@
                   {{ bodySingle.branch.location }}
                 </td>
                 <td class="px-4 text-center py-4 capitalize">
-                  {{ bodySingle.initiator.name }}
+                  {{
+                    bodySingle.initiator && bodySingle.initiator.name
+                      ? bodySingle.initiator.name
+                      : 'No Initiator'
+                  }}
                 </td>
                 <td class="px-4 text-center py-4 capitalize">
                   {{ bodySingle.approvalStage }}

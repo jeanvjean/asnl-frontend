@@ -28,128 +28,76 @@
       </div>
       <div class="grid grid-rows-1 md:grid-cols-2 gap-x-4">
         <select-component
-          :label-title="'Customer'"
+          :label-title="'Route Plan Type'"
           :select-array="customerTypes"
-          :default-option-text="'Select an Order Type'"
+          :default-option-text="'Select an Route Plan Type'"
           :init-value="form.customerType"
           @get="form.customerType = $event.value"
         />
 
         <select-component
-          :label-title="'Order Type'"
+          :label-title="'Driver Name'"
           :select-array="customerTypes"
-          :default-option-text="'Select an Order Type'"
+          :default-option-text="'Enter Driver Name'"
           :init-value="form.customerType"
           @get="form.customerType = $event.value"
         />
 
         <select-component
-          :label-title="'Activity'"
+          :label-title="'Vehicle Number'"
           :select-array="customerTypes"
-          :default-option-text="'Select an Order Type'"
+          :default-option-text="'Enter Vehicle Number'"
           :init-value="form.customerType"
           @get="form.customerType = $event.value"
         />
 
-        <select-component
-          :label-title="'Mode of Service'"
-          :select-array="customerTypes"
-          :default-option-text="'Select Mode of Service'"
-          :init-value="form.customerType"
-          @get="form.customerType = $event.value"
-        />
         <input-component
-          :label-title="'Start Date'"
-          :input-placeholder="'Enter Start Date'"
+          :label-title="'Fuel (Litres)'"
+          :input-placeholder="'Enter Fuel in Litres'"
           :default-value="form.modeOfService"
-          :input-type="'date'"
+          :input-type="'number'"
           @get="form.modeOfService = $event.value"
         />
 
         <input-component
-          :label-title="'End Date'"
-          :input-placeholder="'Enter End Date'"
+          :label-title="'Territory'"
+          :input-placeholder="'Enter Territory'"
+          :input-type="'text'"
+        />
+
+        <input-component
+          :label-title="'RPP Number'"
+          :input-placeholder="'Enter RPP Number'"
           :default-value="form.name"
-          :input-type="'date'"
+          :input-type="'text'"
           @get="form.name = $event.value"
         />
 
         <input-component
-          :label-title="'Departure'"
-          :input-placeholder="'Enter Departure Location'"
-          :default-value="form.rcNumber"
+          :label-title="'Date and Time'"
+          :input-placeholder="'Select Date & Time'"
+          :input-type="'datetime-local'"
           :is-required="false"
           @get="form.rcNumber = $event.value"
         />
-
-        <input-component
-          :label-title="'Destination'"
-          :input-placeholder="'Enter Destination Location'"
-          :default-value="form.nickName"
-          @get="form.nickName = $event.value"
-        />
-
-        <input-component
-          :label-title="'ERC Number'"
-          :input-placeholder="'Enter ERC Number'"
-          :default-value="form.address"
-          @get="form.address = $event.value"
-        />
-
-        <input-component
-          :label-title="'ICN Number'"
-          :input-placeholder="'Enter ICN Number'"
-          :default-value="form.contactPerson"
-          @get="form.contactPerson = $event.value"
-        />
       </div>
-      <span :key="componentKey">
+      <span :key="componentKey" class="block">
         <div
           class="
             border-t border-b-0 border-l-0 border-r-0
             pt-3
             my-2
             border-2 border-gray-300
-            flex
-            justify-between
-            items-center
             px-3
+            w-full
           "
         >
-          <h4>Products Section</h4>
-          <button
-            class="
-              flex
-              justify-center
-              items-center
-              bg-btn-purple
-              text-white
-              px-4
-              py-2
-              rounded-sm
-            "
-            @click="increment"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6 fill-current"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-              />
-            </svg>
-            <span class="text-white">Add Product</span>
-          </button>
+          <h4>Customer Details</h4>
         </div>
         <div
           v-for="(product, i) in products"
           :key="i"
-          class="grid grid-rows-1 md:grid-cols-2 gap-x-4"
+          class="grid grid-rows-1 md:grid-cols-2 gap-x-4 w-full"
         >
           <select-component
             :label-title="'Products'"
@@ -165,6 +113,50 @@
             :default-value="product.price"
           />
         </div>
+        <div class="w-full">
+          <button
+            class="
+              flex
+              space-x-2
+              items-center
+              bg-white
+              text-btn-purple
+              border border-btn-purple
+              px-4
+              py-2
+              rounded-sm
+              float-right
+              my-2
+            "
+            @click="increment"
+          >
+            <span>Add More Customer Details</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="#5C53FF"
+              class="w-6 h-6 fill-current text-white"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="grid grid-rows-1 md:grid-cols-2 gap-x-4 w-full">
+          <input-component
+            :label-title="'Total Quantity'"
+            :input-placeholder="'Enter Total Quantity'"
+          />
+          <input-component
+            :label-title="'Prepared By'"
+            :input-placeholder="'Enter Prepared By'"
+          />
+        </div>
       </span>
 
       <button
@@ -173,17 +165,17 @@
           mt-4
           px-8
           py-3
-          border border-blue-300
+          border border-btn-purple
           text-md
           font-semibold
           flex
           justify-between
-          bg-blue-500
+          bg-btn-purple
           text-white
         "
         @click="submit"
       >
-        Add Customer
+        Complete Route Plan
       </button>
     </div>
   </back-drop>
@@ -197,11 +189,11 @@ import {
   ref,
   useContext,
 } from '@nuxtjs/composition-api'
+import Validator from 'validatorjs'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import { ProductObject } from '@/module/Product'
-import Validator from 'validatorjs'
 import { CustomerController } from '@/module/Customer'
 import { ValidatorObject } from '@/module/Validation'
 

@@ -49,7 +49,7 @@
       </div>
       <h1
         v-else
-        class="capitalize font-semibold tracking-wide customFontRegular pl-4"
+        class="uppercase font-semibold tracking-wide customFontRegular pl-4"
       >
         {{ String(title).replace(/-/gi, ' ') }}
       </h1>
@@ -240,7 +240,6 @@ export default defineComponent({
     })
 
     const showBackButtons = [
-      'vehicle-performance-main',
       'corrective-maintenance-main',
       'new-product',
       'cylinder-type',

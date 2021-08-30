@@ -65,6 +65,19 @@ class VehicleRepository {
       }
     })
   }
+
+  fetchPerformance(id: String, startDate: Date, endDate: Date) {
+    return new Promise<any>((resolve, reject) => {
+      try {
+        const response = $axios.get(
+          `/vehicle/vehicle-performance/${id}?fromDate=${startDate}&toDate=${endDate}`
+        )
+        resolve(response)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 const VehicleController = new VehicleRepository()

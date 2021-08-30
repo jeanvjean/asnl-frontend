@@ -135,7 +135,8 @@ export default defineComponent({
 
     onBeforeMount(() => {
       CylinderController.getRegisteredCylinders(1).then((responses: any) => {
-        body.value = responses.data.cylinders
+        body.value = responses.data.cylinders.docs
+        console.log(body)
       })
     })
 

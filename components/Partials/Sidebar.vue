@@ -269,10 +269,6 @@ export default defineComponent({
               link: '/dashboard/vehicle-management/route-plan',
             },
             {
-              title: 'Vehicle Performance',
-              link: '/dashboard/vehicle-management/vehicle-performance',
-            },
-            {
               title: 'Corrective Maintenance',
               link: '/dashboard/vehicle-management/corrective-maintenance',
             },
@@ -299,6 +295,10 @@ export default defineComponent({
             {
               title: 'Cylinder Mgt. Report',
               link: '/dashboard/reports/cylinder',
+            },
+            {
+              title: 'Vehicle Performance',
+              link: '/dashboard/vehicle-management/vehicle-performance',
             },
           ],
         },
@@ -454,7 +454,7 @@ export default defineComponent({
           subCategories: [
             {
               title: 'ERC List',
-              link: '/dashboard/production/erc-list',
+              link: '/dashboard/production/ecr-list',
             },
             {
               title: 'Production Schedule',
@@ -546,16 +546,23 @@ export default defineComponent({
                 },
               ],
             },
-            {
-              title: 'Vehicle Performance',
-              link: '/dashboard/vehicle-management/vehicle-performance',
-            },
           ],
         },
         {
           title: 'Reports',
           icon: ReportIcon,
-          link: '/dashboard/reports/',
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'All Reports',
+              link: '/dashboard/reports/',
+            },
+            {
+              title: 'Vehicle Performance',
+              link: '/dashboard/vehicle-management/vehicle-performance',
+            },
+          ],
         },
         logout,
       ],

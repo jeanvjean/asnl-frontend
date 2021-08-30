@@ -265,20 +265,29 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, watch } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  ref,
+  useRoute,
+  watch,
+} from '@nuxtjs/composition-api'
 import Confirmation from '@/components/Overlays/Confirmation.vue'
 import FinalStep from '@/components/Overlays/finalStep.vue'
+import { VehicleController } from '@/module/Vehicle'
 export default defineComponent({
   name: 'Transfer',
   components: { Confirmation, FinalStep },
   layout: 'dashboard',
   setup() {
+    const route = useRoute()
     const types = ['Temporary Transfer']
     const reciepients = ['Isaac Babalola']
     const showConfirmation = ref(false)
     const showFinalStep = ref(false)
     const status = ref('')
     const message = ref('')
+    const vehicleId: String = route.value.params.id
     const details = [
       [
         {
@@ -332,6 +341,28 @@ export default defineComponent({
     const deduct = () => {
       tds.value--
     }
+
+    function fetchPerformance() {
+      const startDate = new Date('2021/01/01')
+      const endDate = new Date()
+
+      VehicleController.fetchPerformance(vehicleId, startDate, endDate).then(
+        (response: any) => {
+          console.log(response)
+        }
+      )
+    }
+
+    function fetchVehicle() {
+      VehicleController.fetchVehicle(vehicleId).then((response) => {
+        console.log(response)
+      })
+    }
+
+    onMounted(() => {
+      Promise.all([fetchVehicle(), fetchPerformance()])
+    })
+
     watch(status, (currentValue) => {
       // eslint-disable-next-line no-console
       console.log(currentValue)

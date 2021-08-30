@@ -40,7 +40,7 @@
             <td class="px-4 text-center py-4">{{ bodySingle.currMile }}</td>
             <td class="px-4 text-center py-4">
               <router-link
-                :to="'/dashboard/vehicle-management/vehicle-performance-main/'"
+                :to="`/dashboard/vehicle-management/performance/${bodySingle._id}`"
                 class="
                   px-4
                   py-2
