@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-x-auto w-full px-6">
-    <table class="w-full table-auto">
+    <table id="users-list" class="w-full table-auto">
       <thead class="bg-gray-100">
         <tr>
           <th

@@ -12,8 +12,7 @@
           h-full
           px-4
           py-4
-          lg:px-12
-          lg:py-12
+          lg:px-12 lg:py-12
           grid grid-rows-1
           lg:grid-cols-3
           sm:gap-y-3
