@@ -10,20 +10,13 @@
         ></textarea>
       </div>
       <div class="flex space-x-2">
-        <button
-          class="
-            w-full
-            text-white
-            bg-btn-purple
-            py-3
-            rounded-sm
-            mt-4
-            font-semibold
-          "
-          @click="submitAction"
-        >
-          Submit
-        </button>
+        <button-component
+          :button-text="buttonActionTitle"
+          :button-class="'w-full text-white bg-btn-purple py-3 rounded-sm mt-4 font-semibold'"
+          :loading-status="buttonLoadingStatus"
+          :loading-text="buttonLoadingText"
+          @buttonClicked="submitAction"
+        />
         <button
           class="
             w-full
@@ -47,14 +40,20 @@
 <script lang="ts">
 import { defineComponent, ref, useContext } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
+import ButtonComponent from '@/components/Form/Button.vue'
 
 export default defineComponent({
-  components: { BackDrop },
+  components: { BackDrop, ButtonComponent },
   props: {
     action: {
       type: String,
       required: true,
       default: 'Deleting User',
+    },
+    buttonActionTitle: {
+      type: String,
+      required: true,
+      default: 'Delete',
     },
   },
   setup(_props, ctx) {
@@ -64,11 +63,14 @@ export default defineComponent({
 
     const reasonString = ref<String>('')
     const context = useContext()
+    const buttonLoadingStatus = ref<Boolean>(false)
+    const buttonLoadingText = 'Deleting'
 
     const submitAction = () => {
       if (!reasonString.value) {
         context.$toast.error('Reason is Required')
       } else {
+        buttonLoadingStatus.value = true
         ctx.emit('reasonGiven', reasonString.value)
       }
     }
@@ -77,6 +79,8 @@ export default defineComponent({
       close,
       reasonString,
       submitAction,
+      buttonLoadingStatus,
+      buttonLoadingText,
     }
   },
 })

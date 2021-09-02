@@ -225,6 +225,7 @@
                   :pagination-details="paginationProp"
                   @next="changePage($event.value)"
                   @prev="changePage($event.value)"
+                  @limitChanged="adjustPageLimit($event)"
                 />
                 <button
                   class="
@@ -304,6 +305,7 @@ export default defineComponent({
   setup() {
     const headers = ['Name', 'Phone', 'Email', 'Department', 'Status']
     const page = ref<number>(1)
+    const pageLimit = ref<number>(10)
     const showFilter = ref<Boolean>(false)
 
     const paginationProp = reactive({
@@ -342,18 +344,21 @@ export default defineComponent({
 
     const userFilters = reactive({
       departments: { type: 'checkbox', list: [] },
-      status: { type: 'radio', list: ['Active', 'Suspended', 'Verified'] },
-      state: { type: 'checkbox', list: ['Deleted'] },
+      status: { type: 'radio', list: ['Active', 'Suspended', 'Deleted'] },
     })
 
     const body = ref([])
 
     function changePage(nextPage: number) {
-      getUsers(nextPage)
+      getUsers(nextPage, pageLimit.value)
     }
 
-    function getUsers(pageValue: number) {
-      UserController.getUsers(pageValue).then((response: any) => {
+    function adjustPageLimit(newLimit: number) {
+      getUsers(1, newLimit)
+    }
+
+    function getUsers(pageValue: number, limit: number) {
+      UserController.getUsers(pageValue, limit).then((response: any) => {
         const myResponse = response.data.data
 
         paginationProp.hasNextPage = myResponse.hasNextPage
@@ -396,7 +401,11 @@ export default defineComponent({
     }
 
     onBeforeMount(() => {
-      Promise.all([getUsers(page.value), fetchUserStat(), fetchRoles()])
+      Promise.all([
+        getUsers(page.value, pageLimit.value),
+        fetchUserStat(),
+        fetchRoles(),
+      ])
     })
 
     const defaultState = ref(false)
@@ -411,6 +420,7 @@ export default defineComponent({
       showFilter,
       userFilters,
       downloadTable,
+      adjustPageLimit,
     }
   },
 })

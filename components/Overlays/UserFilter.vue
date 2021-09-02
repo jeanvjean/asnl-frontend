@@ -70,6 +70,52 @@
           </span>
         </div>
       </div>
+
+      <div class="my-6">
+        <div
+          class="
+            flex
+            justify-between
+            items-center
+            text-sm
+            border-0 border-b-4 border-gray-200
+            text-gray-500
+            font-bold
+            mb-2
+            pb-1
+          "
+        >
+          <h3>DATE</h3>
+          <svg
+            class="w-5 h-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </div>
+        <div class="pt-2 my-1">
+          <label for="">From </label>
+          <input
+            type="date"
+            class="w-full border-2 border-gray-300 text-gray-400"
+          />
+        </div>
+        <div class="pt-2 my-1">
+          <label for="">To</label>
+          <input
+            type="date"
+            class="w-full border-2 border-gray-300 text-gray-400"
+          />
+        </div>
+      </div>
     </div>
   </back-drop>
 </template>

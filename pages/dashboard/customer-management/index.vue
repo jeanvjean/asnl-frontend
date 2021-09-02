@@ -240,8 +240,7 @@
                           py-2
                           text-black
                           focus:outline-none
-                          hover:bg-purple-300
-                          hover:text-white
+                          hover:bg-purple-300 hover:text-white
                           w-full
                           overflow-none
                         "
@@ -256,8 +255,7 @@
                           py-2
                           text-black
                           focus:outline-none
-                          hover:bg-purple-300
-                          hover:text-white
+                          hover:bg-purple-300 hover:text-white
                           w-full
                           overflow-none
                         "
@@ -272,10 +270,13 @@
                           py-2
                           text-black
                           focus:outline-none
-                          hover:bg-purple-300
-                          hover:text-white
+                          hover:bg-purple-300 hover:text-white
                           w-full
                           overflow-none
+                        "
+                        @click="
+                          changeCustomer(bodySingle._id),
+                            (showDeleteReason = true)
                         "
                       >
                         Delete Customer
@@ -299,6 +300,12 @@
       :displayed-section="section"
       @close="showSingleCustomer = !showSingleCustomer"
     ></customer>
+    <reason-component
+      v-if="showDeleteReason"
+      :action="'Deleting Customer'"
+      @close="showDeleteReason = false"
+      @reasonGiven="deleteCustomer($event)"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -315,6 +322,7 @@ import FilterComponent from '@/components/Base/Filter.vue'
 import { CustomerController } from '@/module/Customer'
 import Pagination from '@/components/Base/Pagination.vue'
 import { CustomerDto } from '@/types/Types'
+import ReasonComponent from '@/components/Overlays/Reason.vue'
 
 export default defineComponent({
   name: 'Home',
@@ -324,6 +332,7 @@ export default defineComponent({
     Customer,
     FilterComponent,
     Pagination,
+    ReasonComponent,
   },
   layout: 'dashboard',
   setup() {
@@ -339,6 +348,7 @@ export default defineComponent({
 
     const body = ref<any>([])
     const customerProp = ref<CustomerDto>()
+    const showDeleteReason = ref<Boolean>(false)
 
     function showCustomerDetail(
       customer: CustomerDto,
@@ -352,6 +362,7 @@ export default defineComponent({
     const defaultState = ref<Boolean>(false)
     const showNewCustomer = ref<Boolean>(false)
     const showSingleCustomer = ref<Boolean>(false)
+    const selectedCustomer = ref<String>('')
 
     function fetchCustomers(page: number) {
       CustomerController.fetchCustomers(page).then((response) => {
@@ -360,6 +371,19 @@ export default defineComponent({
         paginationProp.hasPrevPage = response.hasPrevPage
         paginationProp.currentPage = response.page
       })
+    }
+
+    function deleteCustomer(reason: String) {
+      CustomerController.deleteCustomer(selectedCustomer.value, reason).then(
+        () => {
+          showDeleteReason.value = false
+          fetchCustomers(1)
+        }
+      )
+    }
+
+    function changeCustomer(newCustomerId: String) {
+      selectedCustomer.value = newCustomerId
     }
 
     function changePage(pageValue: number) {
@@ -380,6 +404,9 @@ export default defineComponent({
       customerProp,
       showCustomerDetail,
       section,
+      showDeleteReason,
+      changeCustomer,
+      deleteCustomer,
     }
   },
 })

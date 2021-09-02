@@ -82,6 +82,19 @@ class Customer {
       }
     })
   }
+
+  deleteCustomer(customerId: String, reason: String) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.delete(
+          `/customer/delete-customer/${customerId}?reason=${reason}`
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 const CustomerController = new Customer()

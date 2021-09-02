@@ -182,6 +182,14 @@
           </svg>
         </div>
         <div class="pt-2 my-1">
+          <label for="">From </label>
+          <input
+            type="date"
+            class="w-full border-2 border-gray-300 text-gray-400"
+          />
+        </div>
+        <div class="pt-2 my-1">
+          <label for="">To</label>
           <input
             type="date"
             class="w-full border-2 border-gray-300 text-gray-400"
@@ -290,7 +298,8 @@ export default defineComponent({
       'Cylinder with Customer',
       'Customer Cylinders with ASNL',
       'Marked for Maintenance',
-      'Cylinder with Suppliers',
+      'Bad Customer Cylinders with ASNL',
+      'Bad ASNL Cylinders',
       'Cylinder with Internal Suppliers',
       'Cylinder with External Suppliers',
     ]
@@ -327,7 +336,7 @@ export default defineComponent({
       Promise.all([fetchGases(), fetchCustomers()])
     })
 
-    const types = ['Assigned', 'Buffer']
+    const types = ['Assigned', 'Buffer', 'Customer']
 
     const cylinderContents = ['Filled', 'Empty']
 

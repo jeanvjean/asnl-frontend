@@ -1,6 +1,9 @@
 <template>
   <back-drop>
-    <div class="w-1/5 bg-white rounded-sm px-4 py-4 text-black font-light z-20">
+    <div
+      :key="componentKey"
+      class="w-1/5 bg-white rounded-sm px-4 py-4 text-black font-light z-20"
+    >
       <div class="relative">
         <h1 class="text-lg font-medium">Change Role</h1>
         <svg
@@ -50,19 +53,41 @@
         </div>
       </div>
       <div class="px-2 py-2">
-        <h6 class="text-sm font-light">Change Role</h6>
-        <div class="flex items-center space-x-4">
-          <select-component
-            :select-array="roles"
-            :init-value="form.role"
-            @get=";(form.role = $event.value), changeSubroles(form.role)"
-          />
+        <div>
+          <label class="block text-black text-base font-semibold" for=""
+            >From</label
+          >
+          <div class="flex items-center space-x-4">
+            <select-component
+              :select-array="roles"
+              :init-value="user.role"
+              :is-disabled="true"
+            />
 
-          <select-component
-            :select-array="subroles"
-            :init-value="form.subrole"
-            @get="form.subrole = $event.value"
-          />
+            <select-component
+              :select-array="defaultSubRoles"
+              :init-value="user.subrole"
+              :is-disabled="true"
+            />
+          </div>
+        </div>
+        <div>
+          <label class="block text-black text-base font-semibold" for=""
+            >To</label
+          >
+          <div class="flex items-center space-x-4">
+            <select-component
+              :select-array="roles"
+              :init-value="form.role"
+              @get=";(form.role = $event.value), changeSubroles(form.role)"
+            />
+
+            <select-component
+              :select-array="subroles"
+              :init-value="form.subrole"
+              @get="form.subrole = $event.value"
+            />
+          </div>
         </div>
       </div>
       <div>
@@ -108,13 +133,19 @@ export default defineComponent({
     const loading = ref(false)
     const loadingText = 'Updating'
     const subroles = ref<any>([])
+    const defaultSubRoles = ref<any>([])
     const context = useContext()
+    const componentKey = ref<number>(0)
 
     const form = reactive({
       id: '',
       role: '',
       subrole: '',
     })
+
+    const changeComponentKey = () => {
+      componentKey.value = Math.floor(Math.random() * 100)
+    }
 
     onBeforeMount(() => {
       form.id = _props.user.id
@@ -123,6 +154,7 @@ export default defineComponent({
       _props.roles.forEach((element: any) => {
         if (element.value === _props.user.role) {
           subroles.value = element.subroles
+          defaultSubRoles.value = element.subroles
         }
       })
     })
@@ -136,6 +168,7 @@ export default defineComponent({
         })
       }
       form.subrole = ''
+      changeComponentKey()
     }
 
     const updateUserRole = () => {
@@ -162,6 +195,8 @@ export default defineComponent({
       subroles,
       form,
       changeSubroles,
+      componentKey,
+      defaultSubRoles,
     }
   },
 })
