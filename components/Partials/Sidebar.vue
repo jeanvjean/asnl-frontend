@@ -269,8 +269,8 @@ export default defineComponent({
               link: '/dashboard/vehicle-management/route-plan',
             },
             {
-              title: 'Corrective Maintenance',
-              link: '/dashboard/vehicle-management/corrective-maintenance',
+              title: 'Corrective Maintenance Requests',
+              link: '#',
             },
             {
               title: 'Pre-Inspection Maintenance',
@@ -421,6 +421,10 @@ export default defineComponent({
           showSubCategory: false,
           subCategories: [
             {
+              title: 'Recieved Goods',
+              link: '/dashboard/inventory/goods-recieve-note',
+            },
+            {
               title: 'Issue Products',
               link: '/dashboard/inventory/issue-products',
             },
@@ -524,7 +528,7 @@ export default defineComponent({
           showSubCategory: false,
           subCategories: [
             {
-              title: 'Register',
+              title: 'Register Vehicle',
               link: '/dashboard/vehicle-management/',
             },
             {
@@ -541,8 +545,8 @@ export default defineComponent({
                   link: '/dashboard/vehicle-management/pre-inspection-maintenance',
                 },
                 {
-                  title: 'Corrective Maintenance',
-                  link: '/dashboard/vehicle-management/corrective-maintenance',
+                  title: 'Corrective Maintenance Requests',
+                  link: '#',
                 },
               ],
             },

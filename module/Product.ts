@@ -1,6 +1,5 @@
 /* eslint-disable no-async-promise-executor */
 import { $axios } from '@/utils/api'
-import { DisbursalDto } from '~/types/Types'
 
 class ProductRespository {
   async createProduct(request: Object) {
@@ -90,7 +89,7 @@ class ProductRespository {
     })
   }
 
-  registerDisbursal(requestBody: DisbursalDto) {
+  registerDisbursal(requestBody: FormData) {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.post(

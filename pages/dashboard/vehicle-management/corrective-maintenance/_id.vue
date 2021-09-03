@@ -80,28 +80,28 @@
           >
             <div class="flex items-center justify-center">
               <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Cylinder No</h4>
+                <h4 class="text-gray-400 font-medium">Vehicle Name</h4>
                 <p>342343234</p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Gas Type</h4>
+                <h4 class="text-gray-400 font-medium">Vehicle Number</h4>
                 <p>Hydrogen</p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Cylinder Volume</h4>
+                <h4 class="text-gray-400 font-medium">Previous Mileage</h4>
                 <p>231.32kg</p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Current Height</h4>
+                <h4 class="text-gray-400 font-medium">Current Mileage</h4>
                 <p>42</p>
               </div>
             </div>
@@ -121,28 +121,28 @@
           >
             <div class="flex items-center justify-center">
               <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Cylinder Type</h4>
+                <h4 class="text-gray-400 font-medium">Date</h4>
                 <p>Buffer Cylinder</p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Manufacturing Date</h4>
+                <h4 class="text-gray-400 font-medium">Amount Spent</h4>
                 <p>12/05/2020</p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Color Code</h4>
+                <h4 class="text-gray-400 font-medium">Maintenance Type</h4>
                 <p>Green</p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Water Capacity</h4>
+                <h4 class="text-gray-400 font-medium">Vehicle Repair By</h4>
                 <p>2,800 kg</p>
               </div>
             </div>
@@ -175,7 +175,7 @@
                     border border-gray-400
                   "
                 >
-                  Description
+                  Name
                 </th>
                 <th
                   class="
@@ -228,29 +228,18 @@
                   class="
                     font-light
                     text-lg
-                    p-2
+                    p-1
                     text-center
                     border border-gray-400
                   "
                 >
-                  <input-component :input-placeholder="'Enter Description'" />
+                  <input-component :input-placeholder="'Enter Name'" />
                 </td>
                 <td
                   class="
                     font-light
                     text-lg
-                    p-2
-                    text-center
-                    border border-gray-400
-                  "
-                >
-                  <input-component :input-placeholder="'#'" />
-                </td>
-                <td
-                  class="
-                    font-light
-                    text-lg
-                    p-2
+                    p-1
                     text-center
                     border border-gray-400
                   "
@@ -261,7 +250,18 @@
                   class="
                     font-light
                     text-lg
-                    p-2
+                    p-1
+                    text-center
+                    border border-gray-400
+                  "
+                >
+                  <input-component :input-placeholder="'#'" />
+                </td>
+                <td
+                  class="
+                    font-light
+                    text-lg
+                    p-1
                     text-center
                     border border-gray-400
                   "
@@ -269,7 +269,7 @@
                   <input-component :input-placeholder="'#'" />
                 </td>
 
-                <td class="font-light text-lg px-3 py-2 text-center">
+                <td class="font-light text-lg px-2 py-1 text-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="w-4 h-4 fill-current text-transparent"
@@ -304,7 +304,7 @@
                 />
               </svg>
               <span class="text-md text-gray-400 underline"
-                >Add New Cylinder</span
+                >Add New Maintenance Detail</span
               >
             </button>
           </div>
@@ -343,10 +343,12 @@
           <div class="overflow-x-auto w-full mb-8">
             <table class="table border-collapse table-fixed w-full">
               <tbody>
-                <tr v-for="i in 4" :key="i">
-                  <td class="w-1/12 text-center">{{ i }}</td>
-                  <td class="w-5/12 border border-black px-4 py-4 text-left">
-                    Authencity of Requests
+                <tr v-for="(analytic, i) in analytics" :key="i">
+                  <td class="w-auto px-2 text-center border-2 border-white">
+                    {{ i + 1 }}
+                  </td>
+                  <td class="w-6/12 border border-black px-4 py-4 text-left">
+                    {{ analytic }}
                   </td>
                   <td
                     class="w-6/12 border border-black px-4 py-4 text-left"
@@ -447,29 +449,49 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, watch } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  ref,
+  useRoute,
+} from '@nuxtjs/composition-api'
 import InputComponent from '@/components/Form/Input.vue'
 import Confirmation from '@/components/Overlays/Confirmation.vue'
 import FinalStep from '@/components/Overlays/finalStep.vue'
+import { VehicleController } from '@/module/Vehicle'
 export default defineComponent({
   name: 'Transfer',
   components: { Confirmation, FinalStep, InputComponent },
   layout: 'dashboard',
   setup() {
+    const route = useRoute()
+    const vehicleId = ref<String>('')
+
+    onMounted(() => {
+      vehicleId.value = route.value.params.id
+      fetchVehicle(vehicleId.value)
+    })
+
+    function fetchVehicle(id: String) {
+      VehicleController.fetchVehicle(id).then((response) => {
+        console.log(response)
+      })
+    }
+
     const types = [{ name: 'Assign Cylinder', value: 'temp' }]
     const reciepients = [{ name: 'Oxygen', value: 'temp' }]
     const showConfirmation = ref(false)
     const showFinalStep = ref(false)
     const status = ref('')
     const message = ref('')
-    watch(status, (currentValue) => {
-      if (currentValue === 'success') {
-        message.value = 'You have successfully approved this request'
-      } else if (currentValue === 'error') {
-        message.value = 'You have regretably declined this request'
-      }
-    })
+
     const count = ref(1)
+    const analytics = [
+      'Authencity of Request',
+      'Estimate Obtained',
+      'Item/Price Done',
+      'Recommendation',
+    ]
     return {
       types,
       reciepients,
@@ -478,6 +500,7 @@ export default defineComponent({
       status,
       message,
       count,
+      analytics,
     }
   },
 })

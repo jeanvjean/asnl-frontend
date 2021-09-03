@@ -95,22 +95,19 @@
           <h4>Customer Details</h4>
         </div>
         <div
-          v-for="(product, i) in products"
+          v-for="(customer, i) in customers"
           :key="i"
           class="grid grid-rows-1 md:grid-cols-2 gap-x-4 w-full"
         >
           <select-component
-            :label-title="'Products'"
-            :select-array="productsArray"
-            :default-option-text="'Select a Product'"
-            :init-value="product.id"
-            @get="changePrice($event.value, i)"
+            :label-title="'Customer'"
+            :select-array="[]"
+            :default-option-text="'Select a Customer'"
           />
           <input-component
             :label-title="'Unit Price'"
             :input-placeholder="'Enter Unit of Price'"
             :disabled="true"
-            :default-value="product.price"
           />
         </div>
         <div class="w-full">
@@ -193,7 +190,6 @@ import Validator from 'validatorjs'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
-import { ProductObject } from '@/module/Product'
 import { CustomerController } from '@/module/Customer'
 import { ValidatorObject } from '@/module/Validation'
 
@@ -233,51 +229,15 @@ export default defineComponent({
 
     const productsBody = ref<Array<String>>([])
 
-    function fetchProducts() {
-      ProductObject.fetchProductsUnPaginated().then((response: any) => {
-        productsArray.value = response.map((product: any) => {
-          return {
-            name: product.asnlNumber,
-            value: product._id,
-            price: product.unitCost,
-          }
-        })
-      })
-    }
-
-    onMounted(() => {
-      fetchProducts()
-    })
-
-    const products = ref<Array<any>>([])
-    const productsArray = ref([])
+    const customers = ref<Array<any>>([])
+    const customersArray = ref([])
     const componentKey = ref<number>(1)
 
     const increment = () => {
-      products.value.push({
+      customers.value.push({
         id: '',
         price: '',
       })
-    }
-
-    function processFile(event: any, index: any) {
-      const file = event.target.files[0]
-      if (index === 'cac') {
-        form.CAC = file
-      } else {
-        form.validId = file
-      }
-    }
-
-    function changePrice(selectedProduct: any, index: any) {
-      productsArray.value.forEach((prod: any) => {
-        if (prod.value === selectedProduct) {
-          products.value[index].id = String(selectedProduct)
-          products.value[index].price = String(prod.price)
-          productsBody.value.push(selectedProduct)
-        }
-      })
-      changeComponentKey()
     }
 
     const changeComponentKey = () => {
@@ -354,12 +314,10 @@ export default defineComponent({
       close,
       form,
       customerTypes,
-      products,
-      productsArray,
+      customers,
+      customersArray,
       increment,
-      changePrice,
       componentKey,
-      processFile,
       requestPayload,
       submit,
     }

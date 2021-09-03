@@ -2,32 +2,7 @@
   <div :key="componentKey" class="py-6 px-6">
     <div class="flex justify-between px-6">
       <h1>All Vehicles</h1>
-      <div class="flex space-x-4">
-        <router-link
-          to="/dashboard/vehicle-management/corrective-maintenance-main"
-          class="
-            flex
-            space-x-2
-            items-center
-            bg-btn-purple
-            rounded-sm
-            px-4
-            py-2
-            text-white
-          "
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            class="w-5 h-5 fill-current"
-            fill="currentColor"
-          >
-            <path
-              d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zm4 10a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z"
-            />
-          </svg>
-          <span>Maintenance</span>
-        </router-link>
+      <div>
         <router-link
           to="/dashboard/vehicle-management/create-vehicle"
           class="
@@ -205,6 +180,24 @@
                 >
                   Remove Driver
                 </button>
+                <router-link
+                  :to="
+                    '/dashboard/vehicle-management/corrective-maintenance/' +
+                    bodySingle._id
+                  "
+                  class="
+                    block
+                    px-3
+                    py-2
+                    text-black
+                    focus:outline-none
+                    hover:bg-purple-300 hover:text-white
+                    w-full
+                    overflow-none
+                  "
+                >
+                  Maintenance Request
+                </router-link>
               </div>
             </td>
           </tr>

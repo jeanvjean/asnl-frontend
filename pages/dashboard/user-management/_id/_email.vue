@@ -181,7 +181,7 @@
             {{ log.activity }}
           </p>
           <p class="text-gray-700 text-sm font-thin">
-            {{ getTimeDifference(log.time) }} ago
+            {{ formatDate(log.time) }}
           </p>
         </div>
       </div>
@@ -199,7 +199,6 @@ import {
   useRouter,
 } from '@nuxtjs/composition-api'
 import { UserController } from '@/module/User'
-import datetimeDifference from 'datetime-difference'
 import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
@@ -296,39 +295,15 @@ export default defineComponent({
       })
     })
 
-    function getTimeDifference(date: Date) {
-      const now = new Date()
-      const past = new Date(date)
-      const difference = datetimeDifference(now, past)
-      let result: String = ''
+    function formatDate(logDate: string) {
+      const response = new Date(logDate)
 
-      if (difference.years) {
-        result += `${difference.years} years, `
-      }
-
-      if (difference.months) {
-        result += `${difference.months} months, `
-      }
-
-      if (difference.days) {
-        result += `${difference.days} days, `
-      }
-
-      if (difference.hours) {
-        result += `${difference.hours} hours, `
-      }
-
-      if (difference.minutes) {
-        result += `${difference.minutes} minutes `
-      }
-
-      return result
+      return response.toUTCString()
     }
 
     return {
       user,
       logs,
-      getTimeDifference,
       auth,
       processFile,
       form,
@@ -337,6 +312,7 @@ export default defineComponent({
       loading,
       userProfile,
       userId,
+      formatDate,
     }
   },
 })

@@ -3,15 +3,12 @@
     <div class="px-6 flex justify-between items-center">
       <h1>Route Plan</h1>
 
-      <div class="flex items-center space-x-6">
+      <div>
         <button
           class="bg-btn-purple rounded-sm text-white px-4 py-2"
           @click="showRoutePlan = true"
         >
           Create Route Plan
-        </button>
-        <button class="bg-btn-purple rounded-sm text-white px-4 py-2">
-          Approve
         </button>
       </div>
     </div>

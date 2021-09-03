@@ -423,11 +423,7 @@
           <div
             class="
               w-full
-              lg:w-3/5
-              lg:flex
-              lg:justify-between
-              lg:items-center
-              lg:space-x-6
+              lg:w-3/5 lg:flex lg:justify-between lg:items-center lg:space-x-6
               mt-10
             "
           >
@@ -466,14 +462,13 @@ import {
   ref,
   useContext,
 } from '@nuxtjs/composition-api'
+import Validator from 'validatorjs'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import { ProductObject } from '@/module/Product'
 import { mainStore } from '@/module/Pinia'
-import Validator from 'validatorjs'
 import { ValidatorObject } from '@/module/Validation'
-// import Multiselect from 'vue-multiselect'
 
 export default defineComponent({
   components: {
@@ -647,4 +642,3 @@ input[type='file'] {
   cursor: pointer;
 }
 </style>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
