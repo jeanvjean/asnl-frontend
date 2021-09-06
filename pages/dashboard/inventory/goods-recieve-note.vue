@@ -157,7 +157,7 @@
     </div>
     <div class="bg-white px-6 py-4 mt-6">
       <div class="flex items-center justify-around px-2 py-2 space-x-4 w-full">
-        <filter-component />
+        <filter-component @filter="showFilter = true" />
         <search-component :place-holder="'Search for GRN'" />
         <button
           class="
@@ -277,6 +277,11 @@
       :inventory="inventoryDetails"
       @close="showRecieveDetails = !showRecieveDetails"
     />
+    <grn-filter
+      v-if="showFilter"
+      :filters="grnFilters"
+      @close="showFilter = false"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -288,10 +293,11 @@ import {
 } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
-import FilterComponent from '@/components/Base/Filter.vue'
+import FilterComponent from '@/components/Base/FilterButton.vue'
 import RecieveProduct from '@/components/Overlays/RecieveProducts.vue'
 import RecieveProductDetail from '@/components/Overlays/RecieveProductDetail.vue'
 import { ProductObject } from '@/module/Product'
+import GrnFilter from '@/components/Overlays/Filter.vue'
 
 export default defineComponent({
   name: 'Analytics',
@@ -301,6 +307,7 @@ export default defineComponent({
     FilterComponent,
     RecieveProduct,
     RecieveProductDetail,
+    GrnFilter,
   },
   layout: 'dashboard',
   setup() {
@@ -332,6 +339,25 @@ export default defineComponent({
       approved: 0,
       pending: 0,
     })
+
+    const grnFilters = {
+      status: {
+        list: [
+          {
+            title: 'Rejected',
+            type: 'checkbox',
+            selected: false,
+          },
+          {
+            title: 'Passed',
+            type: 'checkbox',
+            selected: false,
+          },
+        ],
+      },
+    }
+
+    const showFilter = ref<Boolean>(false)
 
     function changePage(nextPage: number) {
       getInventories(nextPage)
@@ -378,6 +404,8 @@ export default defineComponent({
       changePage,
       getInventories,
       statistics,
+      showFilter,
+      grnFilters,
     }
   },
 })

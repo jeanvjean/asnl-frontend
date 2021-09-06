@@ -3,11 +3,7 @@
     <div class="grid grid-rows-1 md:grid-cols-4 py-2 px-4">
       <div
         class="
-          lg:flex
-          lg:justify-between
-          lg:items-center
-          lg:col-span-3
-          lg:gap-2
+          lg:flex lg:justify-between lg:items-center lg:col-span-3 lg:gap-2
         "
       >
         <h1 class="text-xl text-black font-medium px-2 py-2">
@@ -613,8 +609,6 @@ export default defineComponent({
             availabeCylinders.push(customerCylinders[i])
           }
         }
-
-        console.log(availabeCylinders.length)
 
         if (availabeCylinders.length === 0) {
           context.$toast.info('Customer has no available cylinder')

@@ -341,18 +341,21 @@
             Analytic Section
           </h1>
           <div class="overflow-x-auto w-full mb-8">
-            <table class="table border-collapse table-fixed w-full">
+            <table class="table border-collapse table-auto w-full">
               <tbody>
                 <tr v-for="(analytic, i) in analytics" :key="i">
-                  <td class="w-auto px-2 text-center border-2 border-white">
+                  <td class="w-auto px-2 text-center">
                     {{ i + 1 }}
                   </td>
-                  <td class="w-6/12 border border-black px-4 py-4 text-left">
+                  <td class="w-4/12 border border-black px-4 py-4 text-left">
                     {{ analytic }}
                   </td>
-                  <td
-                    class="w-6/12 border border-black px-4 py-4 text-left"
-                  ></td>
+                  <td class="w-8/12 border border-black px-1 py-1 text-left">
+                    <input-component
+                      :input-placeholder="`Enter ${analytic}`"
+                      @get="form.comment = $event.value"
+                    />
+                  </td>
                 </tr>
               </tbody>
             </table>

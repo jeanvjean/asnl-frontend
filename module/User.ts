@@ -32,20 +32,10 @@ class UserRepository {
     })
   }
 
-  async getUsers(
-    page: number,
-    limit: number = 10,
-    active: Boolean = false,
-    verified: Boolean = false
-  ) {
-    let url: string = `user/get-branch-users?page=${page}&limit=${limit}`
-    if (active) {
-      url = url + `&active=${active}`
-    }
-    if (verified) {
-      url = url + `&verified=${verified}`
-    }
-    return await $axios.get(url)
+  async getUsers(page: number, limit: number = 10, queryString: String = '') {
+    return await $axios.get(
+      `user/get-branch-users?page=${page}&limit=${limit}${queryString}`
+    )
   }
 
   fetchUserUnPaginated() {

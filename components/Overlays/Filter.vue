@@ -25,7 +25,7 @@
           />
         </svg>
       </div>
-      <div class="my-6">
+      <div v-for="(filter, index) in filters" :key="index" class="my-6">
         <div
           class="
             flex
@@ -39,7 +39,7 @@
             pb-1
           "
         >
-          <h3>STATUS</h3>
+          <h3 class="uppercase font-semibold">{{ index }}</h3>
           <svg
             class="w-5 h-5"
             xmlns="http://www.w3.org/2000/svg"
@@ -57,101 +57,23 @@
         </div>
         <div class="space-y-2.5 pt-1">
           <span
-            v-for="(stat, index) in status"
-            :key="index"
-            class="flex items-center space-x-4 text-gray-600"
+            v-for="(listValue, j) in filter.list"
+            :key="j"
+            class="flex items-center space-x-4 text-gray-600 capitalize"
           >
-            <input type="checkbox" />
-            <h3>{{ stat }}</h3>
-          </span>
-        </div>
-      </div>
-
-      <div class="my-6">
-        <div
-          class="
-            flex
-            justify-between
-            items-center
-            text-sm
-            border-0 border-b-4 border-gray-200
-            text-gray-500
-            font-bold
-            mb-2
-            pb-1
-          "
-        >
-          <h3>STATE</h3>
-          <svg
-            class="w-5 h-5"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
+            <input
+              :name="index"
+              :type="listValue.type"
+              :checked="listValue.selected ? 'checked' : ''"
+              :value="listValue.value"
+              @change="addParameters(listValue)"
             />
-          </svg>
-        </div>
-        <div class="space-y-2.5 pt-1">
-          <span
-            v-for="(content, index) in cylinderContents"
-            :key="index"
-            class="flex items-center space-x-4 text-gray-600"
-          >
-            <input type="checkbox" />
-            <h3>{{ content }}</h3>
+            <h3>{{ listValue.title }}</h3>
           </span>
         </div>
       </div>
 
-      <div class="my-6">
-        <div
-          class="
-            flex
-            justify-between
-            items-center
-            text-sm
-            border-0 border-b-4 border-gray-200
-            text-gray-500
-            font-bold
-            mb-2
-            pb-1
-          "
-        >
-          <h3>TYPE OF CYLINDER</h3>
-          <svg
-            class="w-5 h-5"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </div>
-        <div class="space-y-2.5 pt-1">
-          <span
-            v-for="(type, index) in types"
-            :key="index"
-            class="flex items-center space-x-4 text-gray-600"
-          >
-            <input type="checkbox" />
-            <h3>{{ type }}</h3>
-          </span>
-        </div>
-      </div>
-
-      <div class="my-6">
+      <div v-if="showDate" class="my-6">
         <div
           class="
             flex
@@ -197,7 +119,7 @@
         </div>
       </div>
 
-      <div class="my-6">
+      <div v-if="showGases" class="my-6">
         <div
           class="
             flex
@@ -239,7 +161,7 @@
         </div>
       </div>
 
-      <div class="my-6">
+      <div v-if="showCustomers" class="my-6">
         <div
           class="
             flex
@@ -280,6 +202,48 @@
           />
         </div>
       </div>
+
+      <div v-if="showDriver" class="my-6">
+        <div
+          class="
+            flex
+            justify-between
+            items-center
+            text-sm
+            border-0 border-b-4 border-gray-200
+            text-gray-500
+            font-bold
+            mb-2
+            pb-1
+          "
+        >
+          <h3>Drivers</h3>
+          <svg
+            class="w-5 h-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </div>
+        <div class="pt-2 my-1">
+          <multiselect
+            v-model="driverModel"
+            :options="driverArray"
+            label="name"
+            track-by="value"
+            :multiple="true"
+            :class="'w-full border-2 border-gray-300 text-gray-400 capitalize'"
+          />
+        </div>
+      </div>
     </div>
   </back-drop>
 </template>
@@ -289,23 +253,44 @@ import Multiselect from 'vue-multiselect'
 import BackDrop from '@/components/Base/SecondBackDrop.vue'
 import { CylinderController } from '@/module/Cylinder'
 import { CustomerController } from '@/module/Customer'
+import { DriverObject } from '@/module/Driver'
 
 export default defineComponent({
   components: { BackDrop, Multiselect },
+  props: {
+    filters: {
+      type: Object,
+      required: true,
+    },
+    showGases: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    showCustomers: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    showDate: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+    showDriver: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
   setup(_props, ctx) {
-    const status = [
-      'Cylinder with Air Separation',
-      'Cylinder with Customer',
-      'Customer Cylinders with ASNL',
-      'Marked for Maintenance',
-      'Bad Customer Cylinders with ASNL',
-      'Bad ASNL Cylinders',
-      'Cylinder with Internal Suppliers',
-      'Cylinder with External Suppliers',
-    ]
+    const close = () => {
+      ctx.emit('close')
+    }
 
     const gasesArray = ref<any>([])
     const customerArray = ref<any>([])
+    const driverArray = ref<any>([])
 
     function fetchGases() {
       CylinderController.getCylinders().then((response) => {
@@ -331,28 +316,68 @@ export default defineComponent({
 
     const gasModel = ref<string>('')
     const customerModel = ref<string>('')
+    const driverModel = ref<string>('')
 
     onMounted(() => {
-      Promise.all([fetchGases(), fetchCustomers()])
+      const promiseArray = []
+
+      if (_props.showGases) {
+        promiseArray.push(fetchGases())
+      }
+
+      if (_props.showCustomers) {
+        promiseArray.push(fetchCustomers())
+      }
+
+      if (_props.showDriver) {
+        promiseArray.push(fetchDrivers())
+      }
+
+      if (promiseArray.length) {
+        Promise.all(promiseArray)
+      }
     })
 
-    const types = ['Assigned', 'Buffer', 'Customer']
+    const parameters = ref<any>({})
 
-    const cylinderContents = ['Filled', 'Empty']
+    function addParameters(individualFilter: any) {
+      if (individualFilter.type === 'radio') {
+        parameters.value[individualFilter.identifier] = [individualFilter.value]
+        ctx.emit('filterAdded', parameters.value)
+      }
+      //  else if (index in parameters.value) {
+      //   if (parameters.value[index].includes(value.title)) {
+      //     parameters.value[index].pop(value.title)
+      //     ctx.emit('filterAdded', parameters.value)
+      //   } else {
+      //     parameters.value[index].push(value.title)
+      //     ctx.emit('filterAdded', parameters.value)
+      //   }
+      // } else {
+      //   parameters.value[index] = [value.title]
+      //   ctx.emit('filterAdded', parameters.value)
+      // }
+    }
 
-    const close = () => {
-      ctx.emit('close')
+    function fetchDrivers() {
+      DriverObject.getUnPaginatedDrivers().then((response: any) => {
+        const drivers = response
+        driverArray.value = drivers.map((driver: any) => {
+          return { name: driver.name, value: driver._id }
+        })
+      })
     }
 
     return {
       status,
-      types,
       close,
-      gasesArray,
+      addParameters,
       gasModel,
-      customerArray,
       customerModel,
-      cylinderContents,
+      gasesArray,
+      customerArray,
+      driverArray,
+      driverModel,
     }
   },
 })

@@ -42,7 +42,7 @@
           overflow-auto
         "
       >
-        <filter-component />
+        <filter-component @filter="showFilter = true" />
         <search-component :place-holder="'Search for Vehicles'" />
         <pagination :pagination-details="paginationProp" />
       </div>
@@ -115,6 +115,12 @@
     </div>
     <single-route v-if="showRoute" @close="showRoute = false" />
     <route-plan v-if="showRoutePlan" @close="showRoutePlan = false" />
+    <route-plan-filter
+      v-if="showFilter"
+      :filters="routePlanFilters"
+      :show-driver="true"
+      @close="showFilter = false"
+    />
   </div>
 </template>
 
@@ -122,9 +128,11 @@
 import { defineComponent, reactive, ref } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
-import FilterComponent from '@/components/Base/Filter.vue'
+import FilterComponent from '@/components/Base/FilterButton.vue'
 import SingleRoute from '@/components/Overlays/DriverRoute.vue'
 import RoutePlan from '@/components/Overlays/RoutePlan.vue'
+import RoutePlanFilter from '@/components/Overlays/Filter.vue'
+
 export default defineComponent({
   name: 'Reports',
   components: {
@@ -133,6 +141,7 @@ export default defineComponent({
     SingleRoute,
     FilterComponent,
     RoutePlan,
+    RoutePlanFilter,
   },
   layout: 'dashboard',
   setup() {
@@ -144,6 +153,11 @@ export default defineComponent({
       'End Date',
       'Action',
     ]
+
+    const routePlanFilters = {}
+
+    const showFilter = ref<Boolean>(false)
+
     const body = [
       {
         name: 'Chinedu Onunyere',
@@ -168,6 +182,7 @@ export default defineComponent({
 
     const pickUp = ref(true)
     const delivery = ref(false)
+
     return {
       headers,
       body,
@@ -177,6 +192,8 @@ export default defineComponent({
       showRoute,
       paginationProp,
       showRoutePlan,
+      showFilter,
+      routePlanFilters,
     }
   },
 })

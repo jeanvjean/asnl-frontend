@@ -27,7 +27,7 @@
           <div
             class="flex items-center justify-around px-8 py-2 space-x-4 w-full"
           >
-            <filter-component />
+            <filter-component @filter="showFilter = true" />
             <search-component />
 
             <router-link
@@ -241,6 +241,12 @@
       </div>
     </div>
     <audit-log v-if="showAuditLog" @close="showAuditLog = false" />
+    <inventory-filter
+      v-if="showFilter"
+      :filters="inventoryFilters"
+      :show-date="false"
+      @close="showFilter = false"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -251,14 +257,21 @@ import {
   ref,
 } from '@nuxtjs/composition-api'
 import { ProductObject } from '@/module/Product'
-import FilterComponent from '@/components/Base/Filter.vue'
+import FilterComponent from '@/components/Base/FilterButton.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import Pagination from '@/components/Base/Pagination.vue'
 import AuditLog from '@/components/Overlays/AuditLog.vue'
+import InventoryFilter from '@/components/Overlays/Filter.vue'
 
 export default defineComponent({
   name: 'CylinderPool',
-  components: { FilterComponent, SearchComponent, Pagination, AuditLog },
+  components: {
+    FilterComponent,
+    SearchComponent,
+    Pagination,
+    AuditLog,
+    InventoryFilter,
+  },
   layout: 'dashboard',
   setup() {
     const headers = [
@@ -273,12 +286,49 @@ export default defineComponent({
       'Action',
     ]
 
+    const inventoryFilters = {
+      type: {
+        list: [
+          {
+            title: 'Within Division',
+            type: 'checkbox',
+            selected: false,
+          },
+          {
+            title: 'Outright Sales',
+            type: 'checkbox',
+            selected: false,
+          },
+          {
+            title: 'Transfer',
+            type: 'checkbox',
+            selected: false,
+          },
+        ],
+      },
+      status: {
+        list: [
+          {
+            title: 'Pending',
+            type: 'checkbox',
+            selected: false,
+          },
+          {
+            title: 'Completed',
+            type: 'checkbox',
+            selected: false,
+          },
+        ],
+      },
+    }
+
     function changePage(nextPage: number) {
       getProducts(nextPage)
     }
 
     const body = ref()
     const showAuditLog = ref<Boolean>(false)
+    const showFilter = ref<Boolean>(false)
 
     onMounted(() => {
       getProducts(1)
@@ -311,6 +361,8 @@ export default defineComponent({
       paginationProp,
       changePage,
       showAuditLog,
+      showFilter,
+      inventoryFilters,
     }
   },
 })

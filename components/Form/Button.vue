@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full mt-2 text-white">
+  <div class="w-full text-white">
     <button
       v-if="!loadingStatus"
       type="button"

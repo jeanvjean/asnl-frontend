@@ -55,7 +55,13 @@
       v-if="showType"
       @close="showType = false"
     ></new-cylinder-type>
-    <cylinder-filter v-if="showFilter" @close="showFilter = !showFilter" />
+    <cylinder-filter
+      v-if="showFilter"
+      :filters="cylinderFilters"
+      :show-gases="true"
+      :show-customers="true"
+      @close="showFilter = !showFilter"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -72,7 +78,8 @@ import { CylinderController } from '@/module/Cylinder'
 import Pagination from '@/components/Base/Pagination.vue'
 import FilterComponent from '@/components/Base/FilterButton.vue'
 import SearchComponent from '@/components/Base/Search.vue'
-import CylinderFilter from '@/components/Overlays/CylinderFilter.vue'
+import CylinderFilter from '@/components/Overlays/Filter.vue'
+import { cylinderFilters } from '@/constants/variables'
 
 export default defineComponent({
   name: 'CylinderPool',
@@ -404,6 +411,7 @@ export default defineComponent({
       paginationProp,
       changePage,
       showFilter,
+      cylinderFilters,
     }
   },
 })

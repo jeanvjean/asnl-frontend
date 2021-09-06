@@ -1,17 +1,12 @@
 <template>
   <back-drop>
     <div class="w-1/5 bg-white rounded-sm px-4 py-4 text-black font-light">
-      <div>
-        <label for="">Reason for {{ action }}</label>
-        <textarea
-          v-model="reasonString"
-          class="w-full border-2 border-gray-400"
-          rows="5"
-        ></textarea>
-      </div>
+      <h2 class="font-semibold text-base">
+        Are you sure you want to delete this Vehicle
+      </h2>
       <div class="flex space-x-2 mt-4">
         <button-component
-          :button-text="buttonActionTitle"
+          :button-text="'Delete'"
           :button-class="'w-full text-white bg-btn-purple py-3 rounded-sm font-semibold'"
           :loading-status="buttonLoadingStatus"
           :loading-text="buttonLoadingText"
@@ -37,46 +32,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, useContext } from '@nuxtjs/composition-api'
+import { defineComponent, ref } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 
 export default defineComponent({
   components: { BackDrop, ButtonComponent },
-  props: {
-    action: {
-      type: String,
-      required: true,
-      default: 'Deleting User',
-    },
-    buttonActionTitle: {
-      type: String,
-      required: true,
-      default: 'Delete',
-    },
-  },
   setup(_props, ctx) {
     const close = () => {
       ctx.emit('close')
     }
 
-    const reasonString = ref<String>('')
-    const context = useContext()
     const buttonLoadingStatus = ref<Boolean>(false)
     const buttonLoadingText = 'Deleting'
 
     const submitAction = () => {
-      if (!reasonString.value) {
-        context.$toast.error('Reason is Required')
-      } else {
-        buttonLoadingStatus.value = true
-        ctx.emit('reasonGiven', reasonString.value)
-      }
+      buttonLoadingStatus.value = true
+      ctx.emit('deleted')
     }
 
     return {
       close,
-      reasonString,
       submitAction,
       buttonLoadingStatus,
       buttonLoadingText,

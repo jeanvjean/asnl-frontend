@@ -528,7 +528,7 @@ export default defineComponent({
           showSubCategory: false,
           subCategories: [
             {
-              title: 'Register Vehicle',
+              title: 'All Vehicles',
               link: '/dashboard/vehicle-management/',
             },
             {

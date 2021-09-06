@@ -37,7 +37,7 @@
 
     <div v-if="!defaultState" class="bg-white px-6 py-4 mt-6">
       <div class="flex items-center justify-around px-2 py-2 space-x-4 w-full">
-        <filter-component />
+        <filter-component @filter="showFilter = true" />
         <search-component :place-holder="'Search for Vehicles'" />
         <pagination :pagination-details="paginationProp" />
       </div>
@@ -161,7 +161,9 @@
                     w-full
                     overflow-none
                   "
-                  @click="deleteVehicle(bodySingle._id)"
+                  @click="
+                    ;(selectedDriver = bodySingle._id), (showFinalDelete = true)
+                  "
                 >
                   Delete Vehicle
                 </button>
@@ -297,6 +299,17 @@
       :vehicle="vehicle"
       @close="showSingleVehicle = false"
     />
+    <vehicle-filter
+      v-if="showFilter"
+      :filters="vehicleFilters"
+      :show-date="false"
+      @close="showFilter = false"
+    />
+    <final-delete
+      v-if="showFinalDelete"
+      @close="showFinalDelete = false"
+      @deleted="deleteVehicle(selectedDriver)"
+    />
   </div>
 </template>
 
@@ -309,12 +322,15 @@ import {
 } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
-import FilterComponent from '@/components/Base/Filter.vue'
+import FilterComponent from '@/components/Base/FilterButton.vue'
 import AssignDriver from '@/components/Overlays/AssignDriver.vue'
 import finalStep from '@/components/Overlays/finalStep.vue'
 import singleVehicle from '@/components/Overlays/SingleVehicle.vue'
 import { VehicleController } from '@/module/Vehicle'
 import { DriverObject } from '@/module/Driver'
+import VehicleFilter from '@/components/Overlays/Filter.vue'
+import FinalDelete from '@/components/Overlays/FinalDelete.vue'
+
 export default defineComponent({
   name: 'Reports',
   components: {
@@ -324,6 +340,8 @@ export default defineComponent({
     finalStep,
     singleVehicle,
     FilterComponent,
+    VehicleFilter,
+    FinalDelete,
   },
   layout: 'dashboard',
   setup() {
@@ -332,6 +350,10 @@ export default defineComponent({
     const showFinalStep = ref(false)
     const showSingleVehicle = ref(false)
     const vehicle = ref()
+    const showFilter = ref<Boolean>(false)
+    const showFinalDelete = ref<Boolean>(false)
+    const selectedDriver = ref<String>('')
+
     const headers = [
       'Vehicle Category',
       'Registration No',
@@ -341,6 +363,17 @@ export default defineComponent({
       'Latest Mileage',
       'Action',
     ]
+
+    const vehicleFilters = reactive({
+      category: {
+        list: [
+          { title: 'SUV', type: 'checkbox', selected: false },
+          { title: 'Car', type: 'checkbox', selected: false },
+          { title: 'Bus', type: 'checkbox', selected: false },
+          { title: 'Truck', type: 'checkbox', selected: false },
+        ],
+      },
+    })
 
     const changeState = () => {
       showAssignDriver.value = false
@@ -392,12 +425,15 @@ export default defineComponent({
 
     function deleteVehicle(vehicleId: string) {
       VehicleController.deleteVehicle(vehicleId).then(() => {
+        showFinalDelete.value = false
         fetchVehicles(page.value)
       })
     }
+
     onMounted(() => {
       fetchVehicles(page.value)
     })
+
     return {
       headers,
       body,
@@ -413,6 +449,10 @@ export default defineComponent({
       componentKey,
       paginationProp,
       changeState,
+      vehicleFilters,
+      showFilter,
+      showFinalDelete,
+      selectedDriver,
     }
   },
 })

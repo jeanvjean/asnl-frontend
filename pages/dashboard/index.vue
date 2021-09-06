@@ -182,7 +182,13 @@
       v-if="showRegister"
       @close=";(showRegister = false), getCylinders(1)"
     ></new-cylinder>
-    <cylinder-filter v-if="showFilter" @close="showFilter = !showFilter" />
+    <cylinder-filter
+      v-if="showFilter"
+      :filters="cylinderFilters"
+      :show-gases="true"
+      :show-customers="true"
+      @close="showFilter = !showFilter"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -198,7 +204,9 @@ import { CylinderController } from '@/module/Cylinder'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/FilterButton.vue'
 import Pagination from '@/components/Base/Pagination.vue'
-import CylinderFilter from '@/components/Overlays/CylinderFilter.vue'
+import CylinderFilter from '@/components/Overlays/Filter.vue'
+import { cylinderFilters } from '@/constants/variables'
+
 export default defineComponent({
   name: 'Analytics',
   components: {
@@ -276,6 +284,7 @@ export default defineComponent({
       getCylinders,
       showCylinderType,
       showFilter,
+      cylinderFilters,
     }
   },
 })

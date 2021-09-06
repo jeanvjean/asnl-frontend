@@ -163,7 +163,7 @@
     </div>
     <div class="bg-white px-6 py-4 mt-6">
       <div class="flex items-center justify-around px-2 py-2 space-x-4 w-full">
-        <filter-component />
+        <filter-component @filter="showFilter = true" />
         <search-component :place-holder="'Search for MRN'" />
         <button
           v-if="auth.role != 'admin'"
@@ -268,6 +268,13 @@
       :mrn="mrnDetail"
       @close="showIssueProductDetail = false"
     />
+    <mrn-filter
+      v-if="showFilter"
+      :filters="mrnFilters"
+      :show-customers="true"
+      :show-date="false"
+      @close="showFilter = false"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -279,11 +286,14 @@ import {
 } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
-import FilterComponent from '@/components/Base/Filter.vue'
+import FilterComponent from '@/components/Base/FilterButton.vue'
 import IssueProduct from '@/components/Overlays/IssueProducts.vue'
 import IssueProductDetail from '@/components/Overlays/IssueProductDetail.vue'
 import { ProductObject } from '@/module/Product'
 import { mainStore } from '@/module/Pinia'
+import MrnFilter from '@/components/Overlays/Filter.vue'
+import { UserController } from '~/module/User'
+
 export default defineComponent({
   name: 'Analytics',
   components: {
@@ -292,6 +302,7 @@ export default defineComponent({
     FilterComponent,
     IssueProduct,
     IssueProductDetail,
+    MrnFilter,
   },
   layout: 'dashboard',
   setup() {
@@ -303,7 +314,7 @@ export default defineComponent({
       'Status',
       'Date',
     ]
-
+    const showFilter = ref<Boolean>(false)
     const appStore = mainStore()
     const auth: any = appStore.getLoggedInUser
     const body = ref([])
@@ -323,11 +334,31 @@ export default defineComponent({
       pending: 0,
     })
 
+    const mrnFilters = reactive({
+      departments: { type: 'checkbox', list: [] },
+      status: {
+        list: [
+          { title: 'Rejected', type: 'radio', selected: false },
+          { title: 'Passed', type: 'radio', selected: false },
+        ],
+      },
+    })
+
     function getDisbursalStat() {
       ProductObject.fetchDisbursalStatistics().then((response: any) => {
         statistics.approved = response.totalApproved
         statistics.total = response.totalIssuedOut
         statistics.pending = response.totalPending
+      })
+    }
+
+    function fetchRoles() {
+      UserController.fetchRoles().then((response) => {
+        const roles = response.data.data
+        const sortedRoles = roles.map((role: any) => {
+          return { title: role.role, type: 'checkbox', selected: false }
+        })
+        mrnFilters.departments.list = sortedRoles
       })
     }
 
@@ -347,7 +378,11 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      Promise.all([fetchPendingDisbursement(), getDisbursalStat()])
+      Promise.all([
+        fetchPendingDisbursement(),
+        getDisbursalStat(),
+        fetchRoles(),
+      ])
     })
 
     return {
@@ -360,6 +395,8 @@ export default defineComponent({
       fetchDisbursementDetail,
       mrnDetail,
       auth,
+      mrnFilters,
+      showFilter,
     }
   },
 })

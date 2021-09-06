@@ -214,7 +214,7 @@
                 justify-between
                 items-center
                 pr-6
-                pl-4
+                pl-6
                 border-0 border-l-4 border-black
                 mt-4
               "
@@ -243,22 +243,43 @@
               </div>
             </div>
           </div>
-          <div class="w-full px-4">
+          <div class="w-full px-6 py-2">
             <div
-              class="
-                flex
-                items-center
-                justify-between
-                px-6
-                py-2
-                space-x-4
-                w-full
-                h-full
-              "
+              class="flex items-center justify-between space-x-4 w-full h-full"
             >
               <filter-component @filter="showFilter = true" />
               <search-component :place-holder="'Search for User'" />
               <AddUserButton />
+            </div>
+          </div>
+          <div class="w-full flex items-center space-x-4 px-6 py-2">
+            <div
+              v-for="(selectedFilter, j) in displayedFilters"
+              :key="j"
+              class="
+                bg-purple-400 bg-opacity-10
+                text-purple-700
+                font-medium
+                capitalize
+                flex
+                items-center
+                space-x-3
+                px-4
+                py-2
+                rounded-md
+              "
+            >
+              <span class="rounded-md">{{ selectedFilter }}</span>
+
+              <svg
+                class="w-5 h-5 fill-current"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M2.93 17.07A10 10 0 1117.07 2.93 10 10 0 012.93 17.07zM11.4 10l2.83-2.83-1.41-1.41L10 8.59 7.17 5.76 5.76 7.17 8.59 10l-2.83 2.83 1.41 1.41L10 11.41l2.83 2.83 1.41-1.41L11.41 10z"
+                />
+              </svg>
             </div>
           </div>
           <TableComponent :head="headers" :body="body" @refresh="getUsers(1)" />
@@ -269,6 +290,7 @@
       v-if="showFilter"
       :filters="userFilters"
       @close="showFilter = false"
+      @filterAdded="filterUsers($event)"
     />
   </div>
 </template>
@@ -288,8 +310,8 @@ import { UserController } from '@/module/User'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/FilterButton.vue'
-import UserFilter from '@/components/Overlays/UserFilter.vue'
-
+import UserFilter from '@/components/Overlays/Filter.vue'
+import { getFilters, getQueryString } from '@/constants/utils'
 export default defineComponent({
   name: 'Home',
   components: {
@@ -307,6 +329,7 @@ export default defineComponent({
     const page = ref<number>(1)
     const pageLimit = ref<number>(10)
     const showFilter = ref<Boolean>(false)
+    const displayedFilters = ref<Array<String>>()
 
     const paginationProp = reactive({
       hasNextPage: false,
@@ -344,7 +367,30 @@ export default defineComponent({
 
     const userFilters = reactive({
       departments: { type: 'checkbox', list: [] },
-      status: { type: 'radio', list: ['Active', 'Suspended', 'Deleted'] },
+      status: {
+        list: [
+          {
+            title: 'active',
+            type: 'radio',
+            selected: false,
+            value: true,
+            identifier: 'active',
+          },
+          {
+            title: 'suspended',
+            type: 'radio',
+            selected: false,
+            value: false,
+            identifier: 'active',
+          },
+          {
+            title: 'deleted',
+            type: 'radio',
+            selected: false,
+            value: 'deleted',
+          },
+        ],
+      },
     })
 
     const body = ref([])
@@ -357,8 +403,8 @@ export default defineComponent({
       getUsers(1, newLimit)
     }
 
-    function getUsers(pageValue: number, limit: number) {
-      UserController.getUsers(pageValue, limit).then((response: any) => {
+    function getUsers(pageValue: number, limit: number, query: String = '') {
+      UserController.getUsers(pageValue, limit, query).then((response: any) => {
         const myResponse = response.data.data
 
         paginationProp.hasNextPage = myResponse.hasNextPage
@@ -381,6 +427,12 @@ export default defineComponent({
       })
     }
 
+    function filterUsers(filters: any) {
+      const url = getQueryString(filters)
+      displayedFilters.value = getFilters(filters)
+      getUsers(1, pageLimit.value, url)
+    }
+
     function fetchUserStat() {
       UserController.fetchUserStatistics().then((response) => {
         const mainResponse: any = response.data
@@ -390,11 +442,19 @@ export default defineComponent({
       })
     }
 
+    // const filterFromChild = (filters: any) => console.log(filters)
+
     function fetchRoles() {
-      UserController.fetchRoles().then((response) => {
+      UserController.fetchRoles().then((response: any) => {
         const roles = response.data.data
         const sortedRoles = roles.map((role: any) => {
-          return role.role
+          return {
+            title: role.role,
+            type: 'radio',
+            selected: false,
+            value: role.role,
+            identifier: 'search',
+          }
         })
         userFilters.departments.list = sortedRoles
       })
@@ -421,6 +481,8 @@ export default defineComponent({
       userFilters,
       downloadTable,
       adjustPageLimit,
+      filterUsers,
+      displayedFilters,
     }
   },
 })

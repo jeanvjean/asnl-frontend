@@ -170,11 +170,11 @@ import {
   useContext,
   useRouter,
 } from '@nuxtjs/composition-api'
+import Validator from 'validatorjs'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import { VehicleController } from '@/module/Vehicle'
-import Validator from 'validatorjs'
 import { ValidatorObject } from '~/module/Validation'
 
 export default defineComponent({

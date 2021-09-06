@@ -190,35 +190,7 @@
         <div
           class="flex items-center justify-between px-2 py-2 w-full space-x-4"
         >
-          <div>
-            <button
-              class="
-                flex
-                space-x-4
-                items-center
-                bg-gray-200
-                rounded-sm
-                px-5
-                py-2.5
-              "
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                class="w-6 h-6 fill-current text-transparent"
-                stroke="black"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                />
-              </svg>
-              <span>Filter</span>
-            </button>
-          </div>
+          <filter-button @filter="showFilter = true" />
           <search-component :place-holder="'Search'" />
           <router-link
             v-if="user.role !== 'admin'"
@@ -374,10 +346,12 @@
         </div>
       </div>
     </div>
-    <new-cylinder
-      v-if="showRegister"
-      @close="showRegister = false"
-    ></new-cylinder>
+    <new-cylinder v-if="showRegister" @close="showRegister = false" />
+    <transfer-filter
+      v-if="showFilter"
+      :filters="cylinderTransferFilters"
+      @close="showFilter = false"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -391,15 +365,17 @@ import SearchComponent from '@/components/Base/Search.vue'
 import { CylinderController } from '@/module/Cylinder'
 import Pagination from '@/components/Base/Pagination.vue'
 import { mainStore } from '@/module/Pinia'
+import TransferFilter from '@/components/Overlays/Filter.vue'
+import FilterButton from '@/components/Base/FilterButton.vue'
 
 export default defineComponent({
   name: 'Analytics',
-  components: { SearchComponent, Pagination },
+  components: { SearchComponent, Pagination, TransferFilter, FilterButton },
   layout: 'dashboard',
   setup() {
     const appStore = mainStore()
     const user: any = appStore.getLoggedInUser
-
+    const showFilter = ref<Boolean>(false)
     const headers = [
       'Branch',
       'Location',
@@ -409,6 +385,61 @@ export default defineComponent({
       'Status',
       'Next Approval Officer',
     ]
+
+    const cylinderTransferFilters = {
+      type: {
+        list: [
+          {
+            title: 'Within Division',
+            type: 'checkbox',
+            selected: false,
+          },
+          {
+            title: 'Outright Sales',
+            type: 'checkbox',
+            selected: false,
+          },
+          {
+            title: 'Transfer',
+            type: 'checkbox',
+            selected: false,
+          },
+        ],
+      },
+      status: {
+        list: [
+          {
+            title: 'Pending',
+            type: 'checkbox',
+            selected: false,
+          },
+          {
+            title: 'Completed',
+            type: 'checkbox',
+            selected: false,
+          },
+        ],
+      },
+      'approval-stage': {
+        list: [
+          {
+            title: 'Stage 1',
+            type: 'checkbox',
+            selected: false,
+          },
+          {
+            title: 'Stage 2',
+            type: 'checkbox',
+            selected: false,
+          },
+          {
+            title: 'Approved',
+            type: 'checkbox',
+            selected: false,
+          },
+        ],
+      },
+    }
 
     const body = ref<any>([])
 
@@ -456,6 +487,8 @@ export default defineComponent({
       paginationProp,
       fetchPendingList,
       user,
+      cylinderTransferFilters,
+      showFilter,
     }
   },
 })

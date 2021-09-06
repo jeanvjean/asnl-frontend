@@ -74,9 +74,17 @@
         />
 
         <input-component
-          :label-title="'Date and Time'"
-          :input-placeholder="'Select Date & Time'"
-          :input-type="'datetime-local'"
+          :label-title="'Start Date'"
+          :input-placeholder="'Select Start Date'"
+          :input-type="'date'"
+          :is-required="false"
+          @get="form.rcNumber = $event.value"
+        />
+
+        <input-component
+          :label-title="'End Date'"
+          :input-placeholder="'Select End Date'"
+          :input-type="'date'"
           :is-required="false"
           @get="form.rcNumber = $event.value"
         />
