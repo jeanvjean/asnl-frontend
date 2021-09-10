@@ -78,6 +78,20 @@ class VehicleRepository {
       }
     })
   }
+
+  vehicleInspection(requestBody: Object, vehicleId: String) {
+    return new Promise<any>((resolve, reject) => {
+      try {
+        const response = $axios.post(
+          `/vehicle/register-inspection/${vehicleId}`,
+          requestBody
+        )
+        resolve(response)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 const VehicleController = new VehicleRepository()

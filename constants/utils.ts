@@ -1,10 +1,16 @@
 export const getFilters = (filters: any) => {
-  let urls: any[] = []
+  const urls: any[] = []
 
   for (const index in filters) {
-    urls = urls.concat(filters[index])
+    // urls = urls.concat(filters[index])
+    for (let i = 0; i < filters[index].length; i++) {
+      if (filters[index][i] === true || filters[index][i] === false) {
+        urls.push(index)
+      } else {
+        urls.push(filters[index][i])
+      }
+    }
   }
-  console.log(urls)
   return urls
 }
 
@@ -17,3 +23,6 @@ export const getQueryString = (filters: any) => {
 
   return urls.join('')
 }
+
+export const getRandomValue = () =>
+  Math.floor(Math.random() * (1000 - 100 + 1)) + 100

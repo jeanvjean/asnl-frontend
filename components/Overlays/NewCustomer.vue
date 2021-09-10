@@ -138,8 +138,7 @@
               py-2
               border-2 border-gray-200
               rounded-sm
-              focus:outline-none
-              focus:border-btn-purple
+              focus:outline-none focus:border-btn-purple
               font-thin
               placeholder-gray-500
               focus:placeholder-gray-300
@@ -162,8 +161,7 @@
               py-2
               border-2 border-gray-200
               rounded-sm
-              focus:outline-none
-              focus:border-btn-purple
+              focus:outline-none focus:border-btn-purple
               font-thin
               placeholder-gray-500
               focus:placeholder-gray-300
@@ -266,13 +264,14 @@ import {
   ref,
   useContext,
 } from '@nuxtjs/composition-api'
+import Validator from 'validatorjs'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import { ProductObject } from '@/module/Product'
-import Validator from 'validatorjs'
 import { CustomerController } from '@/module/Customer'
 import { ValidatorObject } from '@/module/Validation'
+import { getRandomValue } from '@/constants/utils'
 
 export default defineComponent({
   components: { BackDrop, InputComponent, SelectComponent },
@@ -358,7 +357,7 @@ export default defineComponent({
     }
 
     const changeComponentKey = () => {
-      const random = Math.floor(Math.random() * (1000 - 100 + 1)) + 100
+      const random = getRandomValue()
       componentKey.value = random
     }
 

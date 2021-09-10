@@ -263,16 +263,17 @@
                 capitalize
                 flex
                 items-center
-                space-x-3
-                px-4
+                space-x-2
+                px-2
                 py-2
-                rounded-md
+                rounded-lg
+                text-xs
               "
             >
               <span class="rounded-md">{{ selectedFilter }}</span>
 
               <svg
-                class="w-5 h-5 fill-current"
+                class="w-4 h-4 fill-current"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
               >
@@ -371,21 +372,21 @@ export default defineComponent({
         list: [
           {
             title: 'active',
-            type: 'radio',
+            type: 'checkbox',
             selected: false,
             value: true,
             identifier: 'active',
           },
           {
             title: 'suspended',
-            type: 'radio',
+            type: 'checkbox',
             selected: false,
-            value: false,
-            identifier: 'active',
+            value: true,
+            identifier: 'suspended',
           },
           {
             title: 'deleted',
-            type: 'radio',
+            type: 'checkbox',
             selected: false,
             value: 'deleted',
           },
@@ -441,8 +442,6 @@ export default defineComponent({
         userStatistics.activeUser = mainResponse.activeUsers
       })
     }
-
-    // const filterFromChild = (filters: any) => console.log(filters)
 
     function fetchRoles() {
       UserController.fetchRoles().then((response: any) => {

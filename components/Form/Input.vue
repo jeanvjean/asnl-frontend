@@ -21,8 +21,7 @@
         py-2
         border-2 border-gray-200
         rounded-sm
-        focus:outline-none
-        focus:border-btn-purple
+        focus:outline-none focus:border-btn-purple
         font-thin
         placeholder-gray-500
         focus:placeholder-gray-300
@@ -54,7 +53,7 @@ export default defineComponent({
       default: 'text',
     },
     defaultValue: {
-      type: String,
+      type: [String, Number],
       required: false,
       default: '',
     },
@@ -69,7 +68,7 @@ export default defineComponent({
     },
   },
   setup(_props, ctx) {
-    const inputValue = ref('')
+    const inputValue = ref<String | Number>('')
     const returnValue = () => {
       ctx.emit('get', inputValue)
     }

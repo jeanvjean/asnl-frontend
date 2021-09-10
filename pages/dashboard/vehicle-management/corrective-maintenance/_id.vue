@@ -18,9 +18,9 @@
                 py-2
                 rounded-sm
               "
-              @click=";(status = 'success'), (showConfirmation = true)"
+              @click="submit"
             >
-              <span>Approve</span>
+              <span>Save</span>
               <svg
                 class="w-6 h-6 fill-current text-btn-purple"
                 xmlns="http://www.w3.org/2000/svg"
@@ -32,33 +32,6 @@
                   stroke-linejoin="round"
                   stroke-width="2"
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </button>
-            <button
-              class="
-                flex
-                items-center
-                space-x-4
-                px-4
-                py-2
-                rounded-sm
-                border border-btn-purple
-              "
-              @click=";(status = 'error'), (showConfirmation = true)"
-            >
-              <span>Decline</span
-              ><svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-6 h-6 fill-current text-white"
-                viewBox="0 0 24 24"
-                stroke="#7C3AED"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
             </button>
@@ -80,38 +53,48 @@
           >
             <div class="flex items-center justify-center">
               <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Vehicle Name</h4>
-                <p>342343234</p>
+                <h4 class="text-gray-400 font-medium">Vehicle Category</h4>
+                <p>
+                  {{ vehicleData.vehCategory ? vehicleData.vehCategory : '' }}
+                </p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Vehicle Number</h4>
-                <p>Hydrogen</p>
+                <h4 class="text-gray-400 font-medium">Registration Number</h4>
+                <p>
+                  {{ vehicleData.regNo ? vehicleData.regNo : '' }}
+                </p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Previous Mileage</h4>
-                <p>231.32kg</p>
+                <p>
+                  {{ vehicleData.lastMileage ? vehicleData.lastMileage : '' }}
+                </p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Current Mileage</h4>
-                <p>42</p>
+                <p>
+                  {{ vehicleData.currMile ? vehicleData.currMile : '' }}
+                </p>
               </div>
             </div>
           </div>
           <h1
+            v-if="vehicleData.maintainace && vehicleData.maintainace.length"
             class="px-8 text-gray-500 font-medium text-lg my-6 customFontBold"
           >
             Last Maintenance Details
           </h1>
           <div
+            v-if="vehicleData.maintainace && vehicleData.maintainace.length"
             class="
               grid grid-rows-1
               lg:grid-cols-4
@@ -122,28 +105,30 @@
             <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Date</h4>
-                <p>Buffer Cylinder</p>
+                <p>
+                  {{ new Date(vehicleData.maintainace[0].date).toDateString() }}
+                </p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Amount Spent</h4>
-                <p>12/05/2020</p>
+                <h4 class="text-gray-400 font-medium">Cost</h4>
+                <p>{{ vehicleData.maintainace[0].cost }}</p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Maintenance Type</h4>
-                <p>Green</p>
+                <p>{{ vehicleData.maintainace[0].type }}</p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Vehicle Repair By</h4>
-                <p>2,800 kg</p>
+                <h4 class="text-gray-400 font-medium">Recommended Mechanic</h4>
+                <p>{{ vehicleData.maintainace[0].recomendedMech }}</p>
               </div>
             </div>
           </div>
@@ -160,7 +145,7 @@
           <h1 class="text-gray-500 font-medium text-lg my-4 customFontBold">
             New Maintenance Details
           </h1>
-          <table class="table table-fixed w-full border-collapse border-0">
+          <table class="table table-auto w-full border-collapse border-0">
             <thead>
               <tr class="customFontBold">
                 <th class="w-auto"></th>
@@ -171,7 +156,7 @@
                     px-2
                     py-2
                     text-center
-                    w-3/12
+                    w-4/12
                     border border-gray-400
                   "
                 >
@@ -184,7 +169,7 @@
                     px-2
                     py-2
                     text-center
-                    w-2/12
+                    w-4/12
                     border border-gray-400
                   "
                 >
@@ -197,32 +182,23 @@
                     px-2
                     py-2
                     text-center
-                    w-3/12
+                    w-4/12
                     border border-gray-400
                   "
                 >
                   Unit Cost
                 </th>
-                <th
-                  class="
-                    font-light
-                    text-lg
-                    px-2
-                    py-2
-                    text-center
-                    w-3/12
-                    border border-gray-400
-                  "
-                >
-                  Total Cost
-                </th>
                 <th class="w-auto"></th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="i in count" :key="i" class="customFontRegular">
+            <tbody :key="bodyKey">
+              <tr
+                v-for="(replacementList, i) in form.itemsReplaced"
+                :key="i"
+                class="customFontRegular"
+              >
                 <td class="font-light text-lg px-3 py-2 text-center">
-                  {{ i }}
+                  {{ i + 1 }}
                 </td>
                 <td
                   class="
@@ -233,7 +209,11 @@
                     border border-gray-400
                   "
                 >
-                  <input-component :input-placeholder="'Enter Name'" />
+                  <input-component
+                    :input-placeholder="'Enter Name'"
+                    :default-value="replacementList.name"
+                    @get="replacementList.name = $event.value"
+                  />
                 </td>
                 <td
                   class="
@@ -244,7 +224,12 @@
                     border border-gray-400
                   "
                 >
-                  <input-component :input-placeholder="'#'" />
+                  <input-component
+                    :input-placeholder="'#'"
+                    :default-value="replacementList.qty"
+                    :input-type="'number'"
+                    @get="replacementList.qty = $event.value"
+                  />
                 </td>
                 <td
                   class="
@@ -255,18 +240,12 @@
                     border border-gray-400
                   "
                 >
-                  <input-component :input-placeholder="'#'" />
-                </td>
-                <td
-                  class="
-                    font-light
-                    text-lg
-                    p-1
-                    text-center
-                    border border-gray-400
-                  "
-                >
-                  <input-component :input-placeholder="'#'" />
+                  <input-component
+                    :input-placeholder="'#'"
+                    :default-value="replacementList.unitCost"
+                    :input-type="'number'"
+                    @get="replacementList.unitCost = $event.value"
+                  />
                 </td>
 
                 <td class="font-light text-lg px-2 py-1 text-center">
@@ -289,7 +268,10 @@
             </tbody>
           </table>
           <div class="inline-block px-16 py-4">
-            <button class="flex justify-evenly items-center" @click="count++">
+            <button
+              class="flex justify-evenly items-center"
+              @click="incrementCounter"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="w-4 h-4 fill-current text-transparent mr-2"
@@ -323,11 +305,14 @@
           <input-component
             :label-title="'Recommended Mechanic'"
             :input-placeholder="'Enter Mechanic Name'"
+            :init-value="form.recomendedMech"
+            @get="form.recomendedMech = $event.value"
           />
 
           <input-component
             :label-title="'Referrer'"
             :input-placeholder="'Enter Referrer Name'"
+            @get="form.referer = $event.value"
           />
         </div>
         <div
@@ -343,17 +328,47 @@
           <div class="overflow-x-auto w-full mb-8">
             <table class="table border-collapse table-auto w-full">
               <tbody>
-                <tr v-for="(analytic, i) in analytics" :key="i">
-                  <td class="w-auto px-2 text-center">
-                    {{ i + 1 }}
-                  </td>
+                <tr>
                   <td class="w-4/12 border border-black px-4 py-4 text-left">
-                    {{ analytic }}
+                    Authenticity of Request
                   </td>
                   <td class="w-8/12 border border-black px-1 py-1 text-left">
                     <input-component
-                      :input-placeholder="`Enter ${analytic}`"
-                      @get="form.comment = $event.value"
+                      :input-placeholder="`Enter Authenticity of Request`"
+                      @get="form.analytics.requestAuthenticity = $event.value"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="w-4/12 border border-black px-4 py-4 text-left">
+                    Estimate Obtained
+                  </td>
+                  <td class="w-8/12 border border-black px-1 py-1 text-left">
+                    <input-component
+                      :input-placeholder="`Enter Estimate`"
+                      @get="form.analytics.estimateObtained = $event.value"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="w-4/12 border border-black px-4 py-4 text-left">
+                    Item/Price Done
+                  </td>
+                  <td class="w-8/12 border border-black px-1 py-1 text-left">
+                    <input-component
+                      :input-placeholder="`Enter Item/Price Done`"
+                      @get="form.analytics.itemPrice = $event.value"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="w-4/12 border border-black px-4 py-4 text-left">
+                    Recommendation
+                  </td>
+                  <td class="w-8/12 border border-black px-1 py-1 text-left">
+                    <input-component
+                      :input-placeholder="`Enter Recommendation`"
+                      @get="form.analytics.recomendation = $event.value"
                     />
                   </td>
                 </tr>
@@ -366,6 +381,7 @@
           <div class="w-full">
             <label for="" class="text-black text-lg px-2 py-2">Comments</label>
             <input
+              v-model="form.comment"
               type="text"
               class="w-full px-4 py-3 border-gray-300 mt-4"
               placeholder="Enter Comment here"
@@ -455,13 +471,19 @@
 import {
   defineComponent,
   onMounted,
+  reactive,
   ref,
+  useContext,
   useRoute,
+  useRouter,
+  watch,
 } from '@nuxtjs/composition-api'
+import Validator from 'validatorjs'
 import InputComponent from '@/components/Form/Input.vue'
 import Confirmation from '@/components/Overlays/Confirmation.vue'
 import FinalStep from '@/components/Overlays/finalStep.vue'
 import { VehicleController } from '@/module/Vehicle'
+import { ValidatorObject } from '@/module/Validation'
 export default defineComponent({
   name: 'Transfer',
   components: { Confirmation, FinalStep, InputComponent },
@@ -469,6 +491,7 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const vehicleId = ref<String>('')
+    const vehicleData = ref<any>({})
 
     onMounted(() => {
       vehicleId.value = route.value.params.id
@@ -477,33 +500,108 @@ export default defineComponent({
 
     function fetchVehicle(id: String) {
       VehicleController.fetchVehicle(id).then((response) => {
-        console.log(response)
+        vehicleData.value = response
       })
     }
 
-    const types = [{ name: 'Assign Cylinder', value: 'temp' }]
-    const reciepients = [{ name: 'Oxygen', value: 'temp' }]
     const showConfirmation = ref(false)
     const showFinalStep = ref(false)
     const status = ref('')
     const message = ref('')
+    const router = useRouter()
+    const bodyKey = ref(1)
+    const context = useContext()
 
-    const count = ref(1)
-    const analytics = [
-      'Authencity of Request',
-      'Estimate Obtained',
-      'Item/Price Done',
-      'Recommendation',
-    ]
+    const incrementCounter = () =>
+      form.itemsReplaced.push({
+        name: '',
+        qty: '0',
+        unitCost: '0',
+        totalCost: '0',
+      })
+
+    const form = reactive<any>({
+      type: 'corrective',
+      operation: 'replacements',
+      cost: 0,
+      date: new Date().toISOString(),
+      prevMileage: '',
+      curMileage: '',
+      itemsReplaced: [],
+      analytics: {
+        requestAuthenticity: '',
+        estimateObtained: '',
+        itemPrice: '',
+        recomendation: '',
+      },
+      comment: '',
+      recomendedMech: '',
+      referer: '',
+    })
+
+    const totalValue = (a: number, b: number) => a * b
+
+    watch(form, (currentValue: any) => {
+      let totalCost = 0
+      currentValue.itemsReplaced.forEach((item: any) => {
+        item.totalCost = totalValue(Number(item.qty), Number(item.unitCost))
+        totalCost = totalCost + item.totalCost
+      })
+      form.cost = totalCost
+    })
+
+    watch(vehicleData, (currentValue: any) => {
+      form.curMileage = currentValue.currMile
+      form.prevMileage = currentValue.lastMileage
+    })
+
+    const submit = () => {
+      const rules = {
+        type: 'required|string',
+        operation: 'required|string',
+        cost: 'required|integer',
+        date: 'required|date',
+        prevMileage: 'required|string',
+        curMileage: 'required|string',
+        comment: 'string',
+        recomendedMech: 'required|string',
+        referer: 'required|string',
+        itemsReplaced: 'required|array',
+        'itemsReplaced.*.name': 'required|string',
+        'itemsReplaced.*.qty': 'required|integer|min:1',
+        'itemsReplaced.*.unitCost': 'required|integer|min:1',
+        'itemsReplaced.*.totalCost': 'required|integer',
+        'analytics.requestAuthenticity': 'required|string',
+        'analytics.estimateObtained': 'required|string',
+        'analytics.itemPrice': 'required|string',
+        'analytics.recomendation': 'required|string',
+      }
+
+      const validation: any = new Validator(form, rules)
+      if (validation.fails()) {
+        let messages: string[] = []
+
+        messages = ValidatorObject.getMessages(validation.errors)
+        messages.forEach((error: string) => {
+          context.$toast.error(error)
+        })
+      } else {
+        VehicleController.vehicleInspection(form, vehicleId.value).then(() => {
+          router.go(-1)
+        })
+      }
+    }
+
     return {
-      types,
-      reciepients,
       showConfirmation,
       showFinalStep,
       status,
       message,
-      count,
-      analytics,
+      bodyKey,
+      vehicleData,
+      form,
+      incrementCounter,
+      submit,
     }
   },
 })

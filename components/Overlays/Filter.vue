@@ -344,19 +344,26 @@ export default defineComponent({
       if (individualFilter.type === 'radio') {
         parameters.value[individualFilter.identifier] = [individualFilter.value]
         ctx.emit('filterAdded', parameters.value)
+      } else if (individualFilter.identifier in parameters.value) {
+        if (
+          parameters.value[individualFilter.identifier].includes(
+            individualFilter.value
+          )
+        ) {
+          parameters.value[individualFilter.identifier].pop(
+            individualFilter.value
+          )
+          ctx.emit('filterAdded', parameters.value)
+        } else {
+          parameters.value[individualFilter.identifier].push(
+            individualFilter.value
+          )
+          ctx.emit('filterAdded', parameters.value)
+        }
+      } else {
+        parameters.value[individualFilter.identifier] = [individualFilter.value]
+        ctx.emit('filterAdded', parameters.value)
       }
-      //  else if (index in parameters.value) {
-      //   if (parameters.value[index].includes(value.title)) {
-      //     parameters.value[index].pop(value.title)
-      //     ctx.emit('filterAdded', parameters.value)
-      //   } else {
-      //     parameters.value[index].push(value.title)
-      //     ctx.emit('filterAdded', parameters.value)
-      //   }
-      // } else {
-      //   parameters.value[index] = [value.title]
-      //   ctx.emit('filterAdded', parameters.value)
-      // }
     }
 
     function fetchDrivers() {

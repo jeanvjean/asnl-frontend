@@ -164,17 +164,26 @@
       </div>
     </div>
     <div class="lg:col-span-3 bg-white px-6 py-4 h-screen overflow-y-auto">
-      <h1
-        class="
-          inline-block
-          text-2xl
-          font-medium
-          border-b-2 border-btn-purple
-          mb-4
-        "
-      >
-        Activity Logs
-      </h1>
+      <div class="flex items-center justify-between">
+        <h1
+          class="
+            inline-block
+            text-2xl
+            font-medium
+            border-b-2 border-btn-purple
+            mb-4
+          "
+        >
+          Activity Logs
+        </h1>
+        <button
+          v-if="logs.length > 0"
+          class="bg-btn-purple px-4 py-2 font-semibold text-white rounded-md"
+          @click="downloadLogs"
+        >
+          Download Activity Log
+        </button>
+      </div>
       <div class="space-y-6">
         <div v-for="(log, i) in logs" :key="i">
           <p class="text-md text-black font-light">
@@ -198,6 +207,8 @@ import {
   useRoute,
   useRouter,
 } from '@nuxtjs/composition-api'
+// eslint-disable-next-line import/no-named-as-default
+import jsPDF from 'jspdf'
 import { UserController } from '@/module/User'
 import { mainStore } from '@/module/Pinia'
 
@@ -225,7 +236,7 @@ export default defineComponent({
     const auth: any = appStore.getLoggedInUser
 
     const user = ref()
-    const logs = ref([])
+    const logs = ref<any>([])
     onBeforeMount(() => {
       if (!userId || !email) {
         router.push('/user-management/')
@@ -297,8 +308,26 @@ export default defineComponent({
 
     function formatDate(logDate: string) {
       const response = new Date(logDate)
-
       return response.toUTCString()
+    }
+
+    function downloadLogs() {
+      // eslint-disable-next-line new-cap
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        format: 'a4',
+      })
+      const activities = logs.value.map((log: any, index: any) => {
+        return index + ' ' + log.activity + ' - ' + formatDate(log.time) + ''
+      })
+      doc.setFont('helvetica')
+      doc.setFontSize(14)
+      doc.setLineHeightFactor(1.6)
+      doc.text(activities, 10, 20, {
+        align: 'left',
+        maxWidth: 180,
+      })
+      doc.save('dddd.pdf')
     }
 
     return {
@@ -313,6 +342,7 @@ export default defineComponent({
       userProfile,
       userId,
       formatDate,
+      downloadLogs,
     }
   },
 })

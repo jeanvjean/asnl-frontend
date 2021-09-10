@@ -1,6 +1,6 @@
 <template>
   <div class="py-6 px-6">
-    <card-slider :analytics="statistics" />
+    <card-slider :analytics="cylinderStatistics" />
     <div class="bg-white mt-8">
       <div class="py-2">
         <div
@@ -79,7 +79,7 @@ import Pagination from '@/components/Base/Pagination.vue'
 import FilterComponent from '@/components/Base/FilterButton.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import CylinderFilter from '@/components/Overlays/Filter.vue'
-import { cylinderFilters } from '@/constants/variables'
+import { cylinderFilters, cylinderStatistics } from '@/constants/variables'
 
 export default defineComponent({
   name: 'CylinderPool',
@@ -95,247 +95,7 @@ export default defineComponent({
   layout: 'dashboard',
   setup() {
     const showFilter = ref<Boolean>(false)
-    const statistics = ref<any>([
-      [
-        [
-          {
-            title: 'Total ASNL Cylinders',
-            value: 0,
-          },
-          [
-            {
-              title: 'Buffer Cylinders',
-              value: 0,
-            },
-            {
-              title: 'Assigned Cylinders',
-              value: 0,
-            },
-          ],
-        ],
-        [
-          {
-            title: 'ASNL Cylinders with customers',
-            value: 0,
-          },
-          [
-            {
-              title: 'Buffer Cylinders',
-              value: 0,
-            },
-            {
-              title: 'Assigned Cylinders',
-              value: 0,
-            },
-          ],
-        ],
-        [
-          {
-            title: 'Cylinders with ASNL',
-            value: 0,
-            type: 'other',
-          },
-          [
-            [
-              {
-                title: 'Filled',
-                value: 0,
-              },
-              {
-                title: 'Buffer',
-                value: 0,
-              },
-              {
-                title: 'Assigned',
-                value: 0,
-              },
-            ],
-            [
-              {
-                title: 'Empty',
-                value: 0,
-              },
-              {
-                title: 'Buffer',
-                value: 0,
-              },
-              {
-                title: 'Assigned',
-                value: 0,
-              },
-            ],
-          ],
-        ],
-      ],
-      [
-        [
-          {
-            title: 'Total Customer Cylinders',
-            value: 0,
-            type: 'other',
-          },
-          [
-            [
-              {
-                title: 'Filled',
-                value: 0,
-              },
-              {
-                title: 'Good',
-                value: 0,
-              },
-              {
-                title: 'Bad',
-                value: 0,
-              },
-            ],
-            [
-              {
-                title: 'Empty',
-                value: 0,
-              },
-              {
-                title: 'Good',
-                value: 0,
-              },
-              {
-                title: 'Bad',
-                value: 0,
-              },
-            ],
-          ],
-        ],
-        [
-          {
-            title: 'Total Bad Customer Cylinders',
-            value: 0,
-            type: 'other',
-          },
-          [
-            [
-              {
-                title: 'Filled',
-                value: 0,
-              },
-              {
-                title: 'Good',
-                value: 0,
-              },
-              {
-                title: 'Bad',
-                value: 0,
-              },
-            ],
-            [
-              {
-                title: 'Empty',
-                value: 0,
-              },
-              {
-                title: 'Good',
-                value: 0,
-              },
-              {
-                title: 'Bad',
-                value: 0,
-              },
-            ],
-          ],
-        ],
-        [
-          {
-            title: 'Total Bad ASNL Cylinders',
-            value: 0,
-          },
-          [
-            {
-              title: 'Buffer Cylinders',
-              value: 0,
-            },
-            {
-              title: 'Assigned Cylinders',
-              value: 0,
-            },
-          ],
-        ],
-      ],
-      [
-        [
-          {
-            title: 'Total Cylinders with Suppliers',
-            value: 0,
-          },
-          [
-            {
-              title: 'Internal Suppliers',
-              value: 0,
-            },
-            {
-              title: 'External Suppliers',
-              value: 0,
-            },
-          ],
-        ],
-        [
-          {
-            title: 'Cylinder with Internal Suppliers',
-            value: 0,
-            type: 'other',
-          },
-          [
-            [
-              {
-                title: 'ASNL Cylinders',
-                value: 0,
-              },
-              {
-                title: 'Buffer',
-                value: 0,
-              },
-              {
-                title: 'Assigned',
-                value: 0,
-              },
-            ],
-            [
-              {
-                title: 'Customer Cylinders',
-                value: 0,
-              },
-            ],
-          ],
-        ],
-        [
-          {
-            title: 'Cylinder with External Suppliers',
-            value: 0,
-            type: 'other',
-          },
-          [
-            [
-              {
-                title: 'ASNL Cylinders',
-                value: 0,
-              },
-              {
-                title: 'Buffer',
-                value: 0,
-              },
-              {
-                title: 'Assigned',
-                value: 0,
-              },
-            ],
-            [
-              {
-                title: 'Customer Cylinders',
-                value: 0,
-              },
-            ],
-          ],
-        ],
-      ],
-    ])
+
     const showType = ref(false)
 
     const headers = [
@@ -359,31 +119,7 @@ export default defineComponent({
     }
 
     function fetchStat() {
-      CylinderController.getCylinderStatistics().then((response) => {
-        const stat: any = response.data
-        statistics.value[0][0][0].value =
-          stat.assignedCylinder + stat.bufferCylinder
-        statistics.value[0][0][1][0].value = stat.bufferCylinder
-        statistics.value[0][0][1][1].value = stat.assignedCylinder
-
-        // statistics.value[0][1][0].value = stat.withCustomer
-
-        // statistics.value[0][2][0].value = stat.withAsnl
-        // statistics.value[0][2][1][0][0].value =
-        //   stat.filledAssignedCylinders + stat.filledBufferCylinders
-        // statistics.value[0][2][1][0][1].value = stat.filledBufferCylinders
-        // statistics.value[0][2][1][0][2].value = stat.filledAssignedCylinders
-
-        // statistics.value[0][2][1][1][0].value =
-        //   stat.emptyAssignedCylinders + stat.emptyBufferCylinders
-        // statistics.value[0][2][1][1][1].value = stat.emptyBufferCylinders
-        // statistics.value[0][2][1][1][2].value = stat.emptyAssignedCylinders
-
-        // statistics.value[1][0][0].value =
-        //   stat.customerAssignedCylinders + stat.customerBufferCylinders
-        // statistics.value[1][0][1][0].value = stat.customerBufferCylinders
-        // statistics.value[1][0][1][1].value = stat.customerAssignedCylinders
-      })
+      CylinderController.getCylinderStatistics().then(() => {})
     }
 
     function getCylinders(pageValue: number) {
@@ -399,19 +135,18 @@ export default defineComponent({
     }
 
     onBeforeMount(() => {
-      getCylinders(1)
-      fetchStat()
+      Promise.all([getCylinders(1), fetchStat()])
     })
 
     return {
       headers,
       body,
       showType,
-      statistics,
       paginationProp,
       changePage,
       showFilter,
       cylinderFilters,
+      cylinderStatistics,
     }
   },
 })

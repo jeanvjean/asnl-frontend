@@ -8,13 +8,7 @@
             :key="index"
             class="inline-block"
           >
-            <card2
-              v-if="stat[0].type && stat[0].type === 'other'"
-              :header-stat="stat[0]"
-              :bottom-stat="stat[1]"
-            >
-            </card2>
-            <card v-else :header-stat="stat[0]" :bottom-stat="stat[1]"> </card>
+            <card :stat-object="stat"> </card>
           </span>
         </div>
       </div>
@@ -76,10 +70,10 @@
 <script lang="ts">
 import { defineComponent, ref } from '@nuxtjs/composition-api'
 import Card from '@/components/Base/Card.vue'
-import Card2 from '@/components/Base/Card2.vue'
+// import Card2 from '@/components/Base/Card2.vue'
 
 export default defineComponent({
-  components: { Card, Card2 },
+  components: { Card },
   props: {
     analytics: {
       type: Array,
