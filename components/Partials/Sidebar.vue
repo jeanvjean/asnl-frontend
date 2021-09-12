@@ -433,9 +433,13 @@ export default defineComponent({
         {
           title: 'Purchase Orders',
           icon: InventoryIcon,
-          link: '#',
+          link: '/dashboard/purchase-orders',
           showSubCategory: false,
           subCategories: [
+            {
+              title: 'All Orders',
+              link: '/dashboard/purchase-orders',
+            },
             {
               title: 'Suppliers',
               link: '#',
