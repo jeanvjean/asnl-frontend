@@ -442,15 +442,7 @@ export default defineComponent({
             },
             {
               title: 'Suppliers',
-              link: '#',
-            },
-            {
-              title: 'Internal Suppliers',
-              link: '#',
-            },
-            {
-              title: 'External Suppliers',
-              link: '#',
+              link: '/dashboard/inventory/suppliers',
             },
           ],
         },
