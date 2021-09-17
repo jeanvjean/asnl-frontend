@@ -1,7 +1,7 @@
 <template>
   <button
     v-if="!loadingStatus"
-    type="button"
+    type="submit"
     class="w-full py-3 px-2 rounded-sm text-center font-semibold"
     :class="buttonClass"
     @click="buttonClicked"
@@ -11,6 +11,7 @@
   <button
     v-else
     type="button"
+    disabled
     class="w-full py-3 rounded-sm text-white"
     :class="buttonClass"
     @click="buttonClicked"

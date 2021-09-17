@@ -6,157 +6,143 @@
           <h1 class="font-medium text-xl text-black">Create Vehicle</h1>
           <p class="text-gray-600 text-sm">Enter Vehicle details below</p>
         </div>
-        <div class="grid grid-rows-1 lg:grid-cols-3 gap-4">
-          <select-component
-            :label-title="'Vehicle Category'"
-            :default-option-text="'Select a Vehicle Category'"
-            :select-array="vehicleCategories"
-            :init-value="form.vehCategory"
-            @get="form.vehCategory = $event.value"
-          />
-
-          <select-component
-            :label-title="'Vehicle Manufacturer'"
-            :default-option-text="'Select a Vehicle Manufacturer'"
-            :select-array="vehicleManufacturers"
-            :init-value="form.manufacturer"
-            @get="form.manufacturer = $event.value"
-          />
-
-          <select-component
-            :label-title="'Vehicle Type'"
-            :default-option-text="'Select a Vehicle Type'"
-            :select-array="vehicleTypes"
-            :init-value="form.vehicleType"
-            @get="form.vehicleType = $event.value"
-          />
-
-          <select-component
-            :label-title="'Vehicle Model'"
-            :default-option-text="'Select a Vehicle Model'"
-            :select-array="modelNumbers"
-            :init-value="form.vModel"
-            @get="form.vModel = $event.value"
-          />
-
-          <!-- <div class="py-2">
-            <label
-              class="block w-full px-1 text-gray-800 text-md mb-1"
-              for="vehicle-category"
-              ><span> Vehicle Model </span>
-              <span class="text-red-600 text-base">*</span></label
-            >
-            <multiselect
-              v-model="form.vModel"
-              :options="modelNumbers"
-              placeholder="Select Model Number"
-              :class="'border-2 border-gray-200 rounded-sm'"
+        <form @submit.prevent="createVehicle">
+          <div class="grid grid-rows-1 lg:grid-cols-3 gap-4">
+            <select-component
+              :label-title="'Vehicle Category'"
+              :default-option-text="'Select a Vehicle Category'"
+              :select-array="vehicleCategories"
+              :init-value="form.vehCategory"
+              @get="form.vehCategory = $event.value"
             />
-          </div> -->
 
-          <input-component
-            :label-title="'Registration Number'"
-            :input-placeholder="'Enter Number'"
-            @get="form.regNo = $event.value"
-          />
+            <select-component
+              :label-title="'Vehicle Manufacturer'"
+              :default-option-text="'Select a Vehicle Manufacturer'"
+              :select-array="vehicleManufacturers"
+              :init-value="form.manufacturer"
+              @get="form.manufacturer = $event.value"
+            />
 
-          <input-component
-            :label-title="'Acquisition Date'"
-            :input-type="'date'"
-            :input-placeholder="'Select Date'"
-            @get="form.acqisistionDate = $event.value"
-          />
+            <select-component
+              :label-title="'Vehicle Type'"
+              :default-option-text="'Select a Vehicle Type'"
+              :select-array="vehicleTypes"
+              :init-value="form.vehicleType"
+              @get="form.vehicleType = $event.value"
+            />
 
-          <input-component
-            :label-title="'Current Mileage'"
-            :input-placeholder="'Enter Current Mileage'"
-            @get="form.currMile = $event.value"
-          />
+            <select-component
+              :label-title="'Vehicle Model'"
+              :default-option-text="'Select a Vehicle Model'"
+              :select-array="modelNumbers"
+              :init-value="form.vModel"
+              @get="form.vModel = $event.value"
+            />
 
-          <input-component
-            :label-title="'Battery Capacity (Voltage)'"
-            :input-placeholder="'Enter Battery Capacity'"
-            :input-type="'number'"
-            @get="form.batteryCapacity = $event.value"
-          />
+            <input-component
+              :label-title="'Registration Number'"
+              :input-placeholder="'Enter Number'"
+              @get="form.regNo = $event.value"
+            />
 
-          <input-component
-            :label-title="'Tank Capacity (Litres)'"
-            :input-placeholder="'Enter Tank Capacity'"
-            :input-type="'number'"
-            @get="form.tankCapacity = $event.value"
-          />
+            <input-component
+              :label-title="'Acquisition Date'"
+              :input-type="'date'"
+              :input-placeholder="'Select Date'"
+              @get="form.acqisistionDate = $event.value"
+            />
 
-          <input-component
-            :label-title="'Fuel Type'"
-            :input-placeholder="'Enter Fuel Type'"
-            @get="form.fuelType = $event.value"
-          />
+            <input-component
+              :label-title="'Current Mileage'"
+              :input-placeholder="'Enter Current Mileage'"
+              @get="form.currMile = $event.value"
+            />
 
-          <input-component
-            :label-title="'Gross Weight (Ton)'"
-            :input-placeholder="'Enter Gross Weight'"
-            :is-required="false"
-            :input-type="'number'"
-            @get="form.grossHeight = $event.value"
-          />
+            <input-component
+              :label-title="'Battery Capacity (Voltage)'"
+              :input-placeholder="'Enter Battery Capacity'"
+              :input-type="'number'"
+              @get="form.batteryCapacity = $event.value"
+            />
 
-          <input-component
-            :label-title="'Net Weight (Ton)'"
-            :input-placeholder="'Enter Net Weight'"
-            :is-required="false"
-            :input-type="'number'"
-            @get="form.netWeight = $event.value"
-          />
-          <input-component
-            :label-title="'Licence Number'"
-            :input-placeholder="'########'"
-            @get="form.licence = $event.value"
-          />
+            <input-component
+              :label-title="'Tank Capacity (Litres)'"
+              :input-placeholder="'Enter Tank Capacity'"
+              :input-type="'number'"
+              @get="form.tankCapacity = $event.value"
+            />
 
-          <input-component
-            :label-title="'Insurance Date'"
-            :input-type="'date'"
-            :input-placeholder="'Enter Insurance Date'"
-            @get="form.insuranceDate = $event.value"
-          />
-        </div>
-        <div class="font-bold text-xl my-4">DISPOSAL DETAILS</div>
-        <div class="grid grid-rows-1 lg:grid-cols-3 gap-4">
-          <input-component
-            :label-title="'Disposal Date'"
-            :input-type="'date'"
-            :input-placeholder="'Enter Disposal Date'"
-            :is-required="false"
-            @get="form.disposalDate = $event.value"
-          />
-          <input-component
-            :label-title="'Disposal Amount'"
-            :input-placeholder="'Enter Disposal Amount'"
-            :is-required="false"
-            :input-type="'number'"
-            @get="form.disposalAmount = $event.value"
-          />
-          <input-component
-            :label-title="'Disposal Mileage'"
-            :input-placeholder="'Enter Disposal Mileage'"
-            :is-required="false"
-            @get="form.disposalMileage = $event.value"
-          />
-        </div>
-        <div class="lg:flex w-full lg:space-x-4 lg:w-2/5 my-6">
-          <button-component
-            :button-text="'Create Vehicle'"
-            :button-class="'py-2 bg-btn-purple text-white rounded-sm'"
-            :loading-status="loading"
-            @buttonClicked="createVehicle"
-          />
-          <button-component
-            :button-text="'Cancel'"
-            :button-class="'py-2 bg-white text-btn-purple border border-btn-purple rounded-sm'"
-            @buttonClicked="reset"
-          />
-        </div>
+            <input-component
+              :label-title="'Fuel Type'"
+              :input-placeholder="'Enter Fuel Type'"
+              @get="form.fuelType = $event.value"
+            />
+
+            <input-component
+              :label-title="'Gross Weight (Ton)'"
+              :input-placeholder="'Enter Gross Weight'"
+              :is-required="false"
+              :input-type="'number'"
+              @get="form.grossHeight = $event.value"
+            />
+
+            <input-component
+              :label-title="'Net Weight (Ton)'"
+              :input-placeholder="'Enter Net Weight'"
+              :is-required="false"
+              :input-type="'number'"
+              @get="form.netWeight = $event.value"
+            />
+            <input-component
+              :label-title="'Licence Number'"
+              :input-placeholder="'########'"
+              @get="form.licence = $event.value"
+            />
+
+            <input-component
+              :label-title="'Insurance Date'"
+              :input-type="'date'"
+              :input-placeholder="'Enter Insurance Date'"
+              @get="form.insuranceDate = $event.value"
+            />
+          </div>
+          <div class="font-bold text-xl my-4">DISPOSAL DETAILS</div>
+          <div class="grid grid-rows-1 lg:grid-cols-3 gap-4">
+            <input-component
+              :label-title="'Disposal Date'"
+              :input-type="'date'"
+              :input-placeholder="'Enter Disposal Date'"
+              :is-required="false"
+              @get="form.disposalDate = $event.value"
+            />
+            <input-component
+              :label-title="'Disposal Amount'"
+              :input-placeholder="'Enter Disposal Amount'"
+              :is-required="false"
+              :input-type="'number'"
+              @get="form.disposalAmount = $event.value"
+            />
+            <input-component
+              :label-title="'Disposal Mileage'"
+              :input-placeholder="'Enter Disposal Mileage'"
+              :is-required="false"
+              @get="form.disposalMileage = $event.value"
+            />
+          </div>
+          <div class="md:flex w-full md:space-x-2 md:w-1/4 my-6">
+            <button-component
+              :button-text="'Create Vehicle'"
+              :button-class="'py-2 bg-btn-purple text-white rounded-sm'"
+              :loading-status="loading"
+            />
+            <button-component
+              :button-text="'Cancel'"
+              :button-class="'py-2 bg-white text-btn-purple border border-btn-purple rounded-sm'"
+              @buttonClicked="reset"
+            />
+          </div>
+        </form>
       </div>
     </div>
   </div>
