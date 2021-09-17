@@ -2,7 +2,6 @@ export const getFilters = (filters: any) => {
   const urls: any[] = []
 
   for (const index in filters) {
-    // urls = urls.concat(filters[index])
     for (let i = 0; i < filters[index].length; i++) {
       if (filters[index][i] === true || filters[index][i] === false) {
         urls.push(index)
@@ -18,7 +17,11 @@ export const getQueryString = (filters: any) => {
   const urls: string[] = []
 
   for (const index in filters) {
-    filters[index].map((filter: any) => urls.push(`&${index}=${filter}`))
+    if (index === 'departments') {
+      filters[index].map((filter: any) => urls.push(`&${index}[]=${filter}`))
+    } else {
+      filters[index].map((filter: any) => urls.push(`&${index}=${filter}`))
+    }
   }
 
   return urls.join('')

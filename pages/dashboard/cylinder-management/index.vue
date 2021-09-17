@@ -39,7 +39,10 @@
             "
           >
             <filter-component @filter="showFilter = !showFilter" />
-            <search-component :place-holder="'Search'" />
+            <search-component
+              :place-holder="'Search Cylinders'"
+              @search="searchCylinder($event)"
+            />
             <button
               class="bg-btn-purple px-4 py-2 rounded-sm h-full text-white"
               @click="showType = true"
@@ -48,7 +51,32 @@
             </button>
           </div>
         </div>
-        <table-component :head="headers" :body="body"></table-component>
+        <div class="w-full flex items-center space-x-4 px-6 py-2">
+          <div
+            v-for="(selectedFilter, j) in displayedFilters"
+            :key="j"
+            class="
+              bg-purple-400 bg-opacity-10
+              text-purple-700
+              font-medium
+              capitalize
+              flex
+              items-center
+              space-x-2
+              px-4
+              py-2
+              rounded-lg
+              text-xs
+            "
+          >
+            <span class="rounded-md">{{ selectedFilter }}</span>
+          </div>
+        </div>
+        <table-component
+          :show-loader="isLoading"
+          :head="headers"
+          :body="body"
+        ></table-component>
       </div>
     </div>
     <new-cylinder-type
@@ -61,6 +89,7 @@
       :show-gases="true"
       :show-customers="true"
       @close="showFilter = !showFilter"
+      @filterAdded="filterCylinders($event)"
     />
   </div>
 </template>
@@ -80,6 +109,7 @@ import FilterComponent from '@/components/Base/FilterButton.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import CylinderFilter from '@/components/Overlays/Filter.vue'
 import { cylinderFilters, cylinderStatistics } from '@/constants/variables'
+import { getFilters, getQueryString } from '~/constants/utils'
 
 export default defineComponent({
   name: 'CylinderPool',
@@ -113,6 +143,7 @@ export default defineComponent({
       hasPrevPage: false,
       currentPage: 1,
     })
+    const isLoading = ref<Boolean>(true)
 
     function changePage(nextPage: number) {
       getCylinders(nextPage)
@@ -122,16 +153,43 @@ export default defineComponent({
       CylinderController.getCylinderStatistics().then(() => {})
     }
 
-    function getCylinders(pageValue: number) {
-      CylinderController.getRegisteredCylinders(pageValue).then(
-        (responses: any) => {
+    function getCylinders(
+      pageValue: number,
+      pageLimit: number = 10,
+      query = ''
+    ) {
+      isLoading.value = true
+      CylinderController.getRegisteredCylinders(pageValue, pageLimit, query)
+        .then((responses: any) => {
           const myResponse = responses.data
           body.value = myResponse.cylinders.docs
           paginationProp.hasNextPage = myResponse.cylinders.hasNextPage
           paginationProp.hasPrevPage = myResponse.cylinders.hasPrevPage
           paginationProp.currentPage = myResponse.cylinders.page
-        }
-      )
+        })
+        .finally(() => {
+          isLoading.value = false
+        })
+    }
+
+    function searchCylinder(searchValue: string) {
+      if (searchValue) {
+        displayedFilters.value = []
+        queryString.value = ''
+        getCylinders(1, 10, `&search=${searchValue}`)
+      } else {
+        getCylinders(1, 10)
+      }
+    }
+
+    const displayedFilters = ref<Array<String>>()
+    const queryString = ref<string>('')
+
+    function filterCylinders(filters: any) {
+      queryString.value = getQueryString(filters)
+      displayedFilters.value = getFilters(filters)
+
+      getCylinders(1, 10, queryString.value)
     }
 
     onBeforeMount(() => {
@@ -147,6 +205,10 @@ export default defineComponent({
       showFilter,
       cylinderFilters,
       cylinderStatistics,
+      searchCylinder,
+      isLoading,
+      filterCylinders,
+      displayedFilters,
     }
   },
 })

@@ -106,15 +106,19 @@
         <div class="pt-2 my-1">
           <label for="">From </label>
           <input
+            v-model="otherFilters.fromDate"
             type="date"
             class="w-full border-2 border-gray-300 text-gray-400"
+            @change="pipeUpDate()"
           />
         </div>
         <div class="pt-2 my-1">
           <label for="">To</label>
           <input
+            v-model="otherFilters.toDate"
             type="date"
             class="w-full border-2 border-gray-300 text-gray-400"
+            @change="pipeUpDate()"
           />
         </div>
       </div>
@@ -151,12 +155,11 @@
         </div>
         <div class="pt-2 my-1">
           <multiselect
-            v-model="gasModel"
+            v-model="otherFilters.gasType"
             :options="gasesArray"
-            label="gas"
-            track-by="gasId"
-            :multiple="true"
+            :multiple="false"
             :class="'w-full border-2 border-gray-300 text-gray-400'"
+            @input="pipeUpGasType"
           />
         </div>
       </div>
@@ -193,12 +196,11 @@
         </div>
         <div class="pt-2 my-1">
           <multiselect
-            v-model="customerModel"
+            v-model="otherFilters.customer"
             :options="customerArray"
-            label="name"
-            track-by="value"
-            :multiple="true"
+            :multiple="false"
             :class="'w-full border-2 border-gray-300 text-gray-400'"
+            @input="pipeUpCustomer"
           />
         </div>
       </div>
@@ -248,7 +250,12 @@
   </back-drop>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+} from '@nuxtjs/composition-api'
 import Multiselect from 'vue-multiselect'
 import BackDrop from '@/components/Base/SecondBackDrop.vue'
 import { CylinderController } from '@/module/Cylinder'
@@ -295,10 +302,7 @@ export default defineComponent({
     function fetchGases() {
       CylinderController.getCylinders().then((response) => {
         gasesArray.value = response.data.data.cylinders.map((gas: any) => {
-          return {
-            gas: gas.gasName,
-            gasId: gas._id,
-          }
+          return gas.gasName
         })
       })
     }
@@ -306,17 +310,19 @@ export default defineComponent({
     function fetchCustomers() {
       CustomerController.fetchUnPaginatedCustomers().then((response) => {
         customerArray.value = response.map((element: any) => {
-          return {
-            name: element.name,
-            value: element._id,
-          }
+          return element.name
         })
       })
     }
 
-    const gasModel = ref<string>('')
     const customerModel = ref<string>('')
     const driverModel = ref<string>('')
+    const otherFilters = reactive({
+      fromDate: '',
+      toDate: '',
+      gasType: '',
+      customer: '',
+    })
 
     onMounted(() => {
       const promiseArray = []
@@ -350,9 +356,7 @@ export default defineComponent({
             individualFilter.value
           )
         ) {
-          parameters.value[individualFilter.identifier].pop(
-            individualFilter.value
-          )
+          removeElement(individualFilter.identifier, individualFilter.value)
           ctx.emit('filterAdded', parameters.value)
         } else {
           parameters.value[individualFilter.identifier].push(
@@ -364,6 +368,32 @@ export default defineComponent({
         parameters.value[individualFilter.identifier] = [individualFilter.value]
         ctx.emit('filterAdded', parameters.value)
       }
+    }
+
+    const pipeUpDate = () => {
+      if (otherFilters.fromDate && otherFilters.toDate) {
+        parameters.value.fromDate = [otherFilters.fromDate]
+        parameters.value.toDate = [otherFilters.toDate]
+        ctx.emit('filterAdded', parameters.value)
+      }
+    }
+
+    const pipeUpGasType = () => {
+      parameters.value.gasType = [otherFilters.gasType]
+      ctx.emit('filterAdded', parameters.value)
+    }
+
+    const pipeUpCustomer = () => {
+      parameters.value.customer = [otherFilters.customer]
+      ctx.emit('filterAdded', parameters.value)
+    }
+
+    const removeElement = (index: any, value: any) => {
+      parameters.value[index].forEach((element: any, i: any) => {
+        if (element === value) {
+          parameters.value[index].splice(i, 1)
+        }
+      })
     }
 
     function fetchDrivers() {
@@ -379,12 +409,15 @@ export default defineComponent({
       status,
       close,
       addParameters,
-      gasModel,
       customerModel,
       gasesArray,
       customerArray,
       driverArray,
       driverModel,
+      otherFilters,
+      pipeUpDate,
+      pipeUpGasType,
+      pipeUpCustomer,
     }
   },
 })

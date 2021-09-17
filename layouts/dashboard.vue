@@ -56,4 +56,10 @@ export default defineComponent({
 .customFontBold {
   font-family: 'tt_normsbold';
 }
+
+@media only screen and (max-width: 600px) {
+  * {
+    font-size: 12px;
+  }
+}
 </style>

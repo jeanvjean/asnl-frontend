@@ -54,11 +54,15 @@ class ProductRespository {
     })
   }
 
-  fetchInventories(page: number) {
+  fetchInventories(
+    page: number,
+    pageLimit: number = 10,
+    queryString: string = ''
+  ) {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get(
-          `/inventory/fetch-inventories?page=${page}&limit=10`
+          `/inventory/fetch-inventories?page=${page}&limit=${pageLimit}${queryString}`
         )
         resolve(response.data)
       } catch (error) {

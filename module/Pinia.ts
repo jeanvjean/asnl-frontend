@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 
-// useStore could be anything like useUser, useCart
 export const mainStore = defineStore({
   id: 'auth',
   state() {

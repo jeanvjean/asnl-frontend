@@ -33,13 +33,13 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody v-if="!showLoader">
         <tr
           v-for="(bodySingle, index) in body"
           :key="index"
-          class="font-light hover:bg-gray-100"
+          class="font-extralight hover:bg-gray-100 capitalize text-sm"
         >
-          <td class="px-4 text-left py-4">
+          <td class="px-2 text-left py-4">
             <div class="flex items-center space-x-4">
               <img
                 v-if="bodySingle.image"
@@ -55,32 +55,28 @@
               /><span>{{ bodySingle.name }}</span>
             </div>
           </td>
-          <td class="px-4 text-left py-4">{{ bodySingle.phoneNumber }}</td>
-          <td class="px-4 text-left py-4">{{ bodySingle.email }}</td>
-          <td class="px-4 text-left py-4">
-            <div class="w-40">
-              <span
-                class="px-8 py-2 w-full block text-center capitalize"
-                :class="getColorCode(bodySingle.role)"
-                >{{ bodySingle.role }}</span
-              >
-            </div>
+          <td class="px-2 text-left py-4">{{ bodySingle.phoneNumber }}</td>
+          <td class="px-2 text-left py-4 lowercase">{{ bodySingle.email }}</td>
+          <td class="text-left px-2">
+            <span
+              class="px-4 py-2 w-full block text-center capitalize"
+              :class="getColorCode(bodySingle.role)"
+              >{{ bodySingle.role }}</span
+            >
           </td>
 
-          <td class="pl-4 text-left py-4 pr-10">
-            <div class="w-40">
-              <span
-                class="px-8 py-2 w-full block text-center capitalize"
-                :class="
-                  !bodySingle.deactivated
-                    ? 'bg-green-100 text-green-400'
-                    : 'bg-red-100 text-red-400'
-                "
-                >{{ bodySingle.deactivated ? 'Suspended' : 'Activated' }}</span
-              >
-            </div>
+          <td class="text-left px-2">
+            <span
+              class="px-2 py-2 w-full block text-center"
+              :class="
+                !bodySingle.deactivated
+                  ? 'bg-green-100 text-green-400'
+                  : 'bg-red-100 text-red-400'
+              "
+              >{{ bodySingle.deactivated ? 'Suspended' : 'Activated' }}</span
+            >
           </td>
-          <td class="px-4 py-4 icon-button text-center relative">
+          <td class="px-2 py-4 icon-button text-center relative">
             <button class="mx-auto text-black w-6 h-6">
               <svg
                 class="fill-current"
@@ -102,6 +98,7 @@
                 text-sm
                 rounded-sm
                 action-menu
+                left-12
                 z-30
               "
             >
@@ -192,6 +189,8 @@
         </tr>
       </tbody>
     </table>
+
+    <table-loader v-if="showLoader" />
     <delete-user
       v-if="showDeleteUser"
       :user="hoverUser"
@@ -226,12 +225,13 @@ import DeleteUser from '@/components/Overlays/DeleteUser.vue'
 import ChangeRole from '@/components/Overlays/ChangeRole.vue'
 import { UserController } from '@/module/User'
 import ReasonComponent from '@/components/Overlays/Reason.vue'
-
+import TableLoader from '@/components/TableLoader.vue'
 export default defineComponent({
   components: {
     DeleteUser,
     ChangeRole,
     ReasonComponent,
+    TableLoader,
   },
   props: {
     head: {
@@ -240,6 +240,10 @@ export default defineComponent({
     },
     body: {
       type: Array,
+      required: true,
+    },
+    showLoader: {
+      type: Boolean,
       required: true,
     },
   },

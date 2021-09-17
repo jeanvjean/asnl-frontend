@@ -1,12 +1,24 @@
 <template>
   <button
     v-if="!loadingStatus"
-    type="button"
-    class="w-full py-3 px-2 rounded-sm text-center font-semibold"
-    :class="buttonClass"
+    type="submit"
+    class="
+      py-3
+      px-4
+      w-full
+      rounded-sm
+      flex
+      items-center
+      justify-between
+      font-semibold
+    "
+    :class="
+      iconPosition === 'left' ? `${buttonClass} flex-row-reverse` : buttonClass
+    "
     @click="buttonClicked"
   >
-    {{ buttonText }}
+    <span>{{ buttonText }}</span>
+    <slot></slot>
   </button>
   <button
     v-else
@@ -38,6 +50,11 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false,
+    },
+    iconPosition: {
+      type: String,
+      required: false,
+      default: 'left',
     },
   },
   setup(_props, ctx) {

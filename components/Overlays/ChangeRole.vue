@@ -94,7 +94,6 @@
         <button-component
           :button-text="'Change Role'"
           :loading-status="loading"
-          :loading-text="loadingText"
           :button-class="'text-white bg-btn-purple'"
           @buttonClicked="updateUserRole"
         />
@@ -131,7 +130,6 @@ export default defineComponent({
       ctx.emit('close')
     }
     const loading = ref(false)
-    const loadingText = 'Updating'
     const subroles = ref<any>([])
     const defaultSubRoles = ref<any>([])
     const context = useContext()
@@ -190,7 +188,6 @@ export default defineComponent({
     return {
       close,
       loading,
-      loadingText,
       updateUserRole,
       subroles,
       form,

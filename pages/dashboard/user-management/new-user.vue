@@ -1,8 +1,5 @@
 <template>
   <div :key="key" class="py-6 space-y-2">
-    <div class="px-4 sm:px-6 md:px-8 w-full text-black font-semibold text-lg">
-      New User
-    </div>
     <div class="mx-auto px-4 sm:px-6 lg:px-8 w-full">
       <div
         class="
@@ -21,39 +18,6 @@
       >
         <div class="lg:col-span-1 px-2 py-2 lg:px-8 lg:py-6 w-full">
           <div class="space-y-1 mb-4">
-            <div
-              class="
-                rounded-full
-                bg-btn-purple
-                w-10
-                h-10
-                flex
-                justify-center
-                items-center
-                mb-3
-              "
-            >
-              <svg
-                width="41"
-                height="41"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle
-                  opacity=".1"
-                  cx="20.514"
-                  cy="20.345"
-                  r="20"
-                  transform="rotate(-.042 20.514 20.345)"
-                  fill="#5C53FF"
-                />
-                <path
-                  d="M17.847 19.459a3.556 3.556 0 10-.005-7.112 3.556 3.556 0 00.005 7.112zm-.004-5.334a1.777 1.777 0 11.003 3.554 1.777 1.777 0 01-.003-3.554zM24.959 21.231a2.667 2.667 0 10-.005-5.334 2.667 2.667 0 00.005 5.334zm-.003-3.555a.889.889 0 11.001 1.777.889.889 0 010-1.777zM24.96 22.12a4.445 4.445 0 00-2.72.936 6.222 6.222 0 00-10.61 4.407.89.89 0 001.778-.001 4.445 4.445 0 018.89-.006.889.889 0 101.777-.002 6.133 6.133 0 00-.767-2.977 2.667 2.667 0 014.322 2.086.888.888 0 101.778-.002 4.444 4.444 0 00-4.448-4.44z"
-                  fill="#5C53FF"
-                />
-              </svg>
-            </div>
-
             <h1 class="block font-semibold text-black text-2xl tracking-wide">
               Invite New Members
             </h1>
@@ -61,7 +25,7 @@
               >Send Invitations to members of the company</span
             >
           </div>
-          <form action="" class="w-full" autocomplete="off">
+          <form class="w-full" autocomplete="off" @submit.prevent="inviteUser">
             <input-field
               :label-title="'Email Address'"
               :input-type="'email'"
@@ -81,35 +45,24 @@
               :select-array="subroles"
               @get="subrole = $event.value"
             ></select-input>
-
-            <button
-              type="button"
-              class="
-                bg-btn-purple
-                flex
-                justify-around
-                space-x-2
-                items-center
-                text-white
-                max-w-3/5
-                py-3
-                px-4
-                my-4
-                rounded-sm
-              "
-              @click="inviteUser"
-            >
-              <span class="tracking-wide">Send Invites</span
-              ><svg
-                class="fill-current w-6 h-6"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
+            <div class="mt-4 w-full md:w-7/12">
+              <button-icon-component
+                :button-text="'Send Invites'"
+                :button-class="'border border-btn-purple text-sm font-light bg-btn-purple text-white'"
+                :loading-status="isLoading"
+                :icon-position="'right'"
               >
-                <path
-                  d="M9.417 15.181l-.397 5.584c.568 0 .814-.244 1.109-.537l2.663-2.545 5.518 4.041c1.012.564 1.725.267 1.998-.931L23.93 3.821l.001-.001c.321-1.496-.541-2.081-1.527-1.714l-21.29 8.151c-1.453.564-1.431 1.374-.247 1.741l5.443 1.693L18.953 5.78c.595-.394 1.136-.176.691.218z"
-                />
-              </svg>
-            </button>
+                <svg
+                  class="fill-current w-6 h-6"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9.417 15.181l-.397 5.584c.568 0 .814-.244 1.109-.537l2.663-2.545 5.518 4.041c1.012.564 1.725.267 1.998-.931L23.93 3.821l.001-.001c.321-1.496-.541-2.081-1.527-1.714l-21.29 8.151c-1.453.564-1.431 1.374-.247 1.741l5.443 1.693L18.953 5.78c.595-.394 1.136-.176.691.218z"
+                  />
+                </svg>
+              </button-icon-component>
+            </div>
           </form>
         </div>
         <div class="lg:col-span-2 bg-purple-50 w-full rounded-sm py-10">
@@ -125,10 +78,6 @@
               class="grid grid-cols-2 px-10 py-4 gap-2"
             >
               <div class="my-auto space-x-4">
-                <!-- <input
-                type="checkbox"
-                class="w-6 h-6 rounded-sm border-black border"
-              /> -->
                 <label
                   for=""
                   class="text-black font-medium text-md customFontRegular"
@@ -173,9 +122,11 @@ import {
 import SelectInput from '@/components/Form/Select.vue'
 import InputField from '@/components/Form/Input.vue'
 import { UserController } from '@/module/User'
+import ButtonIconComponent from '@/components/Form/ButtonIcon.vue'
+
 export default defineComponent({
   name: 'NewUser',
-  components: { SelectInput, InputField },
+  components: { SelectInput, InputField, ButtonIconComponent },
   layout: 'dashboard',
   setup() {
     const context = useContext()
@@ -185,6 +136,7 @@ export default defineComponent({
     const permissions = ref([])
 
     const requestPermissions = ref()
+    const isLoading = ref<Boolean>(false)
 
     const email = ref('')
     const role = ref('')
@@ -215,28 +167,29 @@ export default defineComponent({
     })
 
     const inviteUser = () => {
-      if (!email.value || !role.value || !subrole.value) {
-        context.$toast.global.required()
+      requestPermissions.value.forEach((element: any, index: number) => {
+        if (!element.sub_permissions.length) {
+          requestPermissions.value.splice(index, 1)
+        }
+      })
+      if (!requestPermissions.value.length) {
+        context.$toast.error('Please Select at least one Permission')
       } else {
-        requestPermissions.value.forEach((element: any, index: number) => {
-          if (!element.sub_permissions.length) {
-            requestPermissions.value.splice(index, 1)
-          }
-        })
-        if (!requestPermissions.value.length) {
-          context.$toast.error('Please Select at least one Permission')
-        } else {
-          const form = {
-            email: String(email.value).toLowerCase(),
-            role: role.value,
-            subrole: subrole.value,
-            permissions: requestPermissions.value,
-          }
-          UserController.inviteUser(form).then(() => {
+        isLoading.value = true
+        const form = {
+          email: String(email.value).toLowerCase(),
+          role: role.value,
+          subrole: subrole.value,
+          permissions: requestPermissions.value,
+        }
+        UserController.inviteUser(form)
+          .then(() => {
             email.value = role.value = subrole.value = ''
             key.value++
           })
-        }
+          .finally(() => {
+            isLoading.value = false
+          })
       }
     }
 
@@ -296,6 +249,7 @@ export default defineComponent({
       key,
       requestPermissions,
       editPermissions,
+      isLoading,
     }
   },
 })

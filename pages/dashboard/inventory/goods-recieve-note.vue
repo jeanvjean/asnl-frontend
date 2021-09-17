@@ -158,7 +158,10 @@
     <div class="bg-white px-6 py-4 mt-6">
       <div class="flex items-center justify-around px-2 py-2 space-x-4 w-full">
         <filter-component @filter="showFilter = true" />
-        <search-component :place-holder="'Search for GRN'" />
+        <search-component
+          :place-holder="'Search for GRN'"
+          @search="searchInventories($event)"
+        />
         <button
           class="
             px-4
@@ -187,9 +190,31 @@
           :pagination-details="paginationProp"
           @next="changePage($event.value)"
           @prev="changePage($event.value)"
+          @limitChanged="adjustPageLimit($event)"
         />
       </div>
       <div>
+        <div class="w-full flex items-center space-x-4 px-6 py-2">
+          <div
+            v-for="(selectedFilter, j) in displayedFilters"
+            :key="j"
+            class="
+              bg-purple-400 bg-opacity-10
+              text-purple-700
+              font-medium
+              capitalize
+              flex
+              items-center
+              space-x-2
+              px-4
+              py-2
+              rounded-lg
+              text-xs
+            "
+          >
+            <span class="rounded-md">{{ selectedFilter }}</span>
+          </div>
+        </div>
         <table class="w-full table-auto mt-2">
           <thead class="bg-gray-100">
             <tr>
@@ -223,7 +248,7 @@
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="!showLoader">
             <tr
               v-for="(inventory, i) in inventories"
               :key="i"
@@ -265,6 +290,7 @@
             </tr>
           </tbody>
         </table>
+        <table-loader v-if="showLoader" />
       </div>
     </div>
     <recieve-product
@@ -281,6 +307,7 @@
       v-if="showFilter"
       :filters="grnFilters"
       @close="showFilter = false"
+      @filterAdded="filterInventories($event)"
     />
   </div>
 </template>
@@ -298,7 +325,8 @@ import RecieveProduct from '@/components/Overlays/RecieveProducts.vue'
 import RecieveProductDetail from '@/components/Overlays/RecieveProductDetail.vue'
 import { ProductObject } from '@/module/Product'
 import GrnFilter from '@/components/Overlays/Filter.vue'
-
+import TableLoader from '@/components/TableLoader.vue'
+import { getQueryString, getFilters } from '~/constants/utils'
 export default defineComponent({
   name: 'Analytics',
   components: {
@@ -308,6 +336,7 @@ export default defineComponent({
     RecieveProduct,
     RecieveProductDetail,
     GrnFilter,
+    TableLoader,
   },
   layout: 'dashboard',
   setup() {
@@ -322,10 +351,10 @@ export default defineComponent({
     ]
     const inventories = ref<any>([])
     const showRecieveProduct = ref(false)
-
+    const showLoader = ref(true)
     const showRecieveDetails = ref(false)
     const inventoryDetails = ref()
-
+    const pageLimit = ref<number>(10)
     const componentKey = ref(0)
 
     const paginationProp = reactive({
@@ -347,11 +376,15 @@ export default defineComponent({
             title: 'Rejected',
             type: 'checkbox',
             selected: false,
+            value: 'rejected',
+            identifier: 'status',
           },
           {
             title: 'Passed',
             type: 'checkbox',
             selected: false,
+            value: 'approved',
+            identifier: 'status',
           },
         ],
       },
@@ -363,14 +396,23 @@ export default defineComponent({
       getInventories(nextPage)
     }
 
-    function getInventories(pageNumber: number) {
-      ProductObject.fetchInventories(pageNumber).then((response) => {
-        const myResponse = response.data.inventory
-        inventories.value = myResponse.docs
-        paginationProp.hasNextPage = myResponse.hasNextPage
-        paginationProp.hasPrevPage = myResponse.hasPrevPage
-        paginationProp.currentPage = myResponse.page
-      })
+    function getInventories(
+      pageNumber: number,
+      pageLimit: number = 10,
+      query: string = ''
+    ) {
+      showLoader.value = true
+      ProductObject.fetchInventories(pageNumber, pageLimit, query)
+        .then((response) => {
+          const myResponse = response.data.inventory
+          inventories.value = myResponse.docs
+          paginationProp.hasNextPage = myResponse.hasNextPage
+          paginationProp.hasPrevPage = myResponse.hasPrevPage
+          paginationProp.currentPage = myResponse.page
+        })
+        .finally(() => {
+          showLoader.value = false
+        })
     }
 
     function getInventory(value: String) {
@@ -386,6 +428,30 @@ export default defineComponent({
         statistics.approved = response.totalApprovedGrn
         statistics.pending = response.totalPendingGrn
       })
+    }
+
+    function adjustPageLimit(newLimit: number) {
+      pageLimit.value = newLimit
+      getInventories(1, pageLimit.value, queryString.value)
+    }
+    const queryString = ref<string>('')
+    const displayedFilters = ref<Array<String>>([])
+
+    const searchInventories = (searchValue: String) => {
+      if (searchValue) {
+        displayedFilters.value = []
+        queryString.value = ''
+        const searchString = `&search=${searchValue}`
+        getInventories(1, pageLimit.value, searchString)
+      } else {
+        getInventories(1, pageLimit.value)
+      }
+    }
+
+    function filterInventories(filters: any) {
+      queryString.value = getQueryString(filters)
+      displayedFilters.value = getFilters(filters)
+      getInventories(1, pageLimit.value, queryString.value)
     }
 
     onMounted(() => {
@@ -406,6 +472,11 @@ export default defineComponent({
       statistics,
       showFilter,
       grnFilters,
+      showLoader,
+      adjustPageLimit,
+      filterInventories,
+      displayedFilters,
+      searchInventories,
     }
   },
 })

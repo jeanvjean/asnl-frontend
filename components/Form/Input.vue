@@ -7,12 +7,18 @@
       <span>
         {{ labelTitle }}
       </span>
-      <span v-if="isRequired" class="text-red-600 text-base">*</span> </label
+      <span
+        v-if="isRequired"
+        class="text-red-600 text-base"
+        :class="{ 'text-xl': isInvalid }"
+        >*</span
+      > </label
     ><input
       v-model="inputValue"
       :type="inputType"
       :placeholder="inputPlaceholder"
       :disabled="isDisabled"
+      :required="isRequired"
       class="
         appearance-none
         block
@@ -28,8 +34,11 @@
       "
       min="0"
       step="1"
+      :class="{ 'border-red-300': isInvalid }"
       @keyup="returnValue"
       @change="returnValue"
+      @invalid="isInvalid = true"
+      @focus="isInvalid = false"
     />
   </div>
 </template>
@@ -72,6 +81,8 @@ export default defineComponent({
     const returnValue = () => {
       ctx.emit('get', inputValue)
     }
+    const isInvalid = ref<Boolean>(false)
+
     onMounted(() => {
       if (_props.defaultValue) {
         inputValue.value = _props.defaultValue
@@ -80,6 +91,7 @@ export default defineComponent({
     return {
       returnValue,
       inputValue,
+      isInvalid,
     }
   },
 })

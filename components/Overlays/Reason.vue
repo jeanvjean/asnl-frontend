@@ -14,7 +14,6 @@
           :button-text="buttonActionTitle"
           :button-class="'w-full text-white bg-btn-purple py-3 rounded-sm font-semibold'"
           :loading-status="buttonLoadingStatus"
-          :loading-text="buttonLoadingText"
           @buttonClicked="submitAction"
         />
         <button
@@ -47,7 +46,7 @@ export default defineComponent({
     action: {
       type: String,
       required: true,
-      default: 'Deleting User',
+      default: 'Submit',
     },
     buttonActionTitle: {
       type: String,

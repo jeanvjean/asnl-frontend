@@ -42,13 +42,12 @@
         <button-component
           :button-text="'Delete'"
           :loading-status="loading"
-          :loading-text="loadingText"
           :button-class="'text-white bg-btn-purple'"
           @buttonClicked="deleteUser"
         />
         <button-component
           :button-text="'Cancel'"
-          :button-class="'text-black bg-white border border-btn-purple'"
+          :button-class="'text-btn-purple bg-white border border-btn-purple'"
           @buttonClicked="close"
         />
       </div>

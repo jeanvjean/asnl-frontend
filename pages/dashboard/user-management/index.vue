@@ -248,7 +248,10 @@
               class="flex items-center justify-between space-x-4 w-full h-full"
             >
               <filter-component @filter="showFilter = true" />
-              <search-component :place-holder="'Search for User'" />
+              <search-component
+                :place-holder="'Search for User'"
+                @search="searchUsers($event)"
+              />
               <AddUserButton />
             </div>
           </div>
@@ -264,26 +267,21 @@
                 flex
                 items-center
                 space-x-2
-                px-2
+                px-4
                 py-2
                 rounded-lg
                 text-xs
               "
             >
               <span class="rounded-md">{{ selectedFilter }}</span>
-
-              <svg
-                class="w-4 h-4 fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M2.93 17.07A10 10 0 1117.07 2.93 10 10 0 012.93 17.07zM11.4 10l2.83-2.83-1.41-1.41L10 8.59 7.17 5.76 5.76 7.17 8.59 10l-2.83 2.83 1.41 1.41L10 11.41l2.83 2.83 1.41-1.41L11.41 10z"
-                />
-              </svg>
             </div>
           </div>
-          <TableComponent :head="headers" :body="body" @refresh="getUsers(1)" />
+          <TableComponent
+            :show-loader="isLoading"
+            :head="headers"
+            :body="body"
+            @refresh="getUsers(1)"
+          />
         </div>
       </div>
     </div>
@@ -331,6 +329,7 @@ export default defineComponent({
     const pageLimit = ref<number>(10)
     const showFilter = ref<Boolean>(false)
     const displayedFilters = ref<Array<String>>()
+    const queryString = ref<String>('')
 
     const paginationProp = reactive({
       hasNextPage: false,
@@ -388,7 +387,8 @@ export default defineComponent({
             title: 'deleted',
             type: 'checkbox',
             selected: false,
-            value: 'deleted',
+            value: true,
+            identifier: 'deleted',
           },
         ],
       },
@@ -401,37 +401,59 @@ export default defineComponent({
     }
 
     function adjustPageLimit(newLimit: number) {
-      getUsers(1, newLimit)
+      pageLimit.value = newLimit
+      getUsers(1, pageLimit.value)
     }
 
+    const isLoading = ref<Boolean>(true)
+
     function getUsers(pageValue: number, limit: number, query: String = '') {
-      UserController.getUsers(pageValue, limit, query).then((response: any) => {
-        const myResponse = response.data.data
+      isLoading.value = true
+      UserController.getUsers(pageValue, limit, query)
+        .then((response: any) => {
+          const myResponse = response.data.data
 
-        paginationProp.hasNextPage = myResponse.hasNextPage
-        paginationProp.hasPrevPage = myResponse.hasPrevPage
-        paginationProp.currentPage = myResponse.page
+          paginationProp.hasNextPage = myResponse.hasNextPage
+          paginationProp.hasPrevPage = myResponse.hasPrevPage
+          paginationProp.currentPage = myResponse.page
 
-        body.value = myResponse.docs.map((element: any) => {
-          return {
-            name: element.name,
-            phoneNumber: element.phoneNumber,
-            email: element.email,
-            role: element.role,
-            id: element._id,
-            subrole: element.subrole,
-            deactivated: element.deactivated,
-            permissions: element.permissions,
-            image: element.image,
-          }
+          body.value = myResponse.docs.map((element: any) => {
+            return {
+              name: element.name,
+              phoneNumber: element.phoneNumber,
+              email: element.email,
+              role: element.role,
+              id: element._id,
+              subrole: element.subrole,
+              deactivated: element.deactivated,
+              permissions: element.permissions,
+              image: element.image,
+            }
+          })
         })
-      })
+        .finally(() => {
+          isLoading.value = false
+        })
+    }
+
+    const searchUsers = (searchValue: String) => {
+      if (searchValue) {
+        displayedFilters.value = []
+        queryString.value = ''
+        const searchString = `&search=${searchValue}`
+        getUsers(1, pageLimit.value, searchString)
+      } else {
+        getUsers(1, pageLimit.value)
+      }
     }
 
     function filterUsers(filters: any) {
-      const url = getQueryString(filters)
+      queryString.value = getQueryString(filters)
       displayedFilters.value = getFilters(filters)
-      getUsers(1, pageLimit.value, url)
+      if (displayedFilters.value.includes('deleted')) {
+        fetchDeleted()
+      }
+      getUsers(1, pageLimit.value, queryString.value)
     }
 
     function fetchUserStat() {
@@ -443,16 +465,22 @@ export default defineComponent({
       })
     }
 
+    function fetchDeleted() {
+      UserController.fetchDeletedUsers(1, 10).then((response) => {
+        console.log(response)
+      })
+    }
+
     function fetchRoles() {
       UserController.fetchRoles().then((response: any) => {
         const roles = response.data.data
         const sortedRoles = roles.map((role: any) => {
           return {
             title: role.role,
-            type: 'radio',
+            type: 'checkbox',
             selected: false,
             value: role.role,
-            identifier: 'search',
+            identifier: 'departments',
           }
         })
         userFilters.departments.list = sortedRoles
@@ -482,6 +510,8 @@ export default defineComponent({
       adjustPageLimit,
       filterUsers,
       displayedFilters,
+      isLoading,
+      searchUsers,
     }
   },
 })

@@ -7,10 +7,16 @@
       <span>
         {{ labelTitle }}
       </span>
-      <span v-if="isRequired" class="text-red-600 text-base">*</span> </label
+      <span
+        v-if="isRequired"
+        class="text-red-600 text-base"
+        :class="{ 'text-xl': isInvalid }"
+        >*</span
+      > </label
     ><select
       v-model="selectedValue"
       :disabled="isDisabled"
+      :required="isRequired"
       class="
         appearance-none
         block
@@ -20,12 +26,14 @@
         border-2 border-gray-200
         text-black
         rounded-sm
-        focus:outline-none
-        focus:border-btn-purple
+        focus:outline-none focus:border-btn-purple
         font-thin
         bg-white
       "
+      :class="{ 'border-red-300': isInvalid }"
       @change="returnValue"
+      @invalid="isInvalid = true"
+      @focus="isInvalid = false"
     >
       <option
         v-if="defaultOptionText"
@@ -83,9 +91,11 @@ export default defineComponent({
     const returnValue = () => {
       ctx.emit('get', selectedValue)
     }
+    const isInvalid = ref<Boolean>(false)
     return {
       returnValue,
       selectedValue,
+      isInvalid,
     }
   },
 })

@@ -5,11 +5,15 @@ class CylinderRepository {
     return await $axios.get('/cylinder/fetch-cylinders')
   }
 
-  getRegisteredCylinders(page: number) {
+  getRegisteredCylinders(
+    page: number,
+    limit: number = 10,
+    queryString: string = ''
+  ) {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get(
-          `/cylinder/fetch-registered-cylinders?page=${page}&limit=10`
+          `/cylinder/fetch-registered-cylinders?page=${page}&limit=${limit}${queryString}`
         )
         resolve(response.data)
       } catch (error) {

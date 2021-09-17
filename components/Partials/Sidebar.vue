@@ -3,17 +3,10 @@
     <div class="flex flex-col w-80">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div class="flex flex-col h-0 flex-1">
-        <div class="h-20 px-4 flex items-center justify-between">
+        <div class="h-20 px-4 flex items-center">
           <h2 class="text-left font-semibold text-2xl text-white">
             Air Separation
           </h2>
-          <svg
-            class="w-6 h-6 fill-current text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-          </svg>
         </div>
         <div class="flex-1 flex flex-col overflow-y-auto">
           <nav class="flex-1 px-4 py-4 bg-bg-sidebar space-y-4 text-gray-400">
@@ -146,9 +139,7 @@ export default defineComponent({
   setup() {
     const showRegiserCylinder = ref(false)
     const showRegiserCylinderType = ref(false)
-    const appStore = mainStore()
-
-    const auth: any = appStore.getLoggedInUser
+    const { getLoggedInUser: auth }: any = mainStore()
 
     const role = auth.role
     const roleNavigations = ref<any>([])

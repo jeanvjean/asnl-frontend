@@ -234,24 +234,14 @@
         </div>
       </span>
 
-      <button
-        class="
-          rounded-sm
-          mt-4
-          px-8
-          py-3
-          border border-blue-300
-          text-md
-          font-semibold
-          flex
-          justify-between
-          bg-blue-500
-          text-white
-        "
-        @click="submit"
-      >
-        Add Customer
-      </button>
+      <div class="w-1/3 lg:w-1/5">
+        <button-component
+          :button-class="'border border-blue-300 bg-blue-500 text-white'"
+          :button-text="'Add Customer'"
+          :loading-status="true"
+          @buttonClicked="submit"
+        />
+      </div>
     </div>
   </back-drop>
 </template>
@@ -268,13 +258,14 @@ import Validator from 'validatorjs'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
+import ButtonComponent from '@/components/Form/Button.vue'
 import { ProductObject } from '@/module/Product'
 import { CustomerController } from '@/module/Customer'
 import { ValidatorObject } from '@/module/Validation'
 import { getRandomValue } from '@/constants/utils'
 
 export default defineComponent({
-  components: { BackDrop, InputComponent, SelectComponent },
+  components: { BackDrop, InputComponent, SelectComponent, ButtonComponent },
   setup(_props, ctx) {
     const close = () => {
       ctx.emit('close')

@@ -1,8 +1,8 @@
 <template>
   <div :key="componentKey" class="py-6 px-6">
-    <div class="flex justify-between px-6">
-      <h1>All Vehicles</h1>
-      <div>
+    <div class="flex justify-between items-center px-6">
+      <h1 class="text-lg font-semibold">All Vehicles</h1>
+      <div v-if="user.role === 'admin'">
         <router-link
           to="/dashboard/vehicle-management/create-vehicle"
           class="
@@ -330,6 +330,7 @@ import { VehicleController } from '@/module/Vehicle'
 import { DriverObject } from '@/module/Driver'
 import VehicleFilter from '@/components/Overlays/Filter.vue'
 import FinalDelete from '@/components/Overlays/FinalDelete.vue'
+import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
   name: 'Reports',
@@ -353,6 +354,8 @@ export default defineComponent({
     const showFilter = ref<Boolean>(false)
     const showFinalDelete = ref<Boolean>(false)
     const selectedDriver = ref<String>('')
+
+    const { getLoggedInUser: user } = mainStore()
 
     const headers = [
       'Vehicle Category',
@@ -453,6 +456,7 @@ export default defineComponent({
       showFilter,
       showFinalDelete,
       selectedDriver,
+      user,
     }
   },
 })

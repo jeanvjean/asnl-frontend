@@ -37,7 +37,7 @@
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="!showLoader">
           <tr
             v-for="(bodySingle, index) in body"
             :key="index"
@@ -106,8 +106,7 @@
                     py-2
                     text-center text-black
                     focus:outline-none
-                    hover:bg-purple-300
-                    hover:text-white
+                    hover:bg-purple-300 hover:text-white
                     w-full
                     overflow-none
                     font-medium
@@ -124,14 +123,17 @@
           </tr>
         </tbody>
       </table>
+      <table-loader v-if="showLoader" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
+import TableLoader from '@/components/TableLoader.vue'
 
 export default defineComponent({
+  components: { TableLoader },
   props: {
     head: {
       type: Array,
@@ -141,6 +143,7 @@ export default defineComponent({
       type: Array,
       required: true,
     },
+    showLoader: Boolean,
   },
   setup(_props, ctx) {
     const show = () => {

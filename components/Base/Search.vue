@@ -26,6 +26,7 @@
           </svg>
         </div>
         <input
+          v-model="searchValue"
           class="
             block
             border
@@ -36,23 +37,21 @@
             h-full
             text-gray-900
             placeholder-gray-500
-            focus:outline-none
-            focus:placeholder-gray-400
-            focus:ring-0
+            focus:outline-none focus:placeholder-gray-400 focus:ring-0
             px-10
             py-3
             sm:text-sm
           "
           :placeholder="placeHolder"
           type="search"
-          name="search"
+          @input="debounce(($event) => emitSearch($event), 200)"
         />
       </div>
     </form>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, ref } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   props: {
@@ -61,6 +60,26 @@ export default defineComponent({
       required: false,
       default: 'Search',
     },
+  },
+  setup(_props, ctx) {
+    const searchValue = ref<String>('')
+
+    function createDebounce() {
+      let timeout: any = null
+      return function (fnc: () => void) {
+        clearTimeout(timeout)
+        timeout = setTimeout(() => {
+          fnc()
+        }, 500)
+      }
+    }
+    const emitSearch = () => ctx.emit('search', searchValue.value)
+
+    return {
+      searchValue,
+      emitSearch,
+      debounce: createDebounce(),
+    }
   },
 })
 </script>

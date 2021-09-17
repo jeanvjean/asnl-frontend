@@ -38,6 +38,19 @@ class UserRepository {
     )
   }
 
+  fetchDeletedUsers(page: number, limit: number = 10) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.get(
+          `/user/fetch-deleted-users?page=${page}&limit=${limit}`
+        )
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
   fetchUserUnPaginated() {
     return new Promise<any>(async (resolve, reject) => {
       try {
