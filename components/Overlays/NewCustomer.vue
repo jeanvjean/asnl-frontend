@@ -238,7 +238,7 @@
         <button-component
           :button-class="'border border-blue-300 bg-blue-500 text-white'"
           :button-text="'Add Customer'"
-          :loading-status="true"
+          :loading-status="isLoading"
           @buttonClicked="submit"
         />
       </div>
@@ -319,7 +319,7 @@ export default defineComponent({
     const products = ref<Array<any>>([])
     const productsArray = ref([])
     const componentKey = ref<number>(1)
-
+    const isLoading = ref<Boolean>(false)
     const increment = () => {
       products.value.push({
         id: '',
@@ -429,6 +429,7 @@ export default defineComponent({
       processFile,
       requestPayload,
       submit,
+      isLoading,
     }
   },
 })
