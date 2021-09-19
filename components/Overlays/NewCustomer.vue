@@ -30,218 +30,234 @@
           />
         </svg>
       </div>
-      <div class="grid grid-rows-1 md:grid-cols-2 gap-x-4">
-        <select-component
-          :label-title="'Customer Type'"
-          :select-array="customerTypes"
-          :default-option-text="'Select a Customer Type'"
-          :init-value="form.customerType"
-          @get="form.customerType = $event.value"
-        />
-        <input-component
-          :label-title="'Mode of Service'"
-          :input-placeholder="'Enter Mode of Service'"
-          :default-value="form.modeOfService"
-          @get="form.modeOfService = $event.value"
-        />
-
-        <input-component
-          :label-title="'Customer Name'"
-          :input-placeholder="'Enter Customer Name'"
-          :default-value="form.name"
-          @get="form.name = $event.value"
-        />
-
-        <input-component
-          :label-title="'Nick Name'"
-          :input-placeholder="'Enter Nick Name'"
-          :default-value="form.nickName"
-          @get="form.nickName = $event.value"
-        />
-
-        <input-component
-          :label-title="'Address'"
-          :input-placeholder="'Enter Customer Address'"
-          :default-value="form.address"
-          @get="form.address = $event.value"
-        />
-
-        <input-component
-          :label-title="'Name of Contact Person'"
-          :input-placeholder="'Enter Name of Contact Person'"
-          :default-value="form.contactPerson"
-          @get="form.contactPerson = $event.value"
-        />
-
-        <input-component
-          :label-title="'Email Address'"
-          :input-placeholder="'Enter Email Address'"
-          :default-value="form.email"
-          @get="form.email = $event.value"
-        />
-
-        <input-component
-          :label-title="'Tax I.D Number (Optional)'"
-          :input-placeholder="'Enter Tax I.D Number (Optional)'"
-          :default-value="form.TIN"
-          :is-required="false"
-          @get="form.TIN = $event.value"
-        />
-
-        <input-component
-          :label-title="'Phone Number'"
-          :input-placeholder="'Enter Phone Number'"
-          :default-value="form.phoneNumber"
-          @get="form.phoneNumber = $event.value"
-        />
-
-        <input-component
-          :label-title="'R.C Number (Optional)'"
-          :input-placeholder="'Enter R.C Number (Optional)'"
-          :default-value="form.rcNumber"
-          :is-required="false"
-          @get="form.rcNumber = $event.value"
-        />
-
-        <input-component
-          :label-title="'Cylinder Holding Time'"
-          :input-placeholder="'Enter Cylinder Holding Time'"
-          :default-value="form.cylinderHoldingTime"
-          @get="form.cylinderHoldingTime = $event.value"
-        />
-
-        <input-component
-          :label-title="'Territory'"
-          :input-placeholder="'Enter Territory'"
-          :default-value="form.territory"
-          @get="form.territory = $event.value"
-        />
-
-        <input-component
-          :label-title="'Unit Price'"
-          :input-placeholder="'Enter Unit Price'"
-          :default-value="form.unitPrice"
-          @get="form.unitPrice = $event.value"
-        />
-
-        <div class="w-full py-2">
-          <label class="block w-full px-1 text-gray-800 text-md mb-1"
-            >Upload CAC Document</label
-          >
-          <input
-            type="file"
-            class="
-              appearance-none
-              block
-              w-full
-              px-4
-              py-2
-              border-2 border-gray-200
-              rounded-sm
-              focus:outline-none focus:border-btn-purple
-              font-thin
-              placeholder-gray-500
-              focus:placeholder-gray-300
-            "
-            @change="processFile($event, 'cac')"
+      <form @submit.prevent="submit">
+        <div class="grid grid-rows-1 md:grid-cols-2 gap-x-4">
+          <select-component
+            :label-title="'Customer Type'"
+            :select-array="customerTypes"
+            :default-option-text="'Select a Customer Type'"
+            :init-value="form.customerType"
+            @get="form.customerType = $event.value"
           />
-        </div>
-
-        <div class="w-full py-2">
-          <label class="block w-full px-1 text-gray-800 text-md mb-1"
-            >Valid ID</label
-          >
-          <input
-            type="file"
-            class="
-              appearance-none
-              block
-              w-full
-              px-4
-              py-2
-              border-2 border-gray-200
-              rounded-sm
-              focus:outline-none focus:border-btn-purple
-              font-thin
-              placeholder-gray-500
-              focus:placeholder-gray-300
-            "
-            @change="processFile($event, 'validId')"
+          <input-component
+            :label-title="'Mode of Service'"
+            :input-placeholder="'Enter Mode of Service'"
+            :default-value="form.modeOfService"
+            @get="form.modeOfService = $event.value"
           />
+
+          <input-component
+            :label-title="'Customer Name'"
+            :input-placeholder="'Enter Customer Name'"
+            :default-value="form.name"
+            @get="form.name = $event.value"
+          />
+
+          <input-component
+            :label-title="'Nick Name'"
+            :input-placeholder="'Enter Nick Name'"
+            :default-value="form.nickName"
+            @get="form.nickName = $event.value"
+          />
+
+          <input-component
+            :label-title="'Address'"
+            :input-placeholder="'Enter Customer Address'"
+            :default-value="form.address"
+            @get="form.address = $event.value"
+          />
+
+          <input-component
+            :label-title="'Name of Contact Person'"
+            :input-placeholder="'Enter Name of Contact Person'"
+            :default-value="form.contactPerson"
+            @get="form.contactPerson = $event.value"
+          />
+
+          <input-component
+            :label-title="'Email Address'"
+            :input-placeholder="'Enter Email Address'"
+            :default-value="form.email"
+            @get="form.email = $event.value"
+          />
+
+          <input-component
+            :label-title="'Tax I.D Number (Optional)'"
+            :input-placeholder="'Enter Tax I.D Number (Optional)'"
+            :default-value="form.TIN"
+            :is-required="false"
+            @get="form.TIN = $event.value"
+          />
+
+          <input-component
+            :label-title="'Phone Number'"
+            :input-placeholder="'Enter Phone Number'"
+            :default-value="form.phoneNumber"
+            @get="form.phoneNumber = $event.value"
+          />
+
+          <input-component
+            :label-title="'R.C Number (Optional)'"
+            :input-placeholder="'Enter R.C Number (Optional)'"
+            :default-value="form.rcNumber"
+            :is-required="false"
+            @get="form.rcNumber = $event.value"
+          />
+
+          <input-component
+            :label-title="'Cylinder Holding Time'"
+            :input-placeholder="'Enter Cylinder Holding Time'"
+            :default-value="form.cylinderHoldingTime"
+            @get="form.cylinderHoldingTime = $event.value"
+          />
+
+          <input-component
+            :label-title="'Territory'"
+            :input-placeholder="'Enter Territory'"
+            :default-value="form.territory"
+            @get="form.territory = $event.value"
+          />
+
+          <input-component
+            :label-title="'Unit Price'"
+            :input-placeholder="'Enter Unit Price'"
+            :default-value="form.unitPrice"
+            @get="form.unitPrice = $event.value"
+          />
+
+          <div class="w-full py-2">
+            <label class="block w-full px-1 text-gray-800 text-md mb-1"
+              >Upload CAC Document</label
+            >
+            <input
+              type="file"
+              class="
+                appearance-none
+                block
+                w-full
+                px-4
+                py-2
+                border-2 border-gray-200
+                rounded-sm
+                focus:outline-none focus:border-btn-purple
+                font-thin
+                placeholder-gray-500
+                focus:placeholder-gray-300
+              "
+              @change="processFile($event, 'cac')"
+            />
+          </div>
+
+          <div class="w-full py-2">
+            <label class="block w-full px-1 text-gray-800 text-md mb-1"
+              >Valid ID</label
+            >
+            <input
+              type="file"
+              class="
+                appearance-none
+                block
+                w-full
+                px-4
+                py-2
+                border-2 border-gray-200
+                rounded-sm
+                focus:outline-none focus:border-btn-purple
+                font-thin
+                placeholder-gray-500
+                focus:placeholder-gray-300
+              "
+              @change="processFile($event, 'validId')"
+            />
+          </div>
         </div>
-      </div>
-      <span :key="componentKey">
-        <div
-          class="
-            border-t border-b-0 border-l-0 border-r-0
-            pt-3
-            my-2
-            border-2 border-gray-300
-            flex
-            justify-between
-            items-center
-            px-3
-          "
-        >
-          <h4>Products Section</h4>
-          <button
+        <span :key="componentKey">
+          <div
             class="
+              border-t border-b-0 border-l-0 border-r-0
+              pt-3
+              my-2
+              border-2 border-gray-300
               flex
-              justify-center
+              justify-between
               items-center
-              bg-btn-purple
-              text-white
-              px-4
-              py-2
-              rounded-sm
+              px-3
             "
-            @click="increment"
           >
+            <h4>Products Section</h4>
+            <button
+              type="button"
+              class="
+                flex
+                justify-center
+                items-center
+                bg-btn-purple
+                text-white
+                px-4
+                py-2
+                rounded-sm
+              "
+              @click="increment"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-6 h-6 fill-current"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+              <span class="text-white">Add Product</span>
+            </button>
+          </div>
+          <div
+            v-for="(product, i) in products"
+            :key="i"
+            class="flex items-center justify-center space-x-4"
+          >
+            <select-component
+              :label-title="'Products'"
+              :select-array="productsArray"
+              :default-option-text="'Select a Product'"
+              :init-value="product.id"
+              @get="product.id = $event.value"
+            />
+            <input-component
+              :label-title="'Units'"
+              :input-placeholder="'Enter Unit'"
+              :default-value="product.price"
+              @get="product.price = $event.value"
+            />
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6 fill-current"
+              class="fill-current w-12 h-12 text-black pt-6"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              @click="removeProduct(i)"
             >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                d="M6 18 18 6M6 6l12 12"
               />
             </svg>
-            <span class="text-white">Add Product</span>
-          </button>
-        </div>
-        <div
-          v-for="(product, i) in products"
-          :key="i"
-          class="grid grid-rows-1 md:grid-cols-2 gap-x-4"
-        >
-          <select-component
-            :label-title="'Products'"
-            :select-array="productsArray"
-            :default-option-text="'Select a Product'"
-            :init-value="product.id"
-            @get="changePrice($event.value, i)"
-          />
-          <input-component
-            :label-title="'Unit Price'"
-            :input-placeholder="'Enter Unit of Price'"
-            :disabled="true"
-            :default-value="product.price"
-          />
-        </div>
-      </span>
+          </div>
+        </span>
 
-      <div class="w-1/3 lg:w-1/5">
-        <button-component
-          :button-class="'border border-blue-300 bg-blue-500 text-white'"
-          :button-text="'Add Customer'"
-          :loading-status="isLoading"
-          @buttonClicked="submit"
-        />
-      </div>
+        <div class="w-1/3 lg:w-1/5 mt-2">
+          <button-component
+            :button-class="'border border-blue-300 bg-blue-500 text-white'"
+            :button-text="'Add Customer'"
+            :loading-status="isLoading"
+          />
+        </div>
+      </form>
     </div>
   </back-drop>
 </template>
@@ -275,8 +291,12 @@ export default defineComponent({
 
     const customerTypes = [
       {
-        name: 'Pick Up',
-        value: 'pick up',
+        name: 'Walk-in Customer',
+        value: 'walk-in-customer',
+      },
+      {
+        name: 'Regular Customer',
+        value: 'regular-customer',
       },
     ]
 
@@ -312,6 +332,11 @@ export default defineComponent({
       })
     }
 
+    const removeProduct = (index: any) => {
+      products.value.splice(index, 1)
+      changeComponentKey()
+    }
+
     onMounted(() => {
       fetchProducts()
     })
@@ -325,6 +350,7 @@ export default defineComponent({
         id: '',
         price: '',
       })
+      changeComponentKey()
     }
 
     function processFile(event: any, index: any) {
@@ -334,17 +360,6 @@ export default defineComponent({
       } else {
         form.validId = file
       }
-    }
-
-    function changePrice(selectedProduct: any, index: any) {
-      productsArray.value.forEach((prod: any) => {
-        if (prod.value === selectedProduct) {
-          products.value[index].id = String(selectedProduct)
-          products.value[index].price = String(prod.price)
-          productsBody.value.push(selectedProduct)
-        }
-      })
-      changeComponentKey()
     }
 
     const changeComponentKey = () => {
@@ -411,9 +426,12 @@ export default defineComponent({
       } else if (!productsBody.value.length) {
         context.$toast.error('Products is Required')
       } else {
-        CustomerController.registerCustomer(requestPayload.value).then(() => {
-          close()
-        })
+        isLoading.value = true
+        CustomerController.registerCustomer(requestPayload.value)
+          .then(() => {
+            close()
+          })
+          .finally(() => (isLoading.value = false))
       }
     }
 
@@ -424,12 +442,12 @@ export default defineComponent({
       products,
       productsArray,
       increment,
-      changePrice,
       componentKey,
       processFile,
       requestPayload,
       submit,
       isLoading,
+      removeProduct,
     }
   },
 })
