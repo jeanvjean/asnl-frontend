@@ -86,11 +86,11 @@ class CylinderRepository {
     })
   }
 
-  fetchPendingTransfers(page: Number) {
+  fetchPendingTransfers(page: Number, limit: Number, queryString: String = '') {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get(
-          `/cylinder/fetch-transfers?page=${page}&limit=10`
+          `/cylinder/fetch-transfers?page=${page}&limit=${limit}${queryString}`
         )
         resolve(response.data)
       } catch (error) {

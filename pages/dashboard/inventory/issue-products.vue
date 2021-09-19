@@ -225,7 +225,7 @@
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="!isLoading">
           <tr
             v-for="(mrn, i) in body"
             :key="i"
@@ -261,6 +261,8 @@
         </tbody>
       </table>
     </div>
+    <table-loader v-if="isLoading" />
+    <default-state v-if="!isLoading && !body.length" />
 
     <issue-product v-if="showIssueProduct" @close="showIssueProduct = false" />
     <issue-product-detail
@@ -272,7 +274,7 @@
       v-if="showFilter"
       :filters="mrnFilters"
       :show-customers="true"
-      :show-date="false"
+      :show-date="true"
       @close="showFilter = false"
     />
   </div>
@@ -292,7 +294,8 @@ import IssueProductDetail from '@/components/Overlays/IssueProductDetail.vue'
 import { ProductObject } from '@/module/Product'
 import { mainStore } from '@/module/Pinia'
 import MrnFilter from '@/components/Overlays/Filter.vue'
-import { UserController } from '~/module/User'
+import TableLoader from '@/components/TableLoader.vue'
+import DefaultState from '@/components/DefaultState.vue'
 
 export default defineComponent({
   name: 'Analytics',
@@ -303,6 +306,8 @@ export default defineComponent({
     IssueProduct,
     IssueProductDetail,
     MrnFilter,
+    TableLoader,
+    DefaultState,
   },
   layout: 'dashboard',
   setup() {
@@ -321,6 +326,7 @@ export default defineComponent({
     const showIssueProduct = ref(false)
     const showIssueProductDetail = ref(false)
     const mrnDetail = ref<any>()
+    const isLoading = ref<Boolean>(false)
 
     const paginationProp = reactive({
       hasNextPage: false,
@@ -335,11 +341,22 @@ export default defineComponent({
     })
 
     const mrnFilters = reactive({
-      departments: { type: 'checkbox', list: [] },
       status: {
         list: [
-          { title: 'Rejected', type: 'radio', selected: false },
-          { title: 'Passed', type: 'radio', selected: false },
+          {
+            title: 'Pending',
+            type: 'radio',
+            selected: false,
+            identifier: 'status',
+            value: 'pending',
+          },
+          {
+            title: 'Approved',
+            type: 'radio',
+            selected: false,
+            identifier: 'status',
+            value: 'approved',
+          },
         ],
       },
     })
@@ -352,24 +369,17 @@ export default defineComponent({
       })
     }
 
-    function fetchRoles() {
-      UserController.fetchRoles().then((response) => {
-        const roles = response.data.data
-        const sortedRoles = roles.map((role: any) => {
-          return { title: role.role, type: 'checkbox', selected: false }
-        })
-        mrnFilters.departments.list = sortedRoles
-      })
-    }
-
     function fetchPendingDisbursement() {
-      ProductObject.fetchPendingDisbursement().then((response) => {
-        const mrnResponse: any = response
-        body.value = mrnResponse.docs
-        paginationProp.hasNextPage = mrnResponse.hasNextPage
-        paginationProp.hasPrevPage = mrnResponse.hasPrevPage
-        paginationProp.currentPage = mrnResponse.page
-      })
+      isLoading.value = true
+      ProductObject.fetchPendingDisbursement()
+        .then((response) => {
+          const mrnResponse: any = response
+          body.value = mrnResponse.docs
+          paginationProp.hasNextPage = mrnResponse.hasNextPage
+          paginationProp.hasPrevPage = mrnResponse.hasPrevPage
+          paginationProp.currentPage = mrnResponse.page
+        })
+        .finally(() => (isLoading.value = false))
     }
 
     function fetchDisbursementDetail(mrn: any) {
@@ -378,11 +388,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      Promise.all([
-        fetchPendingDisbursement(),
-        getDisbursalStat(),
-        fetchRoles(),
-      ])
+      Promise.all([fetchPendingDisbursement(), getDisbursalStat()])
     })
 
     return {
@@ -397,6 +403,7 @@ export default defineComponent({
       auth,
       mrnFilters,
       showFilter,
+      isLoading,
     }
   },
 })

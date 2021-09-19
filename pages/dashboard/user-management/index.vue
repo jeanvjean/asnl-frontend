@@ -328,7 +328,7 @@ export default defineComponent({
     const page = ref<number>(1)
     const pageLimit = ref<number>(10)
     const showFilter = ref<Boolean>(false)
-    const displayedFilters = ref<Array<String>>()
+    const displayedFilters = ref<Array<String>>([])
     const queryString = ref<String>('')
 
     const paginationProp = reactive({
@@ -480,7 +480,7 @@ export default defineComponent({
             type: 'checkbox',
             selected: false,
             value: role.role,
-            identifier: 'departments',
+            identifier: 'departments[]',
           }
         })
         userFilters.departments.list = sortedRoles

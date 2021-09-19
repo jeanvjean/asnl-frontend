@@ -154,138 +154,89 @@
             </div>
           </div>
           <div v-else class="px-4">
-            <table class="w-full table-auto">
-              <thead class="bg-gray-200">
-                <tr>
-                  <th
-                    v-for="(headSingle, index) in headers"
-                    :key="index"
-                    class="
-                      uppercase
-                      text-gray-800
-                      font-thin
-                      text-sm
-                      px-4
-                      py-2
-                      text-left
-                    "
+            <table-component
+              :table-headers="headers"
+              :table-body="body"
+              :show-loader="isLoading"
+            >
+              <template #action="slotProps">
+                <button class="text-black w-6 h-6">
+                  <svg
+                    class="fill-current"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
                   >
-                    {{ headSingle }}
-                  </th>
-                  <th
-                    class="
-                      uppercase
-                      text-gray-800
-                      font-thin
-                      text-sm
-                      px-4
-                      py-2
-                      text-center
-                    "
-                  >
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(bodySingle, index) in body"
-                  :key="index"
-                  class="font-light hover:bg-gray-100"
+                    <path
+                      d="M4 12a2 2 0 110-4 2 2 0 010 4zm6 0a2 2 0 110-4 2 2 0 010 4zm6 0a2 2 0 110-4 2 2 0 010 4z"
+                    />
+                  </svg>
+                </button>
+                <div
+                  class="
+                    absolute
+                    bg-gray-50
+                    border border-gray-300
+                    w-40
+                    font-medium
+                    text-sm
+                    rounded-sm
+                    action-menu
+                    z-10
+                    ml-12
+                  "
                 >
-                  <td class="px-4 text-left py-4">
-                    {{ bodySingle.name }}
-                  </td>
-
-                  <td class="px-4 text-left py-4">
-                    {{ bodySingle.email }}
-                  </td>
-
-                  <td class="px-4 text-left py-4">
-                    {{ bodySingle.phoneNumber }}
-                  </td>
-
-                  <td class="px-4 text-left py-4">{{ bodySingle.address }}</td>
-
-                  <td class="px-4 py-4 icon-button text-center">
-                    <button class="mx-auto text-black w-6 h-6 relative">
-                      <svg
-                        class="fill-current"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          d="M4 12a2 2 0 110-4 2 2 0 010 4zm6 0a2 2 0 110-4 2 2 0 010 4zm6 0a2 2 0 110-4 2 2 0 010 4z"
-                        />
-                      </svg>
-                    </button>
-                    <div
-                      class="
-                        absolute
-                        -ml-4
-                        bg-gray-50
-                        border border-gray-300
-                        w-40
-                        font-medium
-                        text-sm
-                        rounded-sm
-                        action-menu
-                        z-10
-                      "
-                    >
-                      <button
-                        class="
-                          block
-                          px-3
-                          py-2
-                          text-black
-                          focus:outline-none
-                          hover:bg-purple-300 hover:text-white
-                          w-full
-                          overflow-none
-                        "
-                        @click="showCustomerDetail(bodySingle)"
-                      >
-                        View Details
-                      </button>
-                      <button
-                        class="
-                          block
-                          px-3
-                          py-2
-                          text-black
-                          focus:outline-none
-                          hover:bg-purple-300 hover:text-white
-                          w-full
-                          overflow-none
-                        "
-                        @click="showCustomerDetail(bodySingle, 'pickupForm')"
-                      >
-                        Request Pickup
-                      </button>
-                      <button
-                        class="
-                          block
-                          px-3
-                          py-2
-                          text-black
-                          focus:outline-none
-                          hover:bg-purple-300 hover:text-white
-                          w-full
-                          overflow-none
-                        "
-                        @click="
-                          changeCustomer(bodySingle._id),
-                            (showDeleteReason = true)
-                        "
-                      >
-                        Delete Customer
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                  <button
+                    class="
+                      block
+                      px-3
+                      py-2
+                      text-black
+                      focus:outline-none
+                      hover:bg-purple-300 hover:text-white
+                      w-full
+                      overflow-none
+                    "
+                    @click="showCustomerDetail(slotProps.rowObject)"
+                  >
+                    View Details
+                  </button>
+                  <button
+                    class="
+                      block
+                      px-3
+                      py-2
+                      text-black
+                      focus:outline-none
+                      hover:bg-purple-300 hover:text-white
+                      w-full
+                      overflow-none
+                    "
+                    @click="
+                      showCustomerDetail(slotProps.rowObject, 'pickupForm')
+                    "
+                  >
+                    Request Pickup
+                  </button>
+                  <button
+                    class="
+                      block
+                      px-3
+                      py-2
+                      text-black
+                      focus:outline-none
+                      hover:bg-purple-300 hover:text-white
+                      w-full
+                      overflow-none
+                    "
+                    @click="
+                      changeCustomer(slotProps.rowId), (showDeleteReason = true)
+                    "
+                  >
+                    Delete Customer
+                  </button>
+                </div>
+              </template>
+            </table-component>
           </div>
         </div>
       </div>
@@ -323,6 +274,8 @@ import { CustomerController } from '@/module/Customer'
 import Pagination from '@/components/Base/Pagination.vue'
 import { CustomerDto } from '@/types/Types'
 import ReasonComponent from '@/components/Overlays/Reason.vue'
+import TableComponent from '@/components/Table.vue'
+import { getTableBody } from '@/constants/utils'
 
 export default defineComponent({
   name: 'Home',
@@ -333,6 +286,7 @@ export default defineComponent({
     FilterComponent,
     Pagination,
     ReasonComponent,
+    TableComponent,
   },
   layout: 'dashboard',
   setup() {
@@ -349,6 +303,7 @@ export default defineComponent({
     const body = ref<any>([])
     const customerProp = ref<CustomerDto>()
     const showDeleteReason = ref<Boolean>(false)
+    const isLoading = ref<Boolean>(true)
 
     function showCustomerDetail(
       customer: CustomerDto,
@@ -365,12 +320,21 @@ export default defineComponent({
     const selectedCustomer = ref<String>('')
 
     function fetchCustomers(page: number) {
-      CustomerController.fetchCustomers(page).then((response) => {
-        body.value = response.docs
-        paginationProp.hasNextPage = response.hasNextPage
-        paginationProp.hasPrevPage = response.hasPrevPage
-        paginationProp.currentPage = response.page
-      })
+      isLoading.value = true
+      CustomerController.fetchCustomers(page)
+        .then((response) => {
+          body.value = getTableBody(response.docs, [
+            'name',
+            'email',
+            'phoneNumber',
+            'address',
+          ])
+
+          paginationProp.hasNextPage = response.hasNextPage
+          paginationProp.hasPrevPage = response.hasPrevPage
+          paginationProp.currentPage = response.page
+        })
+        .finally(() => (isLoading.value = false))
     }
 
     function deleteCustomer(reason: String) {
@@ -407,6 +371,7 @@ export default defineComponent({
       showDeleteReason,
       changeCustomer,
       deleteCustomer,
+      isLoading,
     }
   },
 })

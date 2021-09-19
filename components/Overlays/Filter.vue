@@ -56,20 +56,36 @@
           </svg>
         </div>
         <div class="space-y-2.5 pt-1">
-          <span
+          <div
             v-for="(listValue, j) in filter.list"
             :key="j"
-            class="flex items-center space-x-4 text-gray-600 capitalize"
+            class="flex items-center space-x-4 text-gray-600 capitalize w-full"
           >
-            <input
-              :name="index"
-              :type="listValue.type"
-              :checked="listValue.selected ? 'checked' : ''"
-              :value="listValue.value"
-              @change="addParameters(listValue)"
-            />
-            <h3>{{ listValue.title }}</h3>
-          </span>
+            <div v-if="listValue.type != 'text'" class="w-full">
+              <input
+                :name="index"
+                :type="listValue.type"
+                :value="listValue.value"
+                @input="addParameters(listValue)"
+              />
+              <span>{{ listValue.title }}</span>
+            </div>
+            <div v-else class="w-full">
+              <input
+                :name="index"
+                :type="listValue.type"
+                class="w-full border-2 border-gray-300 text-gray-400"
+                :placeholder="`Enter ${listValue.title}`"
+                @input="
+                  addParameters({
+                    value: $event.target.value,
+                    identifier: listValue.identifier,
+                    type: listValue.type,
+                  })
+                "
+              />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -116,6 +132,7 @@
           <label for="">To</label>
           <input
             v-model="otherFilters.toDate"
+            autocomplete="off"
             type="date"
             class="w-full border-2 border-gray-300 text-gray-400"
             @change="pipeUpDate()"
@@ -159,7 +176,13 @@
             :options="gasesArray"
             :multiple="false"
             :class="'w-full border-2 border-gray-300 text-gray-400'"
-            @input="pipeUpGasType"
+            @input="
+              addParameters({
+                type: 'radio',
+                identifier: 'gasType',
+                value: otherFilters.gasType,
+              })
+            "
           />
         </div>
       </div>
@@ -200,7 +223,13 @@
             :options="customerArray"
             :multiple="false"
             :class="'w-full border-2 border-gray-300 text-gray-400'"
-            @input="pipeUpCustomer"
+            @input="
+              addParameters({
+                type: 'radio',
+                identifier: 'customer',
+                value: otherFilters.customer,
+              })
+            "
           />
         </div>
       </div>
@@ -239,10 +268,15 @@
           <multiselect
             v-model="driverModel"
             :options="driverArray"
-            label="name"
-            track-by="value"
-            :multiple="true"
+            :multiple="false"
             :class="'w-full border-2 border-gray-300 text-gray-400 capitalize'"
+            @input="
+              addParameters({
+                type: 'radio',
+                identifier: 'driver',
+                value: otherFilters.driver,
+              })
+            "
           />
         </div>
       </div>
@@ -322,6 +356,7 @@ export default defineComponent({
       toDate: '',
       gasType: '',
       customer: '',
+      driver: '',
     })
 
     onMounted(() => {
@@ -347,9 +382,11 @@ export default defineComponent({
     const parameters = ref<any>({})
 
     function addParameters(individualFilter: any) {
-      if (individualFilter.type === 'radio') {
+      if (
+        individualFilter.type === 'radio' ||
+        individualFilter.type === 'text'
+      ) {
         parameters.value[individualFilter.identifier] = [individualFilter.value]
-        ctx.emit('filterAdded', parameters.value)
       } else if (individualFilter.identifier in parameters.value) {
         if (
           parameters.value[individualFilter.identifier].includes(
@@ -357,17 +394,21 @@ export default defineComponent({
           )
         ) {
           removeElement(individualFilter.identifier, individualFilter.value)
-          ctx.emit('filterAdded', parameters.value)
         } else {
           parameters.value[individualFilter.identifier].push(
             individualFilter.value
           )
-          ctx.emit('filterAdded', parameters.value)
         }
       } else {
         parameters.value[individualFilter.identifier] = [individualFilter.value]
-        ctx.emit('filterAdded', parameters.value)
       }
+
+      for (const index in parameters.value) {
+        if (parameters.value[index].length && !parameters.value[index][0]) {
+          delete parameters.value[index]
+        }
+      }
+      ctx.emit('filterAdded', parameters.value)
     }
 
     const pipeUpDate = () => {
@@ -376,16 +417,6 @@ export default defineComponent({
         parameters.value.toDate = [otherFilters.toDate]
         ctx.emit('filterAdded', parameters.value)
       }
-    }
-
-    const pipeUpGasType = () => {
-      parameters.value.gasType = [otherFilters.gasType]
-      ctx.emit('filterAdded', parameters.value)
-    }
-
-    const pipeUpCustomer = () => {
-      parameters.value.customer = [otherFilters.customer]
-      ctx.emit('filterAdded', parameters.value)
     }
 
     const removeElement = (index: any, value: any) => {
@@ -400,7 +431,7 @@ export default defineComponent({
       DriverObject.getUnPaginatedDrivers().then((response: any) => {
         const drivers = response
         driverArray.value = drivers.map((driver: any) => {
-          return { name: driver.name, value: driver._id }
+          return driver.name
         })
       })
     }
@@ -416,8 +447,6 @@ export default defineComponent({
       driverModel,
       otherFilters,
       pipeUpDate,
-      pipeUpGasType,
-      pipeUpCustomer,
     }
   },
 })

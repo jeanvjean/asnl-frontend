@@ -182,7 +182,7 @@ export default defineComponent({
       }
     }
 
-    const displayedFilters = ref<Array<String>>()
+    const displayedFilters = ref<Array<String>>([])
     const queryString = ref<string>('')
 
     function filterCylinders(filters: any) {

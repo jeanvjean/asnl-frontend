@@ -18,11 +18,11 @@ class VehicleRepository {
       })
   }
 
-  fetchVehicles(page: number) {
+  fetchVehicles(page: number, pageLimit: Number = 10, query: String = '') {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response = await $axios.get(
-          `/vehicle/fetch-vehicles?page=${page}&limit=10`
+          `/vehicle/fetch-vehicles?page=${page}&limit=${pageLimit}${query}`
         )
         resolve(response.data.data)
       } catch (error) {

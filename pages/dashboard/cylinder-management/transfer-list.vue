@@ -182,6 +182,7 @@
               :pagination-details="paginationProp"
               @next="fetchPendingList($event.value)"
               @prev="fetchPendingList($event.value)"
+              @limitChanged="adjustPageLimit($event)"
             />
           </div>
         </div>
@@ -191,7 +192,10 @@
           class="flex items-center justify-between px-2 py-2 w-full space-x-4"
         >
           <filter-button @filter="showFilter = true" />
-          <search-component :place-holder="'Search'" />
+          <search-component
+            :place-holder="'Search'"
+            @search="searchTransfers($event)"
+          />
           <router-link
             v-if="user.role !== 'admin'"
             to="/dashboard/cylinder-management/transfer"
@@ -217,6 +221,27 @@
             </svg>
             <span> Initiate Transfer</span>
           </router-link>
+        </div>
+      </div>
+      <div class="w-full flex items-center space-x-4 px-6 py-2">
+        <div
+          v-for="(selectedFilter, j) in displayedFilters"
+          :key="j"
+          class="
+            bg-purple-400 bg-opacity-10
+            text-purple-700
+            font-medium
+            capitalize
+            flex
+            items-center
+            space-x-2
+            px-4
+            py-2
+            rounded-lg
+            text-xs
+          "
+        >
+          <span class="rounded-md">{{ selectedFilter }}</span>
         </div>
       </div>
       <div class="overflow-x-auto w-full py-2 px-6">
@@ -258,7 +283,7 @@
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody v-if="!isLoading">
               <tr
                 v-for="(bodySingle, index) in body"
                 :key="index"
@@ -343,6 +368,8 @@
               </tr>
             </tbody>
           </table>
+          <table-loader v-if="isLoading" />
+          <default-state v-if="!isLoading && !body.length" />
         </div>
       </div>
     </div>
@@ -351,6 +378,7 @@
       v-if="showFilter"
       :filters="cylinderTransferFilters"
       @close="showFilter = false"
+      @filterAdded="filterTransfers($event)"
     />
   </div>
 </template>
@@ -367,15 +395,30 @@ import Pagination from '@/components/Base/Pagination.vue'
 import { mainStore } from '@/module/Pinia'
 import TransferFilter from '@/components/Overlays/Filter.vue'
 import FilterButton from '@/components/Base/FilterButton.vue'
+import TableLoader from '@/components/TableLoader.vue'
+import { getFilters, getQueryString } from '~/constants/utils'
+import DefaultState from '@/components/DefaultState.vue'
 
 export default defineComponent({
   name: 'Analytics',
-  components: { SearchComponent, Pagination, TransferFilter, FilterButton },
+  components: {
+    SearchComponent,
+    Pagination,
+    TransferFilter,
+    FilterButton,
+    TableLoader,
+    DefaultState,
+  },
   layout: 'dashboard',
   setup() {
     const appStore = mainStore()
     const user: any = appStore.getLoggedInUser
     const showFilter = ref<Boolean>(false)
+    const isLoading = ref<Boolean>(false)
+    const pageLimit = ref<Number>(10)
+    const displayedFilters = ref<Array<String>>([])
+    const queryString = ref<String>('')
+
     const headers = [
       'Branch',
       'Location',
@@ -393,16 +436,22 @@ export default defineComponent({
             title: 'Within Division',
             type: 'checkbox',
             selected: false,
+            identifier: 'filter',
+            value: 'temporary',
           },
           {
             title: 'Outright Sales',
             type: 'checkbox',
             selected: false,
+            identifier: 'filter',
+            value: 'sale',
           },
           {
             title: 'Transfer',
             type: 'checkbox',
             selected: false,
+            identifier: 'filter',
+            value: 'division',
           },
         ],
       },
@@ -412,11 +461,15 @@ export default defineComponent({
             title: 'Pending',
             type: 'checkbox',
             selected: false,
+            identifier: 'status',
+            value: 'pending',
           },
           {
             title: 'Completed',
             type: 'checkbox',
             selected: false,
+            identifier: 'status',
+            value: 'completed',
           },
         ],
       },
@@ -426,16 +479,22 @@ export default defineComponent({
             title: 'Stage 1',
             type: 'checkbox',
             selected: false,
+            identifier: 'stage',
+            value: '1',
           },
           {
             title: 'Stage 2',
             type: 'checkbox',
             selected: false,
+            identifier: 'stage',
+            value: '2',
           },
           {
             title: 'Approved',
             type: 'checkbox',
             selected: false,
+            identifier: 'stage',
+            value: 'approved',
           },
         ],
       },
@@ -444,8 +503,13 @@ export default defineComponent({
     const body = ref<any>([])
 
     onBeforeMount(() => {
-      Promise.all([fetchPendingList(1), fetchTransferStat()])
+      Promise.all([fetchPendingList(1, pageLimit.value), fetchTransferStat()])
     })
+
+    function adjustPageLimit(newLimit: number) {
+      pageLimit.value = newLimit
+      fetchPendingList(1, pageLimit.value)
+    }
 
     const paginationProp = reactive({
       hasNextPage: false,
@@ -468,14 +532,39 @@ export default defineComponent({
       })
     }
 
-    function fetchPendingList(pageNumber: Number) {
-      CylinderController.fetchPendingTransfers(pageNumber).then((response) => {
-        const myResponse = response.data.transfer
-        body.value = myResponse.docs
-        paginationProp.hasNextPage = myResponse.hasNextPage
-        paginationProp.hasPrevPage = myResponse.hasPrevPage
-        paginationProp.currentPage = myResponse.page
-      })
+    function fetchPendingList(
+      pageNumber: Number,
+      limit: Number,
+      query: String = ''
+    ) {
+      isLoading.value = true
+      CylinderController.fetchPendingTransfers(pageNumber, limit, query)
+        .then((response) => {
+          const myResponse = response.data.transfer
+          body.value = myResponse.docs
+          paginationProp.hasNextPage = myResponse.hasNextPage
+          paginationProp.hasPrevPage = myResponse.hasPrevPage
+          paginationProp.currentPage = myResponse.page
+        })
+        .finally(() => (isLoading.value = false))
+    }
+
+    const searchTransfers = (searchValue: String) => {
+      if (searchValue) {
+        displayedFilters.value = []
+        queryString.value = ''
+        const searchString = `&search=${searchValue}`
+        fetchPendingList(1, pageLimit.value, searchString)
+      } else {
+        fetchPendingList(1, pageLimit.value)
+      }
+    }
+
+    function filterTransfers(filters: any) {
+      queryString.value = getQueryString(filters)
+      displayedFilters.value = getFilters(filters)
+
+      fetchPendingList(1, pageLimit.value, queryString.value)
     }
 
     const showRegister = ref(false)
@@ -489,6 +578,11 @@ export default defineComponent({
       user,
       cylinderTransferFilters,
       showFilter,
+      isLoading,
+      adjustPageLimit,
+      filterTransfers,
+      searchTransfers,
+      displayedFilters,
     }
   },
 })

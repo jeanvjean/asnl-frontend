@@ -373,18 +373,45 @@ export default defineComponent({
       status: {
         list: [
           {
-            title: 'Rejected',
+            title: 'Pending',
             type: 'checkbox',
             selected: false,
-            value: 'rejected',
+            value: 'pending',
             identifier: 'status',
           },
           {
-            title: 'Passed',
+            title: 'Approved',
             type: 'checkbox',
             selected: false,
             value: 'approved',
             identifier: 'status',
+          },
+        ],
+      },
+      'product-name': {
+        list: [
+          {
+            title: 'Product Name',
+            type: 'text',
+            identifier: 'name',
+          },
+        ],
+      },
+      'equipment-model': {
+        list: [
+          {
+            title: 'Equipment Model',
+            type: 'text',
+            identifier: 'model',
+          },
+        ],
+      },
+      'equipment-type': {
+        list: [
+          {
+            title: 'Equipment Type',
+            type: 'text',
+            identifier: 'type',
           },
         ],
       },

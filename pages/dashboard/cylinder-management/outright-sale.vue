@@ -3,11 +3,7 @@
     <div class="grid grid-rows-1 md:grid-cols-4 py-2 px-4">
       <div
         class="
-          lg:flex
-          lg:justify-between
-          lg:items-center
-          lg:col-span-3
-          lg:gap-2
+          lg:flex lg:justify-between lg:items-center lg:col-span-3 lg:gap-2
         "
       >
         <h1 class="text-xl text-black font-medium px-2 py-2">
@@ -103,8 +99,7 @@
                 w-full
                 h-full
                 text-base
-                focus:outline-none
-                focus:ring-btn-purple
+                focus:outline-none focus:ring-btn-purple
                 border-btn-purple
                 sm:text-sm
                 rounded-md
@@ -181,9 +176,9 @@
         <div class="md:flex justify-between px-8 py-4">
           <h1 class="flex-1 text-gray-400 font-medium text-lg my-2 md:my-0">
             {{
-              transferType === 'sales'
+              transferType === 'sale'
                 ? 'Outright Sales'
-                : transferType === 'transfer'
+                : transferType === 'division'
                 ? 'Transfer'
                 : 'Outright Sales / Transfer'
             }}

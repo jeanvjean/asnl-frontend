@@ -23,7 +23,7 @@
           <input-component
             :label-title="'Product Name'"
             :input-placeholder="'Enter description'"
-            :default-value="product.description"
+            :default-value="product.productName"
           />
 
           <input-component

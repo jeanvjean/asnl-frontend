@@ -6,11 +6,11 @@ class ProductRespository {
     return await $axios.post('/inventory/create-product', request)
   }
 
-  getProducts(page: number) {
+  getProducts(page: number, limit: Number, queryString: String) {
     return new Promise(async (resolve, reject) => {
       try {
         const response = await $axios.get(
-          `/inventory/fetch-products?page=${page}&limit=10`
+          `/inventory/fetch-products?page=${page}&limit=${limit}${queryString}`
         )
         resolve(response.data.data)
       } catch (error) {

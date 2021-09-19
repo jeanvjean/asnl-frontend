@@ -62,13 +62,11 @@
               {{ bodySingle.waterCapacity }}
             </td>
             <td class="px-4 text-center py-4 w-full">
-              <div>
-                <span
-                  :class="getColorCode(bodySingle.cylinderType)"
-                  class="px-8 py-2 w-full block text-center capitalize"
-                  >{{ bodySingle.cylinderType }}</span
-                >
-              </div>
+              <span
+                :class="getColorCode(bodySingle.cylinderType)"
+                class="px-8 py-2 w-full block text-center capitalize"
+                >{{ bodySingle.cylinderType }}</span
+              >
             </td>
             <td class="px-4 text-center py-4">
               {{ formatDate(bodySingle.dateManufactured) }}
