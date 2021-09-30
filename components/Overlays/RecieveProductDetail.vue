@@ -242,7 +242,7 @@
               </tbody>
             </table>
           </div>
-          <div class="w-11/12 h-full mx-auto">
+          <div class="w-full px-4 h-full mx-auto my-10">
             <div class="flex items-start py-2 px-8 float-right">
               <div class="rounded-sm border-2 border-gray300 px-10 mx-auto">
                 <p class="text-gray-500 text-sm font-medium leading-6">
@@ -265,10 +265,16 @@
             </div>
           </div>
 
-          <form autocomplete="off" @submit.prevent="grnApproval()">
+          <form
+            v-if="
+              user.role === 'sales' && user.subrole === 'head of department'
+            "
+            autocomplete="off"
+            @submit.prevent="grnApproval()"
+          >
             <div
               class="
-                mt-3
+                my-10
                 w-full
                 lg:w-2/5 lg:flex lg:justify-between lg:items-center lg:space-x-6
                 px-4
