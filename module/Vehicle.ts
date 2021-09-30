@@ -31,6 +31,33 @@ class VehicleRepository {
     })
   }
 
+  createRoutePlan(requestBody: any, vehicleId: String) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.post(
+          `/vehicle/record-route/${vehicleId}`,
+          requestBody
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  fetchRoutePlans(page: Number, limit: Number, query: string) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.get(
+          `/vehicle/fetch-routePlans?page=${page}&limit=${limit}&${query}`
+        )
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
   fetchVehiclesUnPaginated() {
     return new Promise<any>(async (resolve, reject) => {
       try {

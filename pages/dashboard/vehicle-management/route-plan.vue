@@ -14,22 +14,6 @@
     </div>
 
     <div class="bg-white px-6 py-4 mt-6 overflow-auto">
-      <div class="flex px-2 py-4 space-x-6 text-black">
-        <button
-          class="px-2 py-2 focus:outline-none"
-          :class="pickUp ? 'text-btn-purple border-b  border-btn-purple' : ''"
-          @click="active"
-        >
-          Pick up
-        </button>
-        <button
-          class="px-2 py-2 focus:outline-none"
-          :class="delivery ? 'text-btn-purple border-b  border-btn-purple' : ''"
-          @click="active"
-        >
-          Delivery
-        </button>
-      </div>
       <div
         class="
           flex
@@ -44,94 +28,84 @@
       >
         <filter-component @filter="showFilter = true" />
         <search-component :place-holder="'Search for Vehicles'" />
-        <pagination :pagination-details="paginationProp" />
+        <pagination
+          :pagination-details="paginationProp"
+          @limitChanged="adjustLimit"
+          @next="changePage($event.value)"
+          @prev="changePage($event.value)"
+        />
       </div>
-      <div class="overflow-auto px-4">
-        <table class="w-96 lg:w-full table table-auto mt-2">
-          <thead class="bg-gray-100">
-            <tr>
-              <th
-                v-for="(headSingle, index) in headers"
-                :key="index"
-                class="
-                  uppercase
-                  text-gray-800
-                  font-thin
-                  text-sm
-                  px-4
-                  py-2
-                  text-left
-                "
-              >
-                {{ headSingle }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(bodySingle, index) in body"
-              :key="index"
-              class="font-light"
-            >
-              <td
-                class="
-                  px-4
-                  text-left
-                  py-4
-                  flex
-                  justify-start
-                  items-center
-                  space-x-2
-                "
-              >
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="@/assets/images/default-avatar.jpg"
-                  alt=""
-                /><span> {{ bodySingle.name }} </span>
-              </td>
-              <td class="px-4 text-left py-4">{{ bodySingle.vehicle_no }}</td>
-              <td class="px-4 text-left py-4">{{ bodySingle.start }}</td>
-              <td class="px-4 text-left py-4">{{ bodySingle.end }}</td>
-              <td class="px-4 text-left py-4">
-                <button
-                  class="
-                    mx-auto
-                    text-btn-purple
-                    border-2 border-btn-purple
-                    py-1.5
-                    px-8
-                    rounded-sm
-                  "
-                  @click="showRoute = true"
-                >
-                  Details
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="w-full flex items-center space-x-4 px-6 py-2">
+        <div
+          v-for="(selectedFilter, j) in displayedFilters"
+          :key="j"
+          class="
+            bg-purple-400 bg-opacity-10
+            text-purple-700
+            font-medium
+            capitalize
+            flex
+            items-center
+            space-x-2
+            px-4
+            py-2
+            rounded-lg
+            text-xs
+          "
+        >
+          <span class="rounded-md">{{ selectedFilter }}</span>
+        </div>
       </div>
+      <table-component
+        :show-loader="showTableLoader"
+        :table-headers="headers"
+        :table-body="body"
+      >
+        <template #action=""
+          ><button
+            class="
+              mx-auto
+              text-btn-purple
+              border-2 border-btn-purple
+              py-1.5
+              px-8
+              rounded-sm
+            "
+            @click="showRoute = true"
+          >
+            Details
+          </button></template
+        >
+      </table-component>
     </div>
     <single-route v-if="showRoute" @close="showRoute = false" />
     <route-plan v-if="showRoutePlan" @close="showRoutePlan = false" />
     <route-plan-filter
       v-if="showFilter"
       :filters="routePlanFilters"
-      :show-driver="true"
+      :show-driver="false"
       @close="showFilter = false"
+      @filterAdded="filterRoutePlan"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+} from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/FilterButton.vue'
 import SingleRoute from '@/components/Overlays/DriverRoute.vue'
 import RoutePlan from '@/components/Overlays/RoutePlan.vue'
 import RoutePlanFilter from '@/components/Overlays/Filter.vue'
+import TableComponent from '@/components/Table.vue'
+import { VehicleController } from '@/module/Vehicle'
+import { getFilters, getQueryString, getTableBody } from '@/constants/utils'
 
 export default defineComponent({
   name: 'Reports',
@@ -142,30 +116,45 @@ export default defineComponent({
     FilterComponent,
     RoutePlan,
     RoutePlanFilter,
+    TableComponent,
   },
   layout: 'dashboard',
   setup() {
     const showRoute = ref(false)
     const headers = [
-      'Driver Name',
       'Vehicle No',
+      'RPP Number',
+      'Plan Type',
       'Start Date',
       'End Date',
-      'Action',
     ]
-
-    const routePlanFilters = {}
+    const pageNumber = ref<Number>(1)
+    const pageLimit = ref<Number>(10)
+    const query = ref<string>('')
+    const showTableLoader = ref<Boolean>(true)
+    const routePlanFilters = {
+      activity: {
+        list: [
+          {
+            title: 'Pick Up',
+            type: 'radio',
+            identifier: 'activity',
+            value: 'pick-up',
+          },
+          {
+            title: 'Delivery',
+            type: 'radio',
+            identifier: 'activity',
+            value: 'delivery',
+          },
+        ],
+      },
+    }
+    const displayedFilters = ref<Array<String>>([])
 
     const showFilter = ref<Boolean>(false)
 
-    const body = [
-      {
-        name: 'Chinedu Onunyere',
-        vehicle_no: '#AAA456JK',
-        start: '20 August, 2020',
-        end: 'In Progress ',
-      },
-    ]
+    const body = ref<any>([])
 
     const active = () => {
       pickUp.value = !pickUp.value
@@ -178,10 +167,66 @@ export default defineComponent({
       currentPage: 1,
     })
 
+    function changePage(nextPage: number) {
+      fetchRoutePlans(nextPage, pageLimit.value, query.value)
+    }
+
+    function adjustLimit(newLimit: Number) {
+      pageLimit.value = newLimit
+      fetchRoutePlans(1, pageLimit.value)
+    }
+
     const showRoutePlan = ref<Boolean>(false)
 
     const pickUp = ref(true)
     const delivery = ref(false)
+
+    const fetchRoutePlans = (
+      page: Number,
+      limit: Number,
+      queryString: string = ''
+    ) => {
+      showTableLoader.value = true
+      VehicleController.fetchRoutePlans(page, limit, queryString)
+        .then((response: any) => {
+          const routes: any = response.docs.map((route: any) => {
+            return {
+              _id: route._id,
+              vehicleNo: route.vehicle
+                ? route.vehicle.regNo
+                : 'No Vehicle Assigned',
+              rppNumber: route.rppNo ? route.rppNo : 'No RPP Number',
+              activity: route.activity,
+              startDate: new Date(route.startDate).toDateString(),
+              endDate: new Date(route.endDate).toDateString(),
+            }
+          })
+
+          paginationProp.hasNextPage = response.hasNextPage
+          paginationProp.hasPrevPage = response.hasPrevPage
+          paginationProp.currentPage = response.page
+          body.value = getTableBody(routes, [
+            'vehicleNo',
+            'rppNumber',
+            'activity',
+            'startDate',
+            'endDate',
+          ])
+        })
+        .finally(() => {
+          showTableLoader.value = false
+        })
+    }
+
+    onMounted(() => {
+      fetchRoutePlans(pageNumber.value, pageLimit.value)
+    })
+
+    function filterRoutePlan(filters: any) {
+      query.value = getQueryString(filters)
+      displayedFilters.value = getFilters(filters)
+      fetchRoutePlans(1, pageLimit.value, query.value)
+    }
 
     return {
       headers,
@@ -194,6 +239,13 @@ export default defineComponent({
       showRoutePlan,
       showFilter,
       routePlanFilters,
+      pageNumber,
+      pageLimit,
+      changePage,
+      showTableLoader,
+      filterRoutePlan,
+      displayedFilters,
+      adjustLimit,
     }
   },
 })

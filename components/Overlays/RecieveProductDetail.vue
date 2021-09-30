@@ -91,7 +91,7 @@
               <p>{{ inventory.invoiceNumber }}</p>
             </div>
           </div>
-          <div class="w-full overflow-x-hidden">
+          <div class="w-full overflow-x-hidden px-2">
             <table class="w-full table table-auto border-collapse">
               <thead>
                 <tr>
@@ -103,6 +103,8 @@
                       text-gray-600
                       capitalize
                       text-center text-xs
+                      w-auto
+                      px-2
                     "
                   >
                     S/N
@@ -126,7 +128,7 @@
                       text-gray-600
                       capitalize
                       text-sm
-                      w-1/12
+                      w-2/12
                     "
                   >
                     Product Name
@@ -138,7 +140,7 @@
                       text-gray-600
                       capitalize
                       text-sm
-                      w-2/12
+                      w-1/12
                     "
                   >
                     Quantity
@@ -240,53 +242,8 @@
               </tbody>
             </table>
           </div>
-          <div class="flex justify-between items-start w-11/12 h-full mx-auto">
-            <div class="w-full mx-auto h-full">
-              <button class="flex items-center space-x-1 invisible">
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    class="w-4 h-4 fill-current text-gray-500"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div class="underline">Add New Product</div>
-              </button>
-            </div>
-            <div class="w-full h-full py-2 px-8 mx-auto">
-              <button
-                class="
-                  w-4/5
-                  h-full
-                  border-2 border-gray-300
-                  px-6
-                  py-3
-                  rounded-sm
-                "
-              >
-                <div class="text-center mb-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    class="w-6 h-6 fill-current text-gray-600 mx-auto"
-                  >
-                    <path
-                      d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"
-                    />
-                    <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
-                  </svg>
-                </div>
-                <div class="text-center font-medium">Upload an attachment</div>
-              </button>
-            </div>
-
-            <div class="flex items-start py-2 px-8 w-full">
+          <div class="w-11/12 h-full mx-auto">
+            <div class="flex items-start py-2 px-8 float-right">
               <div class="rounded-sm border-2 border-gray300 px-10 mx-auto">
                 <p class="text-gray-500 text-sm font-medium leading-6">
                   Inspecting officer
@@ -307,19 +264,46 @@
               </div>
             </div>
           </div>
+
+          <form autocomplete="off" @submit.prevent="grnApproval()">
+            <div
+              class="
+                mt-3
+                w-full
+                lg:w-2/5 lg:flex lg:justify-between lg:items-center lg:space-x-6
+                px-4
+              "
+            >
+              <button-component
+                :button-text="'Approve'"
+                :button-class="'bg-btn-purple text-white w-auto'"
+                :loading-status="buttonLoading.approveLoading"
+                @buttonClicked="form.status = 'approved'"
+              />
+              <button-component
+                :button-text="'Reject'"
+                :button-class="'text-white bg-gray-700 w-auto'"
+                :loading-status="buttonLoading.rejectLoading"
+                @buttonClicked="form.status = 'rejected'"
+              />
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </back-drop>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, onMounted, reactive } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import { mainStore } from '@/module/Pinia'
+import ButtonComponent from '@/components/Form/Button.vue'
+import { ProductObject } from '@/module/Product'
 
 export default defineComponent({
   components: {
     BackDrop,
+    ButtonComponent,
   },
   props: {
     inventory: {
@@ -332,12 +316,45 @@ export default defineComponent({
       ctx.emit('close')
     }
 
-    const appStore = mainStore()
-    const user: any = appStore.getLoggedInUser
+    const refresh = () => {
+      ctx.emit('refresh')
+    }
+
+    const buttonLoading = reactive({
+      approveLoading: false,
+      rejectLoading: false,
+    })
+
+    const form = reactive({
+      status: '',
+      grnId: '',
+    })
+
+    onMounted(() => {
+      form.grnId = _props.inventory._id
+    })
+
+    function grnApproval() {
+      buttonLoading.approveLoading = form.status === 'approved'
+      buttonLoading.rejectLoading = form.status === 'rejected'
+      ProductObject.approveGrn(form)
+        .then(() => {
+          refresh()
+        })
+        .finally(() => {
+          buttonLoading.approveLoading = false
+          buttonLoading.rejectLoading = false
+        })
+    }
+
+    const { getLoggedInUser: user } = mainStore()
 
     return {
       close,
       user,
+      buttonLoading,
+      form,
+      grnApproval,
     }
   },
 })

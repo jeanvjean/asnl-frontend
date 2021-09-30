@@ -8,52 +8,47 @@
           </p>
         </div>
       </div>
-      <div class="grid grid-rows-1 gap-y-10">
-        <input-component
-          :label-title="'Password'"
-          :input-placeholder="'Enter Password'"
-          :input-type="'password'"
-          @get="form.password = $event.value"
-        />
-        <div class="space-y-4">
-          <div class="w-full mt-2">
-            <button
-              class="w-full py-3 rounded-sm bg-btn-purple text-white border"
-              @click="approve"
-            >
-              Continue
-            </button>
-          </div>
-
-          <div class="w-full mt-2">
-            <button
-              class="
-                w-full
-                py-3
-                rounded-sm
-                bg-white
-                text-btn-purple
-                border border-btn-purple
-              "
-              @click="close"
-            >
-              Cancel
-            </button>
+      <form autocomplete="off" @submit.prevent="approve">
+        <div class="grid grid-rows-1 gap-y-10">
+          <input-component
+            :label-title="'Password'"
+            :input-placeholder="'Enter Password'"
+            :input-type="'password'"
+            @get="form.password = $event.value"
+          />
+          <div class="space-y-4">
+            <button-component
+              :button-class="'bg-btn-purple text-white border'"
+              :button-text="'Continue'"
+              :loading-status="buttonLoading"
+            />
+            <button-component
+              :button-class="'bg-white text-btn-purple border border-btn-purple'"
+              :button-text="'Close'"
+              @buttonClicked="close"
+            />
           </div>
         </div>
-      </div>
+      </form>
     </div>
   </back-drop>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, useContext } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  reactive,
+  ref,
+  useContext,
+} from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
+import ButtonComponent from '@/components/Form/Button.vue'
 
 export default defineComponent({
   components: {
     BackDrop,
     InputComponent,
+    ButtonComponent,
   },
   props: {
     displayText: {
@@ -71,6 +66,8 @@ export default defineComponent({
       password: '',
     })
 
+    const buttonLoading = ref<Boolean>(false)
+
     const approve = () => {
       if (form.password === '') {
         context.$toast.error('Password is Required')
@@ -85,12 +82,14 @@ export default defineComponent({
           password: form.password,
         })
       }
+      close()
     }
 
     return {
       close,
       approve,
       form,
+      buttonLoading,
     }
   },
 })

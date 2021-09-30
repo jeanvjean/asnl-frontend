@@ -129,6 +129,7 @@
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
 import TableLoader from '@/components/TableLoader.vue'
+import { formatDate } from '@/constants/utils'
 
 export default defineComponent({
   components: { TableLoader },
@@ -154,22 +155,6 @@ export default defineComponent({
 
     function getColorCode(role: any) {
       return rolesColor[role] ?? rolesColor.default
-    }
-
-    function formatDate(dateValue: string) {
-      const date = new Date(dateValue)
-      const year = date.getFullYear()
-      let month: any = date.getMonth() + 1
-      let dt: any = date.getDate()
-
-      if (dt < 10) {
-        dt = '0' + dt
-      }
-      if (month < 10) {
-        month = '0' + month
-      }
-
-      return year + '-' + month + '-' + dt
     }
 
     return {

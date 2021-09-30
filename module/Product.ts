@@ -140,11 +140,11 @@ class ProductRespository {
     })
   }
 
-  fetchPendingDisbursement() {
+  fetchPendingDisbursement(page: Number, limit: Number) {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get(
-          '/inventory/fetch-pending-disburse-requests'
+          `/inventory/fetch-pending-disburse-requests?page=${page}&limit=${limit}`
         )
         resolve(response.data.data)
       } catch (error) {
@@ -171,6 +171,20 @@ class ProductRespository {
       try {
         const response: any = await $axios.post(
           `/inventory/approve-disbursement`,
+          requestBody
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  approveGrn(requestBody: any) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.post(
+          `/inventory/approve-grn`,
           requestBody
         )
         resolve(response.data)

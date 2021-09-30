@@ -1,7 +1,7 @@
 <template>
   <button
     v-if="!loadingStatus"
-    type="submit"
+    :type="buttonType"
     class="w-full py-3 px-2 rounded-sm text-center font-semibold"
     :class="buttonClass"
     @click="buttonClicked"
@@ -39,6 +39,11 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false,
+    },
+    buttonType: {
+      type: String,
+      required: false,
+      default: 'submit',
     },
   },
   setup(_props, ctx) {

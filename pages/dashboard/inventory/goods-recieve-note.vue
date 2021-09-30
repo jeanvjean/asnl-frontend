@@ -265,9 +265,16 @@
               <td class="px-4 text-center py-4">
                 {{ inventory.invoiceNumber }}
               </td>
-              <td class="px-4 text-center py-4">
-                <span class="px-4 py-2 bg-yellow-100 text-red-400">
-                  Pending
+              <td class="px-4 text-left py-4 capitalize">
+                <span
+                  class="px-8 py-2 block text-center"
+                  :class="{
+                    'bg-yellow-400 text-gray-200 font-bold':
+                      !inventory.approved,
+                    'bg-green-400 text-gray-200 font-bold': inventory.approved,
+                  }"
+                >
+                  {{ inventory.approved ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td class="px-4 text-center py-4">
@@ -301,7 +308,8 @@
     <recieve-product-detail
       v-if="showRecieveDetails"
       :inventory="inventoryDetails"
-      @close="showRecieveDetails = !showRecieveDetails"
+      @close="showRecieveDetails = false"
+      @refresh=";(showRecieveDetails = false), getInventories(1, pageLimit)"
     />
     <grn-filter
       v-if="showFilter"
@@ -504,6 +512,7 @@ export default defineComponent({
       filterInventories,
       displayedFilters,
       searchInventories,
+      pageLimit,
     }
   },
 })

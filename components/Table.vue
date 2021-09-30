@@ -58,10 +58,10 @@
           <td
             v-for="(rowSingle, j) in rows"
             :key="j"
-            :class="rowSingle.class ? rowSingle.class : ''"
             class="py-4 text-center"
+            :class="rowSingle.tdClass"
           >
-            <span>
+            <span :class="rowSingle.class ? rowSingle.class : ''">
               {{ rowSingle.value }}
             </span>
           </td>

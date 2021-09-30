@@ -1,6 +1,12 @@
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
+  loading: {
+    color: 'black',
+    height: '10px',
+    continuous: true,
+    duration: 3000,
+  },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {

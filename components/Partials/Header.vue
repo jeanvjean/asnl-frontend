@@ -249,6 +249,7 @@ export default defineComponent({
       'new-user',
       'transfer',
       'id',
+      'new-complaint',
     ]
 
     const goBack = () => {

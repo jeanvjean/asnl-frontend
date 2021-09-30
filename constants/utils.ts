@@ -31,25 +31,62 @@ export interface rowType {
   name: String
   value: String
   class?: String
+  tdClass?: String
 }
 
 export const getTableBody = (
   bodyArray: any,
-  displayedColumns: string[] = []
+  displayedColumns: string[] = [],
+  classObject: any = {}
 ) => {
   const responseArray: rowType[][] = []
   bodyArray.forEach((body: any) => {
     const mainArr: rowType[] = []
     for (const i in body) {
       if (displayedColumns.includes(i)) {
-        mainArr.push({ name: i, value: body[i] })
+        mainArr.push({
+          name: i,
+          value: body[i],
+          class: `${getColumnClass(i, body[i], classObject)}`,
+        })
       } else {
-        mainArr.push({ name: i, value: body[i], class: 'hidden' })
+        mainArr.push({ name: i, value: body[i], tdClass: 'hidden' })
       }
     }
     responseArray.push(mainArr)
   })
   return responseArray
+}
+
+const getColumnClass = (
+  columnName: any,
+  columnValue: any,
+  classObject: any
+) => {
+  let response = ''
+  if (columnName in classObject) {
+    if (columnValue in classObject[columnName]) {
+      response = classObject[columnName][columnValue]
+    }
+  }
+
+  return response
+}
+
+export function formatDate(dateValue: string) {
+  const date = new Date(dateValue)
+  const year = date.getFullYear()
+  let month: any = date.getMonth() + 1
+  let dt: any = date.getDate()
+
+  if (dt < 10) {
+    dt = '0' + dt
+  }
+  if (month < 10) {
+    month = '0' + month
+  }
+
+  return year + '-' + month + '-' + dt
 }
 
 export const getRandomValue = () =>

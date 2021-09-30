@@ -19,6 +19,7 @@
                 :pagination-details="paginationProp"
                 @next="changePage($event.value)"
                 @prev="changePage($event.value)"
+                @limitChanged="adjustLimit($event)"
               />
             </div>
           </div>

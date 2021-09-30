@@ -252,7 +252,7 @@ import VehicleFilter from '@/components/Overlays/Filter.vue'
 import FinalDelete from '@/components/Overlays/FinalDelete.vue'
 import { mainStore } from '@/module/Pinia'
 import TableComponent from '@/components/Table.vue'
-import { getFilters, getQueryString, getTableBody } from '~/constants/utils'
+import { getFilters, getQueryString, getTableBody } from '@/constants/utils'
 
 export default defineComponent({
   name: 'Reports',
@@ -377,6 +377,7 @@ export default defineComponent({
     function fetchDrivers() {
       DriverObject.getUnPaginatedDrivers().then((response: any) => {
         const driverResponse = response
+
         drivers.value = driverResponse.map((el: any) => {
           showAssignDriver.value = true
           return {

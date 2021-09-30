@@ -1,7 +1,7 @@
 <template>
   <button
     v-if="!loadingStatus"
-    type="submit"
+    :type="buttonType"
     class="
       py-3
       px-4
@@ -55,6 +55,11 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'left',
+    },
+    buttonType: {
+      type: String,
+      required: false,
+      default: 'submit',
     },
   },
   setup(_props, ctx) {

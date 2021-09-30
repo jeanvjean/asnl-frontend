@@ -190,7 +190,12 @@
           </svg>
           <span> Create MRN</span>
         </button>
-        <pagination :pagination-details="paginationProp" />
+        <pagination
+          :pagination-details="paginationProp"
+          @limitChanged="adjustLimit"
+          @next="changePage($event.value)"
+          @prev="changePage($event.value)"
+        />
       </div>
       <table class="w-full table-auto mt-2">
         <thead class="bg-gray-100">
@@ -237,12 +242,20 @@
             </td>
             <td class="px-4 text-center py-4">{{ mrn.customer.name }}</td>
             <td class="px-4 text-center py-4">{{ mrn.jobTag }}</td>
-            <td class="px-4 text-left py-4">
-              <span class="px-8 py-2 bg-yellow-100 text-red-400">
+            <td class="px-4 text-left py-4 capitalize">
+              <span
+                class="px-8 py-2 block text-center"
+                :class="{
+                  'bg-yellow-400 text-gray-200 font-bold':
+                    mrn.requestApproval === 'pending',
+                  'bg-green-400 text-gray-200 font-bold':
+                    mrn.requestApproval === 'completed',
+                }"
+              >
                 {{ mrn.requestApproval }}
               </span>
             </td>
-            <td class="px-4 text-center py-4">12/06/2020</td>
+
             <td class="px-4 text-center py-4">
               <button
                 class="
@@ -269,6 +282,10 @@
       v-if="showIssueProductDetail"
       :mrn="mrnDetail"
       @close="showIssueProductDetail = false"
+      @refresh="
+        ;(showIssueProductDetail = false),
+          fetchPendingDisbursement(pageNumber, pageLimit)
+      "
     />
     <mrn-filter
       v-if="showFilter"
@@ -311,14 +328,7 @@ export default defineComponent({
   },
   layout: 'dashboard',
   setup() {
-    const headers = [
-      'Mrn No.',
-      'Request Dept',
-      'Customer',
-      'Job Tag',
-      'Status',
-      'Date',
-    ]
+    const headers = ['Mrn No.', 'Request Dept', 'Customer', 'Job Tag', 'Status']
     const showFilter = ref<Boolean>(false)
     const appStore = mainStore()
     const auth: any = appStore.getLoggedInUser
@@ -339,6 +349,11 @@ export default defineComponent({
       approved: 0,
       pending: 0,
     })
+
+    function adjustLimit(newLimit: Number) {
+      pageLimit.value = newLimit
+      fetchPendingDisbursement(1, pageLimit.value)
+    }
 
     const mrnFilters = reactive({
       status: {
@@ -369,9 +384,12 @@ export default defineComponent({
       })
     }
 
-    function fetchPendingDisbursement() {
+    const pageNumber = ref<Number>(1)
+    const pageLimit = ref<Number>(1)
+
+    function fetchPendingDisbursement(page: Number, limit: Number) {
       isLoading.value = true
-      ProductObject.fetchPendingDisbursement()
+      ProductObject.fetchPendingDisbursement(page, limit)
         .then((response) => {
           const mrnResponse: any = response
           body.value = mrnResponse.docs
@@ -387,8 +405,16 @@ export default defineComponent({
       showIssueProductDetail.value = true
     }
 
+    function changePage(newPage: Number) {
+      pageNumber.value = newPage
+      fetchPendingDisbursement(pageNumber.value, pageLimit.value)
+    }
+
     onMounted(() => {
-      Promise.all([fetchPendingDisbursement(), getDisbursalStat()])
+      Promise.all([
+        fetchPendingDisbursement(pageNumber.value, pageLimit.value),
+        getDisbursalStat(),
+      ])
     })
 
     return {
@@ -404,6 +430,11 @@ export default defineComponent({
       mrnFilters,
       showFilter,
       isLoading,
+      adjustLimit,
+      changePage,
+      pageNumber,
+      pageLimit,
+      fetchPendingDisbursement,
     }
   },
 })

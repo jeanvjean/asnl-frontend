@@ -76,8 +76,8 @@
               >{{ bodySingle.deactivated ? 'Suspended' : 'Activated' }}</span
             >
           </td>
-          <td class="px-2 py-4 icon-button text-center relative">
-            <button class="mx-auto text-black w-6 h-6">
+          <td class="px-2 py-4 icon-button text-center">
+            <button class="mx-auto text-black w-6 h-6 relative">
               <svg
                 class="fill-current"
                 xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +98,6 @@
                 text-sm
                 rounded-sm
                 action-menu
-                left-12
                 z-30
               "
             >
@@ -378,12 +377,8 @@ export default defineComponent({
 }
 .icon-button:hover > .action-menu {
   display: block;
-  margin-left: -50px;
-  z-index: 50;
 }
 .icon-button:focus > .action-menu {
   display: block;
-  margin-left: -50px;
-  z-index: 50;
 }
 </style>

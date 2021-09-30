@@ -499,6 +499,10 @@ export default defineComponent({
           showSubCategory: false,
           subCategories: [
             {
+              title: 'All Complaints',
+              link: '/dashboard/complaints',
+            },
+            {
               title: 'Notification',
               link: '#',
             },

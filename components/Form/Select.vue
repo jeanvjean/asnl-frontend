@@ -2,7 +2,15 @@
   <div class="w-full py-2">
     <label
       v-if="labelTitle"
-      class="block w-full px-1 text-gray-800 text-md mb-1"
+      class="
+        block
+        w-full
+        px-1
+        text-gray-800 text-md
+        mb-1
+        font-semibold
+        tracking-tighter
+      "
     >
       <span>
         {{ labelTitle }}
@@ -23,14 +31,19 @@
         w-full
         px-4
         py-2
-        border-2 border-gray-200
-        text-black
         rounded-sm
         focus:outline-none focus:border-btn-purple
-        font-thin
+        font-extralight
+        placeholder-gray-500
+        focus:placeholder-gray-300
+        text-gray-500
         bg-white
       "
-      :class="{ 'border-red-300': isInvalid }"
+      :class="{
+        'border-red-300': isInvalid,
+        'border-0 border-b-2 border-gray-500': isDisabled,
+        'border-2 border-gray-200': !isDisabled,
+      }"
       @change="returnValue"
       @invalid="isInvalid = true"
       @focus="isInvalid = false"
