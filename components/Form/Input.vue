@@ -1,5 +1,5 @@
 <template>
-  <div class="py-2">
+  <div class="py-2 w-full">
     <label
       v-if="labelTitle"
       class="block w-full px-1 text-gray-600 text-md mb-1 font-semibold"
