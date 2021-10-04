@@ -179,7 +179,7 @@ export default defineComponent({
         {
           title: 'User Management',
           icon: UserIcon,
-          link: '/dashboard/user-management/',
+          link: '/dashboard/users/',
         },
         {
           title: 'Cylinders',
@@ -189,31 +189,31 @@ export default defineComponent({
           subCategories: [
             {
               title: 'Analytics',
-              link: '/dashboard/cylinder-management/',
+              link: '/dashboard/cylinders/',
             },
             {
               title: 'Transfer Analytics',
-              link: '/dashboard/cylinder-management/transfer-list',
+              link: '/dashboard/cylinders/transfer-list',
             },
             {
               title: 'Cylinder Type Transfers',
-              link: '/dashboard/cylinder-management/cylinder-type',
+              link: '/dashboard/cylinders/cylinder-type',
             },
             {
               title: 'Pending Condemn Cylinder',
-              link: '/dashboard/cylinder-management/condemn-cylinder',
+              link: '/dashboard/cylinders/condemn-cylinder',
             },
             {
               title: 'Register Cylinder',
               type: 'button',
               action: 'register-cylinder',
-              link: '/dashboard/cylinder-management/condemn-cylinder',
+              link: '/dashboard/cylinders/condemn-cylinder',
             },
             {
               title: 'Register Gas Type',
               type: 'button',
               action: 'register-gas-type',
-              link: '/dashboard/cylinder-management/condemn-cylinder',
+              link: '/dashboard/cylinders/condemn-cylinder',
             },
           ],
         },
@@ -253,11 +253,11 @@ export default defineComponent({
           subCategories: [
             {
               title: 'All Vehicles',
-              link: '/dashboard/vehicle-management/',
+              link: '/dashboard/vehicles/',
             },
             {
               title: 'Route Plan',
-              link: '/dashboard/vehicle-management/route-plan',
+              link: '/dashboard/vehicles/route-plan',
             },
             {
               title: 'Corrective Maintenance Requests',
@@ -265,7 +265,7 @@ export default defineComponent({
             },
             {
               title: 'Pre-Inspection Maintenance',
-              link: '/dashboard/cylinder-management/pre-inspection-maintenance',
+              link: '/dashboard/cylinders/pre-inspection-maintenance',
             },
           ],
         },
@@ -289,7 +289,7 @@ export default defineComponent({
             },
             {
               title: 'Vehicle Performance',
-              link: '/dashboard/vehicle-management/vehicle-performance',
+              link: '/dashboard/vehicles/vehicle-performance',
             },
           ],
         },
@@ -321,7 +321,7 @@ export default defineComponent({
             },
             {
               title: 'Transfer',
-              link: '/dashboard/cylinder-management/transfer-list',
+              link: '/dashboard/cylinders/transfer-list',
             },
             {
               title: 'Pending Transfer List',
@@ -334,17 +334,17 @@ export default defineComponent({
                 },
                 {
                   title: 'Condemned Cylinders',
-                  link: '/dashboard/cylinder-management/condemn-cylinder',
+                  link: '/dashboard/cylinders/condemn-cylinder',
                 },
                 {
                   title: 'Cylinder Type Change',
-                  link: '/dashboard/cylinder-management/cylinder-type',
+                  link: '/dashboard/cylinders/cylinder-type',
                 },
               ],
             },
             {
               title: 'Cylinder Pool',
-              link: '/dashboard/cylinder-management/',
+              link: '/dashboard/cylinders/',
             },
           ],
         },
@@ -356,7 +356,7 @@ export default defineComponent({
           subCategories: [
             {
               title: 'Customers',
-              link: '/dashboard/customer-management/',
+              link: '/dashboard/customers/',
             },
             {
               title: 'Incoming',
@@ -520,11 +520,11 @@ export default defineComponent({
           subCategories: [
             {
               title: 'All Vehicles',
-              link: '/dashboard/vehicle-management/',
+              link: '/dashboard/vehicles/',
             },
             {
               title: 'Route Plan',
-              link: '/dashboard/vehicle-management/route-plan',
+              link: '/dashboard/vehicles/route-plan',
             },
             {
               title: 'Vehicle Maintenance',
@@ -533,7 +533,7 @@ export default defineComponent({
               subCategories: [
                 {
                   title: 'Pre-inspection Maintenance',
-                  link: '/dashboard/vehicle-management/pre-inspection-maintenance',
+                  link: '/dashboard/vehicles/pre-inspection-maintenance',
                 },
                 {
                   title: 'Corrective Maintenance Requests',
@@ -555,7 +555,7 @@ export default defineComponent({
             },
             {
               title: 'Vehicle Performance',
-              link: '/dashboard/vehicle-management/vehicle-performance',
+              link: '/dashboard/vehicles/vehicle-performance',
             },
           ],
         },

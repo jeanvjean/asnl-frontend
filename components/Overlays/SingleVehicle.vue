@@ -427,7 +427,7 @@
               </div>
             </div>
             <router-link
-              to="/dashboard/vehicle-management/vehicle-performance"
+              to="/dashboard/vehicles/vehicle-performance"
               class="
                 px-4
                 py-2

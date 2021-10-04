@@ -140,7 +140,7 @@ import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import { ProductObject } from '@/module/Product'
-import { ValidatorObject } from '~/module/Validation'
+import { ValidatorObject } from '@/module/Validation'
 export default defineComponent({
   components: { InputComponent, ButtonComponent, SelectComponent },
   layout: 'dashboard',

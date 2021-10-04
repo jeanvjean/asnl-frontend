@@ -230,7 +230,7 @@ import FilterComponent from '@/components/Base/FilterButton.vue'
 import Pagination from '@/components/Base/Pagination.vue'
 import CylinderFilter from '@/components/Overlays/Filter.vue'
 import { cylinderFilters } from '@/constants/variables'
-import { getFilters, getQueryString } from '~/constants/utils'
+import { getFilters, getQueryString } from '@/constants/utils'
 
 export default defineComponent({
   name: 'Analytics',

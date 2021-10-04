@@ -100,7 +100,6 @@ import {
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import { ProductObject } from '@/module/Product'
-// import { ProductDetail } from '~/types/Types'
 export default defineComponent({
   components: { InputComponent, SelectComponent },
   layout: 'dashboard',

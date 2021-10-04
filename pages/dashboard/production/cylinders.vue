@@ -90,9 +90,7 @@
 
                 <td class="px-4 text-center py-4">
                   <router-link
-                    :to="
-                      '/dashboard/cylinder-management/cylinder/' + cylinder._id
-                    "
+                    :to="'/dashboard/cylinders/cylinder/' + cylinder._id"
                     class="
                       px-6
                       py-1

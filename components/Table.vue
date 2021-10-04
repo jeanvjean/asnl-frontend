@@ -1,7 +1,7 @@
 <template>
   <div class="w-full overflow-x-auto">
     <table class="table table-auto w-full">
-      <thead class="bg-gray-100">
+      <thead class="bg-gray-200">
         <tr>
           <th
             class="

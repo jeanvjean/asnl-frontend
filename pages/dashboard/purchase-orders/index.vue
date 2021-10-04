@@ -128,7 +128,7 @@ import { CustomerController } from '@/module/Customer'
 import Pagination from '@/components/Base/Pagination.vue'
 import { CustomerDto } from '@/types/Types'
 import TableComponent from '@/components/Table.vue'
-import { getTableBody } from '~/constants/utils'
+import { getTableBody } from '@/constants/utils'
 
 export default defineComponent({
   name: 'Home',
@@ -238,14 +238,3 @@ export default defineComponent({
   },
 })
 </script>
-<style scoped>
-.action-menu {
-  display: none;
-}
-.icon-button:hover > .action-menu {
-  display: block;
-}
-.icon-button:focus > .action-menu {
-  display: block;
-}
-</style>

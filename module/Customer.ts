@@ -128,7 +128,7 @@ class Customer {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response = await $axios.get(
-          `/customer/fetch-pending-complaint-approval?page=${page}&limit=${limit}${query}`
+          `/customer/fetch-complaints?page=${page}&limit=${limit}${query}`
         )
         resolve(response.data.data)
       } catch (error) {
@@ -142,6 +142,19 @@ class Customer {
       try {
         const response = await $axios.get(
           `/customer/fetch-complaint-details/${complaintId}`
+        )
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  resolveComplaint(complaintId: String) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.get(
+          `/customer/resolve-complaint//${complaintId}`
         )
         resolve(response.data.data)
       } catch (error) {

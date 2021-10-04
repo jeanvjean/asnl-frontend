@@ -2,7 +2,14 @@
   <div class="bg-dark-blue px-6 py-6 rounded-sm relative">
     <transition :name="transitionAnimation" mode="out-in">
       <div :key="currentIndex">
-        <div class="grid grid-rows-1 lg:grid-cols-3 gap-4">
+        <div
+          class="
+            grid grid-rows-1
+            lg:grid-cols-3
+            gap-y-4 gap-x-0
+            md:gap-y-0 md:gap-x-8
+          "
+        >
           <span
             v-for="(stat, index) in analytics[currentIndex]"
             :key="index"
@@ -70,7 +77,6 @@
 <script lang="ts">
 import { defineComponent, ref } from '@nuxtjs/composition-api'
 import Card from '@/components/Base/Card.vue'
-// import Card2 from '@/components/Base/Card2.vue'
 
 export default defineComponent({
   components: { Card },

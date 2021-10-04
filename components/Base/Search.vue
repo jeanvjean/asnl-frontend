@@ -44,7 +44,7 @@
           "
           :placeholder="placeHolder"
           type="search"
-          @input="debounce(($event) => emitSearch($event), 200)"
+          @input="emitSearch($event)"
         />
       </div>
     </form>
@@ -52,7 +52,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from '@nuxtjs/composition-api'
-
+import { debounce } from 'lodash'
 export default defineComponent({
   props: {
     placeHolder: {
@@ -64,21 +64,14 @@ export default defineComponent({
   setup(_props, ctx) {
     const searchValue = ref<String>('')
 
-    function createDebounce() {
-      let timeout: any = null
-      return function (fnc: () => void) {
-        clearTimeout(timeout)
-        timeout = setTimeout(() => {
-          fnc()
-        }, 500)
-      }
-    }
-    const emitSearch = () => ctx.emit('search', searchValue.value)
+    const emitSearch = debounce(
+      () => ctx.emit('search', searchValue.value),
+      1000
+    )
 
     return {
       searchValue,
       emitSearch,
-      debounce: createDebounce(),
     }
   },
 })

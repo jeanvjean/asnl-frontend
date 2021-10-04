@@ -334,7 +334,7 @@ import RecieveProductDetail from '@/components/Overlays/RecieveProductDetail.vue
 import { ProductObject } from '@/module/Product'
 import GrnFilter from '@/components/Overlays/Filter.vue'
 import TableLoader from '@/components/TableLoader.vue'
-import { getQueryString, getFilters } from '~/constants/utils'
+import { getQueryString, getFilters } from '@/constants/utils'
 export default defineComponent({
   name: 'Analytics',
   components: {

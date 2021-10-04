@@ -162,7 +162,7 @@ import TextAreaComponent from '@/components/Form/TextArea.vue'
 import { getRandomValue } from '@/constants/utils'
 import { CylinderController } from '@/module/Cylinder'
 import { CustomerController } from '@/module/Customer'
-import { ValidatorObject } from '~/module/Validation'
+import { ValidatorObject } from '@/module/Validation'
 
 export default defineComponent({
   components: {

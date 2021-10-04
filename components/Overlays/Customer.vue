@@ -333,42 +333,43 @@
 
           <div class="my-6">
             <div class="w-1/2">
-              <input-component
-                :label-title="'Select Pickup Date'"
-                :input-type="'date'"
-                :input-placeholder="'Select Pickup Date'"
-                :default-value="form.pickupDate"
-                @get="form.pickupDate = $event.value"
-              />
+              <form @submit.prevent="submit">
+                <input-component
+                  :label-title="'Select Pickup Date'"
+                  :input-type="'date'"
+                  :input-placeholder="'Select Pickup Date'"
+                  :default-value="form.pickupDate"
+                  @get="form.pickupDate = $event.value"
+                />
 
-              <input-component
-                :label-title="'Number of Cylinders'"
-                :input-placeholder="'Number of Cylinders'"
-                :default-value="form.numberOfCylinders"
-                @get="form.numberOfCylinders = $event.value"
-              />
+                <input-component
+                  :label-title="'Number of Cylinders'"
+                  :input-placeholder="'Number of Cylinders'"
+                  :default-value="form.numberOfCylinders"
+                  @get="form.numberOfCylinders = $event.value"
+                />
 
-              <select-component
-                :label-title="'Order Type'"
-                :select-array="orderTypes"
-                :default-option-text="'Select Order Type'"
-                :init-value="form.orderType"
-                @get="form.orderType = $event.value"
-              />
+                <select-component
+                  :label-title="'Order Type'"
+                  :select-array="orderTypes"
+                  :default-option-text="'Select Order Type'"
+                  :init-value="form.orderType"
+                  @get="form.orderType = $event.value"
+                />
 
-              <select-component
-                :label-title="'Vehicle'"
-                :select-array="vehicles"
-                :default-option-text="'Select Vehicle'"
-                :init-value="form.vehicle"
-                @get="form.vehicle = $event.value"
-              />
+                <select-component
+                  :label-title="'Vehicle'"
+                  :select-array="vehicles"
+                  :default-option-text="'Select Vehicle'"
+                  :init-value="form.vehicle"
+                  @get="form.vehicle = $event.value"
+                />
 
-              <button-component
-                :button-class="'bg-btn-purple text-white rounded-sm'"
-                :button-text="'Request Pickup'"
-                @buttonClicked="submit"
-              />
+                <button-component
+                  :button-class="'bg-btn-purple text-white rounded-sm'"
+                  :button-text="'Request Pickup'"
+                />
+              </form>
             </div>
           </div>
         </div>
@@ -602,9 +603,9 @@ import ButtonComponent from '@/components/Form/Button.vue'
 import TextAreaComponent from '@/components/Form/TextArea.vue'
 import FilterComponent from '@/components/Base/Filter.vue'
 import { CustomerDto } from '@/types/Types'
-import { ValidatorObject } from '~/module/Validation'
-import { CustomerController } from '~/module/Customer'
-import { VehicleController } from '~/module/Vehicle'
+import { ValidatorObject } from '@/module/Validation'
+import { CustomerController } from '@/module/Customer'
+import { VehicleController } from '@/module/Vehicle'
 
 export default defineComponent({
   components: {
@@ -852,15 +853,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style scoped>
-.action-menu {
-  display: none;
-}
-.icon-button:hover > .action-menu {
-  display: block;
-}
-.icon-button:focus > .action-menu {
-  display: block;
-}
-</style>

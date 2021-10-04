@@ -1,16 +1,8 @@
 <template>
-  <div class="w-full py-2">
+  <div class="py-2">
     <label
       v-if="labelTitle"
-      class="
-        block
-        w-full
-        px-1
-        text-gray-700 text-md
-        mb-1
-        font-semibold
-        tracking-tighter
-      "
+      class="block w-full px-1 text-gray-600 text-md mb-1 font-semibold"
     >
       <span>
         {{ labelTitle }}
@@ -34,17 +26,18 @@
         py-2
         rounded-sm
         focus:outline-none focus:border-btn-purple
-        font-extralight
-        placeholder-gray-500
-        focus:placeholder-gray-300
-        text-gray-500
+        font-semibold
+        placeholder-gray-400
+        focus:placeholder-gray-200
+        text-gray-900
+        border-2
       "
       min="0"
       step="1"
       :class="{
         'border-red-300': isInvalid,
-        'border-0 border-b-2 border-gray-500': isDisabled,
-        'border-2 border-gray-200': !isDisabled,
+        'border-gray-600 bg-gray-200 ': isDisabled,
+        'border-gray-200 text-gray-500 bg-white': !isDisabled,
       }"
       @input="returnValue"
       @invalid="isInvalid = true"
@@ -54,6 +47,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
+import { debounce } from 'lodash'
 
 export default defineComponent({
   props: {
@@ -67,7 +61,7 @@ export default defineComponent({
       default: 'Enter Value',
     },
     inputType: {
-      type: String,
+      type: [String, Number],
       required: false,
       default: 'text',
     },
@@ -88,9 +82,9 @@ export default defineComponent({
   },
   setup(_props, ctx) {
     const inputValue = ref<String | Number>('')
-    const returnValue = () => {
+    const returnValue = debounce(() => {
       ctx.emit('get', inputValue)
-    }
+    }, 1000)
     const isInvalid = ref<Boolean>(false)
 
     onMounted(() => {

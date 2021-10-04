@@ -63,3 +63,14 @@ export type CustomerDto = {
   modeOfService: String
   _id: String
 }
+
+export interface Invoice {
+  customer: String
+  totalAmount: number
+  amountPaid: number
+  amountInWords: String
+  date: String
+  recieptType: String
+  cylinders?: Array<Object>
+  products?: Array<Object>
+}

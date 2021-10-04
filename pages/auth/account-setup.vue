@@ -65,7 +65,7 @@ import Input from '@/components/Form/Input.vue'
 import SelectInput from '@/components/Form/Select.vue'
 import Button from '@/components/Form/Button.vue'
 import { UserController } from '@/module/User'
-import { mainStore } from '~/module/Pinia'
+import { mainStore } from '@/module/Pinia'
 export default defineComponent({
   name: 'Landing',
   components: { Input, Button, SelectInput },

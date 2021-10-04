@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full py-3">
+  <div class="py-3">
     <label
       v-if="labelTitle"
       class="
@@ -26,23 +26,23 @@
       rows="3"
       :placeholder="inputPlaceholder"
       class="
-        appearance-none
         block
         w-full
         px-4
-        py-3
+        py-2
         rounded-sm
+        font-semibold
         focus:outline-none focus:border-btn-purple
-        font-extralight
         placeholder-gray-500
         focus:placeholder-gray-300
-        text-gray-500
+        text-gray-900
+        border-2
         resize-none
       "
       :class="{
         'border-red-300': isInvalid,
-        'border-0 border-b-2 border-gray-500': isDisabled,
-        'border-2 border-gray-200': !isDisabled,
+        'border-gray-600 bg-gray-200 ': isDisabled,
+        'border-gray-300 text-gray-500 bg-white': !isDisabled,
       }"
       :disabled="isDisabled"
       :required="isRequired"
@@ -54,6 +54,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
+import { debounce } from 'lodash'
 
 export default defineComponent({
   props: {
@@ -82,9 +83,9 @@ export default defineComponent({
   },
   setup(_props, ctx) {
     const inputValue = ref('')
-    const returnValue = () => {
+    const returnValue = debounce(() => {
       ctx.emit('get', inputValue)
-    }
+    }, 1000)
     const isInvalid = ref<Boolean>(false)
     onMounted(() => {
       if (_props.defaultValue) {

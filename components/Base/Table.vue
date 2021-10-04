@@ -1,7 +1,7 @@
 <template>
   <div class="overflow-x-auto w-full px-6">
     <table id="users-list" class="w-full table-auto">
-      <thead class="bg-gray-100">
+      <thead class="bg-gray-200">
         <tr>
           <th
             v-for="(headSingle, index) in head"
@@ -175,10 +175,7 @@
                   font-medium
                 "
                 :to="
-                  '/dashboard/user-management/' +
-                  bodySingle.id +
-                  '/' +
-                  bodySingle.email
+                  '/dashboard/users/' + bodySingle.id + '/' + bodySingle.email
                 "
               >
                 View User</router-link
@@ -371,14 +368,3 @@ export default defineComponent({
   },
 })
 </script>
-<style scoped>
-.action-menu {
-  display: none;
-}
-.icon-button:hover > .action-menu {
-  display: block;
-}
-.icon-button:focus > .action-menu {
-  display: block;
-}
-</style>

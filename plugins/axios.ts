@@ -1,6 +1,6 @@
 import { Plugin } from '@nuxt/types'
-import { initializeAxios } from '~/utils/api'
-import { mainStore } from '~/module/Pinia'
+import { initializeAxios } from '@/utils/api'
+import { mainStore } from '@/module/Pinia'
 
 const accessor: Plugin = ({ $axios, $toast }) => {
   initializeAxios($axios)
@@ -12,12 +12,10 @@ const accessor: Plugin = ({ $axios, $toast }) => {
     }
   })
   $axios.onRequestError((error: any) => {
-    console.log(error)
     $toast.info(error.message)
   })
 
   $axios.onResponseError((error: any) => {
-    console.log(error)
     $toast.error(error.response.data.message)
   })
 

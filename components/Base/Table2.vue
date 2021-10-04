@@ -2,7 +2,7 @@
   <div class="overflow-x-auto w-full py-2 px-2">
     <div class="overflow-x-auto w-full">
       <table class="table-fixed w-full">
-        <thead class="bg-gray-100">
+        <thead class="bg-gray-200">
           <tr class="space-x-4">
             <th
               v-for="(headSingle, index) in head"
@@ -71,52 +71,25 @@
             <td class="px-4 text-center py-4">
               {{ formatDate(bodySingle.dateManufactured) }}
             </td>
-            <td class="px-4 py-4 icon-button text-center">
-              <button class="mx-auto text-black w-6 h-6 relative">
-                <svg
-                  class="fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M4 12a2 2 0 110-4 2 2 0 010 4zm6 0a2 2 0 110-4 2 2 0 010 4zm6 0a2 2 0 110-4 2 2 0 010 4z"
-                  />
-                </svg>
-              </button>
-              <div
+            <td class="px-4 py-4 text-center">
+              <router-link
                 class="
-                  absolute
-                  -ml-4
-                  bg-gray-50
-                  border border-gray-300
-                  w-40
-                  font-medium
-                  text-sm
+                  block
+                  px-6
+                  py-2
+                  text-center text-btn-purple
+                  bg-white
+                  border border-btn-purple
                   rounded-sm
-                  action-menu
-                  z-10
+                  w-full
+                  overflow-none
+                  font-medium
+                  text-xs
                 "
+                :to="'/dashboard/cylinders/cylinder/' + bodySingle._id"
               >
-                <router-link
-                  class="
-                    block
-                    px-6
-                    py-2
-                    text-center text-black
-                    focus:outline-none
-                    hover:bg-purple-300 hover:text-white
-                    w-full
-                    overflow-none
-                    font-medium
-                    text-xs
-                  "
-                  :to="
-                    '/dashboard/cylinder-management/cylinder/' + bodySingle._id
-                  "
-                >
-                  View Cylinder</router-link
-                >
-              </div>
+                View Cylinder</router-link
+              >
             </td>
           </tr>
         </tbody>
@@ -165,15 +138,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style scoped>
-.action-menu {
-  display: none;
-}
-.icon-button:hover > .action-menu {
-  display: block;
-}
-.icon-button:focus > .action-menu {
-  display: block;
-}
-</style>

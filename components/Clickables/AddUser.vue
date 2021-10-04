@@ -1,6 +1,6 @@
 <template>
   <router-link
-    to="/dashboard/user-management/new-user"
+    to="/dashboard/users/new-user"
     class="
       flex
       justify-between

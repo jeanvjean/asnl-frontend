@@ -80,7 +80,6 @@
             <input-component
               :label-title="'Cylinder Size'"
               :input-placeholder="'Enter Cylinder Size'"
-              :input-type="'number'"
               :default-value="cylinder.cylinderSize"
               :is-disabled="true"
               :is-required="false"
@@ -154,6 +153,7 @@
             />
 
             <text-area-component
+              v-if="auth._id === form.nextApprovingOfficer._id"
               :label-title="'Approving Officer Comment'"
               :input-placeholder="'Enter Comment'"
               :default-value="requestBody.comment"
@@ -162,7 +162,13 @@
             />
           </div>
 
-          <div class="md:flex w-full md:space-x-2 md:w-1/4 my-6">
+          <div
+            v-if="
+              auth._id === form.nextApprovingOfficer._id &&
+              form.status != 'completed'
+            "
+            class="md:flex w-full md:space-x-2 md:w-1/4 my-6"
+          >
             <button-component
               :button-text="'Approve'"
               :button-class="'bg-btn-purple text-white w-auto'"
@@ -174,6 +180,22 @@
               :button-class="'text-white bg-gray-700 w-auto'"
               :loading-status="buttonLoading.rejectLoading"
               @buttonClicked="requestBody.status = 'reject'"
+            />
+          </div>
+          <div
+            v-else-if="
+              form.status === 'completed' &&
+              auth.role === 'sales' &&
+              auth.subrole === 'head of department'
+            "
+            class="md:flex w-full md:space-x-2 md:w-1/6 my-6"
+          >
+            <button-component
+              :button-text="'Resolve'"
+              :button-class="'bg-btn-purple text-white w-auto'"
+              :loading-status="buttonLoading.resolveLoading"
+              :button-type="'button'"
+              @buttonClicked="resolveComplaint()"
             />
           </div>
         </form>
@@ -200,8 +222,8 @@ import InputComponent from '@/components/Form/Input.vue'
 import TextAreaComponent from '@/components/Form/TextArea.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
-import { CustomerController } from '~/module/Customer'
-import { CylinderController } from '~/module/Cylinder'
+import { CustomerController } from '@/module/Customer'
+import { CylinderController } from '@/module/Cylinder'
 import { formatDate } from '@/constants/utils'
 import Confirmation from '@/components/Overlays/Confirmation.vue'
 import { mainStore } from '@/module/Pinia'
@@ -219,6 +241,7 @@ export default defineComponent({
     const buttonLoading = reactive({
       approveLoading: false,
       rejectLoading: false,
+      resolveLoading: false,
     })
     const complaintTypes = [
       {
@@ -256,6 +279,8 @@ export default defineComponent({
         totalVolume: '',
       },
       additionalAction: '',
+      nextApprovingOfficer: {},
+      status: '',
     })
 
     const requestBody = reactive({
@@ -308,8 +333,25 @@ export default defineComponent({
             form.cylinders[0].dateSupplied
           )
           form.comment = response.comments[0].comment
+          form.replaceCylinder = response.replaceCylinder
+            ? response.replaceCylinder
+            : {}
+          form.nextApprovingOfficer = response.nextApprovalOfficer
+          form.status = response.approvalStatus
         })
         .finally(() => reset())
+    }
+
+    function resolveComplaint(complaint: any = complaintId) {
+      buttonLoading.resolveLoading = true
+
+      CustomerController.resolveComplaint(complaint)
+        .then(() => {
+          router.go(-1)
+        })
+        .finally(() => {
+          buttonLoading.resolveLoading = false
+        })
     }
 
     onMounted(() => {
@@ -358,6 +400,7 @@ export default defineComponent({
       requestBody,
       buttonLoading,
       auth,
+      resolveComplaint,
     }
   },
 })

@@ -67,12 +67,7 @@
   </div>
 </template>
 <script lang="ts">
-import {
-  defineComponent,
-  onMounted,
-  ref,
-  useContext,
-} from '@nuxtjs/composition-api'
+import { defineComponent, ref, useContext } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   props: {
@@ -102,10 +97,6 @@ export default defineComponent({
         context.$toast.info('Last Page')
       }
     }
-
-    onMounted(() => {
-      limitChanged()
-    })
 
     const limitChanged = () => {
       ctx.emit('limitChanged', limit.value)

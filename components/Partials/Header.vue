@@ -165,7 +165,7 @@
             aria-labelledby="user-menu"
           >
             <router-link
-              :to="'/dashboard/user-management/' + auth._id + '/' + auth.email"
+              :to="'/dashboard/users/' + auth._id + '/' + auth.email"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               role="menuitem"
               >Your Profile</router-link

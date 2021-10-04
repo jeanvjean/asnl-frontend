@@ -82,7 +82,6 @@
             <input-component
               :label-title="'Delivery/WayBill Number'"
               :input-placeholder="'Enter Delivery/Waybill Number'"
-              :input-type="'number'"
               @get="cylinder.waybillNo = $event.value"
             />
             <input-component
@@ -156,8 +155,8 @@ import TextAreaComponent from '@/components/Form/TextArea.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import { ValidatorObject } from '@/module/Validation'
-import { CustomerController } from '~/module/Customer'
-import { CylinderController } from '~/module/Cylinder'
+import { CustomerController } from '@/module/Customer'
+import { CylinderController } from '@/module/Cylinder'
 
 export default defineComponent({
   components: {

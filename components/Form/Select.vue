@@ -1,16 +1,8 @@
 <template>
-  <div class="w-full py-2">
+  <div class="py-2">
     <label
       v-if="labelTitle"
-      class="
-        block
-        w-full
-        px-1
-        text-gray-800 text-md
-        mb-1
-        font-semibold
-        tracking-tighter
-      "
+      class="block w-full px-1 text-gray-600 text-md mb-1 font-semibold"
     >
       <span>
         {{ labelTitle }}
@@ -26,23 +18,22 @@
       :disabled="isDisabled"
       :required="isRequired"
       class="
-        appearance-none
         block
         w-full
         px-4
         py-2
         rounded-sm
+        font-semibold
         focus:outline-none focus:border-btn-purple
-        font-extralight
-        placeholder-gray-500
-        focus:placeholder-gray-300
-        text-gray-500
-        bg-white
+        placeholder-gray-400
+        focus:placeholder-gray-200
+        text-gray-900
+        border-2
       "
       :class="{
         'border-red-300': isInvalid,
-        'border-0 border-b-2 border-gray-500': isDisabled,
-        'border-2 border-gray-200': !isDisabled,
+        'border-gray-600 bg-gray-200 ': isDisabled,
+        'border-gray-200 text-gray-500 bg-white': !isDisabled,
       }"
       @change="returnValue"
       @invalid="isInvalid = true"
@@ -85,7 +76,7 @@ export default defineComponent({
       required: false,
     },
     initValue: {
-      type: String,
+      type: [String, Number],
       required: false,
       default: '',
     },
@@ -100,7 +91,7 @@ export default defineComponent({
     },
   },
   setup(_props, ctx) {
-    const selectedValue = ref<String>(_props.initValue)
+    const selectedValue = ref<String | Number>(_props.initValue)
     const returnValue = () => {
       ctx.emit('get', selectedValue)
     }

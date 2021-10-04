@@ -1,5 +1,5 @@
 import { Middleware } from '@nuxt/types'
-import { mainStore } from '~/module/Pinia'
+import { mainStore } from '@/module/Pinia'
 
 const isAuthenticated: Middleware = ({ redirect }) => {
   const appStore = mainStore()

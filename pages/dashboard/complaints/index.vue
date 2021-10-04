@@ -75,11 +75,11 @@
             :to="`/dashboard/complaint/${slotProps.rowId}`"
             class="
               mx-auto
-              py-2
-              px-4
+              p-1
               text-btn-purple
               border border-btn-purple
               rounded-sm
+              block
             "
           >
             View Complaint
@@ -119,7 +119,12 @@ import { DriverObject } from '@/module/Driver'
 import VehicleFilter from '@/components/Overlays/Filter.vue'
 import { mainStore } from '@/module/Pinia'
 import TableComponent from '@/components/Table.vue'
-import { getFilters, getQueryString, getTableBody } from '@/constants/utils'
+import {
+  capitalizeString,
+  getFilters,
+  getQueryString,
+  getTableBody,
+} from '@/constants/utils'
 
 export default defineComponent({
   name: 'Reports',
@@ -156,6 +161,7 @@ export default defineComponent({
       'ICN Number',
       'Status',
       'Approval Stage',
+      'Next Approving Officer',
       'Date & Time',
     ]
 
@@ -204,7 +210,8 @@ export default defineComponent({
       status: {
         pending:
           'text-white bg-yellow-400 rounded-lg px-2 py-1 capitalize font-semibold',
-        approved: 'text-white bg-green-500 rounded-lg px-2 py-1 capitalize',
+        completed: 'text-white bg-green-500 rounded-lg px-2 py-1 capitalize',
+        resolved: 'text-white bg-gray-500 rounded-lg px-2 py-1 capitalize',
       },
     }
 
@@ -224,13 +231,25 @@ export default defineComponent({
               icnNo: complaint.icnNo,
               status: complaint.approvalStatus,
               stage: complaint.approvalStage,
+              nextApprovingOfficer: complaint.nextApprovalOfficer
+                ? capitalizeString(complaint.nextApprovalOfficer.name)
+                : '',
               date: new Date(complaint.createdAt).toDateString(),
               _id: complaint._id,
             }
           })
           body.value = getTableBody(
             body.value,
-            ['customer', 'type', 'ecrNo', 'icnNo', 'status', 'stage', 'date'],
+            [
+              'customer',
+              'type',
+              'ecrNo',
+              'icnNo',
+              'status',
+              'stage',
+              'nextApprovingOfficer',
+              'date',
+            ],
             classObject
           )
           paginationProp.hasNextPage = response.hasNextPage
@@ -285,14 +304,3 @@ export default defineComponent({
   },
 })
 </script>
-<style scoped>
-.action-menu {
-  display: none;
-}
-.icon-button:hover > .action-menu {
-  display: block;
-}
-.icon-button:focus > .action-menu {
-  display: block;
-}
-</style>
