@@ -1,7 +1,7 @@
 <template>
   <div class="py-6 px-6">
     <div class="flex justify-between items-center px-6">
-      <h1 class="text-lg font-semibold">Invoice List</h1>
+      <h1 class="text-lg font-semibold">OCN List</h1>
       <div>
         <router-link
           to="/dashboard/invoices/new-invoice"
