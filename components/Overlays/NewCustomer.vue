@@ -318,8 +318,6 @@ export default defineComponent({
       validId: '',
     })
 
-    const productsBody = ref<Array<String>>([])
-
     function fetchProducts() {
       ProductObject.fetchProductsUnPaginated().then((response: any) => {
         productsArray.value = response.map((product: any) => {
@@ -385,7 +383,7 @@ export default defineComponent({
       formData.append('CAC', form.CAC)
       formData.append('validId', form.validId)
 
-      productsBody.value.forEach((element: any) => {
+      products.value.forEach((element: any) => {
         formData.append('products', element)
       })
 
@@ -414,7 +412,7 @@ export default defineComponent({
         CAC: 'required',
         validId: 'required',
       }
-
+      console.log(products.value.length)
       const validation: any = new Validator(form, rules)
       if (validation.fails()) {
         let messages: string[] = []
@@ -423,7 +421,7 @@ export default defineComponent({
         messages.forEach((error: string) => {
           context.$toast.error(error)
         })
-      } else if (!productsBody.value.length) {
+      } else if (!products.value.length) {
         context.$toast.error('Products is Required')
       } else {
         isLoading.value = true
