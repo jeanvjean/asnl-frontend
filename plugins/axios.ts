@@ -11,9 +11,6 @@ const accessor: Plugin = ({ $axios, $toast }) => {
       config.headers.Authorization = auth.token
     }
   })
-  $axios.onRequestError((error: any) => {
-    $toast.info(error.message)
-  })
 
   $axios.onResponseError((error: any) => {
     $toast.error(error.response.data.message)

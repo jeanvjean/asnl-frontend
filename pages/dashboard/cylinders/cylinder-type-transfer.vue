@@ -79,7 +79,7 @@
                     border border-gray-400
                   "
                 >
-                  Cylinder Number
+                  Assigned Number
                 </th>
                 <th
                   class="
@@ -92,18 +92,6 @@
                   "
                 >
                   Cylinder Type
-                </th>
-                <th
-                  class="
-                    font-light
-                    text-sm
-                    px-2
-                    py-2
-                    text-center
-                    border border-gray-400
-                  "
-                >
-                  Manufacturing Date
                 </th>
                 <th
                   class="
@@ -128,42 +116,6 @@
                   "
                 >
                   Volume
-                </th>
-                <!-- <th
-                  class="
-                    font-light
-                    text-sm
-                    px-2
-                    py-2
-                    text-center
-                    border border-gray-400
-                  "
-                >
-                  Height
-                </th> -->
-                <th
-                  class="
-                    font-light
-                    text-sm
-                    px-2
-                    py-2
-                    text-center
-                    border border-gray-400
-                  "
-                >
-                  Color Code
-                </th>
-                <th
-                  class="
-                    font-light
-                    text-sm
-                    px-2
-                    py-2
-                    text-center
-                    border border-gray-400
-                  "
-                >
-                  Water Capacity
                 </th>
                 <th class="w-auto"></th>
               </tr>
@@ -207,43 +159,21 @@
                   <input-component
                     :default-value="cylinder.type"
                     :input-placeholder="'Cylinder Type'"
-                  />
-                </td>
-                <td class="font-light text-lg text-center">
-                  <input-component
-                    :default-value="cylinder.date"
-                    :input-placeholder="'Manufacture Date'"
-                    :input-type="'date'"
+                    :is-disabled="true"
                   />
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
                     :default-value="cylinder.gasType"
                     :input-placeholder="'Gas Type'"
+                    :is-disabled="true"
                   />
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
                     :default-value="cylinder.volume"
                     :input-placeholder="'Volume'"
-                  />
-                </td>
-                <!-- <td class="font-light text-lg text-center">
-                  <input-component
-                    :default-value="cylinder.volume"
-                    :input-placeholder="'Height'"
-                  />
-                </td> -->
-                <td class="font-light text-lg text-center">
-                  <input-component
-                    :default-value="cylinder.colorCode"
-                    :input-placeholder="'Color Code'"
-                  />
-                </td>
-                <td class="font-light text-lg text-center">
-                  <input-component
-                    :default-value="cylinder.waterCapacity"
-                    :input-placeholder="'Water Capacity'"
+                    :is-disabled="true"
                   />
                 </td>
 
@@ -402,12 +332,12 @@ import {
   useRouter,
   watch,
 } from '@nuxtjs/composition-api'
+import Validator from 'validatorjs'
 import SelectComponent from '@/components/Form/Select.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import { mainStore } from '@/module/Pinia'
 import { CylinderController } from '@/module/Cylinder'
 import { CylinderTypes } from '@/constants/variables'
-import Validator from 'validatorjs'
 import { ValidatorObject } from '@/module/Validation'
 
 export default defineComponent({

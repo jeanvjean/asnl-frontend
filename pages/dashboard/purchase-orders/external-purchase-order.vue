@@ -1,10 +1,9 @@
 <template>
   <div :key="componentKey" class="w-full md:w-10/12 lg:w-8/12 md:mx-auto mt-10">
     <div class="bg-white px-6 md:px-10 py-6">
-      <div class="flex items-center space-x-4 float-right">
-        <span>Date:</span>
+      <div class="float-right">
         <div class="flex space-x-4 items-center">
-          <span>12/02/2020</span
+          <span>{{ new Date().toDateString() }}</span
           ><svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
@@ -34,15 +33,22 @@
               justify-between
               items-center
               grid grid-rows-1
-              md:grid-cols-3
+              md:grid-cols-2 md:gap-x-2
             "
           >
             <select-component
-              :label-title="'Customer'"
-              :default-option-text="'Select Customer'"
-              :select-array="customerArray"
-              :default-value="form.customer"
-              @get="form.customer = $event.value"
+              :label-title="'Supplier'"
+              :default-option-text="'Select Supplier'"
+              :select-array="suppliersArray"
+              :init-value="form.supplier"
+              @get="form.supplier = $event.value"
+            />
+            <select-component
+              :label-title="'Gas Type'"
+              :default-option-text="'Select Gas Type'"
+              :select-array="gasTypes"
+              :init-value="form.gasType"
+              @get="form.gasType = $event.value"
             />
           </div>
         </div>
@@ -99,6 +105,7 @@
 
         <div class="inline-block">
           <button
+            type="button"
             class="flex justify-evenly items-center"
             @click="increaseCounter()"
           >
@@ -115,7 +122,9 @@
                 d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <span class="text-md text-gray-400 underline">Add New Product</span>
+            <span class="text-md text-gray-400 underline"
+              >Add New Cylinder</span
+            >
           </button>
         </div>
 
@@ -163,6 +172,7 @@ import { getRandomValue } from '@/constants/utils'
 import { CylinderController } from '@/module/Cylinder'
 import { CustomerController } from '@/module/Customer'
 import { ValidatorObject } from '@/module/Validation'
+import { ProductObject } from '@/module/Product'
 
 export default defineComponent({
   components: {
@@ -175,13 +185,16 @@ export default defineComponent({
   setup() {
     const form = reactive<any>({
       cylinders: [],
-      customer: '',
+      supplier: '',
       date: new Date().toISOString(),
       comment: '',
+      gasType: '',
+      type: 'external',
     })
+
     const componentKey = ref<Number>()
     const cylinderArray = ref<any>([])
-    const customerArray = ref<any>([])
+    const suppliersArray = ref<any>([])
     const context = useContext()
     const router = useRouter()
     const increaseCounter = () => {
@@ -189,7 +202,6 @@ export default defineComponent({
         cylinderNo: '',
         volume: '',
       })
-      changeComponentKey()
     }
     const buttonLoading = ref<Boolean>(false)
 
@@ -215,12 +227,26 @@ export default defineComponent({
       )
     }
 
-    const fetchCustomers = () => {
-      CustomerController.fetchUnPaginatedCustomers().then((response: any) => {
-        customerArray.value = response.map((element: any) => {
+    const getBranches = () => {
+      ProductObject.fetchAllSuppliers().then((response: any) => {
+        suppliersArray.value = response.map((element: any) => {
           return {
-            name: element.name,
+            name: `${element.name} - ${element.location}`,
             value: element._id,
+          }
+        })
+      })
+    }
+
+    const gasTypes = ref([])
+
+    const fetchGasTypes = () => {
+      CylinderController.getCylinders().then((response) => {
+        const myResponse = response.data.data.cylinders
+        gasTypes.value = myResponse.map((element: any) => {
+          return {
+            name: element.gasName,
+            value: element.gasName,
           }
         })
       })
@@ -228,16 +254,17 @@ export default defineComponent({
 
     onBeforeMount(() => {
       changeComponentKey()
-      Promise.all([fetchCylinders(), fetchCustomers()])
+      Promise.all([fetchCylinders(), getBranches(), fetchGasTypes()])
     })
 
     const submit = () => {
       const rules = {
-        customer: 'required|string',
+        supplier: 'required|string',
         date: 'required|date',
         cylinders: 'required|array',
         'cylinders.*.cylinderNo': 'required|string',
         'cylinders.*.volume': 'required|string|min:1',
+        gasType: 'required',
       }
 
       const validation: any = new Validator(form, rules)
@@ -252,7 +279,7 @@ export default defineComponent({
         buttonLoading.value = true
         CustomerController.createPurchaseOrder(form)
           .then(() => {
-            router.go(-1)
+            router.push('/dashboard/purchase-orders/')
           })
           .finally(() => {
             buttonLoading.value = false
@@ -264,11 +291,12 @@ export default defineComponent({
       form,
       increaseCounter,
       removeCylinders,
-      customerArray,
+      suppliersArray,
       cylinderArray,
       componentKey,
       submit,
       buttonLoading,
+      gasTypes,
     }
   },
 })

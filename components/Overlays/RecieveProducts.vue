@@ -1,8 +1,8 @@
 <template>
   <back-drop>
-    <div :key="componentKey" class="w-full lg:w-3/5 bg-white rounded-sm">
-      <div class="rounded-sm">
-        <div class="flex justify-between items-center bg-white py-4 px-8">
+    <div :key="componentKey" class="w-full lg:w-3/5 rounded-lg">
+      <div>
+        <div class="flex justify-between items-center bg-white py-4 px-4">
           <h1>Recieve Products</h1>
           <div class="flex space-x-8 items-center">
             <button
@@ -70,12 +70,27 @@
             </div>
           </div>
           <div class="grid grid-rows-1 lg:grid-cols-4 gap-x-4 items-center">
-            <input-component
-              :label-title="'Supplier'"
-              :input-placeholder="'Enter Supplier'"
-              :default-value="form.supplier"
-              @get="form.supplier = $event.value"
-            />
+            <div class="py-4">
+              <label
+                class="
+                  block
+                  w-full
+                  px-1
+                  text-gray-600 text-md
+                  mb-1
+                  font-semibold
+                "
+              >
+                <span> Supplier </span>
+              </label>
+              <multiselect
+                v-model="form.supplier"
+                :options="suppliers"
+                :multiple="false"
+                placeholder="Pick a Supplier"
+                :class="'w-full border-2 border-gray-300 text-gray-400'"
+              />
+            </div>
 
             <input-component
               :label-title="'LPO Number'"
@@ -242,11 +257,6 @@
                           setProductName(product.productName, i)
                       "
                     />
-                    <!-- <multiselect
-                      label="name"
-                      track-by="value"
-                      :options="productsArray"
-                    /> -->
                   </td>
 
                   <td>
@@ -423,7 +433,8 @@
           <div
             class="
               w-full
-              lg:w-3/5 lg:flex lg:justify-between lg:items-center lg:space-x-6
+              md:w-2/5
+              lg:flex lg:justify-between lg:items-center lg:space-x-6
               mt-10
             "
           >
@@ -463,6 +474,7 @@ import {
   useContext,
 } from '@nuxtjs/composition-api'
 import Validator from 'validatorjs'
+import Multiselect from 'vue-multiselect'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
@@ -475,7 +487,7 @@ export default defineComponent({
     BackDrop,
     InputComponent,
     SelectComponent,
-    // Multiselect,
+    Multiselect,
   },
   setup(_props, ctx) {
     const close = () => {
@@ -516,7 +528,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      fetchProducts()
+      Promise.all([fetchProducts(), fetchSuppliers()])
     })
 
     const appStore = mainStore()
@@ -576,6 +588,14 @@ export default defineComponent({
       formData.append('grnDocument', form.file)
       return formData
     })
+    const suppliers = ref([])
+
+    const fetchSuppliers = () => {
+      ProductObject.fetchAllSuppliers().then(
+        (response) =>
+          (suppliers.value = response.map((supplier: any) => supplier.name))
+      )
+    }
 
     const submitForm = async () => {
       const rules = {
@@ -629,6 +649,7 @@ export default defineComponent({
       processFile,
       productsArray,
       setProductName,
+      suppliers,
     }
   },
 })
@@ -642,3 +663,4 @@ input[type='file'] {
   cursor: pointer;
 }
 </style>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

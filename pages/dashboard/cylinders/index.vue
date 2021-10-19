@@ -132,9 +132,7 @@ export default defineComponent({
       'Cylinder No',
       'Gas Type',
       'Gas Volume Content',
-      'Water Capacity',
       'Cylinder Type',
-      'Date Cylinder',
     ]
 
     const body = ref<any>([])

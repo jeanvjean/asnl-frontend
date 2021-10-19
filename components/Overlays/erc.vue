@@ -24,70 +24,58 @@
 
       <section class="w-full bg-white px-6 py-4 my-6">
         <div
-          v-for="(profileDetail, index) in profile"
+          v-for="(content, index) in profile"
           :key="index"
-          class="w-full grid grid-cols-3 gap-x-6 items-center py-3.5"
+          class="w-full grid grid-cols-2 gap-x-6 items-center py-3.5"
           :class="index % 2 == 1 ? ' bg-transparent' : ' bg-indigo-100'"
         >
-          <div class="col-span-1 text-right font-semibold text-md">
-            {{ profileDetail.title }}:
+          <div class="col-span-1 text-right font-semibold text-md capitalize">
+            {{ content.title }}
           </div>
-          <div class="col-span-2">{{ profileDetail.value }}</div>
-        </div>
-        <div class="w-full items-center py-3.5 bg-indigo-100 my-4">
-          <div class="flex justify-between items-center px-4 py-2 font-medium">
-            <button
-              class="
-                focus:outline-none
-                focus:border
-                focus:border-0
-                focus:border-btn-purple
-              "
-            >
-              Cylinder 1
-            </button>
-            <button class="focus:outline-none focus:border-btn-purple">
-              Cylinder 2
-            </button>
-            <button class="focus:outline-none focus:border-btn-purple">
-              Cylinder 3
-            </button>
-            <button class="focus:outline-none focus:border-btn-purple">
-              Cylinder 4
-            </button>
-            <router-link
-              to="/dashboard/production/cylinders"
-              class="focus:outline-none text-btn-purple"
-              >View All</router-link
-            >
-          </div>
-          <div
-            v-for="(profileDetail, index) in inner"
-            :key="index"
-            class="w-full grid grid-cols-3 gap-x-6 items-center py-3.5"
-            :class="index % 2 == 1 ? ' bg-transparent' : ' bg-indigo-100'"
-          >
-            <div class="col-span-1 text-right font-semibold text-md">
-              {{ profileDetail.title }}:
-            </div>
-            <div class="col-span-2">{{ profileDetail.value }}</div>
+          <div class="col-span-1">
+            {{ content.value }}
           </div>
         </div>
-        <div
-          v-for="(profileDetail, index) in end"
-          :key="index"
-          class="w-full grid grid-cols-3 gap-x-6 items-center py-3.5"
-          :class="index % 2 == 1 ? ' bg-transparent' : ' bg-indigo-100'"
-        >
-          <div class="col-span-1 text-right font-semibold text-md">
-            {{ profileDetail.title }}:
-          </div>
-          <div class="col-span-2">{{ profileDetail.value }}</div>
+
+        <div class="w-full overflow-x-auto bg-indigo-100 my-4 py-2 px-2">
+          <h2 class="uppercase text-base font-semibold">Cylinders</h2>
+          <table class="table table-auto w-full border-collapse">
+            <thead>
+              <tr>
+                <th class="border border-black">S/N</th>
+                <th class="border border-black">Cylinder Number</th>
+                <th class="border border-black">Cylinder Size</th>
+                <th class="border border-black">Cylinder Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(external, i) in ecr.fringeCylindersArray"
+                :key="i + getRandomValue()"
+              >
+                <td class="text-center">{{ i + 1 }}</td>
+                <td class="text-center py-2">{{ external.cylinderNo }}</td>
+                <td class="text-center py-2">{{ external.cylinderSize }}</td>
+                <td class="text-center py-2">External</td>
+              </tr>
+              <tr
+                v-for="(internal, j) in ecr.asnlCylindersArray"
+                :key="j + getRandomValue()"
+              >
+                <td class="text-center">{{ j + 1 }}</td>
+                <td class="text-center py-2">{{ internal.cylinderNumber }}</td>
+                <td class="text-center py-2">
+                  {{ internal.gasVolumeContent.value }}
+                </td>
+                <td class="text-center py-2">ASNL Cylinder</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+
         <div class="px-4 py-2">
-          <h2 class="py-4">Scan all Cylinder</h2>
           <router-link
-            to="/dashboard/production/production-schedule"
+            :to="`/dashboard/production/schedule/${ecr._id}`"
             class="px-6 py-2 bg-btn-purple text-white font-semibold rounded-sm"
           >
             Schedule for Production
@@ -101,102 +89,35 @@
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/SecondBackDrop.vue'
-
+import { getRandomValue } from '@/constants/utils'
 export default defineComponent({
   components: {
     BackDrop,
+  },
+  props: {
+    ecr: {
+      type: Object,
+      required: true,
+    },
   },
   setup(_props, ctx) {
     const close = () => {
       ctx.emit('close')
     }
 
-    const inner = [
-      {
-        title: 'Cylinder No',
-        value: '232323',
-      },
-      {
-        title: 'Cylinder Type',
-        value: '#2424231',
-      },
-      {
-        title: 'Gas Type',
-        value: 'Oxygen',
-      },
-    ]
-
     const profile = [
-      {
-        title: 'Customer Name',
-        value: 'Luth Martha',
-      },
-      {
-        title: 'Order Type',
-        value: '#2424231',
-      },
-      {
-        title: 'ECR Nos',
-        value: '3434231',
-      },
-      {
-        title: 'ICN Nos',
-        value: '34342432',
-      },
-      {
-        title: 'Gas Type',
-        value: 'Oxygen',
-      },
-      {
-        title: 'Mode of Service',
-        value: 'Walk in Customer',
-      },
-      {
-        title: 'Date and Time',
-        value: '23rd Sept, 2020.',
-      },
-      {
-        title: 'Customer Type',
-        value: 'Premium',
-      },
-      {
-        title: 'Serial Nos',
-        value: 'Premium',
-      },
-    ]
-
-    const end = [
-      {
-        title: 'Total Volume',
-        value: 'Premium',
-      },
-      {
-        title: 'Total Volume',
-        value: 'Premium',
-      },
-      {
-        title: 'Total Quantity',
-        value: 'Premium',
-      },
-      {
-        title: 'Recieved by',
-        value: 'Premium',
-      },
-      {
-        title: 'Security',
-        value: 'Premium',
-      },
-      {
-        title: 'Drive',
-        value: 'Premium',
-      },
+      { title: 'customer', value: _props.ecr.customer },
+      { title: 'ecr number', value: _props.ecr.ercNo },
+      { title: 'Date', value: _props.ecr.createdAt },
+      { title: 'Company Cylinders', value: _props.ecr.asnlCylinders },
+      { title: 'ASNL Cylinders', value: _props.ecr.companyCylinders },
+      { title: 'Type', value: _props.ecr.type },
     ]
 
     return {
       close,
       profile,
-      inner,
-      end,
+      getRandomValue,
     }
   },
 })

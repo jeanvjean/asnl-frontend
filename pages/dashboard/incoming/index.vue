@@ -15,40 +15,44 @@
                 w-full
               "
             >
-              <filter-button />
+              <filter-button @filter="showFilter = true" />
               <search-component
-                :place-holder="'Search by ECR Number'"
+                :place-holder="'Search by ICN Number'"
                 @search="
                   $event
-                    ? getEcrs(pageNumber, pageLimit, `&search=${$event}`)
-                    : getEcrs(pageNumber, pageLimit)
+                    ? getICns(pageNumber, pageLimit, `&search=${$event}`)
+                    : getICns(pageNumber, pageLimit)
                 "
               />
               <pagination
                 :pagination-details="paginationProp"
                 @limitChanged="
-                  ;(pageLimit = $event), getEcrs(pageNumber, pageLimit)
+                  ;(pageLimit = $event), getICns(pageNumber, pageLimit)
                 "
-                @next="getEcrs($event.value, pageLimit)"
-                @prev="getEcrs($event.value, pageLimit)"
+                @next="getICns($event.value, pageLimit)"
+                @prev="getICns($event.value, pageLimit)"
               />
-              <button
-                class="
-                  flex
-                  justify-between
-                  items-end
-                  bg-btn-purple
-                  px-4
-                  py-2
-                  space-x-4
-                  rounded-sm
-                  text-white
-                  font-semibold
-                  text-md
-                "
-              >
-                View Filled ECR
-              </button>
+            </div>
+          </div>
+          <div class="w-full flex items-center space-x-4 px-6 py-2">
+            <div
+              v-for="(selectedFilter, j) in displayedFilters"
+              :key="j"
+              class="
+                bg-purple-400 bg-opacity-10
+                text-purple-700
+                font-medium
+                capitalize
+                flex
+                items-center
+                space-x-2
+                px-4
+                py-2
+                rounded-lg
+                text-xs
+              "
+            >
+              <span class="rounded-md">{{ selectedFilter }}</span>
             </div>
           </div>
           <div class="px-4">
@@ -58,7 +62,8 @@
               :show-loader="showLoader"
             >
               <template #action="slotProps">
-                <button
+                <router-link
+                  :to="`/dashboard/production/ecr/${slotProps.rowId}`"
                   class="
                     px-6
                     py-1
@@ -68,15 +73,25 @@
                   "
                   @click=";(singleEcr = slotProps.rowObject), (showErc = true)"
                 >
-                  Details
-                </button>
+                  Generate ECR
+                </router-link>
               </template>
             </table-component>
           </div>
         </div>
       </div>
     </div>
-    <erc v-if="showErc" :ecr="singleEcr" @close="showErc = !showErc" />
+    <erc v-if="showErc" @close="showErc = !showErc" />
+    <incoming-filter-component
+      v-if="showFilter"
+      :filters="incomingFilters"
+      @close="showFilter = false"
+      @filterAdded="
+        queryString = getQueryString($event)
+        displayedFilters = getFilters($event)
+        getICns(pageNumber, pageLimit, queryString)
+      "
+    />
   </div>
 </template>
 
@@ -90,10 +105,11 @@ import {
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterButton from '@/components/Base/FilterButton.vue'
 import Erc from '@/components/Overlays/erc.vue'
-import { fetchECRs } from '@/module/Production'
+import { fetchIcns } from '@/module/Incoming'
 import TableComponent from '@/components/Table.vue'
-import { getTableBody } from '@/constants/utils'
+import { getTableBody, getQueryString, getFilters } from '@/constants/utils'
 import Pagination from '@/components/Base/Pagination.vue'
+import IncomingFilterComponent from '@/components/Overlays/Filter.vue'
 
 export default defineComponent({
   name: 'Home',
@@ -103,20 +119,64 @@ export default defineComponent({
     Erc,
     TableComponent,
     Pagination,
+    IncomingFilterComponent,
   },
   layout: 'dashboard',
   setup() {
+    const displayedFilters = ref<Array<String>>([])
+    const queryString = ref<String>('')
     const headers = [
-      'Ecr No',
+      'ICN No',
       'Customer',
       'Type',
       'Status',
       'Company Cylinders',
       'ASNL Cylinders',
-      'Date',
     ]
-
-    const defaultState = ref<Boolean>(false)
+    const incomingFilters = {
+      category: {
+        list: [
+          {
+            title: 'Walkin Customers',
+            type: 'radio',
+            selected: false,
+            identifier: 'type',
+            value: 'customer',
+          },
+          {
+            title: 'Driver Pickup',
+            type: 'radio',
+            selected: false,
+            identifier: 'type',
+            value: 'driver',
+          },
+          {
+            title: 'Suppliers',
+            type: 'radio',
+            selected: false,
+            identifier: 'type',
+            value: 'supplier',
+          },
+        ],
+      },
+      status: {
+        list: [
+          {
+            title: 'Passed',
+            type: 'radio',
+            identifier: 'filter',
+            value: 'passed',
+          },
+          {
+            title: 'Pending',
+            type: 'radio',
+            identifier: 'filter',
+            value: 'pending',
+          },
+        ],
+      },
+    }
+    const showFilter = ref<Boolean>(false)
     const showNewCustomer = ref<Boolean>(false)
     const showSingleCustomer = ref<Boolean>(false)
     const showErc = ref<Boolean>(false)
@@ -141,22 +201,19 @@ export default defineComponent({
     const pageNumber = ref(1)
     const pageLimit = ref(10)
 
-    const getEcrs = (page: number, limit: number, query: string = '') => {
+    const getICns = (page: number, limit: number, query: string = '') => {
       showLoader.value = true
-      fetchECRs(page, limit, query)
+      fetchIcns(page, limit, query)
         .then((response) => {
-          tableBody.value = response.docs.map((erc: any) => {
+          tableBody.value = response.docs.map((icn: any) => {
             return {
-              ercNo: erc.ecrNo,
-              customer: erc.customer ? erc.customer.name : '',
-              type: erc.type,
-              status: erc.status,
-              companyCylinders: erc.fringeCylinders.length,
-              asnlCylinders: erc.cylinders.length,
-              createdAt: new Date(erc.createdAt).toDateString(),
-              _id: erc._id,
-              asnlCylindersArray: erc.cylinders,
-              fringeCylindersArray: erc.fringeCylinders,
+              icnNo: icn.icnNo,
+              customer: icn.customer ? icn.customer.name : '',
+              type: icn.type,
+              status: icn.status,
+              companyCylinders: icn.totalCustomerCylinders,
+              asnlCylinders: icn.totalAsnlCylinders,
+              _id: icn._id,
             }
           })
           paginationProp.hasNextPage = response.hasNextPage
@@ -165,13 +222,12 @@ export default defineComponent({
           tableBody.value = getTableBody(
             tableBody.value,
             [
-              'ercNo',
+              'icnNo',
               'customer',
               'type',
               'status',
               'companyCylinders',
               'asnlCylinders',
-              'createdAt',
             ],
             tableClasses
           )
@@ -182,11 +238,10 @@ export default defineComponent({
     const singleEcr = ref<Object>({})
 
     onBeforeMount(() => {
-      getEcrs(pageDetails.number, pageDetails.limit)
+      getICns(pageDetails.number, pageDetails.limit)
     })
     return {
       headers,
-      defaultState,
       showNewCustomer,
       showSingleCustomer,
       showErc,
@@ -195,8 +250,14 @@ export default defineComponent({
       singleEcr,
       pageLimit,
       pageNumber,
-      getEcrs,
+      getICns,
       paginationProp,
+      incomingFilters,
+      showFilter,
+      displayedFilters,
+      queryString,
+      getQueryString,
+      getFilters,
     }
   },
 })

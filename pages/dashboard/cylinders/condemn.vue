@@ -201,11 +201,11 @@
                 <th
                   class="
                     font-light
-                    text-lg
+                    text-sm
                     px-2
                     py-2
                     text-center
-                    w-3/12
+                    w-2/12
                     border border-gray-400
                   "
                 >
@@ -214,7 +214,7 @@
                 <th
                   class="
                     font-light
-                    text-lg
+                    text-sm
                     px-2
                     py-2
                     text-center
@@ -227,7 +227,7 @@
                 <th
                   class="
                     font-light
-                    text-lg
+                    text-sm
                     px-2
                     py-2
                     text-center
@@ -235,12 +235,12 @@
                     border border-gray-400
                   "
                 >
-                  Cylinder Type
+                  Cylinder Number
                 </th>
                 <th
                   class="
                     font-light
-                    text-lg
+                    text-sm
                     px-2
                     py-2
                     text-center
@@ -248,16 +248,29 @@
                     border border-gray-400
                   "
                 >
-                  Date of Manufacture
+                  Manufactured Date
                 </th>
                 <th
                   class="
                     font-light
-                    text-lg
+                    text-sm
                     px-2
                     py-2
                     text-center
-                    w-3/12
+                    w-2/12
+                    border border-gray-400
+                  "
+                >
+                  Purchased Date
+                </th>
+                <th
+                  class="
+                    font-light
+                    text-sm
+                    px-2
+                    py-2
+                    text-center
+                    w-2/12
                     border border-gray-400
                   "
                 >
@@ -308,6 +321,12 @@
                 <td class="font-light text-lg text-center">
                   <input-component
                     :default-value="cylind.dateManufactured"
+                    :is-disabled="true"
+                  />
+                </td>
+                <td class="font-light text-lg text-center">
+                  <input-component
+                    :default-value="cylind.datePurchased"
                     :is-disabled="true"
                   />
                 </td>
@@ -502,7 +521,8 @@ export default defineComponent({
               value: element._id,
               gas: `${element.gasType.gasName} - ${element.gasType.colorCode}`,
               dateManufactured: element.dateManufactured,
-              type: element.cylinderType,
+              type: element.cylinderNumber,
+              datePurchased: element.purchaseDate,
             }
           })
         }
@@ -527,6 +547,9 @@ export default defineComponent({
           cylinders.value[index].cylinderType = element.type
           cylinders.value[index].dateManufactured = new Date(
             element.dateManufactured
+          ).toDateString()
+          cylinders.value[index].datePurchased = new Date(
+            element.datePurchased
           ).toDateString()
         }
       })

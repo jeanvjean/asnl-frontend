@@ -2,68 +2,36 @@
   <div class="py-6">
     <div class="mx-auto px-4 sm:px-6 md:px-8 w-full">
       <div class="bg-white shadow-sm rounded-sm h-full">
-        <div class="py-2">
-          <div
-            class="
-              flex
-              justify-between
-              items-center
-              px-4
-              py-2
-              mt-4
-              w-full
-              overflow-x-auto
-            "
-          >
-            <div class="flex items-center space-x-6 text-sm">
-              <button
-                class="
-                  uppercase
-                  tracking-tight
-                  font-medium
-                  border-0 border-b-4 border-btn-purple
-                  text-gray-600
-                  py-1
-                "
-              >
-                Internal Purchase Order
-              </button>
-              <button
-                class="uppercase tracking-tight font-medium text-gray-600 py-1"
-              >
-                External Purchase Order
-              </button>
-            </div>
-
-            <div class="flex items-center space-x-6">
-              <router-link
-                to="/dashboard/purchase-orders/new-purchase-order"
-                class="
-                  px-4
-                  py-2
-                  rounded-sm
-                  bg-btn-purple
-                  border-btn-purple border
-                  text-white
-                "
-              >
-                Create Order
-              </router-link>
-              <button
-                class="
-                  px-4
-                  py-2
-                  rounded-sm
-                  bg-white
-                  border-btn-purple border
-                  text-btn-purple
-                "
-              >
-                Generate OCN
-              </button>
-            </div>
+        <div class="px-4 py-4 w-full overflow-x-auto">
+          <div class="flex items-center space-x-6 float-right">
+            <router-link
+              to="/dashboard/purchase-orders/action"
+              class="
+                px-4
+                py-2
+                rounded-sm
+                bg-btn-purple
+                border-btn-purple border
+                text-white
+              "
+            >
+              Create Purchase Order
+            </router-link>
+            <button
+              class="
+                px-4
+                py-2
+                rounded-sm
+                bg-white
+                border-btn-purple border
+                text-btn-purple
+              "
+            >
+              Generate OCN
+            </button>
           </div>
         </div>
+
         <div class="overflow-x-auto w-full py-4 px-4">
           <div class="w-full mb-4">
             <div
@@ -77,7 +45,7 @@
                 w-full
               "
             >
-              <filter-component />
+              <filter-component @filter="showFilter = true" />
               <search-component :place-holder="'Search'" />
               <div class="flex items-center space-x-6">
                 <pagination
@@ -113,6 +81,11 @@
         </div>
       </div>
     </div>
+    <purchase-order-filter
+      v-if="showFilter"
+      :filters="purchaseOrderFilters"
+      @close="showFilter = false"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -122,6 +95,7 @@ import {
   reactive,
   ref,
 } from '@nuxtjs/composition-api'
+import { capitalize } from 'lodash'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/FilterButton.vue'
 import { CustomerController } from '@/module/Customer'
@@ -129,6 +103,7 @@ import Pagination from '@/components/Base/Pagination.vue'
 import { CustomerDto } from '@/types/Types'
 import TableComponent from '@/components/Table.vue'
 import { getTableBody } from '@/constants/utils'
+import PurchaseOrderFilter from '@/components/Overlays/Filter.vue'
 
 export default defineComponent({
   name: 'Home',
@@ -137,11 +112,13 @@ export default defineComponent({
     FilterComponent,
     Pagination,
     TableComponent,
+    PurchaseOrderFilter,
   },
   layout: 'dashboard',
   setup() {
     const headers = [
-      'Customer Name',
+      'Purchase-Order Number',
+      'Type',
       'Approval Stage',
       'Status',
       'Date',
@@ -153,7 +130,41 @@ export default defineComponent({
       hasPrevPage: false,
       currentPage: 1,
     })
-
+    const showFilter = ref<Boolean>(false)
+    const purchaseOrderFilters = {
+      type: {
+        list: [
+          {
+            title: 'Internal Purchase Order',
+            type: 'radio',
+            value: 'internal',
+            identifier: 'type',
+          },
+          {
+            title: 'External Purchase Order',
+            type: 'radio',
+            value: 'external',
+            identifier: 'type',
+          },
+        ],
+      },
+      'approval-status': {
+        list: [
+          {
+            title: 'Pending',
+            type: 'radio',
+            value: 'pending',
+            identifier: 'approvalStatus',
+          },
+          {
+            title: 'Completed',
+            type: 'radio',
+            value: 'completed',
+            identifier: 'approvalStatus',
+          },
+        ],
+      },
+    }
     const section = ref<String>('profile')
 
     const customerProp = ref<CustomerDto>()
@@ -181,18 +192,20 @@ export default defineComponent({
           const orders: any = response.purchaseOrders
           body.value = orders.docs.map((order: any) => {
             return {
-              customer: order.customer.name,
+              orderNumber: order.orderNumber ? order.orderNumber : '',
+              type: order.type ? capitalize(order.type) : '',
               approvalStage: order.approvalStage,
               approvalStatus: order.approvalStatus,
               date: new Date(order.date).toDateString(),
-              approvingOfficer: order.nextApprovalOfficer.name,
+              approvingOfficer: capitalize(order.nextApprovalOfficer.name),
               _id: order._id,
             }
           })
           body.value = getTableBody(
             body.value,
             [
-              'customer',
+              'orderNumber',
+              'type',
               'approvalStage',
               'approvalStatus',
               'date',
@@ -234,6 +247,8 @@ export default defineComponent({
       adjustLimit,
       adjustPage,
       showLoader,
+      purchaseOrderFilters,
+      showFilter,
     }
   },
 })

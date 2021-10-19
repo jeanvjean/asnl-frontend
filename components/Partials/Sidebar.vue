@@ -360,22 +360,7 @@ export default defineComponent({
             },
             {
               title: 'Incoming',
-              link: '#',
-              showSubCategory: false,
-              subCategories: [
-                {
-                  title: 'Walk-in Customers',
-                  link: '#',
-                },
-                {
-                  title: 'Driver Pick-ups',
-                  link: '#',
-                },
-                {
-                  title: 'Suppliers',
-                  link: '#',
-                },
-              ],
+              link: '/dashboard/incoming',
             },
             {
               title: 'Sales Requisition',
@@ -412,10 +397,6 @@ export default defineComponent({
           showSubCategory: false,
           subCategories: [
             {
-              title: 'Recieved Goods',
-              link: '/dashboard/inventory/goods-recieve-note',
-            },
-            {
               title: 'Issue Products',
               link: '/dashboard/inventory/issue-products',
             },
@@ -449,7 +430,7 @@ export default defineComponent({
             },
             {
               title: 'Production Schedule',
-              link: '/dashboard/production/production-schedule',
+              link: '/dashboard/production/action',
             },
             {
               title: 'Production Delivery',

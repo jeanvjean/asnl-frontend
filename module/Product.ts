@@ -29,16 +29,27 @@ class ProductRespository {
     })
   }
 
-  fetchSuppliers(page: number, filter: string = '') {
+  fetchSuppliers(page: number, limit: number, filter: string = '') {
     return new Promise(async (resolve, reject) => {
       try {
         let url: string
         if (filter) {
-          url = `/inventory/fetch-suppliers?page=${page}&limit=20&search=${filter}`
+          url = `/inventory/fetch-suppliers?page=${page}&limit=${limit}&search=${filter}`
         } else {
-          url = `/inventory/fetch-suppliers?page=${page}&limit=20`
+          url = `/inventory/fetch-suppliers?page=${page}&limit=${limit}`
         }
         const response = await $axios.get(url)
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  fetchAllSuppliers() {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get('/inventory/fetch-all-suppliers')
         resolve(response.data.data)
       } catch (error) {
         reject(error)

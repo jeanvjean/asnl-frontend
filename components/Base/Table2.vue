@@ -13,7 +13,7 @@
                 font-thin
                 text-sm
                 px-4
-                py-2
+                py-3
                 text-center
                 w-40
               "
@@ -27,7 +27,7 @@
                 font-thin
                 text-sm
                 px-4
-                py-2
+                py-3
                 text-center
                 sm:w-40
                 2xl:w-32
@@ -58,18 +58,12 @@
             <td class="px-4 text-center py-4">
               {{ bodySingle.gasVolumeContent }}
             </td>
-            <td class="px-4 text-center py-4">
-              {{ bodySingle.waterCapacity }}
-            </td>
             <td class="px-4 text-center py-4 w-full">
               <span
                 :class="getColorCode(bodySingle.cylinderType)"
                 class="px-8 py-2 w-full block text-center capitalize"
                 >{{ bodySingle.cylinderType }}</span
               >
-            </td>
-            <td class="px-4 text-center py-4">
-              {{ formatDate(bodySingle.dateManufactured) }}
             </td>
             <td class="px-4 py-4 text-center">
               <router-link

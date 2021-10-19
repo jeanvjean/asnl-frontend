@@ -242,9 +242,9 @@
             </td>
             <td class="px-4 text-center py-4">{{ mrn.customer.name }}</td>
             <td class="px-4 text-center py-4">{{ mrn.jobTag }}</td>
-            <td class="px-4 text-left py-4 capitalize">
+            <td class="px-2 text-left py-4 capitalize">
               <span
-                class="px-8 py-2 block text-center"
+                class="rounded-lg py-2 block text-center"
                 :class="{
                   'bg-yellow-400 text-gray-200 font-bold':
                     mrn.requestApproval === 'pending',

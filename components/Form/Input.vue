@@ -51,9 +51,10 @@ import { debounce } from 'lodash'
 
 export default defineComponent({
   props: {
-    // eslint-disable-next-line vue/require-default-prop
     labelTitle: {
       type: String,
+      required: false,
+      default: '',
     },
     inputPlaceholder: {
       type: String,

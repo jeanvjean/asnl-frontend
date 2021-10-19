@@ -1,8 +1,8 @@
 <template>
   <div class="py-6 px-8">
     <h1 class="text-black font-thin text-xl mb-4">Cylinder Analytics</h1>
-    <div class="grid grid-rows-1 xl:grid-cols-3 gap-4 mb-6">
-      <div class="bg-white px-10 pt-10 pb-24">
+    <div class="grid grid-rows-1 xl:grid-cols-3 gap-6 mb-6">
+      <div class="bg-white px-10 pt-10 pb-24 rounded-md">
         <p class="font-medium text-black tracking-wide pb-4">
           Total Air Separation Cylinders
         </p>
@@ -34,7 +34,7 @@
           </svg>
         </div>
       </div>
-      <div class="bg-white px-10 pt-10 pb-24">
+      <div class="bg-white px-10 pt-10 pb-24 rounded-md">
         <p class="font-medium text-black tracking-wide pb-4">
           Total Buffer Cylinders
         </p>
@@ -66,7 +66,7 @@
           </svg>
         </div>
       </div>
-      <div class="bg-white px-10 pt-10 pb-24">
+      <div class="bg-white px-10 pt-10 pb-24 rounded-md">
         <p class="font-medium text-black tracking-wide pb-4">
           Total Assigned Cylinders
         </p>
@@ -150,7 +150,7 @@
         <div class="flex items-start px-2 space-x-4 w-full">
           <filter-component @filter="showFilter = !showFilter" />
           <search-component
-            :place-holder="'Search for Users, Cylinder no,gas type, Cylinder Volume'"
+            :place-holder="'Search for Cylinder Number'"
             @search="searchCylinder($event)"
           />
 
@@ -203,7 +203,8 @@
     </div>
     <new-cylinder
       v-if="showRegister"
-      @close=";(showRegister = false), getCylinders(1)"
+      @close="showRegister = false"
+      @refresh=";(showRegister = false), getCylinders(1)"
     ></new-cylinder>
     <cylinder-filter
       v-if="showFilter"
@@ -251,9 +252,7 @@ export default defineComponent({
       'Cylinder No',
       'Gas Type',
       'Gas Volume Content',
-      'Water Capacity',
       'Cylinder Type',
-      'Manufacture Date',
     ]
 
     const page = ref<number>(1)

@@ -262,7 +262,19 @@ export default defineComponent({
       isLoading.value = true
       ProductObject.getProducts(pageValue, limit, query)
         .then((response: any) => {
-          body.value = getTableBody(response.docs, [
+          body.value = response.docs.map((product: any) => {
+            return {
+              asnlNumber: product.asnlNumber,
+              productName: product.productName,
+              partNumber: product.partNumber,
+              quantity: product.quantity,
+              reorderLevel: product.reorderLevel,
+              unitCost: product.unitCost,
+              location: product.location,
+              totalCost: product.totalCost,
+            }
+          })
+          body.value = getTableBody(body.value, [
             'asnlNumber',
             'productName',
             'partNumber',

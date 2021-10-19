@@ -32,10 +32,12 @@
             @get="formInputs.cylinderType = $event.value"
           />
           <select-component
+            v-if="formInputs.cylinderType === 'assigned'"
             :label-title="'Cylinder Assigned To'"
             :default-option-text="'Select Customer'"
             :select-array="customers"
             :init-value="formInputs.assignedTo"
+            :is-required="false"
             @get="formInputs.assignedTo = $event.value"
           />
           <input-component
@@ -62,7 +64,7 @@
             <label
               for="password"
               class="block w-full px-1 text-gray-800 text-md"
-              >Gas Volume Content</label
+              >Cylinder Size</label
             ><input
               v-model="formInputs.gasVolumeContent"
               placeholder="Enter Amount"
@@ -141,6 +143,7 @@
             :input-type="'number'"
             :input-placeholder="'Select Date Here'"
             :default-value="formInputs.purchaseCost"
+            :is-required="false"
             @get="formInputs.purchaseCost = $event.value"
           />
           <input-component
@@ -148,6 +151,7 @@
             :input-type="'date'"
             :input-placeholder="'Select Purchase Date'"
             :default-value="formInputs.purchaseDate"
+            :is-required="false"
             @get="formInputs.purchaseDate = $event.value"
           />
         </div>
@@ -271,7 +275,7 @@ export default defineComponent({
         fillingPreasure: 'required|numeric',
         gasVolumeContent: 'required|numeric',
         cylinderNumber: 'required|string',
-        assignedTo: 'required|string',
+        assignedTo: 'required_if:cylinderType,assigned|string',
         assignedNumber: 'required|string',
         purchaseCost: 'numeric',
         purchaseDate: 'date',
@@ -305,6 +309,7 @@ export default defineComponent({
         isLoading.value = true
         CylinderController.registerCylinder(requestBody)
           .then(() => {
+            ctx.emit('refresh')
             close()
           })
           .finally(() => {

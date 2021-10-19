@@ -1,21 +1,26 @@
 <template>
   <div :key="componentKey" class="w-full md:w-10/12 lg:w-8/12 md:mx-auto mt-10">
     <div class="bg-white px-6 md:px-10 py-6">
-      <div class="flex items-center space-x-4 float-right">
-        <span>Date:</span>
-        <div class="flex space-x-4 items-center">
-          <span>{{ purchaseDetails.date }}</span
-          ><svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            class="fill-current w-5 h-5"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-              clip-rule="evenodd"
-            />
-          </svg>
+      <div class="flex items-center justify-between px-2 py-2">
+        <h1 class="uppercase font-semibold">
+          {{ purchaseDetails.type }} PURCHASE ORDER DETAILS
+        </h1>
+        <div class="flex items-center space-x-4">
+          <span>Date:</span>
+          <div class="flex space-x-4 items-center">
+            <span>{{ purchaseDetails.date }}</span
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              class="fill-current w-5 h-5"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
         </div>
       </div>
 
@@ -33,11 +38,27 @@
           px-4
         "
       >
-        <div class="w-full flex justify-between items-center">
+        <div class="w-full flex justify-center items-center">
           <div class="space-y-3 text-black">
-            <p class="">Customer Name</p>
+            <p class="">Type</p>
             <p class="text-base font-extrabold text-gray-400">
-              {{ purchaseDetails.customer }}
+              {{ purchaseDetails.type }}
+            </p>
+          </div>
+        </div>
+        <div class="w-full flex justify-center items-center">
+          <div class="space-y-3">
+            <p class="">
+              {{
+                purchaseDetails.type == 'internal'
+                  ? 'Branch'
+                  : purchaseDetails.type == 'external'
+                  ? 'Supplier'
+                  : ''
+              }}
+            </p>
+            <p class="text-base font-extrabold text-gray-400">
+              {{ purchaseDetails.fillingAgent }}
             </p>
           </div>
         </div>
@@ -49,7 +70,7 @@
             </p>
           </div>
         </div>
-        <div class="w-full flex justify-end items-center">
+        <div class="w-full flex justify-center items-center">
           <div class="space-y-3">
             <p class="">Status</p>
             <p class="text-base font-extrabold text-gray-400">
@@ -205,7 +226,7 @@ export default defineComponent({
     const router = useRouter()
     const orderId = route.value.params.id
     const purchaseDetails = reactive({
-      customer: '',
+      type: '',
       approvalStage: '',
       status: '',
       cylinders: [],
@@ -213,6 +234,7 @@ export default defineComponent({
       comments: [],
       approvingOfficers: [],
       nextApprovingOfficer: '',
+      fillingAgent: '',
     })
     const users = ref<any>([])
     const showFinalStep = ref<Boolean>(false)
@@ -244,7 +266,11 @@ export default defineComponent({
           purchaseDetails.approvalStage = response.approvalStage
           purchaseDetails.status = response.approvalStatus
           purchaseDetails.cylinders = response.cylinders
-          purchaseDetails.customer = response.customer.name
+          purchaseDetails.type = response.type
+          purchaseDetails.fillingAgent =
+            response.type === 'internal'
+              ? response.fromBranch.name
+              : response.supplier.name
           purchaseDetails.date = new Date(response.date).toDateString()
           purchaseDetails.comments = response.comments
           purchaseDetails.approvingOfficers = response.approvalOfficers
