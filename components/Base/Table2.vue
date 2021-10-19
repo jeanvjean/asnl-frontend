@@ -56,7 +56,7 @@
               {{ bodySingle.gasType.gasName }}
             </td>
             <td class="px-4 text-center py-4">
-              {{ bodySingle.gasVolumeContent }}
+              {{ bodySingle.gasVolumeContent.value }}
             </td>
             <td class="px-4 text-center py-4 w-full">
               <span
