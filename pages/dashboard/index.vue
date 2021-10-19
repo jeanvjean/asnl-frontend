@@ -251,7 +251,7 @@ export default defineComponent({
     const headers = [
       'Cylinder No',
       'Gas Type',
-      'Gas Volume Content',
+      'Cylinder Size',
       'Cylinder Type',
     ]
 
