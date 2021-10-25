@@ -260,7 +260,7 @@ export default defineComponent({
           erc.fringeCylinders = response.fringeCylinders
           erc.cylinders = response.cylinders
           erc.ercNo = response.ercNo
-          form.customer = response.customer._id
+          form.customer = response.customer ? response.customer._id : ''
           form.ecrNo = response.ecrNo
           form.totalQuantity = erc.fringeCylinders.length + erc.cylinders.length
           form.totalVolume =
@@ -340,7 +340,7 @@ export default defineComponent({
         buttonLoading.value = true
         createSchedule(form)
           .then(() => {
-            router.push('/dashboard/production/erc-list')
+            router.push('/dashboard/production/ecr-list')
           })
           .finally(() => {
             buttonLoading.value = false

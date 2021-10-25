@@ -31,3 +31,20 @@ export function createSchedule(requestBody: any) {
     }
   })
 }
+
+export function fetchSchedules(
+  page: number,
+  limit: number,
+  queryString: string = ''
+) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await $axios.get(
+        `/production/fetch-production-approvals?page=${page}&limit=${limit}${queryString}`
+      )
+      resolve(response.data.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}

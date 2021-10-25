@@ -430,7 +430,7 @@ export default defineComponent({
             },
             {
               title: 'Production Schedule',
-              link: '/dashboard/production/action',
+              link: '/dashboard/production/',
             },
             {
               title: 'Production Delivery',

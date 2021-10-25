@@ -116,9 +116,6 @@ export default defineComponent({
       'Date',
     ]
 
-    const defaultState = ref<Boolean>(false)
-    const showNewCustomer = ref<Boolean>(false)
-    const showSingleCustomer = ref<Boolean>(false)
     const showErc = ref<Boolean>(false)
     const pageDetails = reactive({
       number: 1,
@@ -186,9 +183,6 @@ export default defineComponent({
     })
     return {
       headers,
-      defaultState,
-      showNewCustomer,
-      showSingleCustomer,
       showErc,
       tableBody,
       showLoader,
