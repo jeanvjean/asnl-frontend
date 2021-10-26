@@ -364,18 +364,7 @@ export default defineComponent({
             },
             {
               title: 'Sales Requisition',
-              link: '#',
-              showSubCategory: false,
-              subCategories: [
-                {
-                  title: 'Customers Cylinders',
-                  link: '#',
-                },
-                {
-                  title: 'Company Cylinders',
-                  link: '#',
-                },
-              ],
+              link: '/dashboard/production/sales-requisition',
             },
             {
               title: 'Outgoing',

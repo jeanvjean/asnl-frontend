@@ -32,7 +32,8 @@
             :show-loader="showLoader"
           >
             <template #action="slotProps">
-              <button
+              <router-link
+                :to="`/dashboard/production/status/${slotProps.rowId}`"
                 class="
                   px-6
                   py-1
@@ -42,8 +43,8 @@
                 "
                 @click=";(singleEcr = slotProps.rowObject), (showErc = true)"
               >
-                Mark as Filled
-              </button>
+                View
+              </router-link>
             </template>
           </table-component>
         </div>
@@ -59,7 +60,7 @@ import {
   reactive,
   ref,
 } from '@nuxtjs/composition-api'
-import { fetchSchedules } from '~/module/Production'
+import { fetchSchedules } from '@/module/Production'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterButton from '@/components/Base/FilterButton.vue'
 import TableComponent from '@/components/Table.vue'
@@ -105,7 +106,8 @@ export default defineComponent({
               shift: schedule.shift,
               quantity: schedule.quantityToFill,
               status: schedule.status,
-              date: schedule.date,
+              date: new Date(schedule.date).toDateString(),
+              _id: schedule._id,
             }
           })
 

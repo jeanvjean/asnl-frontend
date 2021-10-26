@@ -48,3 +48,43 @@ export function fetchSchedules(
     }
   })
 }
+
+export function fetchSchedule(productionId: String) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await $axios.get(
+        `/production/fetch-prodctionSchedule/${productionId}`
+      )
+      resolve(response.data.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export function updateSchedule(requestBody: any) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await $axios.post(
+        `production/update-completed-cylinders`,
+        requestBody
+      )
+      resolve(response.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export function completeSchedule(scheduleId: string) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await $axios.get(
+        `production/mark-completed-production/${scheduleId}`
+      )
+      resolve(response.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}

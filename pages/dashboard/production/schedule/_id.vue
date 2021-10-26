@@ -240,6 +240,7 @@ export default defineComponent({
     })
 
     const gasTypes = ref([])
+    const regex = /[A-Za-z]/g
 
     const getGases = () => {
       CylinderController.getCylinders().then((response) => {
@@ -264,15 +265,18 @@ export default defineComponent({
           form.ecrNo = response.ecrNo
           form.totalQuantity = erc.fringeCylinders.length + erc.cylinders.length
           form.totalVolume =
-            erc.fringeCylinders.reduce(
-              (curr: number, prev: any) => (curr += Number(prev.cylinderSize)),
-              0
-            ) +
-            erc.cylinders.reduce(
-              (curr: number, prev: any) =>
-                (curr += Number(prev.gasVolumeContent.value)),
-              0
-            )
+            erc.fringeCylinders.reduce((curr: number, prev: any) => {
+              const volume = String(prev.cylinderSize)
+              curr += Number(volume.replaceAll(regex, ''))
+
+              return curr
+            }, 0) +
+            erc.cylinders.reduce((curr: number, prev: any) => {
+              const volume = String(prev.gasVolumeContent.value)
+              curr += Number(volume.replaceAll(regex, ''))
+
+              return curr
+            }, 0)
         })
         .finally(() => changeComponentKey())
     }
@@ -293,13 +297,15 @@ export default defineComponent({
 
       erc.fringeCylinders.forEach((element: any) => {
         if (form.cylinders.includes(element._id)) {
-          total += Number(element.cylinderSize)
+          const volume = String(element.cylinderSize)
+          total += Number(volume.replaceAll(regex, ''))
         }
       })
 
       erc.cylinders.forEach((element: any) => {
         if (form.cylinders.includes(element._id)) {
-          total += Number(element.gasVolumeContent.value)
+          const volume = String(element.gasVolumeContent.value)
+          total += Number(volume.replaceAll(regex, ''))
         }
       })
 
@@ -340,7 +346,7 @@ export default defineComponent({
         buttonLoading.value = true
         createSchedule(form)
           .then(() => {
-            router.push('/dashboard/production/ecr-list')
+            router.push('/dashboard/production')
           })
           .finally(() => {
             buttonLoading.value = false

@@ -2,37 +2,6 @@
   <div class="py-6 px-6">
     <div class="flex justify-between items-center px-6">
       <h1 class="text-lg font-semibold">Invoice List</h1>
-      <div>
-        <router-link
-          to="/dashboard/invoices/new-invoice"
-          class="
-            flex
-            space-x-2
-            items-center
-            bg-btn-purple
-            rounded-sm
-            px-4
-            py-2
-            text-white
-          "
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-5 h-5 fill-current"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            />
-          </svg>
-
-          <span>Create Invoice</span>
-        </router-link>
-      </div>
     </div>
 
     <div class="bg-white px-6 py-4 mt-6">

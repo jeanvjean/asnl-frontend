@@ -28,8 +28,8 @@
             :label-title="'Order Type'"
             :default-option-text="'Select an Order Type'"
             :select-array="orderTypes"
-            :init-value="form.orderType"
-            @get="form.orderType = $event.value"
+            :init-value="form.type"
+            @get="form.type = $event.value"
           />
 
           <select-component
@@ -238,7 +238,7 @@ export default defineComponent({
     const form = reactive<any>({
       customer: '',
       cylinders: [],
-      orderType: '',
+      type: '',
       modeOfService: '',
       fringeCylinders: [],
       gasType: '',
@@ -249,11 +249,11 @@ export default defineComponent({
     const orderTypes = [
       {
         name: 'Refill Order ',
-        value: 'refill',
+        value: 'sales',
       },
       {
         name: 'Complaints',
-        value: 'complaints',
+        value: 'complaint',
       },
     ]
 
@@ -354,6 +354,7 @@ export default defineComponent({
 
     const submit = () => {
       const rules = {
+        type: 'required|alpha',
         cylinders: 'array',
         'cylinders.*.cylinderId': 'required|string',
         fringeCylinders: 'array',
