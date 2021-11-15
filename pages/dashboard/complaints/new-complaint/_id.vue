@@ -1,5 +1,5 @@
 <template>
-  <div :key="keyValue" class="px-6 py-6">
+  <div class="px-6 py-6" :key="keyValue">
     <div class="bg-white w-full h-full rounded-sm">
       <div class="px-6 py-6">
         <div class="mb-4">
@@ -16,17 +16,18 @@
             />
 
             <select-component
-              :label-title="'Customers'"
-              :default-option-text="'Select Customer'"
-              :select-array="customers"
+              :label-title="'Customer'"
+              :input-placeholder="'Enter Customer'"
+              :selectArray="customers"
               :init-value="form.customer"
-              @get="form.customer = $event.value"
+              :is-required="false"
+              :isDisabled="form.customer ? true : false"
             />
 
-            <input-component
+            <select-component
               :label-title="'ICN Number'"
-              :input-placeholder="'Enter ICN Number'"
-              :default-value="form.icnNo"
+              :default-option-text="'Enter ICN Number'"
+              :selectArray="allIcns"
               :is-required="false"
               @get="form.icnNo = $event.value"
             />
@@ -37,6 +38,7 @@
               :default-value="form.ecrNo"
               :is-required="false"
               @get="form.ecrNo = $event.value"
+              :isDisabled="form.ecrNo ? true : false"
             />
 
             <div class="col-span-2">
@@ -92,16 +94,18 @@
                 <th class="border border-black font-semibold text-base">
                   Total Volume
                 </th>
+                <th class="border border-black font-semibold text-base">
+                  Cylinder Comment
+                </th>
                 <th class="px-2"></th>
               </thead>
               <tbody>
                 <tr v-for="(cylinder, index) in form.cylinders" :key="index">
                   <td class="text-center">{{ index + 1 }}</td>
                   <td>
-                    <select-component
+                    <input-component
                       :default-option-text="'Enter Cylinder Number'"
-                      :select-array="cylinders"
-                      :init-value="cylinder.cylinderNo"
+                      :defaultValue="cylinder.cylinderNo"
                       @get="cylinder.cylinderNo = $event.value"
                     />
                   </td>
@@ -109,6 +113,7 @@
                     <input-component
                       :input-placeholder="'Enter Cylinder Size'"
                       :input-type="'number'"
+                      :defaultValue="cylinder.cylinderSize"
                       @get="cylinder.cylinderSize = $event.value"
                     />
                   </td>
@@ -122,13 +127,21 @@
                   <td>
                     <input-component
                       :input-placeholder="'Enter Delivery/Waybill Number'"
+                      :defaultValue="cylinder.waybillNo"
                       @get="cylinder.waybillNo = $event.value"
                     />
                   </td>
                   <td>
                     <input-component
                       :input-placeholder="'Enter Total Volume'"
+                      :defaultValue="cylinder.totalVolume"
                       @get="cylinder.totalVolume = $event.value"
+                    />
+                  </td>
+                  <td>
+                    <text-area-component
+                      :input-placeholder="'Enter Comment'"
+                      @get="cylinder.comment = $event.value"
                     />
                   </td>
                   <td>
@@ -168,14 +181,37 @@
                 </th>
               </thead>
               <tbody>
-                <tr v-for="(replace, j) in form.replaceCylinder" :key="j">
+                <tr v-for="(replace, j) in form.cylinders" :key="j">
                   <td class="text-center">{{ j + 1 }}</td>
                   <td>
                     <select-component
                       :default-option-text="'Enter Cylinder Number'"
-                      :select-array="cylinders"
-                      :init-value="replace.cylinderNo"
-                      @get="replace.cylinderNo = $event.value"
+                      :selectArray="availableCylinders"
+                      :init-value="
+                        form.replaceCylinder.length >= j + 1 &&
+                        form.replaceCylinder[j]
+                          ? form.replaceCylinder[j].cylinderNo
+                          : ''
+                      "
+                      @get="addToReplacementCylinders($event.value, j)"
+                      :isDisabled="
+                        j >= 1 &&
+                        form.replaceCylinder &&
+                        form.replaceCylinder[j - 1] == null
+                      "
+                      v-if="!form.replaceCylinder[j]"
+                    />
+                    <select-component
+                      :default-option-text="'Enter Cylinder Number'"
+                      :selectArray="replaceCol"
+                      :init-value="
+                        form.replaceCylinder.length >= j + 1 &&
+                        form.replaceCylinder[j]
+                          ? form.replaceCylinder[j].cylinderNo
+                          : ''
+                      "
+                      v-if="form.replaceCylinder.length >= j + 1"
+                      :isDisabled="true"
                     />
                   </td>
                   <td>
@@ -183,14 +219,58 @@
                       :input-placeholder="'Enter Cylinder Size'"
                       :input-type="'number'"
                       @get="replace.cylinderSize = $event.value"
+                      :defaultValue="
+                        form.replaceCylinder.length >= j + 1 &&
+                        form.replaceCylinder[j]
+                          ? form.replaceCylinder[j].cylinderSize
+                          : ''
+                      "
+                      :isDisabled="
+                        j >= 1 &&
+                        form.replaceCylinder &&
+                        form.replaceCylinder[j - 1] == null
+                      "
                     />
                   </td>
+
                   <td>
                     <input-component
                       :input-placeholder="'Total Volume'"
                       :input-type="'number'"
                       @get="replace.totalVolume = $event.value"
+                      :defaultValue="
+                        form.replaceCylinder.length >= j + 1
+                          ? form.replaceCylinder[j].totalVolume
+                          : ''
+                      "
+                      :isDisabled="
+                        j >= 1 &&
+                        form.replaceCylinder &&
+                        form.replaceCylinder[j - 1] == null
+                      "
                     />
+                  </td>
+                  <td>
+                    <button
+                      @click="
+                        decrementReplaceCylinderCount(
+                          j,
+                          form.replaceCylinder[j]
+                        )
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        class="fill-current text-gray-600 w-4 h-4"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -216,11 +296,11 @@
               :button-class="'py-2 bg-btn-purple text-white rounded-sm'"
               :loading-status="loading"
             />
-            <button-component
+            <!-- <button-component
               :button-text="'Cancel'"
               :button-class="'py-2 bg-white text-btn-purple border border-btn-purple rounded-sm'"
               @buttonClicked="reset"
-            />
+            /> -->
           </div>
         </form>
       </div>
@@ -235,6 +315,7 @@ import {
   ref,
   useContext,
   useRouter,
+  useRoute,
 } from '@nuxtjs/composition-api'
 import Validator from 'validatorjs'
 import InputComponent from '@/components/Form/Input.vue'
@@ -242,10 +323,11 @@ import TextAreaComponent from '@/components/Form/TextArea.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import { ValidatorObject } from '@/module/Validation'
+import { fetchEcr } from '@/module/ECR'
+import { fetchIcns } from '@/module/Incoming'
 import { CustomerController } from '@/module/Customer'
 import { CylinderController } from '@/module/Cylinder'
 import { getRandomValue } from '@/constants/utils'
-
 export default defineComponent({
   components: {
     InputComponent,
@@ -256,18 +338,16 @@ export default defineComponent({
   layout: 'dashboard',
   setup() {
     const context = useContext()
-
     const complaintTypes = [
       {
         name: 'Cylinder',
         value: 'cylinder',
       },
     ]
-
     const modelNumbers = ref<any>([])
     const router = useRouter()
-
-    const form = reactive<any>({
+    const route = useRoute()
+    let form = reactive<any>({
       customer: '',
       complaintType: '',
       title: '',
@@ -275,16 +355,18 @@ export default defineComponent({
       comment: '',
       icnNo: '',
       ecrNo: '',
-      cylinders: [],
       replaceCylinder: [],
+      cylinders: [],
       additionalAction: '',
     })
-
     const loading = ref(false)
-
     const customers = ref<any>([])
+    const customer = ref('')
     const cylinders = ref<any>([])
-
+    const availableCylinders = ref<any>([])
+    const replaceCol = ref<any>([])
+    const allIcns = ref<any>([])
+    const keyValue = ref<number>(1)
     const fetchCustomers = () => {
       CustomerController.fetchUnPaginatedCustomers().then((response) => {
         customers.value = response.map((element: any) => {
@@ -295,7 +377,6 @@ export default defineComponent({
         })
       })
     }
-
     const incrementCylinderCount = () => {
       form.cylinders.push({
         cylinderNo: '',
@@ -304,37 +385,99 @@ export default defineComponent({
         waybillNo: '',
         totalVolume: '',
       })
-
-      form.replaceCylinder.push({
-        cylinderNo: '',
-        cylinderSize: '',
-        totalVolume: '',
-      })
+      // form.replaceCylinder = [...form.replaceCylinder, null]
+      reset()
     }
-
     const decrementCylinderCount = (index: any) => {
       form.cylinders.splice(index, 1)
       form.replaceCylinder.splice(index, 1)
       reset()
     }
-
+    const decrementReplaceCylinderCount = (index: any, item: any) => {
+      if (item) {
+        availableCylinders.value.push(item)
+      }
+      form.replaceCylinder.splice(index, 1)
+      reset()
+    }
+    const addToReplacementCylinders = (value: any, index: any) => {
+      availableCylinders.value.forEach((element: any) => {
+        if (element.cylinderNo == value) {
+          form.replaceCylinder[index] = element
+          reset()
+        }
+        availableCylinders.value = [
+          ...availableCylinders.value.filter(
+            (el: any) => el.cylinderNo != value
+          ),
+        ]
+      })
+    }
     const fetchCylinders = () => {
       CylinderController.getRegisteredCylindersUnPaginated().then(
         (response) => {
-          cylinders.value = response.data.map((element: any) => {
-            return {
-              name: element.cylinderNumber,
-              value: element.cylinderNumber,
+          response.data.forEach((element: any) => {
+            if (element.available) {
+              availableCylinders.value.push({
+                totalVolume: element.gasVolumeContent.value,
+                cylinderSize: element.cylNo,
+                cylinderNo: element.cylinderNumber,
+                value: element.cylinderNumber,
+                name: element.cylinderNumber,
+              })
             }
           })
+          replaceCol.value = [...availableCylinders.value]
         }
       )
     }
-
+    const ecr = ref(null)
+    const fetchEcrDetails = () => {
+      fetchEcr(route.value.params.id)
+        .then((response) => {
+          console.log(response.data)
+          ecr.value = response
+          form.ecrNo = response.ecrNo
+          form.customer = response.customer._id
+          customer.value = response.customer.name
+          form.cylinders = response.cylinders.map((element: any) => {
+            return {
+              cylinderNo: element.cylinderNumber,
+              cylinderSize: element.cylNo,
+              waybillNo: element.waybillNo,
+              totalVolume: element.gasVolumeContent.value,
+            }
+          })
+          form.fringeCylinders = response.fringeCylinders.map(
+            (element: any) => {
+              return {
+                ...element,
+              }
+            }
+          )
+        })
+        .finally(() => reset())
+    }
+    const fetchAllIcns = () => {
+      fetchIcns(1, 10, '').then((response) => {
+        allIcns.value = response.docs.map((element: any) => {
+          return {
+            name: element.icnNo,
+            value: element._id,
+          }
+        })
+      })
+    }
     onMounted(() => {
-      Promise.all([fetchCustomers(), fetchCylinders()])
+      loading.value = true
+      Promise.all([
+        fetchEcrDetails(),
+        fetchCustomers(),
+        fetchCylinders(),
+        fetchAllIcns(),
+      ])
+      loading.value = false
     })
-
     const submit = () => {
       const rules = {
         customer: 'required|string',
@@ -355,11 +498,9 @@ export default defineComponent({
         'replaceCylinder.*.totalVolume': 'required|string',
         additionalAction: 'required|string',
       }
-
       const validation: any = new Validator(form, rules)
       if (validation.fails()) {
         let messages: string[] = []
-
         messages = ValidatorObject.getMessages(validation.errors)
         messages.forEach((error: string) => {
           context.$toast.error(error)
@@ -376,13 +517,10 @@ export default defineComponent({
           })
       }
     }
-
     const reset = () => {
       keyValue.value = getRandomValue()
     }
-
-    const keyValue = ref(1)
-
+    // const keyValue = ref(1)
     return {
       form,
       submit,
@@ -395,6 +533,13 @@ export default defineComponent({
       cylinders,
       incrementCylinderCount,
       decrementCylinderCount,
+      decrementReplaceCylinderCount,
+      allIcns,
+      addToReplacementCylinders,
+      availableCylinders,
+      replaceCol,
+      ecr,
+      customer,
     }
   },
 })

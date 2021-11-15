@@ -134,6 +134,8 @@
               :select-array="gasTypes"
               :init-value="form.gasType"
               @get="form.gasType = $event.value"
+              :isDisabled="true"
+              v-if="form.gasType"
             />
 
             <input-component
@@ -187,7 +189,6 @@ import InputComponent from '@/components/Form/Input.vue'
 import { ValidatorObject } from '~/module/Validation'
 import ButtonComponent from '@/components/Form/Button.vue'
 import { createSchedule } from '~/module/Production'
-
 export default defineComponent({
   components: {
     SendToProduction,
@@ -199,12 +200,10 @@ export default defineComponent({
   layout: 'noSidebar',
   setup() {
     const componentKey = ref<number>(1)
-
     const changeComponentKey = () => {
       componentKey.value = getRandomValue()
     }
     const buttonLoading = ref<Boolean>(false)
-
     const ercId = useRoute().value.params.id
     const erc = reactive<any>({
       customer: '',
@@ -213,7 +212,6 @@ export default defineComponent({
       cylinders: [],
       ercNo: '',
     })
-
     const shifts = [
       {
         name: 'Morning',
@@ -224,7 +222,6 @@ export default defineComponent({
         value: 'night',
       },
     ]
-
     const form = reactive<any>({
       customer: '',
       ecrNo: '',
@@ -238,10 +235,7 @@ export default defineComponent({
       comment: '',
       gasType: '',
     })
-
     const gasTypes = ref([])
-    const regex = /[A-Za-z]/g
-
     const getGases = () => {
       CylinderController.getCylinders().then((response) => {
         const myResponse = response.data.data.cylinders
@@ -256,6 +250,8 @@ export default defineComponent({
     const getEcr = (ecr: string) => {
       fetchEcr(ecr)
         .then((response) => {
+          console.log(response.cylinders)
+          console.log(response.fringeCylinders)
           erc.customer = response.customer ? response.customer.name : ''
           erc.address = response.customer ? response.customer.address : ''
           erc.fringeCylinders = response.fringeCylinders
@@ -265,26 +261,22 @@ export default defineComponent({
           form.ecrNo = response.ecrNo
           form.totalQuantity = erc.fringeCylinders.length + erc.cylinders.length
           form.totalVolume =
-            erc.fringeCylinders.reduce((curr: number, prev: any) => {
-              const volume = String(prev.cylinderSize)
-              curr += Number(volume.replaceAll(regex, ''))
-
-              return curr
-            }, 0) +
-            erc.cylinders.reduce((curr: number, prev: any) => {
-              const volume = String(prev.gasVolumeContent.value)
-              curr += Number(volume.replaceAll(regex, ''))
-
-              return curr
-            }, 0)
+            erc.fringeCylinders.reduce(
+              (curr: number, prev: any) => (curr += Number(prev.cylinderSize)),
+              0
+            ) +
+            erc.cylinders.reduce(
+              (curr: number, prev: any) =>
+                (curr += Number(prev.gasVolumeContent.value)),
+              0
+            )
+          form.gasType = response.cylinders[0].gasType
         })
         .finally(() => changeComponentKey())
     }
-
     onMounted(() => {
       Promise.all([getEcr(ercId), getGases()])
     })
-
     const addCylinders = (cylinderId: string) => {
       if (form.cylinders.includes(cylinderId)) {
         const firstIndex = form.cylinders.indexOf(cylinderId)
@@ -294,29 +286,22 @@ export default defineComponent({
       }
       form.quantityToFill = form.cylinders.length
       let total: number = 0
-
       erc.fringeCylinders.forEach((element: any) => {
         if (form.cylinders.includes(element._id)) {
-          const volume = String(element.cylinderSize)
-          total += Number(volume.replaceAll(regex, ''))
+          total += Number(element.cylinderSize)
         }
       })
-
       erc.cylinders.forEach((element: any) => {
         if (form.cylinders.includes(element._id)) {
-          const volume = String(element.gasVolumeContent.value)
-          total += Number(volume.replaceAll(regex, ''))
+          total += Number(element.gasVolumeContent.value)
         }
       })
-
       form.volumeToFill = total
     }
-
     const showProduction = ref<Boolean>(false)
     const showSupplier = ref<Boolean>(false)
     const context = useContext()
     const router = useRouter()
-
     const submit = () => {
       const rules = {
         customer: 'required|string',
@@ -331,13 +316,11 @@ export default defineComponent({
         comment: 'string',
         gasType: 'required|string',
       }
-
       const validation: any = new Validator(form, rules, {
         required: ':attribute must have an element',
       })
       if (validation.fails()) {
         let messages: string[] = []
-
         messages = ValidatorObject.getMessages(validation.errors)
         messages.forEach((error: string) => {
           context.$toast.error(error)
@@ -346,7 +329,7 @@ export default defineComponent({
         buttonLoading.value = true
         createSchedule(form)
           .then(() => {
-            router.push('/dashboard/production')
+            router.push('/dashboard/production/ecr-list')
           })
           .finally(() => {
             buttonLoading.value = false

@@ -22,3 +22,14 @@ export function fetchEcr(ecrId: string) {
     }
   })
 }
+
+export function fetchEcrs() {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await $axios.get(`ecr/fetch-ecr/`)
+      resolve(response.data.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}

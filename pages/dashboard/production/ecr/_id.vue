@@ -28,16 +28,8 @@
             :label-title="'Order Type'"
             :default-option-text="'Select an Order Type'"
             :select-array="orderTypes"
-            :init-value="form.type"
-            @get="form.type = $event.value"
-          />
-
-          <select-component
-            :label-title="'Mode of Service'"
-            :default-option-text="'Select an Mode of service'"
-            :select-array="modeOfServices"
-            :init-value="form.modeOfService"
-            @get="form.modeOfService = $event.value"
+            :init-value="form.orderType"
+            @get="form.orderType = $event.value"
           />
 
           <select-component
@@ -45,19 +37,12 @@
             :default-option-text="'Select Gas Type'"
             :init-value="form.gasType"
             :select-array="gasTypes"
-            @get="form.gasType = $event.value"
+            @get="setGasType($event.value)"
           />
         </div>
 
-        <div
-          v-if="
-            form.modeOfService === 'both' || form.modeOfService === 'customer'
-          "
-          class="w-full overflow-x-auto mt-8 mb-5"
-        >
-          <h1 class="uppercase font-semibold text-lg my-2">
-            External Cylinders
-          </h1>
+        <div v-if="selectedGas" class="w-full overflow-x-auto mt-8 mb-5">
+          <h1 class="uppercase font-semibold text-lg my-2">All Cylinders</h1>
           <table class="table w-full border-collapse text-gray-700">
             <thead>
               <tr>
@@ -76,26 +61,22 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="(externalCylinder, j) in form.fringeCylinders"
-                :key="j"
-              >
+              <tr v-for="(cylinder, j) in gasCylinders" :key="j">
                 <td class="text-center">{{ j + 1 }}</td>
-
                 <td>
                   <input-component
                     :input-placeholder="'Cylinder Number'"
-                    :default-value="externalCylinder.cylinderNo"
+                    :default-value="cylinder.name"
                     :input-type="'text'"
-                    @get="externalCylinder.cylinderNo = $event.value"
+                    @get="cylinder.name = $event.value"
                   />
                 </td>
                 <td>
                   <input-component
                     :input-placeholder="'Cylinder Size'"
-                    :default-value="externalCylinder.cylinderSize"
+                    :default-value="cylinder.volume"
                     :input-type="'number'"
-                    @get="externalCylinder.cylinderSize = $event.value"
+                    @get="cylinder.volume = $event.value"
                   />
                 </td>
               </tr>
@@ -105,7 +86,7 @@
             <button
               class="flex justify-evenly items-center"
               type="button"
-              @click="incrementFringeCylinders"
+              @click="addToCylinders"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -121,80 +102,6 @@
                 />
               </svg>
               <span class="underline">Register New Cylinder</span>
-            </button>
-          </div>
-        </div>
-
-        <div
-          v-if="form.modeOfService === 'both' || form.modeOfService === 'asnl'"
-          class="w-full overflow-x-auto mt-8 mb-5"
-        >
-          <h1 class="uppercase font-semibold text-lg my-2">ASNL Cylinders</h1>
-          <table class="table w-full border-collapse text-gray-700">
-            <thead>
-              <tr>
-                <th
-                  class="w-auto text-center px-0.5 border border-black text-xs"
-                >
-                  S/N
-                </th>
-                <th class="w-auto border border-black text-center">
-                  ASNL Number
-                </th>
-                <th class="w-auto border border-black text-center">
-                  Cylinder Size
-                </th>
-                <th class="w-auto px-1"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(cylinder, i) in form.cylinders" :key="i">
-                <td class="text-center">{{ i + 1 }}</td>
-
-                <td>
-                  <select-component
-                    :input-placeholder="'ASNL Number'"
-                    :init-value="cylinder.cylinderId"
-                    :default-option-text="'Select ASNL Cylinder'"
-                    :select-array="cylinders"
-                    @get="
-                      ;(cylinder.cylinderId = $event.value),
-                        setVolume($event.value, i)
-                    "
-                  />
-                </td>
-                <td>
-                  <input-component
-                    :input-placeholder="'Cylinder Size'"
-                    :default-value="cylinder.cylinderSize"
-                    :input-type="'text'"
-                    :is-disabled="true"
-                    @get="cylinder.cylinderSize = $event.value"
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="inline-block text-sm text-gray-400 my-2">
-            <button
-              class="flex justify-evenly items-center"
-              type="button"
-              @click="incrementAsnlCylinders()"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 fill-current text-transparent mr-2"
-                viewBox="0 0 24 24"
-                stroke="gray"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <span class="underline">Add Cylinders</span>
             </button>
           </div>
         </div>
@@ -238,25 +145,23 @@ export default defineComponent({
     const form = reactive<any>({
       customer: '',
       cylinders: [],
-      type: '',
+      orderType: '',
       modeOfService: '',
       fringeCylinders: [],
       gasType: '',
       priority: 1,
     })
     const buttonLoading = ref<Boolean>(false)
-
     const orderTypes = [
       {
-        name: 'Refill Order ',
-        value: 'sales',
+        name: 'Refill Order',
+        value: 'refill',
       },
       {
         name: 'Complaints',
-        value: 'complaint',
+        value: 'complaints',
       },
     ]
-
     const modeOfServices = [
       {
         name: 'Customers Cylinders',
@@ -271,21 +176,18 @@ export default defineComponent({
         value: 'both',
       },
     ]
-
     const componentKey = ref<number>(1)
-
     const changeComponentKey = () => {
       componentKey.value = getRandomValue()
     }
-
     const gasTypes = ref([])
     const cylinders = ref([])
-
+    const selectedGas = ref(null)
+    const gasCylinders = ref<any>([])
     const constantsValues = reactive({
       icnNo: '',
       customerName: '',
     })
-
     const getGases = () => {
       CylinderController.getCylinders().then((response) => {
         const myResponse = response.data.data.cylinders
@@ -297,8 +199,21 @@ export default defineComponent({
         })
       })
     }
-
-    const getIcn = (icnId: string) => {
+    const setGasType = (gasId: String) => {
+      form.gasType = gasId
+      gasTypes.value.forEach((cylinder: any) => {
+        if (cylinder.value === gasId) {
+          selectedGas.value = cylinder.name
+        }
+      })
+      gasCylinders.value = []
+      cylinders.value.forEach((item: any) => {
+        if (item.gasType.gasName == selectedGas.value) {
+          gasCylinders.value.push(item)
+        }
+      })
+    }
+    const getIcn = (icnId: any) => {
       fetchIcn(icnId)
         .then((response: any) => {
           form.customer = response.customer._id
@@ -307,7 +222,6 @@ export default defineComponent({
         })
         .finally(() => changeComponentKey())
     }
-
     const fetchCylinders = () => {
       CylinderController.getRegisteredCylindersUnPaginated().then(
         (response) => {
@@ -316,12 +230,12 @@ export default defineComponent({
               name: element.cylinderNumber,
               value: element._id,
               volume: element.gasVolumeContent.value,
+              gasType: element.gasType,
             }
           })
         }
       )
     }
-
     const setVolume = (id: string, index: any) => {
       cylinders.value.forEach((cylinder: any) => {
         if (cylinder.value === id) {
@@ -330,42 +244,46 @@ export default defineComponent({
       })
       changeComponentKey()
     }
-
-    const incrementFringeCylinders = () => {
+    const incrementCylinders = () => {
       form.fringeCylinders.push({
         cylinderNo: '',
         cylinderSize: '',
       })
     }
-
-    const incrementAsnlCylinders = () => {
+    const addToCylinders = () => {
       form.cylinders.push({
+        cylinderId: '',
+        cylinderSize: '',
+        // type: 'new',
+      })
+      gasCylinders.value.push({
         cylinderId: '',
         cylinderSize: '',
       })
     }
-
+    const incrementAsnlCylinders = () => {
+      form.cylinders.push({
+        cylinderId: '',
+        cylinderSize: '',
+        // type: 'exist',
+      })
+    }
     onMounted(() => {
       Promise.all([getIcn(icn), getGases(), fetchCylinders()])
     })
-
     const context = useContext()
     const router = useRouter()
-
     const submit = () => {
       const rules = {
-        type: 'required|alpha',
         cylinders: 'array',
         'cylinders.*.cylinderId': 'required|string',
         fringeCylinders: 'array',
         'fringeCylinders.*.cylinderNo': 'required|string',
         'fringeCylinders.*.cylinderSize': 'required|string',
       }
-
       const validation: any = new Validator(form, rules)
       if (validation.fails()) {
         let messages: string[] = []
-
         messages = ValidatorObject.getMessages(validation.errors)
         messages.forEach((error: string) => {
           context.$toast.error(error)
@@ -384,13 +302,12 @@ export default defineComponent({
           .finally(() => (buttonLoading.value = false))
       }
     }
-
     return {
       form,
       constantsValues,
       componentKey,
       gasTypes,
-      incrementFringeCylinders,
+      incrementCylinders,
       incrementAsnlCylinders,
       cylinders,
       orderTypes,
@@ -398,6 +315,10 @@ export default defineComponent({
       setVolume,
       buttonLoading,
       submit,
+      setGasType,
+      selectedGas,
+      gasCylinders,
+      addToCylinders,
     }
   },
 })

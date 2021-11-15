@@ -469,6 +469,10 @@ export default defineComponent({
           showSubCategory: false,
           subCategories: [
             {
+              title: 'ECR list',
+              link: '/dashboard/complaints/ecr-list',
+            },
+            {
               title: 'All Complaints',
               link: '/dashboard/complaints',
             },

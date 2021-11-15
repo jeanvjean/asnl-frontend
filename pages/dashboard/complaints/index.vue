@@ -2,7 +2,7 @@
   <div :key="componentKey" class="py-6 px-6">
     <div class="flex justify-between items-center px-6">
       <h1 class="text-lg font-semibold">All Complaints</h1>
-      <div>
+      <div class="hidden">
         <router-link
           to="/dashboard/complaints/new-complaint"
           class="
@@ -125,7 +125,6 @@ import {
   getQueryString,
   getTableBody,
 } from '@/constants/utils'
-
 export default defineComponent({
   name: 'Reports',
   components: {
@@ -153,7 +152,6 @@ export default defineComponent({
     const displayedFilters = ref<Array<String>>([])
     const queryString = ref<String>('')
     const { getLoggedInUser: user } = mainStore()
-
     const headers = [
       'Customer',
       'Complaint Type',
@@ -164,7 +162,6 @@ export default defineComponent({
       'Next Approving Officer',
       'Date & Time',
     ]
-
     const vehicleFilters = reactive({
       status: {
         list: [
@@ -183,29 +180,24 @@ export default defineComponent({
         ],
       },
     })
-
     const changeState = () => {
       showAssignDriver.value = false
       showFinalStep.value = true
     }
-
     const paginationProp = reactive({
       hasNextPage: false,
       hasPrevPage: false,
       currentPage: 1,
     })
-
     function adjustLimit(newLimit: Number) {
       pageLimit.value = newLimit
       fetchComplaints(1, pageLimit.value)
     }
-
     function filterComplaints(filters: any) {
       queryString.value = getQueryString(filters)
       displayedFilters.value = getFilters(filters)
       fetchComplaints(1, pageLimit.value, queryString.value)
     }
-
     const classObject = {
       status: {
         pending:
@@ -214,7 +206,6 @@ export default defineComponent({
         resolved: 'text-white bg-gray-500 rounded-lg px-2 py-1 capitalize',
       },
     }
-
     function fetchComplaints(
       pageValue: number,
       pageLimit: Number = 10,
@@ -258,11 +249,9 @@ export default defineComponent({
         })
         .finally(() => (isLoading.value = false))
     }
-
     function fetchDrivers() {
       DriverObject.getUnPaginatedDrivers().then((response: any) => {
         const driverResponse = response
-
         drivers.value = driverResponse.map((el: any) => {
           showAssignDriver.value = true
           return {
@@ -272,13 +261,10 @@ export default defineComponent({
         })
       })
     }
-
     const componentKey = ref(0)
-
     onMounted(() => {
       fetchComplaints(page.value, pageLimit.value)
     })
-
     return {
       headers,
       body,

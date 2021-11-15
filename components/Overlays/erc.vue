@@ -73,12 +73,42 @@
           </table>
         </div>
 
-        <div class="px-4 py-2">
+        <div class="px-0 py-2">
           <router-link
             :to="`/dashboard/production/schedule/${ecr._id}`"
-            class="px-6 py-2 bg-btn-purple text-white font-semibold rounded-sm"
+            class="
+              px-6
+              py-2
+              bg-btn-purple
+              text-white
+              font-semibold
+              rounded-sm
+              block
+              md:inline
+              text-center
+            "
           >
-            Schedule for Production
+            Production Schedule
+          </router-link>
+
+          <router-link
+            :to="`/dashboard/purchase-orders/purchase-order/${ecr._id}`"
+            class="
+              px-6
+              md:ml-2
+              py-2
+              bg-btn-purple
+              text-white
+              font-semibold
+              rounded-sm
+              block
+              md:inline
+              mt-2
+              md:mt-0
+              text-center
+            "
+          >
+            Purchase Schedule
           </router-link>
         </div>
       </section>
@@ -104,7 +134,6 @@ export default defineComponent({
     const close = () => {
       ctx.emit('close')
     }
-
     const profile = [
       { title: 'customer', value: _props.ecr.customer },
       { title: 'ecr number', value: _props.ecr.ercNo },
@@ -113,7 +142,6 @@ export default defineComponent({
       { title: 'ASNL Cylinders', value: _props.ecr.companyCylinders },
       { title: 'Type', value: _props.ecr.type },
     ]
-
     return {
       close,
       profile,

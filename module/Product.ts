@@ -1,4 +1,3 @@
-/* eslint-disable no-async-promise-executor */
 import { $axios } from '@/utils/api'
 
 class ProductRespository {
@@ -29,7 +28,7 @@ class ProductRespository {
     })
   }
 
-  fetchSuppliers(page: number, limit: number, filter: string = '') {
+  fetchSuppliers(page: Number, limit: Number, filter: String = '') {
     return new Promise(async (resolve, reject) => {
       try {
         let url: string
