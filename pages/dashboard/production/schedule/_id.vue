@@ -63,8 +63,9 @@
               </th>
             </tr>
           </thead>
+
           <tbody class="bg-white">
-            <tr
+            <!-- <tr
               v-for="(cylind, index) in erc.fringeCylinders"
               :key="index + getRandomValue()"
             >
@@ -78,7 +79,7 @@
               </td>
               <td class="px-4 py-2">{{ cylind.cylinderNo }}</td>
               <td class="px-4 py-2">{{ cylind.cylinderSize }}</td>
-            </tr>
+            </tr> -->
 
             <tr
               v-for="(cylind, k) in erc.cylinders"
@@ -261,10 +262,10 @@ export default defineComponent({
           form.ecrNo = response.ecrNo
           form.totalQuantity = erc.fringeCylinders.length + erc.cylinders.length
           form.totalVolume =
-            erc.fringeCylinders.reduce(
-              (curr: number, prev: any) => (curr += Number(prev.cylinderSize)),
-              0
-            ) +
+            // erc.fringeCylinders.reduce(
+            //   (curr: number, prev: any) => (curr += Number(prev.cylinderSize)),
+            //   0
+            // ) +
             erc.cylinders.reduce(
               (curr: number, prev: any) =>
                 (curr += Number(prev.gasVolumeContent.value)),
@@ -286,11 +287,11 @@ export default defineComponent({
       }
       form.quantityToFill = form.cylinders.length
       let total: number = 0
-      erc.fringeCylinders.forEach((element: any) => {
-        if (form.cylinders.includes(element._id)) {
-          total += Number(element.cylinderSize)
-        }
-      })
+      // erc.fringeCylinders.forEach((element: any) => {
+      //   if (form.cylinders.includes(element._id)) {
+      //     total += Number(element.cylinderSize)
+      //   }
+      // })
       erc.cylinders.forEach((element: any) => {
         if (form.cylinders.includes(element._id)) {
           total += Number(element.gasVolumeContent.value)

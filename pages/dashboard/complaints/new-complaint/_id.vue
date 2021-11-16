@@ -111,24 +111,24 @@
                   </td>
                   <td>
                     <input-component
-                      :input-placeholder="'Enter Cylinder Size'"
-                      :input-type="'number'"
-                      :defaultValue="cylinder.cylinderSize"
-                      @get="cylinder.cylinderSize = $event.value"
+                      :input-placeholder="'Enter Total Volume'"
+                      :defaultValue="cylinder.totalVolume"
+                      @get="cylinder.totalVolume = $event.value"
                     />
                   </td>
                   <td>
                     <input-component
                       :input-placeholder="'Select Date'"
                       :input-type="'date'"
-                      @get="cylinder.dateSupplied = $event.value"
+                      :defaultValue="cylinder.lastsupplydate"
+                      @get="cylinder.lastsupplydate = $event.value"
                     />
                   </td>
                   <td>
                     <input-component
                       :input-placeholder="'Enter Delivery/Waybill Number'"
-                      :defaultValue="cylinder.waybillNo"
-                      @get="cylinder.waybillNo = $event.value"
+                      :defaultValue="cylinder.deliveryNo"
+                      @get="cylinder.deliveryNo = $event.value"
                     />
                   </td>
                   <td>
@@ -139,7 +139,7 @@
                     />
                   </td>
                   <td>
-                    <text-area-component
+                    <input-component
                       :input-placeholder="'Enter Comment'"
                       @get="cylinder.comment = $event.value"
                     />
@@ -358,6 +358,8 @@ export default defineComponent({
       replaceCylinder: [],
       cylinders: [],
       additionalAction: '',
+      lastsupplydate: null,
+      deliveryNo: null,
     })
     const loading = ref(false)
     const customers = ref<any>([])
@@ -444,9 +446,17 @@ export default defineComponent({
             return {
               cylinderNo: element.cylinderNumber,
               cylinderSize: element.cylNo,
-              waybillNo: element.waybillNo,
               totalVolume: element.gasVolumeContent.value,
             }
+          })
+          form.cylinders.forEach((item: any) => {
+            let cylinderNumber: String = item.cylinderNo
+            CylinderController.confirmCylinderOnSysytem(cylinderNumber).then(
+              (response) => {
+                item.deliveryNo = response.deliveryNo
+                item.lastsupplydate = response.lastsupplydate
+              }
+            )
           })
           form.fringeCylinders = response.fringeCylinders.map(
             (element: any) => {

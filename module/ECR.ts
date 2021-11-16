@@ -33,3 +33,13 @@ export function fetchEcrs() {
     }
   })
 }
+export function fetchComplaintEcrs() {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await $axios.get(`/ecr/fetch-complaint-ecr`)
+      resolve(response.data.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}

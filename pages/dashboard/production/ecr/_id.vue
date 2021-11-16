@@ -31,6 +31,13 @@
             :init-value="form.orderType"
             @get="form.orderType = $event.value"
           />
+          <select-component
+            :label-title="'Priority'"
+            :default-option-text="'Select an Priority'"
+            :select-array="priorities"
+            :init-value="form.orderType"
+            @get="form.priority = $event.value"
+          />
 
           <select-component
             :label-title="'Gas Type'"
@@ -155,11 +162,21 @@ export default defineComponent({
     const orderTypes = [
       {
         name: 'Refill Order',
-        value: 'refill',
+        value: 'sales',
       },
       {
         name: 'Complaints',
         value: 'complaints',
+      },
+    ]
+    const priorities = [
+      {
+        name: 'Regular',
+        value: 2,
+      },
+      {
+        name: 'Urgent',
+        value: 1,
       },
     ]
     const modeOfServices = [
@@ -311,6 +328,7 @@ export default defineComponent({
       incrementAsnlCylinders,
       cylinders,
       orderTypes,
+      priorities,
       modeOfServices,
       setVolume,
       buttonLoading,

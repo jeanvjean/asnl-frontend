@@ -111,8 +111,8 @@ export default defineComponent({
       'Customer',
       'Type',
       'Status',
-      'Company Cylinders',
-      'ASNL Cylinders',
+      'Cylinders',
+      // 'ASNL Cylinders',
       'Date',
     ]
 
@@ -166,7 +166,7 @@ export default defineComponent({
               'customer',
               'type',
               'status',
-              'companyCylinders',
+              // 'companyCylinders',
               'asnlCylinders',
               'createdAt',
             ],

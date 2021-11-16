@@ -242,6 +242,16 @@ class CylinderRepository {
       }
     })
   }
+  confirmCylinderOnSysytem(assignedNumber: String = '', barcode: String = '', cylinderNumber: String = '') {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get(`/cylinder/check-cylinder?cylinderNumber=${cylinderNumber}&barcode=${barcode}&assignedNumber=${assignedNumber}`)
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 const CylinderController = new CylinderRepository()

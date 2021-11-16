@@ -108,7 +108,7 @@
               text-center
             "
           >
-            Purchase Schedule
+            Purchase Order
           </router-link>
         </div>
       </section>

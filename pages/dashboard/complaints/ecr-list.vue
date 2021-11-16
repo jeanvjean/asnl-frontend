@@ -94,7 +94,8 @@ import {
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterButton from '@/components/Base/FilterButton.vue'
 import Erc from '@/components/Overlays/erc.vue'
-import { fetchECRs } from '@/module/Production'
+// import { fetchECRs } from '@/module/Production'
+import { fetchComplaintEcrs } from '@/module/ECR'
 import TableComponent from '@/components/Table.vue'
 import { getTableBody } from '@/constants/utils'
 import Pagination from '@/components/Base/Pagination.vue'
@@ -145,7 +146,7 @@ export default defineComponent({
 
     const getEcrs = (page: number, limit: number, query: string = '') => {
       showLoader.value = true
-      fetchECRs(page, limit, query)
+      fetchComplaintEcrs()
         .then((response) => {
           tableBody.value = response.docs.map((erc: any) => {
             return {
