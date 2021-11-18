@@ -539,7 +539,7 @@ export default defineComponent({
     const types = [
       {
         name: 'Permanent Transfer',
-        value: 'branch',
+        value: 'division',
       },
       {
         name: 'Temporary Transfer',
@@ -568,10 +568,29 @@ export default defineComponent({
     onMounted(() => {
       fetchGases()
       CustomerController.fetchUnPaginatedCustomers().then((response) => {
-        customers.value = response
+        response.forEach((element: any) => {
+          fetchCustomerCyl(element._id).then((cylLength) => {
+            console.log(cylLength)
+            if (cylLength > 0) {
+              customers.value.push(element)
+            }
+          })
+        })
       })
     })
 
+    const fetchCustomerCyl = async (id: String) => {
+      let customerCylinders: any = []
+      await fetchCustomerCylinders(id).then((response: any) => {
+        response.forEach((cylinder: any) => {
+          if (cylinder.available) {
+            customerCylinders.push(cylinder)
+          }
+        })
+      })
+      console.log(customerCylinders)
+      return customerCylinders.length
+    }
     function increaseCounter() {
       cylinders.value.push({
         customer: '',
@@ -674,7 +693,7 @@ export default defineComponent({
         })
 
         const requestBody: any = {
-          type: 'temporary',
+          type: form.type,
           comment: form.comment,
           to: form.reciepient,
           cylinders: requestCylinders,
@@ -712,6 +731,7 @@ export default defineComponent({
 
     function fetchGases() {
       CylinderController.getCylinders().then((response: any) => {
+        console.log(response.data)
         gases.value = response.data.data.cylinders.map((cylinder: any) => {
           return {
             name: cylinder.gasName,
