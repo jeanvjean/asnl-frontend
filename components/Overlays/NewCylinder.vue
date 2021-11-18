@@ -68,7 +68,7 @@
               class="block w-full px-1 text-gray-800 text-md"
               >Cylinder Size</label
             ><input
-              v-model="formInputs.gasVolumeContent"
+              v-model="formInputs.gasVolumeContent.value"
               placeholder="Enter Amount"
               type="number"
               class="
@@ -95,9 +95,10 @@
                 py-2
                 rounded-sm
               "
+              v-model="formInputs.gasVolumeContent.unit"
             >
-              <option value="KG">Kg</option>
-              <option value="KG">
+              <option value="kg">Kg</option>
+              <option value="m3">
                 <p>m<sup>3</sup></p>
               </option>
             </select>
@@ -226,7 +227,7 @@ export default defineComponent({
       standardColor: '',
       testingPresure: '',
       fillingPreasure: '',
-      gasVolumeContent: '',
+      gasVolumeContent: { value: '', unit: 'kg' },
       cylinderNumber: '',
       assignedTo: '',
       assignedNumber: '',
@@ -274,7 +275,7 @@ export default defineComponent({
     const updateComponent = () => {
       componentKey.value++
     }
-
+    const requestBody = ref<any>()
     const createCylinder = () => {
       const rules = {
         cylinderType: 'required|string',
@@ -284,7 +285,8 @@ export default defineComponent({
         standardColor: 'required|string',
         testingPresure: 'required|numeric',
         fillingPreasure: 'required|numeric',
-        gasVolumeContent: 'required|numeric',
+        'gasVolumeContent.value': 'required|numeric',
+        'gasVolumeContent.unit': 'required|string',
         cylinderNumber: 'required|string',
         assignedTo: 'required_if:cylinderType,assigned|string',
         assignedNumber: 'required|string',
@@ -301,7 +303,7 @@ export default defineComponent({
           context.$toast.error(error)
         })
       } else {
-        const requestBody = {
+        requestBody.value = {
           cylinderType: formInputs.cylinderType,
           waterCapacity: formInputs.waterCapacity,
           dateManufactured: formInputs.dateManufactured,
@@ -310,6 +312,7 @@ export default defineComponent({
           testingPresure: formInputs.testingPresure,
           fillingPreasure: formInputs.fillingPreasure,
           gasVolumeContent: formInputs.gasVolumeContent,
+          //chnage gasVolume content to Object
           cylinderNumber: formInputs.cylinderNumber,
           purchaseCost: formInputs.purchaseCost,
           assignedTo: formInputs.assignedTo,
@@ -317,8 +320,11 @@ export default defineComponent({
             ? new Date(formInputs.purchaseDate).toISOString()
             : formInputs.purchaseDate,
         }
+        if (formInputs.cylinderType !== 'assigned') {
+          delete requestBody.value.assignedTo
+        }
         isLoading.value = true
-        CylinderController.registerCylinder(requestBody)
+        CylinderController.registerCylinder(requestBody.value)
           .then(() => {
             ctx.emit('refresh')
             close()

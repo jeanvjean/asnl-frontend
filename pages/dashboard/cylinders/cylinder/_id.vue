@@ -230,7 +230,9 @@ export default defineComponent({
           Standard_Color: cylinderResponse.standardColor,
           Testing_Pressure: cylinderResponse.testingPresure,
           Filling_Preasure: cylinderResponse.fillingPreasure,
-          GasVolume_Content: cylinderResponse.gasVolumeContent,
+          GasVolume_Content:
+            cylinderResponse.gasVolumeContent.value +
+            cylinderResponse.gasVolumeContent.unit,
           Assigned_To:
             cylinderResponse.assignedTo && cylinderResponse.assignedTo.name
               ? cylinderResponse.assignedTo.name
