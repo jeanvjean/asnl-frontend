@@ -41,7 +41,15 @@
               :input-placeholder="'Select Order Type'"
               :select-array="orderTypes"
               :default-option-text="'Select Order Type'"
-              @get="orderType = $event.value"
+              @get="changeOrderType($event.value)"
+            />
+            <select-component
+              :label-title="'Supplier'"
+              :default-option-text="'Select Supplier'"
+              :select-array="suppliersArray"
+              :init-value="form.supplier"
+              @get="form.supplier = $event.value"
+              v-if="orderType == 'external'"
             />
 
             <select-component
@@ -67,7 +75,7 @@
               <tr>
                 <th class="w-auto text-center"></th>
                 <th class="w-6/12 border border-black">Cylinder No</th>
-                <th class="w-5/12 border border-black">Volume</th>
+                <th class="w-5/12 border border-black">Cylinder Size</th>
                 <th class="w-auto"></th>
               </tr>
             </thead>
@@ -185,6 +193,7 @@ import { CylinderController } from '@/module/Cylinder'
 import { CustomerController } from '@/module/Customer'
 import { ValidatorObject } from '@/module/Validation'
 import { fetchBranches } from '@/module/Branch'
+import { ProductObject } from '@/module/Product'
 import { mainStore } from '@/module/Pinia'
 import { fetchEcr } from '@/module/ECR'
 export default defineComponent({
@@ -199,6 +208,7 @@ export default defineComponent({
     const form = reactive<any>({
       cylinders: [],
       fromBranch: '',
+      supplier: '',
       date: new Date().toISOString(),
       comment: '',
       gasType: '',
@@ -214,9 +224,9 @@ export default defineComponent({
       { name: 'Internal Purchase Order', value: 'internal' },
       { name: 'External Purchase Order', value: 'external' },
     ])
-    const orderType = ref(null)
+    const orderType = ref<String>()
     const selectedGas = ref(null)
-    const fromBranch = ref('')
+    const suppliersArray = ref<any>([])
     const context = useContext()
     const router = useRouter()
     const route = useRoute()
@@ -240,7 +250,6 @@ export default defineComponent({
     const fetchCylinders = () => {
       CylinderController.getRegisteredCylindersUnPaginated().then(
         (response) => {
-          // console.log(response)
           cylinderArray.value = response.data.map((element: any) => {
             return {
               name: element.cylinderNumber,
@@ -252,6 +261,9 @@ export default defineComponent({
       )
       changeComponentKey()
     }
+    function changeOrderType(value: any) {
+      orderType.value = value
+    }
 
     const getBranches = () => {
       fetchBranches().then((response: any) => {
@@ -261,9 +273,15 @@ export default defineComponent({
             value: element._id,
           }
         })
-        // branchesArray.value = branchesArray.value.filter(
-        //   (branch: any) => branch.value !== userBranch
-        // )
+      })
+
+      ProductObject.fetchAllSuppliers().then((response: any) => {
+        suppliersArray.value = response.map((element: any) => {
+          return {
+            name: `${element.name} - ${element.location}`,
+            value: element._id,
+          }
+        })
       })
       changeComponentKey()
     }
@@ -284,24 +302,6 @@ export default defineComponent({
       })
     }
 
-    // const selectCylinder = (gasId: String) => {
-    //   form.gasType = gasId
-    //   gasTypes.value.forEach((cylinder: any) => {
-    //     if (cylinder.value === gasId) {
-    //       selectedGas.value = cylinder.name
-    //     }
-    //   })
-    //   form.cylinders = []
-    //   cylinderArray.value.forEach((item: any) => {
-    //     console.log(item)
-    //     if (item.gasType.gasName == selectedGas.value) {
-    //       form.cylinders.push({
-    //         cylinderNo: item.cylinderNumber,
-    //         volume: item.gasVolumeContent.value,
-    //       })
-    //     }
-    //   })
-    // }
     const getEcr = () => {
       fetchEcr(route.value.params.id).then((response) => {
         console.log(response)
@@ -316,8 +316,6 @@ export default defineComponent({
           }
         })
         changeComponentKey()
-        // console.log(response.cylinders)
-        // console.log(response.fringeCylinders)
       })
     }
     onBeforeMount(() => {
@@ -330,18 +328,21 @@ export default defineComponent({
         fromBranch:
           orderType.value == 'internal' || orderType.value == null
             ? 'required|string'
-            : '',
-        supplier:
-          orderType.value == 'external' || orderType.value == null
-            ? 'required|string'
-            : '',
+            : 'string',
+        supplier: orderType.value == 'external' ? 'required|string' : 'string',
         date: 'required|date',
         cylinders: 'required|array',
         'cylinders.*.cylinderNo': 'required|string',
-        'cylinders.*.volume': 'required|string|min:1',
+        'cylinders.*.volume': 'required|min:1',
         gasType: 'required',
       }
-
+      if (orderType.value == 'external') {
+        delete form.fromBranch
+      }
+      if (orderType.value == 'internal') {
+        delete form.supplier
+      }
+      console.log(form)
       const validation: any = new Validator(form, rules)
       if (validation.fails()) {
         let messages: string[] = []
@@ -372,8 +373,10 @@ export default defineComponent({
       submit,
       buttonLoading,
       gasTypes,
-      // selectCylinder,
+      suppliersArray,
       orderTypes,
+      orderType,
+      changeOrderType,
     }
   },
 })

@@ -413,6 +413,7 @@ export default defineComponent({
             (el: any) => el.cylinderNo != value
           ),
         ]
+        reset()
       })
     }
     const fetchCylinders = () => {

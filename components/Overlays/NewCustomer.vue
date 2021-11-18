@@ -105,7 +105,7 @@
           />
 
           <input-component
-            :label-title="'Cylinder Holding Time'"
+            :label-title="'Cylinder Holding Time (days)'"
             :input-placeholder="'Enter Cylinder Holding Time'"
             :default-value="form.cylinderHoldingTime"
             @get="form.cylinderHoldingTime = $event.value"
@@ -218,7 +218,7 @@
           <div
             v-for="(product, i) in products"
             :key="i"
-            class="flex items-center justify-center space-x-4"
+            class="flex items-center justify-center space-x-4 w-1/2"
           >
             <select-component
               :label-title="'Products'"
@@ -227,12 +227,12 @@
               :init-value="product.id"
               @get="product.id = $event.value"
             />
-            <input-component
+            <!-- <input-component
               :label-title="'Units'"
               :input-placeholder="'Enter Unit'"
               :default-value="product.price"
               @get="product.price = $event.value"
-            />
+            /> -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="fill-current w-12 h-12 text-black pt-6"

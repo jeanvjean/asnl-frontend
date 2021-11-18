@@ -39,6 +39,8 @@
             :init-value="formInputs.assignedTo"
             :is-required="false"
             @get="formInputs.assignedTo = $event.value"
+            :addText="'Add New Customer'"
+            @addFunction="showNewCustomer = true"
           />
           <input-component
             :label-title="'Assigned Number'"
@@ -173,6 +175,10 @@
           </button-icon-component>
         </div>
       </form>
+      <new-customer
+        v-if="showNewCustomer"
+        @close="showNewCustomer = !showNewCustomer"
+      />
     </div>
   </back-drop>
 </template>
@@ -188,6 +194,7 @@ import Validator from 'validatorjs'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
+import NewCustomer from '@/components/Overlays/NewCustomer.vue'
 import { CylinderController } from '@/module/Cylinder'
 import { CustomerController } from '@/module/Customer'
 import { ValidatorObject } from '@/module/Validation'
@@ -200,11 +207,12 @@ export default defineComponent({
     InputComponent,
     SelectComponent,
     ButtonIconComponent,
+    NewCustomer,
   },
   setup(_props, ctx) {
     const context = useContext()
 
-    const customers = ref([])
+    const customers = ref<any>([])
     const gasTypes = ref([])
     const close = () => {
       ctx.emit('close')
@@ -227,6 +235,7 @@ export default defineComponent({
     })
 
     const isLoading = ref<Boolean>(false)
+    const showNewCustomer = ref<Boolean>(false)
 
     onMounted(() => {
       CylinderController.getCylinders().then((response) => {
@@ -248,6 +257,8 @@ export default defineComponent({
           }
         })
       })
+
+      updateComponent()
     })
 
     function changeColor(id: string) {
@@ -329,6 +340,7 @@ export default defineComponent({
       changeColor,
       componentKey,
       isLoading,
+      showNewCustomer,
     }
   },
 })

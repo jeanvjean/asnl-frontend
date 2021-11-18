@@ -30,12 +30,13 @@
             :select-array="orderTypes"
             :init-value="form.orderType"
             @get="form.orderType = $event.value"
+            :isDisabled="true"
           />
           <select-component
             :label-title="'Priority'"
             :default-option-text="'Select an Priority'"
             :select-array="priorities"
-            :init-value="form.orderType"
+            :init-value="form.priority"
             @get="form.priority = $event.value"
           />
 
@@ -76,6 +77,7 @@
                     :default-value="cylinder.name"
                     :input-type="'text'"
                     @get="cylinder.name = $event.value"
+                    :is-disabled="cylinder.type ? false : true"
                   />
                 </td>
                 <td>
@@ -84,11 +86,34 @@
                     :default-value="cylinder.volume"
                     :input-type="'number'"
                     @get="cylinder.volume = $event.value"
+                    :is-disabled="cylinder.type ? false : true"
                   />
                 </td>
               </tr>
             </tbody>
           </table>
+          <div class="inline-block text-sm text-gray-400 my-2 mr-3">
+            <button
+              class="flex justify-evenly items-center"
+              type="button"
+              @click="showRegister = true"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4 fill-current text-transparent mr-2"
+                viewBox="0 0 24 24"
+                stroke="gray"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span class="underline">Register New Cylinder</span>
+            </button>
+          </div>
           <div class="inline-block text-sm text-gray-400 my-2">
             <button
               class="flex justify-evenly items-center"
@@ -108,7 +133,7 @@
                   d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <span class="underline">Register New Cylinder</span>
+              <span class="underline">Add New Cylinder</span>
             </button>
           </div>
         </div>
@@ -122,6 +147,11 @@
         </div>
       </form>
     </div>
+    <new-cylinder
+      v-if="showRegister"
+      @close="showRegister = false"
+      @refresh="showRegister = false"
+    ></new-cylinder>
   </div>
 </template>
 <script lang="ts">
@@ -138,13 +168,14 @@ import Validator from 'validatorjs'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
+import NewCylinder from '@/components/Overlays/NewCylinder.vue'
 import { fetchIcn } from '@/module/Incoming'
 import { getRandomValue } from '@/constants/utils'
 import { CylinderController } from '@/module/Cylinder'
 import { ValidatorObject } from '@/module/Validation'
 import { createEcr } from '@/module/ECR'
 export default defineComponent({
-  components: { InputComponent, SelectComponent, ButtonComponent },
+  components: { InputComponent, NewCylinder, SelectComponent, ButtonComponent },
   layout: 'dashboard',
   setup() {
     const route = useRoute()
@@ -152,11 +183,11 @@ export default defineComponent({
     const form = reactive<any>({
       customer: '',
       cylinders: [],
-      orderType: '',
+      orderType: 'sales',
       modeOfService: '',
       fringeCylinders: [],
       gasType: '',
-      priority: 1,
+      priority: 2,
     })
     const buttonLoading = ref<Boolean>(false)
     const orderTypes = [
@@ -193,6 +224,7 @@ export default defineComponent({
         value: 'both',
       },
     ]
+    const showRegister = ref(false)
     const componentKey = ref<number>(1)
     const changeComponentKey = () => {
       componentKey.value = getRandomValue()
@@ -205,17 +237,7 @@ export default defineComponent({
       icnNo: '',
       customerName: '',
     })
-    const getGases = () => {
-      CylinderController.getCylinders().then((response) => {
-        const myResponse = response.data.data.cylinders
-        gasTypes.value = myResponse.map((element: any) => {
-          return {
-            name: element.gasName,
-            value: element._id,
-          }
-        })
-      })
-    }
+
     const setGasType = (gasId: String) => {
       form.gasType = gasId
       gasTypes.value.forEach((cylinder: any) => {
@@ -230,6 +252,29 @@ export default defineComponent({
         }
       })
     }
+    const getGasLength = (gasName: String) => {
+      let gasesLength = 0
+      cylinders.value.forEach((item: any) => {
+        if (item.gasType.gasName == gasName) {
+          gasesLength += 1
+        }
+      })
+      console.log(gasesLength)
+
+      return gasesLength
+    }
+    const getGases = () => {
+      CylinderController.getCylinders().then((response) => {
+        const myResponse = response.data.data.cylinders
+        gasTypes.value = myResponse.map((element: any) => {
+          return {
+            name: element.gasName,
+            value: element._id,
+            length: getGasLength(element.gasName),
+          }
+        })
+      })
+    }
     const getIcn = (icnId: any) => {
       fetchIcn(icnId)
         .then((response: any) => {
@@ -242,14 +287,17 @@ export default defineComponent({
     const fetchCylinders = () => {
       CylinderController.getRegisteredCylindersUnPaginated().then(
         (response) => {
+          console.log(response)
           cylinders.value = response.data.map((element: any) => {
             return {
               name: element.cylinderNumber,
               value: element._id,
               volume: element.gasVolumeContent.value,
               gasType: element.gasType,
+              length: getGasLength(element.gasType.gasName),
             }
           })
+          changeComponentKey()
         }
       )
     }
@@ -261,30 +309,46 @@ export default defineComponent({
       })
       changeComponentKey()
     }
-    const incrementCylinders = () => {
-      form.fringeCylinders.push({
-        cylinderNo: '',
-        cylinderSize: '',
-      })
-    }
+
     const addToCylinders = () => {
-      form.cylinders.push({
-        cylinderId: '',
-        cylinderSize: '',
-        // type: 'new',
-      })
       gasCylinders.value.push({
         cylinderId: '',
         cylinderSize: '',
+        type: 'new',
       })
     }
-    const incrementAsnlCylinders = () => {
-      form.cylinders.push({
-        cylinderId: '',
-        cylinderSize: '',
-        // type: 'exist',
-      })
-    }
+    // const registeredCylinders = ref([])
+    // const stat = reactive({
+    //   totalCylinders: 0,
+    //   totalBufferCylinders: 0,
+    //   totalAssignedCylinders: 0,
+    // })
+    // const paginationProp = reactive({
+    //   hasNextPage: false,
+    //   hasPrevPage: false,
+    //   currentPage: 1,
+    // })
+    // function getCylinders(
+    //   pageValue: number,
+    //   pageLimit: number = 10,
+    //   query = ''
+    // ) {
+    //   isLoading.value = true
+    //   CylinderController.getRegisteredCylinders(pageValue, pageLimit, query)
+    //     .then((responses: any) => {
+    //       const myResponse = responses.data
+    //       stat.totalCylinders = myResponse.counts.totalCylinders
+    //       stat.totalBufferCylinders = myResponse.counts.totalBufferCylinders
+    //       stat.totalAssignedCylinders = myResponse.counts.totalAssignedCylinders
+    //       registeredCylinders.value = myResponse.cylinders.docs
+    //       paginationProp.hasNextPage = myResponse.cylinders.hasNextPage
+    //       paginationProp.hasPrevPage = myResponse.cylinders.hasPrevPage
+    //       paginationProp.currentPage = myResponse.cylinders.page
+    //     })
+    //     .finally(() => {
+    //       isLoading.value = false
+    //     })
+    // }
     onMounted(() => {
       Promise.all([getIcn(icn), getGases(), fetchCylinders()])
     })
@@ -312,6 +376,15 @@ export default defineComponent({
             (cylinder: any) => cylinder.cylinderId
           )
         }
+        gasCylinders.value.forEach((item: any) => {
+          if (item.type) {
+            form.fringeCylinders.push({
+              cylinderNo: item.name,
+              cylinderSize: item.volume,
+            })
+            console.log(item)
+          }
+        })
         createEcr(form)
           .then(() => {
             router.push('/dashboard/production/ecr-list')
@@ -324,8 +397,6 @@ export default defineComponent({
       constantsValues,
       componentKey,
       gasTypes,
-      incrementCylinders,
-      incrementAsnlCylinders,
       cylinders,
       orderTypes,
       priorities,
@@ -337,6 +408,8 @@ export default defineComponent({
       selectedGas,
       gasCylinders,
       addToCylinders,
+      getGasLength,
+      showRegister,
     }
   },
 })

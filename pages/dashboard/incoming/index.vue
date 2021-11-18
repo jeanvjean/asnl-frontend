@@ -130,7 +130,7 @@ export default defineComponent({
       'Customer',
       'Type',
       'Status',
-      'Company Cylinders',
+      'Customer Cylinders',
       'ASNL Cylinders',
     ]
     const incomingFilters = {
