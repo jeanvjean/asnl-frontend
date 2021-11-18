@@ -627,7 +627,7 @@ export default defineComponent({
       if (cylinderId !== '') {
         cylindersArrays.value[index].forEach((element: any) => {
           if (element._id === cylinderId) {
-            cylinders.value[index].volume = element.gasVolumeContent
+            cylinders.value[index].volume = element.gasVolumeContent.value
             cylinders.value[index].type = element.cylinderType
             cylinders.value[index].cylinder = element._id
             cylinders.value[index].gas = element.gasType.gasName

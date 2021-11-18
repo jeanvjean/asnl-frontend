@@ -282,21 +282,31 @@ import { getRandomValue } from '@/constants/utils'
 
 export default defineComponent({
   components: { BackDrop, InputComponent, SelectComponent, ButtonComponent },
+  props: {
+    fromCylinder: {
+      type: Boolean,
+      required: false,
+    },
+  },
   setup(_props, ctx) {
     const close = () => {
       ctx.emit('close')
     }
 
     const context = useContext()
+    const products = ref<Array<any>>([])
+    const productsArray = ref([])
+    const componentKey = ref<number>(1)
+    const isLoading = ref<Boolean>(false)
 
     const customerTypes = [
       {
         name: 'Walk-in Customer',
-        value: 'walk-in-customer',
+        value: 'walk-in',
       },
       {
         name: 'Regular Customer',
-        value: 'regular-customer',
+        value: 'regular',
       },
     ]
 
@@ -320,6 +330,7 @@ export default defineComponent({
 
     function fetchProducts() {
       ProductObject.fetchProductsUnPaginated().then((response: any) => {
+        console.log(response)
         productsArray.value = response.map((product: any) => {
           return {
             name: product.asnlNumber,
@@ -339,10 +350,6 @@ export default defineComponent({
       fetchProducts()
     })
 
-    const products = ref<Array<any>>([])
-    const productsArray = ref([])
-    const componentKey = ref<number>(1)
-    const isLoading = ref<Boolean>(false)
     const increment = () => {
       products.value.push({
         id: '',
@@ -421,13 +428,14 @@ export default defineComponent({
         messages.forEach((error: string) => {
           context.$toast.error(error)
         })
-      } else if (!products.value.length) {
-        context.$toast.error('Products is Required')
       } else {
         isLoading.value = true
         CustomerController.registerCustomer(requestPayload.value)
-          .then(() => {
+          .then((response) => {
             close()
+            if (_props.fromCylinder) {
+              ctx.emit('addNewCustomer', response.data)
+            }
           })
           .finally(() => (isLoading.value = false))
       }

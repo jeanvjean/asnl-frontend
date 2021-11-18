@@ -41,7 +41,7 @@
               :input-placeholder="'Select Order Type'"
               :select-array="orderTypes"
               :default-option-text="'Select Order Type'"
-              @get="changeOrderType($event.value)"
+              @get="form.type = $event.value"
             />
             <select-component
               :label-title="'Supplier'"
@@ -49,7 +49,7 @@
               :select-array="suppliersArray"
               :init-value="form.supplier"
               @get="form.supplier = $event.value"
-              v-if="orderType == 'external'"
+              v-if="form.type == 'external'"
             />
 
             <select-component
@@ -263,6 +263,8 @@ export default defineComponent({
     }
     function changeOrderType(value: any) {
       orderType.value = value
+      form.type = value
+      changeComponentKey()
     }
 
     const getBranches = () => {
@@ -325,24 +327,21 @@ export default defineComponent({
 
     const submit = () => {
       const rules = {
-        fromBranch:
-          orderType.value == 'internal' || orderType.value == null
-            ? 'required|string'
-            : 'string',
-        supplier: orderType.value == 'external' ? 'required|string' : 'string',
+        fromBranch: form.type == 'internal' ? 'required|string' : 'string',
+        supplier: form.type == 'external' ? 'required|string' : 'string',
         date: 'required|date',
         cylinders: 'required|array',
         'cylinders.*.cylinderNo': 'required|string',
         'cylinders.*.volume': 'required|min:1',
         gasType: 'required',
       }
-      if (orderType.value == 'external') {
+      if (form.type == 'external') {
         delete form.fromBranch
       }
-      if (orderType.value == 'internal') {
+      if (form.type == 'internal') {
         delete form.supplier
       }
-      console.log(form)
+
       const validation: any = new Validator(form, rules)
       if (validation.fails()) {
         let messages: string[] = []

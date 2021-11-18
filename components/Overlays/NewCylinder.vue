@@ -56,10 +56,10 @@
           />
 
           <input-component
-            :label-title="'Water Capacity'"
+            :label-title="'Water Capacity (kg)'"
             :input-placeholder="'Capacity'"
-            :default-value="formInputs.waterCapacity"
-            @get="formInputs.waterCapacity = $event.value"
+            :default-value="formInputs.waterCapacity.value"
+            @get="formInputs.waterCapacity.value = $event.value"
           />
 
           <div class="w-full py-2 mt-1 relative">
@@ -176,9 +176,12 @@
           </button-icon-component>
         </div>
       </form>
+
       <new-customer
         v-if="showNewCustomer"
         @close="showNewCustomer = !showNewCustomer"
+        @addNewCustomer="addNewCustomer"
+        :fromCylinder="true"
       />
     </div>
   </back-drop>
@@ -221,7 +224,7 @@ export default defineComponent({
 
     const formInputs = reactive({
       cylinderType: '',
-      waterCapacity: '',
+      waterCapacity: { value: '', unit: 'kg' },
       dateManufactured: '',
       gasType: '',
       standardColor: '',
@@ -237,6 +240,14 @@ export default defineComponent({
 
     const isLoading = ref<Boolean>(false)
     const showNewCustomer = ref<Boolean>(false)
+
+    const addNewCustomer = (customer: any) => {
+      customers.value.push({
+        name: customer.data.name,
+        value: customer.data._id,
+      })
+      updateComponent()
+    }
 
     onMounted(() => {
       CylinderController.getCylinders().then((response) => {
@@ -279,7 +290,8 @@ export default defineComponent({
     const createCylinder = () => {
       const rules = {
         cylinderType: 'required|string',
-        waterCapacity: 'required|numeric',
+        'waterCapacity.value': 'required|numeric',
+        'waterCapacity.unit': 'required|string',
         dateManufactured: 'date',
         gasType: 'required|string',
         standardColor: 'required|string',
@@ -347,6 +359,7 @@ export default defineComponent({
       componentKey,
       isLoading,
       showNewCustomer,
+      addNewCustomer,
     }
   },
 })

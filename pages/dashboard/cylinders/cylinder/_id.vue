@@ -124,8 +124,8 @@
                   text-black
                 "
               >
-                <h1 class="font-light">Gas Cylinder:</h1>
-                <span>{{ details.Cylinder_Number }} </span>
+                <h1 class="font-light">Cylinder Number:</h1>
+                <span>{{ details.barcode }} </span>
               </div>
             </div>
           </div>
@@ -220,9 +220,12 @@ export default defineComponent({
     onMounted(() => {
       CylinderController.getCylinder(cylinderId.value).then((response) => {
         const cylinderResponse = response.data.data
+        console.log(cylinderResponse)
         details.value = {
           Cylinder_Type: cylinderResponse.cylinderType,
-          Water_Capacity: cylinderResponse.waterCapacity,
+          Water_Capacity:
+            cylinderResponse.waterCapacity.value +
+            cylinderResponse.waterCapacity.unit,
           Date_Manufactured: new Date(
             cylinderResponse.dateManufactured
           ).toDateString(),
@@ -242,6 +245,7 @@ export default defineComponent({
             : cylinderResponse.cylinderNumber
             ? cylinderResponse.cylinderNumber
             : 'Not Specified',
+          barcode: cylinderResponse.barcode,
         }
       })
     })
