@@ -54,7 +54,7 @@
           </div>
         </section>
         <section v-else-if="showBarcode" class="bg-gray-200">
-          <div class="w-4/5 mx-auto py-10 px-6">
+          <div class="mx-auto py-10 px-6">
             <div
               class="
                 px-6
@@ -66,10 +66,9 @@
                 items-center
               "
             >
-              <vue-barcode
-                value="codecheef.org"
-                :options="{ displayValue: true }"
-              ></vue-barcode>
+              <barcode :value="details.barcode">
+                Show this if the rendering fails.
+              </barcode>
             </div>
             <div class="px-6 my-4">
               <button
@@ -191,11 +190,12 @@ import {
   useRouter,
 } from '@nuxtjs/composition-api'
 import { CylinderController } from '@/module/Cylinder'
+const VueBarcode = require('vue-barcode')
 
 export default defineComponent({
   name: 'SingleCylinder',
   layout: 'dashboard',
-
+  components: { barcode: VueBarcode },
   setup() {
     const route = useRoute()
     const router = useRouter()
