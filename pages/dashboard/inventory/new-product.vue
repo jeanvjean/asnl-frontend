@@ -182,6 +182,7 @@ export default defineComponent({
 
     function fetchSuppliers() {
       ProductObject.fetchAllSuppliers().then((response: any) => {
+        console.log(response)
         suppliers.value = response.map((element: any) => {
           return {
             name: element.name,

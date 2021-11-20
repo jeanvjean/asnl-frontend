@@ -391,7 +391,7 @@ export default defineComponent({
       formData.append('validId', form.validId)
 
       products.value.forEach((element: any) => {
-        formData.append('products', element)
+        formData.append('products', element.id)
       })
 
       return formData

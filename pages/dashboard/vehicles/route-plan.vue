@@ -196,6 +196,7 @@ export default defineComponent({
       showTableLoader.value = true
       VehicleController.fetchRoutePlans(page, limit, queryString)
         .then((response: any) => {
+          console.log(response)
           const routes: any = response.docs.map((route: any) => {
             return {
               _id: route._id,

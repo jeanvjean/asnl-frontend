@@ -65,7 +65,7 @@
               :label-title="'Email address'"
               :input-placeholder="'Enter Email Address'"
               :input-type="'email'"
-              @get="formInputs.emailAddress = $event.value"
+              @get="formInputs.email = $event.value"
             />
             <input-component
               :label-title="'Telephone No'"
@@ -130,7 +130,7 @@ export default defineComponent({
       name: '',
       location: '',
       contactPerson: '',
-      emailAddress: '',
+      email: '',
       phoneNumber: '',
       supplierType: '',
     })

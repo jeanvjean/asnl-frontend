@@ -100,7 +100,7 @@
                 {{ cylinder.cylinderNo }}
               </td>
               <td class="w-6/12 border border-black text-center py-2 px-2">
-                {{ cylinder.volume }}
+                {{ cylinder.volume.value + ' ' + cylinder.volume.unit }}
               </td>
             </tr>
           </tbody>

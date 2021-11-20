@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-rows-1 lg:grid-cols-3 gap-5 px-4 py-6">
+  <div class="grid grid-rows-1 lg:grid-cols-3 gap-5 px-4 py-6" id="whole">
     <div class="lg:col-span-1">
       <div class="bg-white px-4 py-4 mb-4">
         <div class="grid grid-cols-2 gap-4 mb-4">
@@ -42,7 +42,7 @@
             Print Barcode
           </button>
         </div>
-        <section v-if="showDetails">
+        <section v-if="showDetails" id="details">
           <div
             v-for="(detail, index) in details"
             :key="index"
@@ -53,7 +53,7 @@
             <div class="px-2 py-1">{{ detail }}</div>
           </div>
         </section>
-        <section v-else-if="showBarcode" class="bg-gray-200">
+        <section v-else-if="showBarcode" class="bg-gray-200" id="barcode">
           <div class="mx-auto py-10 px-6">
             <div
               class="
@@ -65,8 +65,9 @@
                 justify-center
                 items-center
               "
+              id="printJS-barcode"
             >
-              <barcode :value="details.barcode">
+              <barcode :value="details.barcode" width="1">
                 Show this if the rendering fails.
               </barcode>
             </div>
@@ -86,6 +87,7 @@
                   text-white
                   w-full
                 "
+                @click="printJS('printJS-barcode', 'html')"
               >
                 <span>Product Barcode</span>
                 <svg
@@ -129,11 +131,15 @@
           text-btn-purple text-center
           border-2 border-btn-purple
         "
+        @click="printJS('tracking', 'html')"
       >
         Download Cylinder History
       </button>
     </div>
-    <div class="lg:col-span-2 bg-white px-4 py-4 overflow-y-scroll h-screen">
+    <div
+      class="lg:col-span-2 bg-white px-4 py-4 overflow-y-scroll h-screen"
+      id="tracking"
+    >
       <h1
         class="
           font-medium
@@ -147,9 +153,9 @@
       >
         Tracking
       </h1>
-      <div v-for="i in 3" :key="i" class="px-4 py-4">
+      <div v-for="(track, i) in cylinder.tracking" :key="i" class="px-4 py-4">
         <div class="px-4 py-2 bg-gray-200 font-light text-xl mb-4">
-          March, 2019
+          {{ track.data }}
         </div>
         <ul>
           <li
@@ -168,11 +174,9 @@
             ></div>
             <div>
               <p class="text-md font-light">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil
-                aperiam consequatur aliquam quia maxime officiis veritatis fuga
-                a ab velit at
+                {{ track.name }}
               </p>
-              <p class="text-sm font-light text-gray-500">March 21, 2019</p>
+              <p class="text-sm font-light text-gray-500">{{ track.date }}</p>
             </div>
           </li>
         </ul>
@@ -191,6 +195,7 @@ import {
 } from '@nuxtjs/composition-api'
 import { CylinderController } from '@/module/Cylinder'
 const VueBarcode = require('vue-barcode')
+import printJS from 'print-js'
 
 export default defineComponent({
   name: 'SingleCylinder',
@@ -208,9 +213,11 @@ export default defineComponent({
       }
     })
     const details = ref({})
+    const cylinder = ref([])
 
     onMounted(() => {
       CylinderController.getCylinder(cylinderId.value).then((response) => {
+        cylinder.value = response.data.data
         const cylinderResponse = response.data.data
         console.log(cylinderResponse)
         details.value = {
@@ -248,12 +255,18 @@ export default defineComponent({
 
     const showDetails = ref(true)
     const showBarcode = ref(false)
+    const printWindow = () => {
+      window.print()
+    }
 
     return {
       details,
       showDetails,
       showBarcode,
       formatTitle,
+      cylinder,
+      printWindow,
+      printJS,
     }
   },
   methods: {

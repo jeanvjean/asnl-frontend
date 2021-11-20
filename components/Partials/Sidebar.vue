@@ -51,15 +51,8 @@
                   :key="i"
                   class="w-full"
                 >
-                  <button
-                    v-if="subNav.type && subNav.type === 'button'"
-                    class="block px-2 py-2 focus:outline-none focus:text-white"
-                    @click="toggleComponent(subNav.action)"
-                  >
-                    {{ subNav.title }}
-                  </button>
                   <router-link
-                    v-else-if="!subNav.subCategories"
+                    v-if="!subNav.subCategories"
                     :to="subNav.link"
                     class="block px-2 py-2"
                     >{{ subNav.title }}</router-link
@@ -107,10 +100,6 @@
         v-if="showRegiserCylinder"
         @close="showRegiserCylinder = !showRegiserCylinder"
       />
-      <new-cylinder-type
-        v-if="showRegiserCylinderType"
-        @close="showRegiserCylinderType = !showRegiserCylinderType"
-      />
     </div>
   </div>
 </template>
@@ -118,7 +107,6 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
-import NewCylinderType from '@/components/Overlays/NewCylinderType.vue'
 import DashboardIcon from '@/components/Icons/DashboardIcon.vue'
 import CylinderIcon from '@/components/Icons/CylinderIcon.vue'
 import UserIcon from '@/components/Icons/UserIcon.vue'
@@ -135,10 +123,9 @@ import TimerIcon from '@/components/Icons/TimerIcon.vue'
 import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
-  components: { NewCylinder, NewCylinderType, CaretDown, CaretUp },
+  components: { NewCylinder, CaretDown, CaretUp },
   setup() {
     const showRegiserCylinder = ref(false)
-    const showRegiserCylinderType = ref(false)
     const { getLoggedInUser: auth }: any = mainStore()
 
     const role = auth.role
@@ -147,14 +134,6 @@ export default defineComponent({
     function getNavigations(role: string) {
       const result = navigations[role] ? navigations[role] : navigations.admin
       return result
-    }
-
-    function toggleComponent(action: String) {
-      if (action === 'register-cylinder') {
-        showRegiserCylinder.value = true
-      } else if (action === 'register-gas-type') {
-        showRegiserCylinderType.value = true
-      }
     }
 
     onMounted(() => {
@@ -201,18 +180,6 @@ export default defineComponent({
             },
             {
               title: 'Pending Condemn Cylinder',
-              link: '/dashboard/cylinders/condemn-cylinder',
-            },
-            {
-              title: 'Register Cylinder',
-              type: 'button',
-              action: 'register-cylinder',
-              link: '/dashboard/cylinders/condemn-cylinder',
-            },
-            {
-              title: 'Register Gas Type',
-              type: 'button',
-              action: 'register-gas-type',
               link: '/dashboard/cylinders/condemn-cylinder',
             },
           ],
@@ -539,9 +506,8 @@ export default defineComponent({
 
     return {
       showRegiserCylinder,
-      showRegiserCylinderType,
+
       roleNavigations,
-      toggleComponent,
     }
   },
 })

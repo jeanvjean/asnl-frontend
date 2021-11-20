@@ -37,9 +37,7 @@ class CylinderRepository {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get(
-          `/cylinder/fetch-cylinder-stats
-`
-        )
+          `/cylinder/fetch-cylinder-stats`)
         resolve(response.data)
       } catch (error) {
         reject(error)

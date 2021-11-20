@@ -171,6 +171,23 @@
           >
             Register Cylinder
           </button>
+          <button
+            class="
+              flex
+              justify-between
+              items-end
+              bg-btn-purple
+              px-4
+              py-2
+              text-white
+              font-semibold
+              text-md
+              rounded-sm
+            "
+            @click="showRegiserCylinderType = !showRegiserCylinderType"
+          >
+            Register Gas Type
+          </button>
         </div>
       </div>
       <div class="w-full flex items-center space-x-4 px-6 py-2">
@@ -206,6 +223,10 @@
       @close="showRegister = false"
       @refresh=";(showRegister = false), getCylinders(1)"
     ></new-cylinder>
+    <new-cylinder-type
+      v-if="showRegiserCylinderType"
+      @close="showRegiserCylinderType = !showRegiserCylinderType"
+    />
     <cylinder-filter
       v-if="showFilter"
       :filters="cylinderFilters"
@@ -225,6 +246,7 @@ import {
 } from '@nuxtjs/composition-api'
 import TableComponent from '@/components/Base/Table2.vue'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
+import NewCylinderType from '@/components/Overlays/NewCylinderType.vue'
 import { CylinderController } from '@/module/Cylinder'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/FilterButton.vue'
@@ -242,6 +264,7 @@ export default defineComponent({
     FilterComponent,
     Pagination,
     CylinderFilter,
+    NewCylinderType,
   },
   layout: 'dashboard',
 
@@ -254,6 +277,8 @@ export default defineComponent({
       'Cylinder Size',
       'Cylinder Type',
     ]
+
+    const showRegiserCylinderType = ref(false)
 
     const page = ref<number>(1)
 
@@ -334,6 +359,7 @@ export default defineComponent({
       changePage,
       getCylinders,
       showCylinderType,
+      showRegiserCylinderType,
       showFilter,
       cylinderFilters,
       filterCylinders,
