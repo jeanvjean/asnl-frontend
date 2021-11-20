@@ -153,33 +153,38 @@
       >
         Tracking
       </h1>
-      <div v-for="(track, i) in cylinder.tracking" :key="i" class="px-4 py-4">
-        <div class="px-4 py-2 bg-gray-200 font-light text-xl mb-4">
-          {{ track.data }}
+      <div v-if="cylinder && cylinder.tracking && cylinder.tracking.length">
+        <div v-for="(track, i) in cylinder.tracking" :key="i" class="px-4 py-4">
+          <div class="px-4 py-2 bg-gray-200 font-light text-xl mb-4">
+            {{ track.data }}
+          </div>
+          <ul>
+            <li
+              v-for="j in 3"
+              :key="j"
+              class="flex justify-between px-4 py-3 space-x-4"
+            >
+              <div
+                class="
+                  w-4
+                  h-4
+                  bg-btn-purple
+                  border-2 border-btn-purple
+                  rounded-full
+                "
+              ></div>
+              <div>
+                <p class="text-md font-light">
+                  {{ track.name }}
+                </p>
+                <p class="text-sm font-light text-gray-500">{{ track.date }}</p>
+              </div>
+            </li>
+          </ul>
         </div>
-        <ul>
-          <li
-            v-for="j in 3"
-            :key="j"
-            class="flex justify-between px-4 py-3 space-x-4"
-          >
-            <div
-              class="
-                w-4
-                h-4
-                bg-btn-purple
-                border-2 border-btn-purple
-                rounded-full
-              "
-            ></div>
-            <div>
-              <p class="text-md font-light">
-                {{ track.name }}
-              </p>
-              <p class="text-sm font-light text-gray-500">{{ track.date }}</p>
-            </div>
-          </li>
-        </ul>
+      </div>
+      <div v-else>
+        <default-state />
       </div>
     </div>
   </div>
@@ -194,13 +199,15 @@ import {
   useRouter,
 } from '@nuxtjs/composition-api'
 import { CylinderController } from '@/module/Cylinder'
+
+import DefaultState from '@/components/DefaultState.vue'
 const VueBarcode = require('vue-barcode')
 import printJS from 'print-js'
 
 export default defineComponent({
   name: 'SingleCylinder',
   layout: 'dashboard',
-  components: { barcode: VueBarcode },
+  components: { barcode: VueBarcode, DefaultState },
   setup() {
     const route = useRoute()
     const router = useRouter()

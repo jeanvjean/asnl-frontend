@@ -276,17 +276,6 @@ export default defineComponent({
           showSubCategory: false,
           subCategories: [
             {
-              title: 'Register',
-              link: '#',
-              showSubCategory: false,
-              subCategories: [
-                {
-                  title: "Customer's Cylinders",
-                  link: '#',
-                },
-              ],
-            },
-            {
               title: 'Transfer',
               link: '/dashboard/cylinders/transfer-list',
             },
