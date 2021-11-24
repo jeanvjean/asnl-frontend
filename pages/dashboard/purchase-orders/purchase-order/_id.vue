@@ -86,7 +86,7 @@
                 <td>
                   <select-component
                     :input-placeholder="'Enter Cylinder No'"
-                    :init-value="cylinder.cylinderNo"
+                    :init-value="cylinder.cylinderNumber"
                     :select-array="cylinderArray"
                     :default-option-text="'Select Cylinder'"
                     @get="cylinder.cylinderNo = $event.value"
@@ -121,31 +121,6 @@
             </tbody>
           </table>
         </div>
-
-        <!-- <div class="inline-block">
-          <button
-            type="button"
-            class="flex justify-evenly items-center"
-            @click="increaseCounter()"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-4 h-4 fill-current text-transparent mr-2"
-              viewBox="0 0 24 24"
-              stroke="gray"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span class="text-md text-gray-400 underline"
-              >Add New Cylinder</span
-            >
-          </button>
-        </div> -->
 
         <div class="flex md:space-x-4 flex-col md:flex-row items-center my-8">
           <div class="w-full">
@@ -182,6 +157,7 @@ import {
   useContext,
   useRouter,
   useRoute,
+  watch,
 } from '@nuxtjs/composition-api'
 import Validator from 'validatorjs'
 import ButtonComponent from '@/components/Form/Button.vue'
@@ -196,6 +172,7 @@ import { fetchBranches } from '@/module/Branch'
 import { ProductObject } from '@/module/Product'
 import { mainStore } from '@/module/Pinia'
 import { fetchEcr } from '@/module/ECR'
+import { initiateScan } from '@/module/SCAN'
 export default defineComponent({
   components: {
     SelectComponent,
@@ -214,6 +191,13 @@ export default defineComponent({
       gasType: '',
       type: 'internal',
       ecr: '',
+    })
+    const scan = reactive<any>({
+      status: '',
+      _id: '',
+      cylinders: [],
+      formId: '',
+      initNum: 0,
     })
     const { getLoggedInUser: auth }: any = mainStore()
     const userBranch = auth.branch
@@ -241,13 +225,79 @@ export default defineComponent({
     const buttonLoading = ref<Boolean>(false)
 
     const removeCylinders = (index: any) => {
-      form.cylinders.splice(index, 1)
+      scanCylinders.value.splice(index, 1)
       changeComponentKey()
     }
 
     const changeComponentKey = () => {
       componentKey.value = getRandomValue()
     }
+    const initCylinder = () => {
+      initiateScan().then((response) => {
+        console.log(response)
+        scan.status = response.status
+        scan._id = response._id
+        scan.cylinders = response.cylinders
+        scan.formId = response.formId
+        scan.initNum = response.initNum
+      })
+    }
+    const { $fire } = useContext()
+    const db = $fire.database
+
+    watch(
+      () => scan.formId,
+      (currentValue, oldValue) => {
+        console.log(currentValue)
+        const ref = db.ref(`forms/${currentValue}/form`)
+        // const ref = db.ref(`forms/1/form`)
+        ref.on(
+          'value',
+          (snapshot: any) => {
+            scanCylinders.value = []
+            const cyl = JSON.parse(snapshot.val().cylinders)
+            console.log(cyl)
+            console.log(totalCylinders.value)
+            if (cyl != null) {
+              cyl.forEach((item: any) => {
+                CylinderController.confirmCylinderOnSysytem(
+                  '',
+                  item.barcode,
+                  ''
+                ).then((data) => {
+                  if (
+                    data &&
+                    totalCylinders.value.includes(
+                      data.data.cylinder.cylinderNumber
+                    )
+                  ) {
+                    scanCylinders.value.push({
+                      _id: data.data.cylinder._id,
+                      cylinderNumber: data.data.cylinder.cylinderNumber,
+                      barcode: data.data.cylinder.barcode,
+                      volume:
+                        data.data.cylinder.gasVolumeContent.value +
+                        data.data.cylinder.gasVolumeContent.unit,
+                    })
+                  }
+                  form.cylinders.push({
+                    cylinderNo: data.data.cylinder.cylinderNumber,
+                    volume: {
+                      value: data.data.cylinder.gasVolumeContent.value,
+                      unit: data.data.cylinder.gasVolumeContent.unit,
+                    },
+                  })
+                })
+              })
+            }
+          },
+          (errorObject: Error) => {
+            console.log('The read failed: ' + errorObject.name)
+          }
+        )
+      },
+      { immediate: true }
+    )
 
     const fetchCylinders = () => {
       CylinderController.getRegisteredCylindersUnPaginated().then(
@@ -305,7 +355,7 @@ export default defineComponent({
         changeComponentKey()
       })
     }
-
+    const totalCylinders = <any>ref([])
     const getEcr = () => {
       fetchEcr(route.value.params.id).then((response) => {
         console.log(response)
@@ -313,18 +363,21 @@ export default defineComponent({
         form.fromBranch = response.branch._id
         form.ecr = route.value.params.id
         form.gasType = response.cylinders[0].gasType
-        form.cylinders = response.cylinders.map((element: any) => {
-          return {
-            cylinderNo: element.cylinderNumber,
-            volume: element.gasVolumeContent.value,
-          }
-        })
+        totalCylinders.value = response.cylinders.map(
+          (element: any) => element.cylinderNumber
+        )
         changeComponentKey()
       })
     }
     onBeforeMount(() => {
       changeComponentKey()
-      Promise.all([fetchCylinders(), getBranches(), getEcr(), fetchGasTypes()])
+      Promise.all([
+        fetchCylinders(),
+        getBranches(),
+        getEcr(),
+        fetchGasTypes(),
+        initiateScan(),
+      ])
     })
 
     const submit = () => {
@@ -334,7 +387,7 @@ export default defineComponent({
         date: 'required|date',
         cylinders: 'required|array',
         'cylinders.*.cylinderNo': 'required|string',
-        'cylinders.*.volume': 'required|min:1',
+        'cylinders.*.volume': 'required',
         gasType: 'required',
       }
       if (form.type == 'external') {
@@ -343,7 +396,7 @@ export default defineComponent({
       if (form.type == 'internal') {
         delete form.supplier
       }
-
+      console.log(form)
       const validation: any = new Validator(form, rules)
       if (validation.fails()) {
         let messages: string[] = []

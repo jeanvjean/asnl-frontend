@@ -271,8 +271,8 @@ export default defineComponent({
       (currentValue, oldValue) => {
         console.log(currentValue)
         form.volumeToFill = 0
-        // const ref = db.ref(`forms/${currentValue}/form`)
-        const ref = db.ref(`forms/1/form`)
+        const ref = db.ref(`forms/${currentValue}/form`)
+        // const ref = db.ref(`forms/1/form`)
         const cynd = ecr.cylinders.map((item: any) => item.cylinderNumber)
         console.log(cynd)
         ref.on(

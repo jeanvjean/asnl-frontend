@@ -158,7 +158,7 @@ import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
 import { fetchIcn } from '@/module/Incoming'
-import { initiateScan, completeScan, fetchScanInfo } from '@/module/SCAN'
+import { initiateScan } from '@/module/SCAN'
 import { getRandomValue } from '@/constants/utils'
 import { CylinderController } from '@/module/Cylinder'
 import { ValidatorObject } from '@/module/Validation'
@@ -270,8 +270,8 @@ export default defineComponent({
       () => scan.formId,
       (currentValue, oldValue) => {
         console.log(currentValue)
-        // const ref = db.ref(`forms/${currentValue}/form`)
-        const ref = db.ref(`forms/1/form`)
+        const ref = db.ref(`forms/${currentValue}/form`)
+        // const ref = db.ref(`forms/1/form`)
         ref.on(
           'value',
           (snapshot: any) => {
