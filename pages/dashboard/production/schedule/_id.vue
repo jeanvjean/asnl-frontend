@@ -25,16 +25,17 @@
         </div>
         <div class="flex-1">
           <h3 class="font-semibold text-lg">
-            {{ erc.customer }}
+            {{ ecr.customer }}
           </h3>
-          <span class="font-medium text-sm">{{ erc.address }}</span>
+          <span class="font-medium text-sm">{{ ecr.address }}</span>
         </div>
       </div>
       <div class="w-full mx-auto mt-10 px-8">
+        <h3 class="font-semibold text-lg">Scan ID : {{ scan.formId }}</h3>
         <table class="w-full">
           <thead class="bg-gray-200">
-            <tr>
-              <th></th>
+            <tr class="w-full">
+              <!-- <th></th> -->
               <th
                 class="
                   text-left
@@ -65,55 +66,39 @@
           </thead>
 
           <tbody class="bg-white">
-            <!-- <tr
-              v-for="(cylind, index) in erc.fringeCylinders"
-              :key="index + getRandomValue()"
-            >
-              <td class="px-4">
-                <input
-                  type="checkbox"
-                  name="external"
-                  :checked="form.cylinders.includes(cylind._id)"
-                  @change="addCylinders(cylind._id)"
-                />
-              </td>
-              <td class="px-4 py-2">{{ cylind.cylinderNo }}</td>
-              <td class="px-4 py-2">{{ cylind.cylinderSize }}</td>
-            </tr> -->
-
             <tr
               v-for="(cylind, k) in scanCylinders"
               :key="k + getRandomValue()"
             >
-              <td class="px-4">
+              <!-- <td class="px-4">
                 <input
                   type="checkbox"
                   name="internal"
                   :checked="form.cylinders.includes(cylind._id)"
                   @input="addCylinders(cylind._id)"
                 />
-              </td>
+              </td> -->
               <td class="px-4 py-2">{{ cylind.cylinderNumber }}</td>
-              <td class="px-4 py-2">{{ cylind.gasVolumeContent.value }}</td>
+              <td class="px-4 py-2">{{ cylind.volume }}</td>
             </tr>
 
             <tr class="border border-black">
-              <td class="px-4"></td>
+              <!-- <td class="px-4"></td> -->
               <td class="px-4 py-2">Total Quantity</td>
               <td class="px-4 py-2">{{ form.totalQuantity }}</td>
             </tr>
             <tr class="border border-black">
-              <td class="px-4"></td>
+              <!-- <td class="px-4"></td> -->
               <td class="px-4 py-2">Total Volume(Kg)</td>
               <td class="px-4 py-2">{{ form.totalVolume }}</td>
             </tr>
             <tr class="border border-black">
-              <td class="px-4"></td>
+              <!-- <td class="px-4"></td> -->
               <td class="px-4 py-2">Quantity to be Filled</td>
               <td class="px-4 py-2">{{ form.quantityToFill }}</td>
             </tr>
             <tr class="border border-black">
-              <td class="px-4"></td>
+              <!-- <td class="px-4"></td> -->
               <td class="px-4 py-2">Volume to be Filled</td>
               <td class="px-4 py-2">{{ form.volumeToFill }}</td>
             </tr>
@@ -187,6 +172,7 @@ import {
   useContext,
   useRoute,
   useRouter,
+  watch,
 } from '@nuxtjs/composition-api'
 import Validator from 'validatorjs'
 import SendToProduction from '@/components/Overlays/SendToProduction.vue'
@@ -197,6 +183,7 @@ import SelectComponent from '@/components/Form/Select.vue'
 import { CylinderController } from '@/module/Cylinder'
 import InputComponent from '@/components/Form/Input.vue'
 import { ValidatorObject } from '~/module/Validation'
+import { initiateScan } from '@/module/SCAN'
 import ButtonComponent from '@/components/Form/Button.vue'
 import { createSchedule } from '~/module/Production'
 export default defineComponent({
@@ -214,13 +201,12 @@ export default defineComponent({
       componentKey.value = getRandomValue()
     }
     const buttonLoading = ref<Boolean>(false)
-    const ercId = useRoute().value.params.id
-    const erc = reactive<any>({
+    const ecrId = useRoute().value.params.id
+    const ecr = reactive<any>({
       customer: '',
       address: '',
-      fringeCylinders: [],
       cylinders: [],
-      ercNo: '',
+      ecrNo: '',
     })
     const shifts = [
       {
@@ -235,6 +221,7 @@ export default defineComponent({
     const form = reactive<any>({
       customer: '',
       ecrNo: '',
+      ecrId: '',
       shift: '',
       date: new Date().toISOString(),
       cylinders: [],
@@ -245,7 +232,6 @@ export default defineComponent({
       comment: '',
       gasType: '',
     })
-    const scanCylinders = ref<any>([])
     const gasTypes = ref([])
     const getGases = () => {
       CylinderController.getCylinders().then((response) => {
@@ -258,35 +244,117 @@ export default defineComponent({
         })
       })
     }
-    const getEcr = (ecr: string) => {
-      fetchEcr(ecr)
+    const scan = reactive<any>({
+      status: '',
+      _id: '',
+      cylinders: [],
+      formId: '',
+      initNum: 0,
+    })
+    const newCylinders = ref<any>([])
+    const scanCylinders = ref<any>([])
+    const initCylinder = () => {
+      initiateScan().then((response) => {
+        console.log(response)
+        scan.status = response.status
+        scan._id = response._id
+        scan.cylinders = response.cylinders
+        scan.formId = response.formId
+        scan.initNum = response.initNum
+      })
+    }
+    const { $fire } = useContext()
+    const db = $fire.database
+
+    watch(
+      () => scan.formId,
+      (currentValue, oldValue) => {
+        console.log(currentValue)
+        form.volumeToFill = 0
+        // const ref = db.ref(`forms/${currentValue}/form`)
+        const ref = db.ref(`forms/1/form`)
+        const cynd = ecr.cylinders.map((item: any) => item.cylinderNumber)
+        console.log(cynd)
+        ref.on(
+          'value',
+          (snapshot: any) => {
+            scanCylinders.value = [...newCylinders.value]
+            const cyl = JSON.parse(snapshot.val().cylinders)
+            console.log(cyl)
+            if (cyl != null) {
+              form.quantityToFill = cyl.length
+              cyl.forEach((item: any) => {
+                CylinderController.confirmCylinderOnSysytem(
+                  '',
+                  item.barcode,
+                  ''
+                ).then((data) => {
+                  if (
+                    data &&
+                    cynd.includes(data.data.cylinder.cylinderNumber)
+                  ) {
+                    scanCylinders.value.push({
+                      _id: data.data.cylinder._id,
+                      cylinderNumber: data.data.cylinder.cylinderNumber,
+                      barcode: data.data.cylinder.barcode,
+                      volume:
+                        data.data.cylinder.gasVolumeContent.value +
+                        data.data.cylinder.gasVolumeContent.unit,
+                    })
+                    form.volumeToFill +=
+                      data.data.cylinder.gasVolumeContent.value
+                  }
+                })
+              })
+              form.cylinders = scanCylinders
+            }
+          },
+          (errorObject: Error) => {
+            console.log('The read failed: ' + errorObject.name)
+          }
+        )
+      },
+      { immediate: true }
+    )
+    watch(
+      () => scanCylinders,
+      (currentValue, oldValue) => {
+        // let totalVolume: Number
+        console.log('here')
+        form.volumeToFill = 0
+        currentValue.value.forEach((item: any) => {
+          console.log(item)
+          form.volumeToFill += Number(item.volume)
+        })
+        // form.volumeToFill = totalVolume
+        changeComponentKey()
+      },
+      { immediate: true }
+    )
+
+    const getEcr = (ecrId: string) => {
+      fetchEcr(ecrId)
         .then((response) => {
-          console.log(response.cylinders)
-          console.log(response.fringeCylinders)
-          erc.customer = response.customer ? response.customer.name : ''
-          erc.address = response.customer ? response.customer.address : ''
-          erc.fringeCylinders = response.fringeCylinders
-          erc.cylinders = response.cylinders
-          erc.ercNo = response.ercNo
+          console.log(response)
+          ecr.customer = response.customer ? response.customer.name : ''
+          ecr.address = response.customer ? response.customer.address : ''
+          ecr.cylinders = response.cylinders
+          ecr.ecrNo = response.ercNo
+          form.ecr = response._id
           form.customer = response.customer ? response.customer._id : ''
           form.ecrNo = response.ecrNo
-          form.totalQuantity = erc.fringeCylinders.length + erc.cylinders.length
-          form.totalVolume =
-            // erc.fringeCylinders.reduce(
-            //   (curr: number, prev: any) => (curr += Number(prev.cylinderSize)),
-            //   0
-            // ) +
-            erc.cylinders.reduce(
-              (curr: number, prev: any) =>
-                (curr += Number(prev.gasVolumeContent.value)),
-              0
-            )
+          form.totalQuantity = ecr.cylinders.length
+          form.totalVolume = ecr.cylinders.reduce(
+            (curr: number, prev: any) =>
+              (curr += Number(prev.gasVolumeContent.value)),
+            0
+          )
           form.gasType = response.cylinders[0].gasType
         })
         .finally(() => changeComponentKey())
     }
     onMounted(() => {
-      Promise.all([getEcr(ercId), getGases()])
+      Promise.all([getEcr(ecrId), getGases(), initCylinder()])
     })
     const addCylinders = (cylinderId: string) => {
       if (form.cylinders.includes(cylinderId)) {
@@ -297,12 +365,8 @@ export default defineComponent({
       }
       form.quantityToFill = form.cylinders.length
       let total: number = 0
-      // erc.fringeCylinders.forEach((element: any) => {
-      //   if (form.cylinders.includes(element._id)) {
-      //     total += Number(element.cylinderSize)
-      //   }
-      // })
-      erc.cylinders.forEach((element: any) => {
+
+      ecr.cylinders.forEach((element: any) => {
         if (form.cylinders.includes(element._id)) {
           total += Number(element.gasVolumeContent.value)
         }
@@ -327,6 +391,7 @@ export default defineComponent({
         comment: 'string',
         gasType: 'required|string',
       }
+      // form.cylinders = ecr.cylinders
       const validation: any = new Validator(form, rules, {
         required: ':attribute must have an element',
       })
@@ -350,11 +415,12 @@ export default defineComponent({
     return {
       showProduction,
       showSupplier,
-      erc,
+      ecr,
       getRandomValue,
       shifts,
       addCylinders,
       form,
+      scan,
       gasTypes,
       changeComponentKey,
       componentKey,

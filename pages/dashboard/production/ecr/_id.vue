@@ -128,6 +128,7 @@
             :button-class="'bg-btn-purple text-white w-auto'"
             :button-text="'Save'"
             :loading-status="buttonLoading"
+            v-if="scanCylinders.length > 0"
           />
         </div>
       </form>
@@ -269,14 +270,14 @@ export default defineComponent({
       () => scan.formId,
       (currentValue, oldValue) => {
         console.log(currentValue)
-        const ref = db.ref(`forms/${currentValue}/form`)
-        // const ref = db.ref(`forms/1/form`)
+        // const ref = db.ref(`forms/${currentValue}/form`)
+        const ref = db.ref(`forms/1/form`)
         ref.on(
           'value',
           (snapshot: any) => {
             scanCylinders.value = [...newCylinders.value]
             const cyl = JSON.parse(snapshot.val().cylinders)
-            if (cyl!=null) {
+            if (cyl != null) {
               cyl.forEach((item: any) => {
                 CylinderController.confirmCylinderOnSysytem(
                   '',
