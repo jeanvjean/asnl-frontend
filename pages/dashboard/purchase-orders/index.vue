@@ -4,7 +4,7 @@
       <div class="bg-white shadow-sm rounded-sm h-full">
         <div class="px-4 py-4 w-full overflow-x-auto">
           <div class="flex items-center space-x-6 float-right">
-            <router-link
+            <!-- <router-link
               to="/dashboard/purchase-orders/action"
               class="
                 px-4
@@ -16,7 +16,7 @@
               "
             >
               Create Purchase Order
-            </router-link>
+            </router-link> -->
             <button
               class="
                 px-4

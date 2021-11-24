@@ -80,7 +80,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(cylinder, i) in form.cylinders" :key="i">
+              <tr v-for="(cylinder, i) in scanCylinders" :key="i">
                 <td class="text-center">{{ i + 1 }}</td>
 
                 <td>
@@ -122,7 +122,7 @@
           </table>
         </div>
 
-        <div class="inline-block">
+        <!-- <div class="inline-block">
           <button
             type="button"
             class="flex justify-evenly items-center"
@@ -145,7 +145,7 @@
               >Add New Cylinder</span
             >
           </button>
-        </div>
+        </div> -->
 
         <div class="flex md:space-x-4 flex-col md:flex-row items-center my-8">
           <div class="w-full">
@@ -213,12 +213,14 @@ export default defineComponent({
       comment: '',
       gasType: '',
       type: 'internal',
+      ecr: '',
     })
     const { getLoggedInUser: auth }: any = mainStore()
     const userBranch = auth.branch
 
     const componentKey = ref<Number>()
     const cylinderArray = ref<any>([])
+    const scanCylinders = ref<any>([])
     const branchesArray = ref<any>([])
     const orderTypes = ref([
       { name: 'Internal Purchase Order', value: 'internal' },
@@ -309,7 +311,7 @@ export default defineComponent({
         console.log(response)
         selectedGas.value = response.cylinders[0].gasName
         form.fromBranch = response.branch._id
-
+        form.ecr = route.value.params.id
         form.gasType = response.cylinders[0].gasType
         form.cylinders = response.cylinders.map((element: any) => {
           return {
@@ -376,6 +378,7 @@ export default defineComponent({
       orderTypes,
       orderType,
       changeOrderType,
+      scanCylinders,
     }
   },
 })

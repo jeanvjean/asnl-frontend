@@ -337,8 +337,9 @@ export default defineComponent({
         }
         isLoading.value = true
         CylinderController.registerCylinder(requestBody.value)
-          .then(() => {
+          .then((response) => {
             ctx.emit('refresh')
+            ctx.emit('addToScanCylinder', response.data.data)
             close()
           })
           .finally(() => {

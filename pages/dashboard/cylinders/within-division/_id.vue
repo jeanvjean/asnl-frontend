@@ -194,7 +194,10 @@
                 <td class="font-light text-lg text-center">
                   <input-component
                     :is-disabled="true"
-                    :default-value="cylinder.gasVolumeContent"
+                    :default-value="
+                      cylinder.gasVolumeContent.value +
+                      cylinder.gasVolumeContent.unit
+                    "
                     :input-placeholder="'Enter Volume'"
                   />
                 </td>
@@ -226,7 +229,9 @@
                 <td class="font-light text-lg text-center">
                   <input-component
                     :is-disabled="true"
-                    :default-value="cylinder.purchaseCost"
+                    :default-value="
+                      cylinder.purchaseCost.cost + cylinder.purchaseCost.unit
+                    "
                     :input-placeholder="'Purchase Cost'"
                   />
                 </td>
@@ -425,6 +430,7 @@ export default defineComponent({
 
     function getCylinderDetail(id: String) {
       CylinderController.getTransferCylinderDetail(id).then((response) => {
+        console.log(response)
         transferDetail.value = response.data
         form.type = transferDetail.value.type
         form.gas = transferDetail.value.gasType._id

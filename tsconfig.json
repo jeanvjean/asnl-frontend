@@ -28,7 +28,8 @@
       "@nuxtjs/axios",
       "@types/node",
       "@nuxtjs/toast",
-      "pinia/nuxt/types"
+      "pinia/nuxt/types",
+       "@nuxtjs/firebase"
     ]
   },
   "exclude": [

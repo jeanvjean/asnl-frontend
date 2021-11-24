@@ -54,6 +54,24 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/toast',
+    [
+      '@nuxtjs/firebase',
+      {
+        config: {
+          apiKey: "AIzaSyBTO9EOJuhBYqWonrib2JV-vHqtT75V4xE",
+          authDomain: "asnl-1f533.firebaseapp.com",
+          databaseURL: "https://asnl-1f533-default-rtdb.firebaseio.com",
+          projectId: "asnl-1f533",
+          storageBucket: "asnl-1f533.appspot.com",
+          messagingSenderId: "395052174263",
+          appId: "1:395052174263:web:ffdd5a61fce37a404c3632",
+          measurementId: "G-PY3H4DRVY7"
+        },
+        services: {
+          database: true // this is the realtime database service
+        }
+      }
+    ]
   ],
   router: {
     linkExactActiveClass: 'text-white',

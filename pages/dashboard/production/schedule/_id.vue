@@ -82,7 +82,7 @@
             </tr> -->
 
             <tr
-              v-for="(cylind, k) in erc.cylinders"
+              v-for="(cylind, k) in scanCylinders"
               :key="k + getRandomValue()"
             >
               <td class="px-4">
@@ -146,6 +146,15 @@
               :is-disabled="true"
               :is-required="false"
             />
+          </div>
+          <div>
+            <p class="text-gray-500 text-sm font-medium leading-6">
+              Initiated on
+            </p>
+            <p class="text-gray-500 text-sm font-medium">
+              <span>{{ new Date().toDateString() }}</span> @
+              <span>{{ new Date().toLocaleTimeString() }}</span>
+            </p>
           </div>
 
           <div class="w-1/4 my-10">
@@ -236,6 +245,7 @@ export default defineComponent({
       comment: '',
       gasType: '',
     })
+    const scanCylinders = ref<any>([])
     const gasTypes = ref([])
     const getGases = () => {
       CylinderController.getCylinders().then((response) => {
@@ -350,6 +360,7 @@ export default defineComponent({
       componentKey,
       submit,
       buttonLoading,
+      scanCylinders,
     }
   },
 })

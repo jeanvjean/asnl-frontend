@@ -2,7 +2,7 @@
   <div :key="componentKey" class="w-full md:w-10/12 lg:w-7/12 md:mx-auto mt-10">
     <div class="bg-white px-6 md:p-10 py-4">
       <div class="my-1">
-        <h1 class="font-bold text-xl uppercase tracking-normal">New ECR</h1>
+        <h1 class="font-bold text-xl uppercase tracking-normal">New FCR</h1>
         Scan ID:{{ scan.formId }}
       </div>
       <form @submit.prevent="submit">
@@ -10,11 +10,11 @@
           class="w-full items-center grid grid-rows-1 md:grid-cols-3 md:gap-x-4"
         >
           <input-component
-            :label-title="'Customer'"
-            :input-placeholder="'Customer'"
+            :label-title="'Supplier\'s Name'"
+            :input-placeholder="'Suppliers'"
             :is-required="false"
             :is-disabled="true"
-            :default-value="constantsValues.customerName"
+            :default-value="constantsValues.supplierName"
           />
 
           <input-component
@@ -25,18 +25,12 @@
             :default-value="constantsValues.icnNo"
           />
 
-          <!-- <select-component
-            :label-title="'Mode of Service'"
-            :default-option-text="'Select a Mode of Service'"
-            :select-array="modeOfServices"
-            :init-value="form.modeOfService"
-            @get="form.modeOfService = $event.value"
-          /> -->
           <select-component
             :label-title="'Order Type'"
             :default-option-text="'Select an Order Type'"
             :select-array="orderTypes"
             :init-value="form.type"
+            :isDisabled="true"
             @get="form.type = $event.value"
           />
           <select-component
@@ -157,7 +151,7 @@ import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
 import { fetchIcn } from '@/module/Incoming'
-import { initiateScan, completeScan, fetchScanInfo } from '@/module/SCAN'
+import { initiateScan } from '@/module/SCAN'
 import { getRandomValue } from '@/constants/utils'
 import { CylinderController } from '@/module/Cylinder'
 import { ValidatorObject } from '@/module/Validation'
@@ -169,9 +163,9 @@ export default defineComponent({
     const route = useRoute()
     const icn = route.value.params.id
     const form = reactive<any>({
-      customer: '',
+      supplier: {},
       cylinders: [],
-      type: 'sales',
+      type: 'filled',
       gasType: '',
       priority: 2,
       icn_id: '',
@@ -180,14 +174,14 @@ export default defineComponent({
       status: '',
       _id: '',
       cylinders: [],
-      formId: '',
+      formId: 0,
       initNum: 0,
     })
     const buttonLoading = ref<Boolean>(false)
     const orderTypes = [
       {
-        name: 'Refill Order',
-        value: 'sales',
+        name: 'Filled',
+        value: 'filled',
       },
       {
         name: 'Complaints',
@@ -226,11 +220,12 @@ export default defineComponent({
     const gasTypes = ref([])
     const totalCylinders = ref<any>([])
     const selectedGas = ref(null)
-    const newCylinders = ref<any>([])
     const scanCylinders = ref<any>([])
+
+    const newCylinders = ref<any>([])
     const constantsValues = reactive({
       icnNo: '',
-      customerName: '',
+      supplierName: '',
     })
 
     const setGasType = (gasId: String) => {
@@ -253,7 +248,6 @@ export default defineComponent({
 
     const initCylinder = () => {
       initiateScan().then((response) => {
-        console.log(response)
         scan.status = response.status
         scan._id = response._id
         scan.cylinders = response.cylinders
@@ -268,22 +262,23 @@ export default defineComponent({
     watch(
       () => scan.formId,
       (currentValue, oldValue) => {
-        console.log(currentValue)
         const ref = db.ref(`forms/${currentValue}/form`)
         // const ref = db.ref(`forms/1/form`)
         ref.on(
           'value',
           (snapshot: any) => {
             scanCylinders.value = [...newCylinders.value]
+
             const cyl = JSON.parse(snapshot.val().cylinders)
-            if (cyl!=null) {
+            if (cyl != null) {
               cyl.forEach((item: any) => {
+                // console.log(cylinders)
                 CylinderController.confirmCylinderOnSysytem(
                   '',
                   item.barcode,
                   ''
                 ).then((data) => {
-                  if (data) {
+                  if (!totalCylinders.value.includes(data.data.cylinder._id)) {
                     scanCylinders.value.push({
                       _id: data.data.cylinder._id,
                       cylinderNumber: data.data.cylinder.cylinderNumber,
@@ -327,6 +322,7 @@ export default defineComponent({
           return {
             name: element.gasName,
             value: element._id,
+            // length: getGasLength(element.gasName),
           }
         })
         changeComponentKey()
@@ -336,10 +332,10 @@ export default defineComponent({
       fetchIcn(icnId)
         .then((response: any) => {
           console.log(response)
-          form.customer = response.customer._id
+          form.supplier = response.supplier._id
           constantsValues.icnNo = response.icnNo
           form.icn_id = response._id
-          constantsValues.customerName = response.customer.name
+          constantsValues.supplierName = response.supplier.name
         })
         .finally(() => changeComponentKey())
     }
@@ -386,10 +382,10 @@ export default defineComponent({
             (cylinder: any) => cylinder._id
           )
         }
-        console.log(form)
+
         createEcr(form)
           .then(() => {
-            router.push('/dashboard/production/ecr-list')
+            router.push('/dashboard/purchase-orders/fcr-list')
           })
           .finally(() => (buttonLoading.value = false))
       }

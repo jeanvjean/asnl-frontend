@@ -4,6 +4,7 @@ import { $axios } from '@/utils/api'
 export function createEcr(requestBody: any) {
   return new Promise<any>(async (resolve, reject) => {
     try {
+      console.log(requestBody)
       const response = await $axios.post(`/ecr/create-ecr`, requestBody)
       resolve(response.data)
     } catch (error) {
@@ -33,10 +34,31 @@ export function fetchEcrs() {
     }
   })
 }
+export function fetchFcrs(page: Number, limit: Number, query: String = '') {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await $axios.get(`ecr/fetch-fcrs?page=1&limit=10`)
+      resolve(response.data.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
 export function fetchComplaintEcrs() {
   return new Promise<any>(async (resolve, reject) => {
     try {
       const response = await $axios.get(`/ecr/fetch-complaint-ecr`)
+      resolve(response.data.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+export function createIcn(body: any) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+
+      const response = await $axios.get(`/ocn/create-ocn`, body)
       resolve(response.data.data)
     } catch (error) {
       reject(error)

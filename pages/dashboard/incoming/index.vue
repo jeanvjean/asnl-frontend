@@ -63,6 +63,7 @@
             >
               <template #action="slotProps">
                 <router-link
+                  v-if="slotProps.rowObject.type == 'customer'"
                   :to="`/dashboard/production/ecr/${slotProps.rowId}`"
                   class="
                     px-6
@@ -74,6 +75,20 @@
                   @click=";(singleEcr = slotProps.rowObject), (showErc = true)"
                 >
                   Generate ECR
+                </router-link>
+                <router-link
+                  v-if="slotProps.rowObject.type == 'supplier'"
+                  :to="`/dashboard/production/fcr/${slotProps.rowId}`"
+                  class="
+                    px-6
+                    py-1
+                    border border-btn-purple
+                    rounded-sm
+                    text-btn-purple text-sm
+                  "
+                  @click=";(singleEcr = slotProps.rowObject), (showErc = true)"
+                >
+                  Generate FCR
                 </router-link>
               </template>
             </table-component>
@@ -206,11 +221,16 @@ export default defineComponent({
       fetchIcns(page, limit, query)
         .then((response) => {
           tableBody.value = response.docs.map((icn: any) => {
+            console.log(icn)
             return {
               icnNo: icn.icnNo,
-              customer: icn.customer ? icn.customer.name : '',
+              customer: icn.customer
+                ? icn.customer.name
+                : icn.supplier
+                ? icn.supplier.name
+                : '',
               type: icn.type,
-              status: icn.status,
+              status: icn.status ? icn.status : icn.approvalStatus,
               companyCylinders: icn.totalCustomerCylinders,
               asnlCylinders: icn.totalAsnlCylinders,
               _id: icn._id,

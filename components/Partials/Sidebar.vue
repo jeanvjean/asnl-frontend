@@ -354,6 +354,10 @@ export default defineComponent({
           showSubCategory: false,
           subCategories: [
             {
+              title: 'FCR List',
+              link: '/dashboard/purchase-orders/fcr-list',
+            },
+            {
               title: 'All Orders',
               link: '/dashboard/purchase-orders',
             },
