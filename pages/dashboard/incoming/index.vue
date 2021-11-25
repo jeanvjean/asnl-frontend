@@ -64,21 +64,28 @@
               <template #action="slotProps">
                 <router-link
                   v-if="slotProps.rowObject.type == 'customer'"
-                  :to="`/dashboard/production/ecr/${slotProps.rowId}`"
-                  class="
-                    px-6
-                    py-1
-                    border border-btn-purple
-                    rounded-sm
-                    text-btn-purple text-sm
+                  :to="
+                    slotProps.rowObject.asnlCylinders < 1
+                      ? ''
+                      : `/dashboard/production/ecr/${slotProps.rowId}`
                   "
-                  @click=";(singleEcr = slotProps.rowObject), (showErc = true)"
+                  class="px-6 py-1 rounded-sm text-sm"
+                  :class="
+                    slotProps.rowObject.asnlCylinders < 1
+                      ? 'border border-btn-gray text-btn-gray'
+                      : ''
+                  "
+                  @click="generateEcr(slotProps.rowObject)"
                 >
                   Generate ECR
                 </router-link>
                 <router-link
                   v-if="slotProps.rowObject.type == 'supplier'"
-                  :to="`/dashboard/production/fcr/${slotProps.rowId}`"
+                  :to="
+                    slotProps.rowObject.asnlCylinders < 1
+                      ? ''
+                      : `/dashboard/production/fcr/${slotProps.rowId}`
+                  "
                   class="
                     px-6
                     py-1
@@ -86,7 +93,12 @@
                     rounded-sm
                     text-btn-purple text-sm
                   "
-                  @click=";(singleEcr = slotProps.rowObject), (showErc = true)"
+                  :class="
+                    slotProps.rowObject.asnlCylinders < 1
+                      ? 'border border-btn-gray text-btn-gray'
+                      : ''
+                  "
+                  @click="generateEcr(slotProps.rowObject)"
                 >
                   Generate FCR
                 </router-link>
@@ -256,6 +268,12 @@ export default defineComponent({
     }
 
     const singleEcr = ref<Object>({})
+    const generateEcr = (item: any) => {
+      if (item.asnlCylinders > 0) {
+        singleEcr.value = item
+        showErc.value = true
+      }
+    }
 
     onBeforeMount(() => {
       getICns(pageDetails.number, pageDetails.limit)
@@ -278,6 +296,7 @@ export default defineComponent({
       queryString,
       getQueryString,
       getFilters,
+      generateEcr,
     }
   },
 })

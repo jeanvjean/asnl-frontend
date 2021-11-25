@@ -147,6 +147,7 @@
               :button-class="'bg-btn-purple text-white w-auto'"
               :button-text="'Submit'"
               :loading-status="buttonLoading"
+              v-if="scanCylinders.length > 0"
             />
           </div>
         </form>
