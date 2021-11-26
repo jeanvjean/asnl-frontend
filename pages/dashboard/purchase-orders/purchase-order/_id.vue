@@ -257,11 +257,10 @@ export default defineComponent({
         ref.on(
           'value',
           (snapshot: any) => {
-            scanCylinders.value = []
-            const cyl = JSON.parse(snapshot.val().cylinders)
-            console.log(cyl)
-            console.log(totalCylinders.value)
-            if (cyl != null) {
+            if (snapshot.val()) {
+              scanCylinders.value = []
+              const cyl = JSON.parse(snapshot.val().cylinders)
+
               cyl.forEach((item: any) => {
                 CylinderController.confirmCylinderOnSysytem(
                   '',

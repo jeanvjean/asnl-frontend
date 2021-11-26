@@ -311,6 +311,7 @@ export default defineComponent({
       isLoading.value = true
       CylinderController.getRegisteredCylinders(pageValue, pageLimit, query)
         .then((responses: any) => {
+          console.log(responses.data)
           const myResponse = responses.data
           stat.totalCylinders = myResponse.counts.totalCylinders
           stat.totalBufferCylinders = myResponse.counts.totalBufferCylinders
