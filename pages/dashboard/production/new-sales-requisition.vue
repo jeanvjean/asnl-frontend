@@ -29,10 +29,10 @@
           class="grid grid-rows-1 md:grid-cols-3 w-full px-4 gap-y-2 md:gap-x-4"
         >
           <div class="w-full space-y-2">
-            <input-component
+            <select-component
               :label-title="'Customer Name'"
-              :input-placeholder="'Enter Customer Name'"
-              :default-value="form.customerName"
+              :default-option-text="'Select a Customer'"
+              :selectArray="customers"
               @get="form.customerName = $event.value"
             />
           </div>
@@ -232,6 +232,7 @@
 
         <div class="flex items-center space-x-6 px-4 mt-4">
           <button-component
+            v-if="form.cylinders.length > 0"
             :button-class="'bg-btn-purple text-white w-full md:w-1/4'"
             :button-text="'Send'"
             :loading-status="buttonLoading"
@@ -253,6 +254,7 @@ import {
 } from '@nuxtjs/composition-api'
 import Validator from 'validatorjs'
 import { CylinderController } from '@/module/Cylinder'
+import { CustomerController } from '@/module/Customer'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
@@ -282,6 +284,7 @@ export default defineComponent({
     }
 
     const cylinders = ref<any>([])
+    const customers = ref<any>([])
     const externalCylinders = ref<any>([])
     const internalCylinders = ref<any>([])
 
@@ -334,6 +337,17 @@ export default defineComponent({
         }
       )
     }
+    const fetchCustomers = () => {
+      CustomerController.fetchUnPaginatedCustomers().then((response) => {
+        console.log(response)
+        customers.value = response.map((element: any) => {
+          return {
+            name: element.name,
+            value: element._id,
+          }
+        })
+      })
+    }
 
     function decrement(index: any) {
       if (selected.customer) {
@@ -346,7 +360,7 @@ export default defineComponent({
     const buttonLoading = ref<Boolean>(false)
 
     onMounted(() => {
-      Promise.all([getGases(), fetchCylinders()])
+      Promise.all([getGases(), fetchCylinders(), fetchCustomers()])
     })
     const context = useContext()
     const router = useRouter()
@@ -400,6 +414,7 @@ export default defineComponent({
       buttonLoading,
       changeComponentKey,
       componentKey,
+      customers,
     }
   },
 })
