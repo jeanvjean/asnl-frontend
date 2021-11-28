@@ -270,26 +270,24 @@ export default defineComponent({
           (snapshot: any) => {
             if (snapshot.val()) {
               scanCylinders.value = [...newCylinders.value]
-
               const cyl = JSON.parse(snapshot.val().cylinders)
-              cyl.forEach((item: any) => {
-                // console.log(cylinders)
-                CylinderController.confirmCylinderOnSysytem(
-                  '',
-                  item.barcode,
-                  ''
-                ).then((data) => {
-                  if (!totalCylinders.value.includes(data.data.cylinder._id)) {
-                    scanCylinders.value.push({
-                      _id: data.data.cylinder._id,
-                      cylinderNumber: data.data.cylinder.cylinderNumber,
-                      barcode: data.data.cylinder.barcode,
-                      volume:
-                        data.data.cylinder.gasVolumeContent.value +
-                        data.data.cylinder.gasVolumeContent.unit,
-                    })
-                  }
-                })
+              let item = cyl[cyl.length - 1]
+              // console.log(cylinders)
+              CylinderController.confirmCylinderOnSysytem(
+                '',
+                item.barcode,
+                ''
+              ).then((data) => {
+                if (!totalCylinders.value.includes(data.data.cylinder._id)) {
+                  scanCylinders.value.push({
+                    _id: data.data.cylinder._id,
+                    cylinderNumber: data.data.cylinder.cylinderNumber,
+                    barcode: data.data.cylinder.barcode,
+                    volume:
+                      data.data.cylinder.gasVolumeContent.value +
+                      data.data.cylinder.gasVolumeContent.unit,
+                  })
+                }
               })
             }
           },

@@ -260,37 +260,37 @@ export default defineComponent({
             if (snapshot.val()) {
               scanCylinders.value = []
               const cyl = JSON.parse(snapshot.val().cylinders)
+              let item = cyl[cyl.length - 1]
 
-              cyl.forEach((item: any) => {
-                CylinderController.confirmCylinderOnSysytem(
-                  '',
-                  item.barcode,
-                  ''
-                ).then((data) => {
-                  if (
-                    data &&
-                    totalCylinders.value.includes(
-                      data.data.cylinder.cylinderNumber
-                    )
-                  ) {
-                    scanCylinders.value.push({
-                      _id: data.data.cylinder._id,
-                      cylinderNumber: data.data.cylinder.cylinderNumber,
-                      barcode: data.data.cylinder.barcode,
-                      volume:
-                        data.data.cylinder.gasVolumeContent.value +
-                        data.data.cylinder.gasVolumeContent.unit,
-                    })
-                  }
-                  form.cylinders.push({
-                    cylinderNo: data.data.cylinder.cylinderNumber,
-                    volume: {
-                      value: data.data.cylinder.gasVolumeContent.value,
-                      unit: data.data.cylinder.gasVolumeContent.unit,
-                    },
+              CylinderController.confirmCylinderOnSysytem(
+                '',
+                item.barcode,
+                ''
+              ).then((data) => {
+                if (
+                  data &&
+                  totalCylinders.value.includes(
+                    data.data.cylinder.cylinderNumber
+                  )
+                ) {
+                  scanCylinders.value.push({
+                    _id: data.data.cylinder._id,
+                    cylinderNumber: data.data.cylinder.cylinderNumber,
+                    barcode: data.data.cylinder.barcode,
+                    volume:
+                      data.data.cylinder.gasVolumeContent.value +
+                      data.data.cylinder.gasVolumeContent.unit,
                   })
+                }
+                form.cylinders.push({
+                  cylinderNo: data.data.cylinder.cylinderNumber,
+                  volume: {
+                    value: data.data.cylinder.gasVolumeContent.value,
+                    unit: data.data.cylinder.gasVolumeContent.unit,
+                  },
                 })
               })
+              // })
             }
           },
           (errorObject: Error) => {

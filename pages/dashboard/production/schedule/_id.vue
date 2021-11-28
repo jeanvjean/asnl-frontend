@@ -283,29 +283,26 @@ export default defineComponent({
               scanCylinders.value = [...newCylinders.value]
               const cyl = JSON.parse(snapshot.val().cylinders)
               form.quantityToFill = cyl.length
-              cyl.forEach((item: any) => {
-                CylinderController.confirmCylinderOnSysytem(
-                  '',
-                  item.barcode,
-                  ''
-                ).then((data) => {
-                  if (
-                    data &&
-                    cynd.includes(data.data.cylinder.cylinderNumber)
-                  ) {
-                    scanCylinders.value.push({
-                      _id: data.data.cylinder._id,
-                      cylinderNumber: data.data.cylinder.cylinderNumber,
-                      barcode: data.data.cylinder.barcode,
-                      volume:
-                        data.data.cylinder.gasVolumeContent.value +
-                        data.data.cylinder.gasVolumeContent.unit,
-                    })
-                    form.volumeToFill +=
-                      data.data.cylinder.gasVolumeContent.value
-                  }
-                })
+
+              let item = cyl[cyl.length - 1]
+              CylinderController.confirmCylinderOnSysytem(
+                '',
+                item.barcode,
+                ''
+              ).then((data) => {
+                if (data && cynd.includes(data.data.cylinder.cylinderNumber)) {
+                  scanCylinders.value.push({
+                    _id: data.data.cylinder._id,
+                    cylinderNumber: data.data.cylinder.cylinderNumber,
+                    barcode: data.data.cylinder.barcode,
+                    volume:
+                      data.data.cylinder.gasVolumeContent.value +
+                      data.data.cylinder.gasVolumeContent.unit,
+                  })
+                  form.volumeToFill += data.data.cylinder.gasVolumeContent.value
+                }
               })
+
               form.cylinders = scanCylinders
             }
           },
