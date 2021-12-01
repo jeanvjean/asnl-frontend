@@ -34,7 +34,7 @@ export function fetchEcrs() {
     }
   })
 }
-export function fetchFcrs(page: Number, limit: Number, query: String = '') {
+export function fetchFcrs(page: number, limit: number, query: string = '') {
   return new Promise<any>(async (resolve, reject) => {
     try {
       const response = await $axios.get(`ecr/fetch-fcrs?page=1&limit=10`)

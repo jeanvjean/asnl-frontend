@@ -65,23 +65,17 @@
             </tr>
           </thead>
 
-          <tbody class="bg-white">
+          <tbody class="bg-white" v-if="form.cylinders.length">
             <tr
               v-for="(cylind, k) in scanCylinders"
               :key="k + getRandomValue()"
             >
-              <!-- <td class="px-4">
-                <input
-                  type="checkbox"
-                  name="internal"
-                  :checked="form.cylinders.includes(cylind._id)"
-                  @input="addCylinders(cylind._id)"
-                />
-              </td> -->
               <td class="px-4 py-2">{{ cylind.cylinderNumber }}</td>
               <td class="px-4 py-2">{{ cylind.volume }}</td>
             </tr>
+          </tbody>
 
+          <tbody class="bg-white">
             <tr class="border border-black">
               <!-- <td class="px-4"></td> -->
               <td class="px-4 py-2">Total Quantity</td>
@@ -206,7 +200,7 @@ export default defineComponent({
     const ecr = reactive<any>({
       customer: '',
       address: '',
-      cylinders: [],
+      cylinders: [''],
       ecrNo: '',
     })
     const shifts = [
@@ -225,7 +219,7 @@ export default defineComponent({
       ecrId: '',
       shift: '',
       date: new Date().toISOString(),
-      cylinders: [],
+      cylinders: [''],
       quantityToFill: 0,
       volumeToFill: 0,
       totalQuantity: 0,
@@ -280,38 +274,41 @@ export default defineComponent({
           'value',
           (snapshot: any) => {
             if (snapshot.val()) {
-              scanCylinders.value = [...newCylinders.value]
               const cyl = JSON.parse(snapshot.val().cylinders)
-              form.quantityToFill = cyl.length
-
-              let item = cyl[cyl.length - 1]
-              CylinderController.confirmCylinderOnSysytem(
-                '',
-                item.barcode,
-                ''
-              ).then((data) => {
-                if (data && cynd.includes(data.data.cylinder.cylinderNumber)) {
-                  scanCylinders.value.push({
-                    _id: data.data.cylinder._id,
-                    cylinderNumber: data.data.cylinder.cylinderNumber,
-                    barcode: data.data.cylinder.barcode,
-                    volume:
-                      data.data.cylinder.gasVolumeContent.value +
-                      data.data.cylinder.gasVolumeContent.unit,
-                  })
-                  form.volumeToFill += data.data.cylinder.gasVolumeContent.value
-                }
-              })
-
-              form.cylinders = scanCylinders
+              if (cyl.length) {
+                let item = cyl[cyl.length - 1]
+                CylinderController.confirmCylinderOnSysytem(
+                  '',
+                  item.barcode,
+                  ''
+                ).then((data) => {
+                  console.log(cynd)
+                  console.log(cynd.includes(data.data.cylinder.cylinderNumber))
+                  if (
+                    cynd.includes(data.data.cylinder.cylinderNumber) === true
+                  ) {
+                    scanCylinders.value.push({
+                      _id: data.data.cylinder._id,
+                      cylinderNumber: data.data.cylinder.cylinderNumber,
+                      barcode: data.data.cylinder.barcode,
+                      volume:
+                        data.data.cylinder.gasVolumeContent.value +
+                        data.data.cylinder.gasVolumeContent.unit,
+                    })
+                    form.quantityToFill += 1
+                    form.volumeToFill +=
+                      data.data.cylinder.gasVolumeContent.value
+                  }
+                  form.cylinders = [...scanCylinders.value]
+                })
+              }
             }
           },
           (errorObject: Error) => {
             console.log('The read failed: ' + errorObject.name)
           }
         )
-      },
-      { immediate: true }
+      }
     )
     watch(
       () => scanCylinders,

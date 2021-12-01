@@ -17,6 +17,7 @@ module.exports = {
         'bg-sidebar': '#131B24',
         'btn-purple': '#5C53FF',
         'btn-red': 'red',
+        'btn-green': 'green',
         'btn-gray': 'grey',
         'role-orange': '#FF7070',
         'role-purple': '#CC5FBF',

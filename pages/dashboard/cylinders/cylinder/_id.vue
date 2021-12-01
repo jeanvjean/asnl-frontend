@@ -159,16 +159,12 @@
             {{ track.data }}
           </div>
           <ul>
-            <li
-              v-for="j in 3"
-              :key="j"
-              class="flex justify-between px-4 py-3 space-x-4"
-            >
+            <li class="flex align-center px-4 py-3 space-x-4">
               <div
                 class="
                   w-4
                   h-4
-                  bg-btn-purple
+                  bg-btn-grey
                   border-2 border-btn-purple
                   rounded-full
                 "
@@ -177,7 +173,15 @@
                 <p class="text-md font-light">
                   {{ track.name }}
                 </p>
-                <p class="text-sm font-light text-gray-500">{{ track.date }}</p>
+                <p class="text-sm font-light text-gray-500">
+                  {{
+                    months[new Date(track.date).getMonth()] +
+                    ' ' +
+                    new Date(track.date).getDate() +
+                    ', ' +
+                    new Date(track.date).getFullYear()
+                  }}
+                </p>
               </div>
             </li>
           </ul>
@@ -221,6 +225,20 @@ export default defineComponent({
     })
     const details = ref({})
     const cylinder = ref([])
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ]
 
     onMounted(() => {
       CylinderController.getCylinder(cylinderId.value).then((response) => {
@@ -274,6 +292,7 @@ export default defineComponent({
       cylinder,
       printWindow,
       printJS,
+      months,
     }
   },
   methods: {

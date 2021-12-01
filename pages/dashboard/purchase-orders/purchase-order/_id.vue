@@ -17,6 +17,7 @@
           </svg>
         </div>
       </div>
+      <div>Scan: {{ scan.formId }}</div>
       <form autocomplete="off" method="POST" @submit.prevent="submit">
         <div
           class="
@@ -258,39 +259,40 @@ export default defineComponent({
           'value',
           (snapshot: any) => {
             if (snapshot.val()) {
-              scanCylinders.value = []
               const cyl = JSON.parse(snapshot.val().cylinders)
-              let item = cyl[cyl.length - 1]
+              if (cyl.length) {
+                let item = cyl[cyl.length - 1]
 
-              CylinderController.confirmCylinderOnSysytem(
-                '',
-                item.barcode,
-                ''
-              ).then((data) => {
-                if (
-                  data &&
-                  totalCylinders.value.includes(
-                    data.data.cylinder.cylinderNumber
-                  )
-                ) {
-                  scanCylinders.value.push({
-                    _id: data.data.cylinder._id,
-                    cylinderNumber: data.data.cylinder.cylinderNumber,
-                    barcode: data.data.cylinder.barcode,
-                    volume:
-                      data.data.cylinder.gasVolumeContent.value +
-                      data.data.cylinder.gasVolumeContent.unit,
+                CylinderController.confirmCylinderOnSysytem(
+                  '',
+                  item.barcode,
+                  ''
+                ).then((data) => {
+                  if (
+                    data &&
+                    totalCylinders.value.includes(
+                      data.data.cylinder.cylinderNumber
+                    )
+                  ) {
+                    scanCylinders.value.push({
+                      _id: data.data.cylinder._id,
+                      cylinderNumber: data.data.cylinder.cylinderNumber,
+                      barcode: data.data.cylinder.barcode,
+                      volume:
+                        data.data.cylinder.gasVolumeContent.value +
+                        data.data.cylinder.gasVolumeContent.unit,
+                    })
+                  }
+                  form.cylinders.push({
+                    cylinderNo: data.data.cylinder.cylinderNumber,
+                    volume: {
+                      value: data.data.cylinder.gasVolumeContent.value,
+                      unit: data.data.cylinder.gasVolumeContent.unit,
+                    },
                   })
-                }
-                form.cylinders.push({
-                  cylinderNo: data.data.cylinder.cylinderNumber,
-                  volume: {
-                    value: data.data.cylinder.gasVolumeContent.value,
-                    unit: data.data.cylinder.gasVolumeContent.unit,
-                  },
                 })
-              })
-              // })
+                // })
+              }
             }
           },
           (errorObject: Error) => {
@@ -378,7 +380,7 @@ export default defineComponent({
         getBranches(),
         getEcr(),
         fetchGasTypes(),
-        initiateScan(),
+        initCylinder(),
       ])
     })
 
@@ -421,6 +423,7 @@ export default defineComponent({
 
     return {
       form,
+      scan,
       increaseCounter,
       removeCylinders,
       branchesArray,

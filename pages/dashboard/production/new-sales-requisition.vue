@@ -1,13 +1,16 @@
 <template>
   <div :key="componentKey">
-    <div class="py-4 px-2">
+    <div class="py-4 px-2" id="printJS-barcode">
       <div class="flex space-x-0 items-center">
         <button
           class="px-6 py-2 tracking-wide font-medium border-2 border-gray-200"
           :class="{
             'bg-purple-600 text-white': selected.customer,
           }"
-          @click=";(selected.customer = true), (selected.walkin = false)"
+          @click="
+            ;(selected.customer = true), (selected.walkin = false)
+            form.type = 'regular'
+          "
         >
           Air Separation Cylinder
         </button>
@@ -16,7 +19,10 @@
           :class="{
             'bg-purple-600 text-white': selected.walkin,
           }"
-          @click=";(selected.walkin = true), (selected.customer = false)"
+          @click="
+            ;(selected.walkin = true), (selected.customer = false)
+            form.type = 'walk-in'
+          "
         >
           Walk-in Customer
         </button>
@@ -33,29 +39,34 @@
               :label-title="'Customer Name'"
               :default-option-text="'Select a Customer'"
               :selectArray="customers"
-              @get="form.customerName = $event.value"
-            />
-          </div>
-          <div class="w-full space-y-2">
-            <input-component
-              :label-title="'ECR Number'"
-              :input-placeholder="'Enter ECR Number'"
-              :default-value="form.ecrNo"
-              @get="form.ecrNo = $event.value"
+              :initValue="form.customer.name"
+              @get="
+                form.customer.id = $event.value
+                getCustomer($event.value)
+                getDispEcrs()
+              "
             />
           </div>
           <div class="w-full space-y-2">
             <select-component
-              :input-placeholder="'Select Gas Type'"
-              :label-title="'Gas Type'"
-              :init-value="form.cylinderType"
-              :default-option-text="'Select ASNL Cylinder'"
-              :select-array="gasTypes"
-              @get="form.cylinderType = $event.value"
+              :label-title="'ECR Number'"
+              :default-option-text="'Select ECR Number'"
+              :selectArray="dispEcrs"
+              @get="setEcr($event)"
+              :initValue="form.ecrNo"
+            />
+          </div>
+          <div class="w-full space-y-2" v-if="form.ecrNo">
+            <input-component
+              :labelTitle="'Gas Type'"
+              :default-value="form.cylinderType"
+              :inputPlaceholder="'Gas type'"
+              :isDisabled="true"
             />
           </div>
         </div>
         <div class="px-4 my-8">
+          <div v-if="scan.formId">Scan ID:{{ scan.formId }}</div>
           <h1 class="font-semibold uppercase mb-2">Cylinder Details</h1>
 
           <div>
@@ -75,15 +86,12 @@
                     </tr>
                   </thead>
                   <tbody v-if="selected.customer">
-                    <tr v-for="(cylinder, i) in internalCylinders" :key="i">
+                    <tr v-for="(cylinder, i) in form.cylinders" :key="i">
                       <td>{{ i + 1 }}</td>
                       <td>
-                        <select-component
-                          :input-placeholder="'ASNL Number'"
-                          :init-value="cylinder.cylinderNumber"
-                          :default-option-text="'Select ASNL Cylinder'"
-                          :select-array="cylinders"
-                          @get="cylinder.cylinderNumber = $event.value"
+                        <input-component
+                          :input-placeholder="'Volume'"
+                          :default-value="cylinder.cylinderNumber"
                         />
                       </td>
                       <td>
@@ -95,8 +103,7 @@
                             ;(cylinder.volume.value = $event.value),
                               (cylinder.amount =
                                 Number(cylinder.unitPrice) *
-                                Number(cylinder.volume.value)),
-                              changeComponentKey()
+                                Number(cylinder.volume.value))
                           "
                         />
                       </td>
@@ -107,83 +114,33 @@
                           :input-type="'number'"
                           @get="
                             cylinder.unitPrice = $event.value
-                            ;(cylinder.amount =
+                            cylinder.amount =
                               Number(cylinder.unitPrice) *
-                              Number(cylinder.volume.value)),
-                              changeComponentKey()
+                              Number(cylinder.volume.value)
                           "
                         />
                       </td>
                       <td>
-                        <input-component
-                          :input-placeholder="'Amount'"
-                          :default-value="cylinder.amount"
-                          :input-type="'number'"
-                          :is-disabled="true"
-                        />
-                      </td>
-                      <td>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          class="fill-current text-gray-500 w-5 h-5 mx-auto"
-                          @click="decrement(j)"
+                        <div
+                          class="
+                            py-2
+                            px-8
+                            inline
+                            border-4
+                            rounded-sm
+                            font-semibold
+                            text-gray-900 text-gray-500
+                            border-gray-200
+                            bg-white
+                          "
                         >
-                          <path
-                            fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      </td>
-                    </tr>
-                  </tbody>
-                  <tbody v-else>
-                    <tr v-for="(cylinder, j) in externalCylinders" :key="j">
-                      <td>{{ j + 1 }}</td>
-                      <td>
-                        <input-component
-                          :input-placeholder="'Cylinder Number'"
-                          :default-value="cylinder.cylinderNumber"
-                          @get="cylinder.cylinderNumber = $event.value"
-                        />
-                      </td>
-                      <td>
-                        <input-component
-                          :input-placeholder="'Volume'"
-                          :default-value="cylinder.volume.value"
-                          :input-type="'number'"
-                          @get="
-                            ;(cylinder.volume.value = $event.value),
-                              (cylinder.amount =
-                                Number(cylinder.unitPrice) *
-                                Number(cylinder.volume.value)),
-                              changeComponentKey()
-                          "
-                        />
-                      </td>
-                      <td>
-                        <input-component
-                          :input-placeholder="'Cylinder Size'"
-                          :default-value="cylinder.unitPrice"
-                          :input-type="'number'"
-                          @get="
-                            ;(cylinder.unitPrice = $event.value),
-                              (cylinder.amount =
-                                Number(cylinder.unitPrice) *
-                                Number(cylinder.volume.value)),
-                              changeComponentKey()
-                          "
-                        />
-                      </td>
-                      <td>
-                        <input-component
-                          :input-placeholder="'Amount'"
-                          :default-value="cylinder.amount"
-                          :input-type="'number'"
-                          :is-disabled="true"
-                        />
+                          <span
+                            v-show="cylinder.amount"
+                            class="font-semibold text-gray-900 text-gray-500"
+                          >
+                            {{ cylinder.amount }}</span
+                          >
+                        </div>
                       </td>
                       <td>
                         <svg
@@ -191,7 +148,7 @@
                           viewBox="0 0 20 20"
                           fill="currentColor"
                           class="fill-current text-gray-500 w-5 h-5 mx-auto"
-                          @click="decrement(j)"
+                          @click="decrement(i)"
                         >
                           <path
                             fill-rule="evenodd"
@@ -211,30 +168,35 @@
             <button
               class="flex items-center space-x-2 text-purple-500"
               type="button"
-              @click="increment"
+              v-show="!scan.formId"
+              @click="initCylinder"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                class="fill-current w-5 h-5"
-              >
+              <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
                 <path
-                  fill-rule="evenodd"
-                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                  clip-rule="evenodd"
+                  fill="currentColor"
+                  d="M4,6H6V18H4V6M7,6H8V18H7V6M9,6H12V18H9V6M13,6H14V18H13V6M16,6H18V18H16V6M19,6H20V18H19V6M2,4V8H0V4A2,2 0 0,1 2,2H6V4H2M22,2A2,2 0 0,1 24,4V8H22V4H18V2H22M2,16V20H6V22H2A2,2 0 0,1 0,20V16H2M22,20V16H24V20A2,2 0 0,1 22,22H18V20H22Z"
                 />
               </svg>
-              <span>Add More</span>
+              <span>Scan Cylinders</span>
             </button>
+          </div>
+          <div class="mt-6 w-1/3" v-if="auth.name">
+            <p class="font-bold tracking-wide text-base">Prepared by:</p>
+            {{ auth.name.toUpperCase() }}
           </div>
         </div>
 
         <div class="flex items-center space-x-6 px-4 mt-4">
           <button-component
-            v-if="form.cylinders.length > 0"
+            @click="printJS('printJS-barcode', 'html')"
             :button-class="'bg-btn-purple text-white w-full md:w-1/4'"
-            :button-text="'Send'"
+            :button-text="'Print'"
+          />
+
+          <button-component
+            @click="submit"
+            :button-class="'bg-btn-white border border-btn-purple text-btn-purple w-full md:w-1/4'"
+            :button-text="'Save'"
             :loading-status="buttonLoading"
           />
         </div>
@@ -251,6 +213,7 @@ import {
   ref,
   useContext,
   useRouter,
+  watch,
 } from '@nuxtjs/composition-api'
 import Validator from 'validatorjs'
 import { CylinderController } from '@/module/Cylinder'
@@ -260,22 +223,42 @@ import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import { ValidatorObject } from '@/module/Validation'
 import { createRequisition } from '@/module/Sales'
+import { initiateScan } from '@/module/SCAN'
+import { fetchEcrs } from '@/module/ECR'
+import { values } from 'lodash'
+import { mainStore } from '@/module/Pinia'
+import printJS from 'print-js'
 
 export default defineComponent({
   components: { InputComponent, SelectComponent, ButtonComponent },
   layout: 'noSidebar',
   setup() {
+    const appStore = mainStore()
+    const auth: any = appStore.getLoggedInUser
+
     const selected = reactive({
       customer: true,
       walkin: false,
     })
 
+    const scan = reactive<any>({
+      status: '',
+      _id: '',
+      cylinders: [],
+      formId: '',
+      initNum: 0,
+    })
+
     const form = reactive({
-      customerName: '',
+      customer: {
+        name: '',
+        id: '',
+      },
       ecrNo: '',
       date: new Date().toISOString(),
       cylinderType: '',
       cylinders: [],
+      type: 'regular',
     })
     const componentKey = ref<number>(0)
 
@@ -284,10 +267,38 @@ export default defineComponent({
     }
 
     const cylinders = ref<any>([])
+    const ecrCylinders = ref<any>([])
     const customers = ref<any>([])
+    const ecrs = ref<any>([])
+    const dispEcrs = ref<any>([])
     const externalCylinders = ref<any>([])
     const internalCylinders = ref<any>([])
 
+    const scanCylinders = ref([])
+
+    const { $fire } = useContext()
+    const db = $fire.database
+
+    const initCylinder = () => {
+      initiateScan().then((response) => {
+        scan.status = response.status
+        scan._id = response._id
+        scan.cylinders = response.cylinders
+        scan.formId = response.formId
+        scan.initNum = response.initNum
+      })
+    }
+    const setEcr = (event: any) => {
+      // const Item = ecrs.value.find((item: any) => item._id === event.value)
+      ecrs.value.forEach((item: any) => {
+        if (item.value == event.value) {
+          form.ecrNo = item.name
+          form.cylinderType = item.gas
+          ecrCylinders.value = item.cylinders
+          console.log(ecrCylinders.value)
+        }
+      })
+    }
     const increment = () => {
       if (selected.customer) {
         internalCylinders.value.push({
@@ -311,11 +322,74 @@ export default defineComponent({
         })
       }
     }
+
+    watch(
+      () => scan.formId,
+      (currentValue, oldValue) => {
+        console.log(currentValue)
+        const ref = db.ref(`forms/${currentValue}/form`)
+        // const ref = db.ref(`forms/1/form`)
+        ref.on(
+          'value',
+          (snapshot: any) => {
+            if (snapshot.val()) {
+              const cyl = JSON.parse(snapshot.val().cylinders)
+              if (cyl.length) {
+                var item = cyl[cyl.length - 1]
+                CylinderController.confirmCylinderOnSysytem(
+                  '',
+                  item.barcode,
+                  ''
+                ).then((data) => {
+                  console.log(ecrCylinders.value)
+                  console.log(data.data.cylinder)
+                  if (ecrCylinders.value.includes(data.data.cylinder._id)) {
+                    console.log(data.data)
+                    cylinders.value.push({
+                      noOfCylinders: data.data.cylinder.cylNo,
+                      cylinderNumber: data.data.cylinder.cylinderNumber,
+                      volume: {
+                        value: data.data.cylinder.gasVolumeContent.value,
+                        unit: data.data.cylinder.gasVolumeContent.unit,
+                      },
+                      unitPrice: data.data.cylinder.purchaseCost?.cost,
+                      amount:
+                        data.data.cylinder.purchaseCost?.cost *
+                        data.data.cylinder.cylNo,
+                    })
+                    form.cylinders = cylinders.value
+                  } else {
+                    context.$toast.error(
+                      'The cylinder is either empty of does not belong to the ECR'
+                    )
+                  }
+                })
+              }
+            }
+          },
+          (errorObject: Error) => {
+            console.log('The read failed: ' + errorObject.name)
+          }
+        )
+      }
+    )
+
     const gasTypes = ref([])
 
+    const getCustomer = (value: any) => {
+      customers.value.forEach((item: any) => {
+        console.log(value)
+        if (item.value == value) {
+          console.log(item.value)
+          console.log(item.name)
+          form.customer.name = item.name
+        }
+      })
+    }
     const getGases = () => {
       CylinderController.getCylinders().then((response) => {
         const myResponse = response.data.data.cylinders
+        // console.log(myResponse)
         gasTypes.value = myResponse.map((element: any) => {
           return {
             name: element.gasName,
@@ -325,21 +399,31 @@ export default defineComponent({
       })
     }
 
-    const fetchCylinders = () => {
-      CylinderController.getRegisteredCylindersUnPaginated().then(
-        (response) => {
-          cylinders.value = response.data.map((element: any) => {
-            return {
-              name: element.cylinderNumber,
-              value: element.cylinderNumber,
-            }
-          })
-        }
+    const fetchAllEcr = () => {
+      console.log('here')
+      fetchEcrs().then((response) => {
+        console.log(response.docs)
+        ecrs.value = response.docs.map((item: any) => {
+          return {
+            name: item.ecrNo,
+            value: item._id,
+            _id: item.customer._id,
+            cylinders: item.removeArr.map((id: any) => id),
+            gas: item.gasType.gasName,
+          }
+        })
+        console.log(ecrs.value)
+      })
+    }
+    const getDispEcrs = () => {
+      dispEcrs.value = ecrs.value.filter(
+        (item: any) => item._id === form.customer.id
       )
     }
+
     const fetchCustomers = () => {
       CustomerController.fetchUnPaginatedCustomers().then((response) => {
-        console.log(response)
+        console.log(response.map((element: any) => element.name))
         customers.value = response.map((element: any) => {
           return {
             name: element.name,
@@ -350,27 +434,27 @@ export default defineComponent({
     }
 
     function decrement(index: any) {
-      if (selected.customer) {
-        internalCylinders.value.splice(index, 1)
-      } else if (selected.walkin) {
-        externalCylinders.value.splice(index, 1)
-      }
+      form.cylinders.splice(index, 1)
     }
 
     const buttonLoading = ref<Boolean>(false)
 
     onMounted(() => {
-      Promise.all([getGases(), fetchCylinders(), fetchCustomers()])
+      Promise.all([getGases(), fetchCustomers(), fetchAllEcr()])
     })
     const context = useContext()
     const router = useRouter()
 
     const submit = () => {
-      form.cylinders = selected.customer
-        ? internalCylinders.value
-        : externalCylinders.value
+      // form.cylinders = selected.customer
+      //   ? internalCylinders.value
+      //   : externalCylinders.value
+
+      console.log(form)
+
       const rules = {
-        customerName: 'required|string',
+        'customer.name': 'required|string',
+        'customer.id': 'required|string',
         ecrNo: 'required|string',
         date: 'required|date',
         cylinderType: 'required|string',
@@ -415,6 +499,17 @@ export default defineComponent({
       changeComponentKey,
       componentKey,
       customers,
+      initCylinder,
+      scanCylinders,
+      scan,
+      ecrs,
+      dispEcrs,
+      getDispEcrs,
+      ecrCylinders,
+      setEcr,
+      auth,
+      getCustomer,
+      printJS,
     }
   },
 })

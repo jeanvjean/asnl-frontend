@@ -137,7 +137,7 @@ export default defineComponent({
     const pageNumber = ref(1)
     const pageLimit = ref(10)
 
-    const getEcrs = (page: Number, limit: Number, query: String = '') => {
+    const getEcrs = (page: number, limit: number, query: string = '') => {
       showLoader.value = true
       fetchFcrs(page, limit, query)
         .then((response) => {

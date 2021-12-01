@@ -66,14 +66,14 @@
                   v-if="slotProps.rowObject.type == 'customer'"
                   :to="
                     slotProps.rowObject.asnlCylinders < 1
-                      ? ''
+                      ? `/dashboard/production/ecr/${slotProps.rowId}`
                       : `/dashboard/production/ecr/${slotProps.rowId}`
                   "
                   class="px-6 py-1 rounded-sm text-sm"
                   :class="
                     slotProps.rowObject.asnlCylinders < 1
                       ? 'border border-btn-gray text-btn-gray'
-                      : ''
+                      : 'text-btn-purple text-sm  border border-btn-purple'
                   "
                   @click="generateEcr(slotProps.rowObject)"
                 >
@@ -96,7 +96,7 @@
                   :class="
                     slotProps.rowObject.asnlCylinders < 1
                       ? 'border border-btn-gray text-btn-gray'
-                      : ''
+                      : 'text-btn-purple text-sm  border border-btn-purple'
                   "
                   @click="generateEcr(slotProps.rowObject)"
                 >

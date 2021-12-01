@@ -33,6 +33,7 @@
           >
             <template #action="slotProps">
               <router-link
+                v-if="!slotProps.rowObject.produced"
                 :to="`/dashboard/production/status/${slotProps.rowId}`"
                 class="
                   px-6
@@ -45,6 +46,20 @@
               >
                 View
               </router-link>
+              <span
+                v-else
+                class="
+                  text-btn-green
+                  bg-green-100
+                  rounded-lg
+                  px-2
+                  py-2
+                  capitalize
+                  text-center
+                "
+              >
+                Completed
+              </span>
             </template>
           </table-component>
         </div>
@@ -99,6 +114,7 @@ export default defineComponent({
       showLoader.value = true
       fetchSchedules(page, limit, query)
         .then((response) => {
+          console.log(response)
           schedulesBody.value = response.docs.map((schedule: any) => {
             return {
               ecrNo: schedule.ecrNo,
@@ -108,6 +124,7 @@ export default defineComponent({
               status: schedule.status,
               date: new Date(schedule.date).toDateString(),
               _id: schedule._id,
+              produced: schedule.produced,
             }
           })
 

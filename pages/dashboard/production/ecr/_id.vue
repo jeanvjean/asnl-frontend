@@ -277,12 +277,10 @@ export default defineComponent({
           (snapshot: any) => {
             // console.log(snapshot.val())
             if (snapshot.val()) {
-              scanCylinders.value = [...newCylinders.value]
+              // scanCylinders.value = [...newCylinders.value]
               const cyl = JSON.parse(snapshot.val().cylinders)
               console.log(cyl)
-              if (biggie.value < 10) {
-                biggie.value = biggie.value + 1
-              }
+
               let item = cyl[cyl.length - 1]
               CylinderController.confirmCylinderOnSysytem(
                 '',
@@ -309,49 +307,49 @@ export default defineComponent({
       },
       { immediate: true }
     )
-    const biggie = ref(1)
-    watch(
-      () => biggie.value,
-      (currentValue, oldValue) => {
-        if (scan.formId) {
-          console.log(scan.formId)
+    // const biggie = ref(1)
+    // watch(
+    //   () => biggie.value,
+    //   (currentValue, oldValue) => {
+    //     if (scan.formId) {
+    //       console.log(scan.formId)
 
-          const ref = db.ref(`forms/${scan.formId}/form`)
+    //       const ref = db.ref(`forms/${scan.formId}/form`)
 
-          ref
-            .get()
-            .then((snapshot: any) => {
-              if (snapshot.exists()) {
-                let Rcylinders = JSON.parse(snapshot.val().cylinders)
+    //       ref
+    //         .get()
+    //         .then((snapshot: any) => {
+    //           if (snapshot.exists()) {
+    //             let Rcylinders = JSON.parse(snapshot.val().cylinders)
 
-                let obj = {
-                  cylinders: JSON.stringify([
-                    ...Rcylinders,
-                    {
-                      _id: '619e29b1764ef5d96bbe3850',
-                      cylinderNumber: biggie.value,
-                      assignedNumber: 'ASNL000012',
-                      barcode: 'REG-CYL15',
-                    },
-                  ]),
-                  form_id: scan.formId,
-                  status: 'success',
-                }
-                var updates: any = {}
-                updates[`/forms/${scan.formId}/form`] = obj
-                return db.ref().update(updates)
-              } else {
-                console.log('No data available')
-              }
-            })
-            .catch((error: any) => {
-              console.error(error)
-            })
-          //
-        }
-      },
-      { immediate: true }
-    )
+    //             let obj = {
+    //               cylinders: JSON.stringify([
+    //                 ...Rcylinders,
+    //                 {
+    //                   _id: '619e29b1764ef5d96bbe3850',
+    //                   cylinderNumber: biggie.value,
+    //                   assignedNumber: 'ASNL000012',
+    //                   barcode: 'REG-CYL15',
+    //                 },
+    //               ]),
+    //               form_id: scan.formId,
+    //               status: 'success',
+    //             }
+    //             var updates: any = {}
+    //             updates[`/forms/${scan.formId}/form`] = obj
+    //             return db.ref().update(updates)
+    //           } else {
+    //             console.log('No data available')
+    //           }
+    //         })
+    //         .catch((error: any) => {
+    //           console.error(error)
+    //         })
+    //       //
+    //     }
+    //   },
+    //   { immediate: true }
+    // )
 
     // let obj = {
     //   cylinders: [],
@@ -369,12 +367,7 @@ export default defineComponent({
         barcode: item.barcode,
         volume: item.gasVolumeContent.value + item.gasVolumeContent.unit,
       })
-      newCylinders.value.push({
-        _id: item._id,
-        cylinderNumber: item.cylinderNumber,
-        barcode: item.barcode,
-        volume: item.gasVolumeContent.value + item.gasVolumeContent.unit,
-      })
+
       changeComponentKey()
     }
     const getGases = () => {
@@ -392,7 +385,7 @@ export default defineComponent({
     const getIcn = (icnId: any) => {
       fetchIcn(icnId)
         .then((response: any) => {
-          console.log(response)
+          // console.log(response)
           form.customer = response.customer._id
           constantsValues.icnNo = response.icnNo
           form.icn_id = response._id
@@ -406,7 +399,7 @@ export default defineComponent({
           totalCylinders.value = response.data.map(
             (element: any) => element.cylinderNumber
           )
-
+          console.log(response.data)
           form.cylinders = response.data.map((element: any) => {
             return {
               cylinderId: element.cylinderNumber,

@@ -269,7 +269,7 @@ export default defineComponent({
           'value',
           (snapshot: any) => {
             if (snapshot.val()) {
-              scanCylinders.value = [...newCylinders.value]
+              // scanCylinders.value = [...newCylinders.value, scanCylinders.value]
               const cyl = JSON.parse(snapshot.val().cylinders)
               let item = cyl[cyl.length - 1]
               // console.log(cylinders)
@@ -306,12 +306,7 @@ export default defineComponent({
         barcode: item.barcode,
         volume: item.gasVolumeContent.value + item.gasVolumeContent.unit,
       })
-      newCylinders.value.push({
-        _id: item._id,
-        cylinderNumber: item.cylinderNumber,
-        barcode: item.barcode,
-        volume: item.gasVolumeContent.value + item.gasVolumeContent.unit,
-      })
+
       changeComponentKey()
     }
     const getGases = () => {

@@ -80,7 +80,7 @@
                 <input
                   v-if="row.status != 'filled'"
                   type="checkbox"
-                  @change="addCylinders(row.id)"
+                  @change="addCylinders(row)"
                 />
               </td>
               <td
@@ -171,7 +171,7 @@
               Total Volume
             </div>
             <div class="text-lg tracking-tight">
-              {{ productionDetail.totalVolume }}
+              {{ productionDetail.totalVolume }}kg
             </div>
           </div>
           <div class="px-4 py-4 grid grid-cols-2 gap-10">
@@ -203,7 +203,7 @@
               Volume to be Filled
             </div>
             <div class="text-lg tracking-tight">
-              {{ productionDetail.volumeToFill }}
+              {{ productionDetail.volumeToFill }}kg
             </div>
           </div>
         </div>
@@ -256,10 +256,10 @@ export default defineComponent({
       ecrNo: '',
       shift: '',
       date: '',
-      totalQuantity: '0',
-      totalVolume: '0',
-      quantityToFill: '0',
-      volumeToFill: '0',
+      totalQuantity: 0,
+      totalVolume: 0,
+      quantityToFill: 0,
+      volumeToFill: 0,
       cylinders: [],
       status: '',
     })
@@ -273,9 +273,11 @@ export default defineComponent({
       completed: false,
       update: false,
     }
-
+    const totalVolume = ref<number>(0)
+    const gasVolume = ref(0)
     const getProductionDetail = (scheduleId: string) => {
       fetchSchedule(scheduleId).then((response) => {
+        console.log(response)
         productionDetail.customerName = response.customer
           ? response.customer.name
           : ''
@@ -301,21 +303,29 @@ export default defineComponent({
         buttonsToShow.completed = productionDetail.cylinders.every(
           (cy: any) => cy.status === 'filled'
         )
+
         buttonsToShow.update = !buttonsToShow.completed
-        productionDetail.totalVolume = `${response.totalVolume.value} ${response.totalVolume.unit}`
-        productionDetail.volumeToFill = `${response.volumeToFill.value} ${response.volumeToFill.unit}`
+        response.cylinders.forEach((cylinder: any) => {
+          totalVolume.value += cylinder.gasVolumeContent.value
+          console.log(totalVolume.value)
+          console.log(cylinder.gasVolumeContent.value)
+        })
+        productionDetail.totalVolume = totalVolume.value
+        productionDetail.volumeToFill = 0
       })
     }
-
     const cylinders = ref<string[]>([])
 
-    const addCylinders = (cylinderId: string) => {
+    const addCylinders = (cylinder: any) => {
       let index: number
-      if (cylinders.value.includes(cylinderId)) {
-        index = cylinders.value.indexOf(cylinderId)
+
+      if (cylinders.value.includes(cylinder.id)) {
+        index = cylinders.value.indexOf(cylinder.id)
         cylinders.value.splice(index, 1)
+        productionDetail.volumeToFill -= cylinder.volume
       } else {
-        cylinders.value.push(cylinderId)
+        cylinders.value.push(cylinder.id)
+        productionDetail.volumeToFill += cylinder.volume
       }
     }
 
@@ -326,7 +336,8 @@ export default defineComponent({
     const finalise = () => {
       buttonLoading.value = true
       completeSchedule(schedule)
-        .then(() => {
+        .then((data) => {
+          console.log(data)
           router.push('/dashboard/production')
         })
         .finally(() => {
