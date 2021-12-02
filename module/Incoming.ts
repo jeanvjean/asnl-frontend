@@ -24,3 +24,13 @@ export function fetchIcn(icnId: string) {
     }
   })
 }
+export function createOcn(payload: object) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await $axios.post(`/ocn/create-ocn`, payload)
+      resolve(response.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}

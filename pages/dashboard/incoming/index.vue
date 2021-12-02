@@ -64,9 +64,21 @@
               <template #action="slotProps">
                 <router-link
                   v-if="slotProps.rowObject.type == 'customer'"
-                  :to="`/dashboard/production/ecr/${slotProps.rowId}`"
+                  :to="
+                    slotProps.rowObject.asnlCylinders +
+                      slotProps.rowObject.companyCylinders <
+                    1
+                      ? ''
+                      : `/dashboard/production/ecr/${slotProps.rowId}`
+                  "
                   class="px-6 py-1 rounded-sm text-sm"
-                  :class="'text-btn-purple text-sm  border border-btn-purple'"
+                  :class="
+                    slotProps.rowObject.asnlCylinders +
+                      slotProps.rowObject.companyCylinders <
+                    1
+                      ? 'text-btn-gray text-sm  border border-btn-gray'
+                      : 'text-btn-purple text-sm  border border-btn-purple'
+                  "
                   @click="generateEcr(slotProps.rowObject)"
                 >
                   Generate ECR
@@ -74,7 +86,9 @@
                 <router-link
                   v-if="slotProps.rowObject.type == 'supplier'"
                   :to="
-                    slotProps.rowObject.asnlCylinders < 1
+                    slotProps.rowObject.asnlCylinders +
+                      slotProps.rowObject.companyCylinders <
+                    1
                       ? ''
                       : `/dashboard/production/fcr/${slotProps.rowId}`
                   "

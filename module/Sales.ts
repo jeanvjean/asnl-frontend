@@ -31,3 +31,17 @@ export function fetchRequisitions(
     }
   })
 }
+export function fetchRequisition(
+  id: string = ''
+) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await $axios.get(
+        `/sales/fetch-sales-req/${id}`
+      )
+      resolve(response.data.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}

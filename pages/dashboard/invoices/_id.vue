@@ -4,24 +4,9 @@
       <div class="bg-white w-3/4 mx-auto">
         <div class="flex justify-between px-6 py-4">
           <h1 class="flex-1 text-gray-400 font-medium text-lg">
-            Invoice Details
+            Requisition Details
           </h1>
           <div class="flex space-x-6">
-            <button
-              class="
-                flex
-                items-center
-                bg-btn-purple
-                text-white
-                space-x-4
-                px-4
-                py-2
-                rounded-sm
-              "
-              @click="genereteOCN"
-            >
-              <span>Generate OCN</span>
-            </button>
             <button
               class="
                 flex
@@ -33,8 +18,9 @@
                 border border-btn-purple
                 text-btn-purple
               "
+              @click="generateInvoice"
             >
-              Generate Reciept
+              Generate Invoice
             </button>
             <button
               class="
@@ -46,6 +32,10 @@
                 px-4
                 py-2
                 rounded-sm
+              "
+              @click="
+                status = 'success'
+                showConfirmation = true
               "
             >
               <svg
@@ -65,14 +55,6 @@
             </button>
           </div>
         </div>
-        <div class="ml-6">
-          <h2 class="font-medium text-md">
-            Payment Status:
-            <span class="text-gray-600">{{
-              form.amountPaid == form.totalAmount ? 'Paid' : 'Not Completed'
-            }}</span>
-          </h2>
-        </div>
         <div class="w-full overflow-x-auto px-8 my-8">
           <div
             class="
@@ -85,14 +67,14 @@
             <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Customer Name</h4>
-                <p class="text-gray-600">{{ form.customer.name }}</p>
+                <p>{{ details.customer.name }}</p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Cylinder Type</h4>
-                <p>{{ cylinderType }}</p>
+                <h4 class="text-gray-400 font-medium">ERC No</h4>
+                <p>{{ details.ecrNo }}</p>
               </div>
             </div>
 
@@ -101,11 +83,11 @@
                 <h4 class="text-gray-400 font-medium">Date</h4>
                 <p>
                   {{
-                    new Date(form.date).getMonth() +
+                    new Date(details.date).getMonth() +
                     '/' +
-                    new Date(form.date).getDate() +
+                    new Date(details.date).getDate() +
                     '/' +
-                    new Date(form.date).getFullYear()
+                    new Date(details.date).getFullYear()
                   }}
                 </p>
               </div>
@@ -123,7 +105,7 @@
                 <th class="px-4 py-2 text-left">Amount</th>
               </tr>
             </thead>
-            <tbody v-if="form.receiptType === 'cylinder' && cylinders.length">
+            <tbody>
               <tr v-for="(cylinder, i) in cylinders" :key="i">
                 <td class="px-4 py-2 text-right">0{{ i + 1 }}.</td>
                 <td class="px-4 py-2 border border-gray-300 text-left">
@@ -142,11 +124,11 @@
             </tbody>
           </table>
         </div>
-        <div class="w-full overflow-x-auto px-8 pb-4 my-4">
+        <div class="w-full overflow-x-auto px-8 my-4">
           <div
             class="
               grid grid-rows-1
-              lg:grid-cols-3
+              lg:grid-cols-4
               divide divide-x-2 divide-gray-300
               mt-8
             "
@@ -167,18 +149,25 @@
 
             <div class="flex items-center justify-center">
               <div class="space-y-4">
+                <h4 class="text-gray-400 font-medium">VAT</h4>
+                <p>7%</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-center">
+              <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Total Amount</h4>
-                <p class="leading-3">₦ {{ form.totalAmount }}.00</p>
+                <p class="leading-3">{{ totalAmount }}.00</p>
               </div>
             </div>
           </div>
         </div>
-        <div class="flex items-start py-2 px-2 mx-4" v-if="false">
-          <!--  <div>
+        <div class="flex items-start py-2 px-2 mx-4">
+          <div>
             <p class="text-gray-500 text-sm font-medium leading-6">
               Initiated at
             </p>
-           <p class="text-gray-500 text-sm font-medium">
+            <p class="text-gray-500 text-sm font-medium">
               <span>
                 {{
                   new Date(preparedBy.date).getMonth() +
@@ -192,8 +181,8 @@
                 {{ new Date(preparedBy.date).getHours() }}:
                 {{ new Date(preparedBy.date).getMinutes() }}</span
               >
-            </p> -->
-          <!-- <div class="flex items-start space-x-4 py-2">
+            </p>
+            <div class="flex items-start space-x-4 py-2">
               <img
                 v-if="preparedBy.image != null"
                 class="h-10 w-10 rounded-full"
@@ -210,8 +199,8 @@
                 <p class="text-black text-lg">{{ preparedBy.name }}</p>
                 <p class="text-gray-600 text-sm">{{ preparedBy.subrole }}</p>
               </div>
-            </div> 
-          </div>-->
+            </div>
+          </div>
           <div v-show="false">
             <p class="text-gray-500 text-sm font-medium leading-6">
               Initiated at
@@ -255,204 +244,116 @@
     </div>
   </div>
 </template>
-
 <script lang="ts">
 import {
   defineComponent,
+  ref,
+  watch,
+  useRoute,
   onBeforeMount,
   reactive,
-  ref,
-  useRoute,
 } from '@nuxtjs/composition-api'
-import InputComponent from '@/components/Form/Input.vue'
-import SelectComponent from '@/components/Form/Select.vue'
-import { getRandomValue } from '@/constants/utils'
-import { CylinderController } from '@/module/Cylinder'
-import { CustomerController } from '@/module/Customer'
-import { ProductObject } from '@/module/Product'
-import { fetchInvoice } from '@/module/Account'
-import { createOcn } from '@/module/Incoming'
+import { fetchRequisition } from '~/module/Sales'
+import { createInvoice } from '~/module/Account'
+var converter = require('number-to-words')
 
 export default defineComponent({
-  components: {
-    SelectComponent,
-    InputComponent,
-  },
+  name: 'Requisition',
   layout: 'dashboard',
   setup() {
-    const form = reactive<any>({
-      customer: '',
-      receiptType: '',
-      totalAmount: '',
-      invoiceNo: '',
-      amountPaid: '',
-      id: '',
+    const types = [{ name: 'Assign Cylinder', value: 'temp' }]
+    const reciepients = [{ name: 'Oxygen', value: 'temp' }]
+    const showConfirmation = ref(false)
+    const showFinalStep = ref(false)
+    const status = ref('')
+    const message = ref('')
+    const route = useRoute()
+
+    const id = route.value.params.id
+
+    const details = reactive({
+      customer: {
+        name: '',
+        id: '',
+        type: '',
+      },
+      ecrNo: '',
       date: null,
     })
-    const componentKey = ref<Number>()
-    const invoiceId: String = useRoute().value.params.id
-    const customerArray = ref<any>([])
-    const receiptTypes = [
-      {
-        name: 'Cylinder',
-        value: 'cylinder',
-      },
-      {
-        name: 'Product',
-        value: 'product',
-      },
-    ]
 
-    const headers = ref<Array<String>>([])
-    const products = ref<Array<any>>([])
-    const cylinders = ref<Array<any>>([])
-    const productsArray = ref<Array<any>>([])
-
+    const preparedBy = reactive({
+      email: '',
+      image: '',
+      name: '',
+      subrole: '',
+      date: null,
+    })
+    const cylinders = ref<any>([])
     const totalVolume = ref(0)
-    const cylinderType = ref('')
+    const totalAmount = ref(0)
 
-    const changeHeaders = (receiptType: String) => {
-      if (receiptType === 'cylinder') {
-        headers.value = [
-          'Gas Type',
-          'Volume',
-          'Unit Price',
-          'Quantity',
-          'Amount',
-        ]
-      } else if (receiptType === 'product') {
-        headers.value = ['Product Number', 'Quantity', 'Unit Price', 'Amount']
+    watch(status, (currentValue) => {
+      if (currentValue === 'success') {
+        message.value = 'You have successfully approved this request'
+      } else if (currentValue === 'error') {
+        message.value = 'You have regretably declined this request'
       }
-    }
+    })
+    const count = ref(0)
 
-    const gasTypes = ref([])
-
-    const changeComponentKey = () => {
-      componentKey.value = getRandomValue()
-    }
-
-    function getGasTypes() {
-      CylinderController.getCylinders().then((response) => {
-        const myResponse = response.data.data.cylinders
-        gasTypes.value = myResponse.map((element: any) => {
-          return {
-            name: element.gasName,
-            value: element.gasName,
-          }
-        })
-      })
-    }
-
-    const fetchCustomers = () => {
-      CustomerController.fetchUnPaginatedCustomers().then((response: any) => {
-        customerArray.value = response.map((element: any) => {
-          return {
-            name: element.name,
-            value: element.name,
-          }
-        })
-      })
-    }
-
-    const fetchProducts = () => {
-      ProductObject.fetchProductsUnPaginated().then((response) => {
-        productsArray.value = response.map((product: any) => {
-          return {
-            name: product.productName,
-            value: product.productName,
-          }
-        })
-      })
-    }
-
-    const getInvoiceDetails = (id: String) => {
-      fetchInvoice(id).then((response) => {
-        console.log(response)
-        form.id = response._id
-        form.customer = response.customer
-        form.receiptType = response.recieptType
-        form.totalAmount = response.totalAmount
-        form.invoiceNo = response.invoiceNo
-        form.amountPaid = response.amountPaid
-        form.date = response.createdAt
-
-        changeHeaders(form.receiptType)
-        if (form.receiptType === 'cylinder') {
-          cylinders.value = response.cylinders
-        } else if (form.receiptType === 'product') {
-          products.value = response.products
-        }
-
-        CylinderController.confirmCylinderOnSysytem(
-          '',
-          '',
-          cylinders.value[0].cylinderNumber
-        ).then((data) => {
-          cylinderType.value = data.data.cylinder.gasType.gasName
-        })
-        cylinders.value.forEach((item: any) => {
-          totalVolume.value += item.volume.value
-        })
-      })
-      changeComponentKey()
-      console.log(form)
-    }
-
-    const genereteOCN = () => {
-      let payload = {
-        customer: form.customer.id, //for customer type
-        cylinderType: cylinderType.value,
-        date: form.date,
-        noteType: 'out-going',
-        totalVol: {
-          value: totalVolume.value,
-          unit: 'kg',
+    const generateInvoice = () => {
+      let requestBody = {
+        customer: {
+          name: details.customer.name,
+          email: 'gbenga@email.com',
+          id: details.customer.id,
         },
-        totalAmount: {
-          value: form.totalAmount,
-          unit: 'NGN',
-        },
-        totalQty: cylinders.value.length,
-        type: 'customer',
-        invoice: form.id, // pass this when creating ocn(outgoing)
-        invoiceNo: form.invoiceNo, //pass this when creating ocn(outgoing)
+        totalAmount: totalAmount.value,
+        amountPaid: totalAmount.value,
+        date: '2021-05-15T10:38:50.733Z',
+        amountInWords: `${converter.toWords(totalAmount.value)} Naira Only`,
+        recieptType: cylinders.value.length > 0 ? 'cylinder' : 'product',
+        customerType: details.customer.type,
+        salesReq: id,
         cylinders: [...cylinders.value],
       }
-
-      createOcn(payload)
-        .then((data: any) => {
-          console.log(data)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      createInvoice(requestBody).then((data) => {
+        console.log(data)
+      })
     }
 
     onBeforeMount(() => {
-      changeComponentKey()
-      Promise.all([
-        getInvoiceDetails(invoiceId),
-        fetchCustomers(),
-        getGasTypes(),
-        fetchProducts(),
-      ])
+      fetchRequisition(id).then((data) => {
+        console.log(data)
+        details.customer = data.customer
+        details.ecrNo = data.ecrNo
+        details.date = data.createdAt
+        cylinders.value = data.cylinders
+        data.cylinders.forEach((item: any) => {
+          totalVolume.value += item.volume.value
+          totalAmount.value += item.amount
+        })
+        preparedBy.name = data.preparedBy.name
+        preparedBy.image = data.preparedBy.image
+        preparedBy.subrole = data.preparedBy.subrole
+        preparedBy.email = data.preparedBy.email
+        preparedBy.date = data.preparedBy.createdAt
+      })
     })
-
     return {
-      form,
-      customerArray,
-      componentKey,
-      receiptTypes,
-      changeComponentKey,
-      headers,
-      changeHeaders,
+      types,
+      reciepients,
+      showConfirmation,
+      showFinalStep,
+      status,
+      message,
+      count,
+      details,
       cylinders,
-      products,
-      gasTypes,
-      productsArray,
       totalVolume,
-      cylinderType,
-      genereteOCN,
+      totalAmount,
+      generateInvoice,
+      preparedBy,
     }
   },
 })

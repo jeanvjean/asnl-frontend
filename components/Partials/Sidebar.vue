@@ -112,6 +112,7 @@ import CylinderIcon from '@/components/Icons/CylinderIcon.vue'
 import UserIcon from '@/components/Icons/UserIcon.vue'
 import ReportIcon from '@/components/Icons/ReportIcon.vue'
 import DriverIcon from '@/components/Icons/DriverIcon.vue'
+import InvoiceIcon from '@/components/Icons/InvoiceIcon.vue'
 import InventoryIcon from '@/components/Icons/InventoryIcon.vue'
 import VehicleIcon from '@/components/Icons/VehicleIcon.vue'
 import LogoutIcon from '@/components/Icons/LogoutIcon.vue'
@@ -181,6 +182,22 @@ export default defineComponent({
             {
               title: 'Pending Condemn Cylinder',
               link: '/dashboard/cylinders/condemn-cylinder',
+            },
+          ],
+        },
+        {
+          title: 'Invoice',
+          icon: InvoiceIcon,
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'Sales Requisitions',
+              link: '/dashboard/invoices/sales-requisitions',
+            },
+            {
+              title: 'Invoice',
+              link: '/dashboard/invoices',
             },
           ],
         },

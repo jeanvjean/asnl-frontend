@@ -186,15 +186,12 @@
           </div>
         </div>
 
-        <div
-          class="flex items-center space-x-6 px-4 mt-4"
-          v-if="form.cylinders.length && selected.customer && form.ecrNo"
-        >
+        <div class="flex items-center space-x-6 px-4 mt-4">
           <button-component
             :buttonType="'button'"
-            @click="printNow()"
+            @buttonClicked="printNow()"
             :button-class="'bg-btn-purple text-white w-full md:w-1/4'"
-            :button-text="'Print'"
+            :button-text="'Print a copy'"
           />
           <button-component
             @click="submit"
@@ -405,7 +402,6 @@ export default defineComponent({
     const fetchAllEcr = () => {
       console.log('here')
       fetchEcrs().then((response) => {
-        console.log(response.docs)
         ecrs.value = response.docs.map((item: any) => {
           return {
             name: item.ecrNo,
@@ -426,7 +422,6 @@ export default defineComponent({
 
     const fetchCustomers = () => {
       CustomerController.fetchUnPaginatedCustomers().then((response) => {
-        console.log(response.map((element: any) => element.name))
         customers.value = response.map((element: any) => {
           return {
             name: element.name,
@@ -441,7 +436,6 @@ export default defineComponent({
     }
     const printNow = () => {
       printJS('printJS-barcode', 'html')
-      console.log('printing')
     }
     const buttonLoading = ref<Boolean>(false)
 

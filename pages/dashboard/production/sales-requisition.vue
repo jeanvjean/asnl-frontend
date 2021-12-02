@@ -182,7 +182,7 @@ export default defineComponent({
           tableBody.value = response.docs.map((requisition: any) => {
             return {
               ercNo: requisition.ecrNo,
-              customer: requisition.customerName,
+              customer: requisition.customer.name,
               type: requisition.type,
               status: requisition.status,
               totalCylinders: requisition.cylinders.length,

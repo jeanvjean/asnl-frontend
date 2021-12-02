@@ -136,7 +136,7 @@
 
         <div
           class="flex items-center w-1/2 space-x-4 my-10"
-          v-if="scanCylinders.length > 0"
+          v-if="scanCylinders.length > 0 && form.type"
         >
           <button-component
             :button-class="'bg-btn-purple text-white w-auto'"

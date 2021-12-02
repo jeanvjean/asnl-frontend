@@ -303,7 +303,7 @@ export default defineComponent({
                   item.barcode,
                   item.cylinderNumber
                 ).then((data) => {
-                  if (data) {
+                  if (data && data.data.cylinder.available) {
                     scanCylinders.value.push({
                       _id: data.data.cylinder._id,
                       cylinderNumber: data.data.cylinder.cylinderNumber,
@@ -312,6 +312,8 @@ export default defineComponent({
                         data.data.cylinder.gasVolumeContent.value +
                         data.data.cylinder.gasVolumeContent.unit,
                     })
+                  } else {
+                    context.$toast.error('This Cylinder is not available.')
                   }
                 })
               }
@@ -365,6 +367,7 @@ export default defineComponent({
     const fetchCylinders = () => {
       CylinderController.getRegisteredCylindersUnPaginated().then(
         (response) => {
+          console.log(response.data)
           totalCylinders.value = response.data.map(
             (element: any) => element.cylinderNumber
           )

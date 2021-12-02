@@ -65,10 +65,10 @@ export type CustomerDto = {
 }
 
 export interface Invoice {
-  customer: String
+  customer: Object
   totalAmount: number
   amountPaid: number
-  amountInWords: String
+  amountInWords?: String
   date: String
   recieptType: String
   cylinders?: Array<Object>

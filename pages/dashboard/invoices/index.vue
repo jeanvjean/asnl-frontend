@@ -163,7 +163,7 @@ export default defineComponent({
             return {
               invoiceNumber: invoice.invoiceNo,
               type: invoice.recieptType,
-              customer: invoice.customer,
+              customer: invoice.customer.name,
               amount: invoice.totalAmount,
               date: new Date(invoice.createdAt).toDateString(),
               _id: invoice._id,
