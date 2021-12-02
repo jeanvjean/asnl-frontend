@@ -117,8 +117,8 @@ export default defineComponent({
           console.log(response)
           schedulesBody.value = response.docs.map((schedule: any) => {
             return {
-              ecrNo: schedule.ecrNo,
               productionNo: schedule.productionNo,
+              ecrNo: schedule.ecrNo,
               shift: schedule.shift,
               quantity: schedule.quantityToFill,
               status: schedule.status,

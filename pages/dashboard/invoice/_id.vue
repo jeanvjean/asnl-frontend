@@ -400,7 +400,7 @@ export default defineComponent({
 
     const genereteOCN = () => {
       let payload = {
-        customer: form.customer.id, //for customer type
+        customer: form.customer.id,
         cylinderType: cylinderType.value,
         date: form.date,
         noteType: 'out-going',
@@ -414,8 +414,8 @@ export default defineComponent({
         },
         totalQty: cylinders.value.length,
         type: 'customer',
-        invoice: form.id, // pass this when creating ocn(outgoing)
-        invoiceNo: form.invoiceNo, //pass this when creating ocn(outgoing)
+        invoice: form.id,
+        invoiceNo: form.invoiceNo,
         cylinders: [...cylinders.value],
       }
 

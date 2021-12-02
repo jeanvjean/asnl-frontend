@@ -34,29 +34,193 @@
           <span class="rounded-md">{{ selectedFilter }}</span>
         </div>
       </div>
-      <table-component
-        :show-loader="isLoading"
-        :table-headers="headers"
-        :table-body="body"
-      >
-        <template #action="slotProps">
-          <router-link
-            :to="`/dashboard/invoice/${slotProps.rowId}`"
-            class="
-              mx-auto
-              p-1
-              text-btn-purple
-              border border-btn-purple
-              rounded-sm
-              block
-            "
+      <div class="w-full">
+        <table
+          style="border-spacing: 0 15px"
+          class="w-full table-auto table border-separate"
+        >
+          <thead
+            class="bg-gray-200 tracking-tight text-base font-semibold uppercase"
           >
-            View Invoice
-          </router-link>
-        </template>
-      </table-component>
+            <tr>
+              <th></th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-3
+                  py-3
+                  text-center
+                "
+              >
+                Inovice Number
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-3
+                  py-3
+                  text-center
+                "
+              >
+                Invoice Type
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-3
+                  py-3
+                  text-center
+                "
+              >
+                Customer
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-3
+                  py-3
+                  text-center
+                "
+              >
+                Total Amount
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-3
+                  py-3
+                  text-center
+                "
+              >
+                Date
+              </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-light
+                  text-sm
+                  px-6
+                  py-2
+                  text-center
+                "
+              >
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white">
+            <tr v-for="(invoice, index) in body" :key="index">
+              <td class="px-2 py-1 text-center">
+                <input
+                  type="checkbox"
+                  v-model="invoice.checked"
+                  @change="changedChecked(invoice, i)"
+                  class="rounded-sm"
+                />
+              </td>
+              <td
+                class="
+                  text-left
+                  capitalize
+                  font-light
+                  text-md
+                  px-6
+                  py-6
+                  border-white border
+                "
+              >
+                {{ invoice.invoiceNumber }}
+              </td>
+              <td
+                class="
+                  text-center
+                  capitalize
+                  font-light
+                  text-md
+                  px-6
+                  py-6
+                  border-white border
+                "
+              >
+                {{ invoice.type }}
+              </td>
+              <td
+                class="
+                  text-center
+                  capitalize
+                  font-light
+                  text-md
+                  px-6
+                  py-6
+                  border-white border
+                "
+              >
+                {{ invoice.customer }}
+              </td>
+              <td
+                class="
+                  text-center
+                  capitalize
+                  font-light
+                  text-md
+                  px-6
+                  py-6
+                  border-white border
+                "
+              >
+                {{ invoice.amount }}
+              </td>
+              <td
+                class="
+                  text-center
+                  capitalize
+                  font-light
+                  text-md
+                  px-6
+                  py-6
+                  border-white border
+                "
+              >
+                {{ invoice.date }}
+              </td>
+              <td>
+                <router-link
+                  :to="`/dashboard/invoice/${invoice._id}`"
+                  class="
+                    text-center
+                    mx-auto
+                    p-1
+                    text-btn-purple
+                    border border-btn-purple
+                    rounded-sm
+                    block
+                  "
+                >
+                  View Invoice
+                </router-link>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-
+    <invoice-payment v-if="showPayment" @close="showPayment = false" />
     <invoice-filter
       v-if="showFilter"
       :filters="invoiceFilters"
@@ -79,9 +243,9 @@ import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/FilterButton.vue'
 import InvoiceFilter from '@/components/Overlays/Filter.vue'
 import { mainStore } from '@/module/Pinia'
-import TableComponent from '@/components/Table.vue'
 import { getFilters, getQueryString, getTableBody } from '@/constants/utils'
 import { fetchInvoices } from '@/module/Account'
+import InvoicePayment from '@/components/Overlays/InvoicePayment.vue'
 
 export default defineComponent({
   name: 'Reports',
@@ -90,7 +254,7 @@ export default defineComponent({
     SearchComponent,
     FilterComponent,
     InvoiceFilter,
-    TableComponent,
+    InvoicePayment,
   },
   layout: 'dashboard',
   setup() {
@@ -134,6 +298,8 @@ export default defineComponent({
       },
     })
 
+    const showPayment = ref(false)
+
     const paginationProp = reactive({
       hasNextPage: false,
       hasPrevPage: false,
@@ -143,6 +309,11 @@ export default defineComponent({
     function adjustLimit(newLimit: Number) {
       pageLimit.value = newLimit
       getInvoices(1, pageLimit.value)
+    }
+    const index = ref(0)
+    function changedChecked(invoice: object, i: number) {
+      showPayment.value = true
+      index.value = i
     }
 
     function filterVehicles(filters: any) {
@@ -167,16 +338,10 @@ export default defineComponent({
               amount: invoice.totalAmount,
               date: new Date(invoice.createdAt).toDateString(),
               _id: invoice._id,
+              checked: false,
             }
           })
 
-          body.value = getTableBody(body.value, [
-            'invoiceNumber',
-            'type',
-            'customer',
-            'amount',
-            'date',
-          ])
           paginationProp.hasNextPage = response.hasNextPage
           paginationProp.hasPrevPage = response.hasPrevPage
           paginationProp.currentPage = response.page
@@ -201,6 +366,9 @@ export default defineComponent({
       adjustLimit,
       filterVehicles,
       displayedFilters,
+      showPayment,
+      changedChecked,
+      index,
     }
   },
 })
