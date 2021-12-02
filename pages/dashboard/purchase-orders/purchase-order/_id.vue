@@ -264,9 +264,9 @@ export default defineComponent({
                 let item = cyl[cyl.length - 1]
 
                 CylinderController.confirmCylinderOnSysytem(
-                  '',
+                  item.assignedNumber,
                   item.barcode,
-                  ''
+                  item.cylinderNumber
                 ).then((data) => {
                   if (
                     data &&

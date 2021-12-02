@@ -117,12 +117,19 @@
           </div>
         </div>
 
-        <div class="flex items-center w-full md:w-1/3 lg:w-1/4 space-x-4 my-4">
+        <div
+          class="flex items-center w-full md:w-1/3 lg:w-1/4 space-x-4 my-4"
+          v-if="
+            scanCylinders.length > 0 &&
+            form.gasType &&
+            form.priority &&
+            form.type
+          "
+        >
           <button-component
             :button-class="'bg-btn-purple text-white w-auto'"
             :button-text="'Save'"
             :loading-status="buttonLoading"
-            v-if="scanCylinders.length > 0"
           />
         </div>
       </form>
@@ -274,9 +281,9 @@ export default defineComponent({
               let item = cyl[cyl.length - 1]
               // console.log(cylinders)
               CylinderController.confirmCylinderOnSysytem(
-                '',
+                item.assignedNumber,
                 item.barcode,
-                ''
+                item.cylinderNumber
               ).then((data) => {
                 if (!totalCylinders.value.includes(data.data.cylinder._id)) {
                   scanCylinders.value.push({

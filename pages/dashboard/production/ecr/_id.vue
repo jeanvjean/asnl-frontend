@@ -24,14 +24,6 @@
             :is-disabled="true"
             :default-value="constantsValues.icnNo"
           />
-
-          <!-- <select-component
-            :label-title="'Mode of Service'"
-            :default-option-text="'Select a Mode of Service'"
-            :select-array="modeOfServices"
-            :init-value="form.modeOfService"
-            @get="form.modeOfService = $event.value"
-          /> -->
           <select-component
             :label-title="'Order Type'"
             :default-option-text="'Select an Order Type'"
@@ -96,6 +88,22 @@
                     :is-disabled="cylinder.type ? false : true"
                   />
                 </td>
+                <td>
+                  <button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      class="fill-current text-gray-600 w-4 h-4"
+                      @click="removeCylinders(j)"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -123,12 +131,21 @@
           </div>
         </div>
 
-        <div class="flex items-center w-full md:w-1/3 lg:w-1/4 space-x-4 my-4">
+        <div
+          class="flex items-center w-full md:w-1/3 lg:w-1/4 space-x-4 my-4"
+          v-if="
+            scanCylinders.length > 0 &&
+            constantsValues.icnNo &&
+            constantsValues.customerName &&
+            form.gasType &&
+            form.priority &&
+            form.type
+          "
+        >
           <button-component
             :button-class="'bg-btn-purple text-white w-auto'"
             :button-text="'Save'"
             :loading-status="buttonLoading"
-            v-if="scanCylinders.length > 0"
           />
         </div>
       </form>
@@ -279,25 +296,25 @@ export default defineComponent({
             if (snapshot.val()) {
               // scanCylinders.value = [...newCylinders.value]
               const cyl = JSON.parse(snapshot.val().cylinders)
-              console.log(cyl)
-
-              let item = cyl[cyl.length - 1]
-              CylinderController.confirmCylinderOnSysytem(
-                '',
-                item.barcode,
-                ''
-              ).then((data) => {
-                if (data) {
-                  scanCylinders.value.push({
-                    _id: data.data.cylinder._id,
-                    cylinderNumber: data.data.cylinder.cylinderNumber,
-                    barcode: data.data.cylinder.barcode,
-                    volume:
-                      data.data.cylinder.gasVolumeContent.value +
-                      data.data.cylinder.gasVolumeContent.unit,
-                  })
-                }
-              })
+              if (cyl.length) {
+                let item = cyl[cyl.length - 1]
+                CylinderController.confirmCylinderOnSysytem(
+                  item.assignedNumber,
+                  item.barcode,
+                  item.cylinderNumber
+                ).then((data) => {
+                  if (data) {
+                    scanCylinders.value.push({
+                      _id: data.data.cylinder._id,
+                      cylinderNumber: data.data.cylinder.cylinderNumber,
+                      barcode: data.data.cylinder.barcode,
+                      volume:
+                        data.data.cylinder.gasVolumeContent.value +
+                        data.data.cylinder.gasVolumeContent.unit,
+                    })
+                  }
+                })
+              }
             }
           },
           (errorObject: Error) => {
@@ -307,58 +324,6 @@ export default defineComponent({
       },
       { immediate: true }
     )
-    // const biggie = ref(1)
-    // watch(
-    //   () => biggie.value,
-    //   (currentValue, oldValue) => {
-    //     if (scan.formId) {
-    //       console.log(scan.formId)
-
-    //       const ref = db.ref(`forms/${scan.formId}/form`)
-
-    //       ref
-    //         .get()
-    //         .then((snapshot: any) => {
-    //           if (snapshot.exists()) {
-    //             let Rcylinders = JSON.parse(snapshot.val().cylinders)
-
-    //             let obj = {
-    //               cylinders: JSON.stringify([
-    //                 ...Rcylinders,
-    //                 {
-    //                   _id: '619e29b1764ef5d96bbe3850',
-    //                   cylinderNumber: biggie.value,
-    //                   assignedNumber: 'ASNL000012',
-    //                   barcode: 'REG-CYL15',
-    //                 },
-    //               ]),
-    //               form_id: scan.formId,
-    //               status: 'success',
-    //             }
-    //             var updates: any = {}
-    //             updates[`/forms/${scan.formId}/form`] = obj
-    //             return db.ref().update(updates)
-    //           } else {
-    //             console.log('No data available')
-    //           }
-    //         })
-    //         .catch((error: any) => {
-    //           console.error(error)
-    //         })
-    //       //
-    //     }
-    //   },
-    //   { immediate: true }
-    // )
-
-    // let obj = {
-    //   cylinders: [],
-    //   form_id: 1,
-    //   status: 'success',
-    // }
-    // var updates: any = {}
-    // updates['/forms/1/form'] = obj
-    // return db.ref().update(updates)
 
     const addToScanCylinder = (item: any) => {
       scanCylinders.value.push({
@@ -368,6 +333,10 @@ export default defineComponent({
         volume: item.gasVolumeContent.value + item.gasVolumeContent.unit,
       })
 
+      changeComponentKey()
+    }
+    const removeCylinders = (index: any) => {
+      scanCylinders.value.splice(index, 1)
       changeComponentKey()
     }
     const getGases = () => {
@@ -455,6 +424,7 @@ export default defineComponent({
       priorities,
       modeOfServices,
       // setVolume,
+      removeCylinders,
       buttonLoading,
       submit,
       setGasType,

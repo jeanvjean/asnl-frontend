@@ -48,7 +48,8 @@ export default defineComponent({
   },
   setup(_props, ctx) {
     const buttonClicked = () => {
-      ctx.emit('buttonClicked')
+      // ctx.emit('buttonClicked')
+      ctx.emit('click')
     }
     return {
       buttonClicked,

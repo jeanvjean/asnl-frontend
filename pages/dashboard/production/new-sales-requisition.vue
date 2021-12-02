@@ -1,6 +1,6 @@
 <template>
   <div :key="componentKey">
-    <div class="py-4 px-2" id="printJS-barcode">
+    <div class="py-4 px-2">
       <div class="flex space-x-0 items-center">
         <button
           class="px-6 py-2 tracking-wide font-medium border-2 border-gray-200"
@@ -186,13 +186,16 @@
           </div>
         </div>
 
-        <div class="flex items-center space-x-6 px-4 mt-4">
+        <div
+          class="flex items-center space-x-6 px-4 mt-4"
+          v-if="form.cylinders.length && selected.customer && form.ecrNo"
+        >
           <button-component
-            @click="printJS('printJS-barcode', 'html')"
+            :buttonType="'button'"
+            @click="printNow()"
             :button-class="'bg-btn-purple text-white w-full md:w-1/4'"
             :button-text="'Print'"
           />
-
           <button-component
             @click="submit"
             :button-class="'bg-btn-white border border-btn-purple text-btn-purple w-full md:w-1/4'"
@@ -337,9 +340,9 @@ export default defineComponent({
               if (cyl.length) {
                 var item = cyl[cyl.length - 1]
                 CylinderController.confirmCylinderOnSysytem(
-                  '',
+                  item.assignedNumber,
                   item.barcode,
-                  ''
+                  item.cylinderNumber
                 ).then((data) => {
                   console.log(ecrCylinders.value)
                   console.log(data.data.cylinder)
@@ -436,7 +439,10 @@ export default defineComponent({
     function decrement(index: any) {
       form.cylinders.splice(index, 1)
     }
-
+    const printNow = () => {
+      printJS('printJS-barcode', 'html')
+      console.log('printing')
+    }
     const buttonLoading = ref<Boolean>(false)
 
     onMounted(() => {
@@ -509,7 +515,7 @@ export default defineComponent({
       setEcr,
       auth,
       getCustomer,
-      printJS,
+      printNow,
     }
   },
 })
