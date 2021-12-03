@@ -270,7 +270,7 @@ import { getRandomValue } from '@/constants/utils'
 import { CylinderController } from '@/module/Cylinder'
 import { CustomerController } from '@/module/Customer'
 import { ProductObject } from '@/module/Product'
-import { fetchInvoice } from '@/module/Account'
+import { fetchInvoice, updateInvoice } from '@/module/Account'
 import { createOcn } from '@/module/Incoming'
 
 export default defineComponent({

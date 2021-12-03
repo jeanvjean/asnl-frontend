@@ -18,11 +18,6 @@
       </div>
       <div class="space-y-2">
         <input-component
-          :label-title="'Customer Name'"
-          :input-placeholder="'Enter Customer Name'"
-          @get="form.customer = $event.value"
-        />
-        <input-component
           :label-title="'Amount Display'"
           :input-placeholder="'Enter Amount'"
           @get="form.amount = $event.value"
@@ -31,7 +26,7 @@
           :button-text="'Recieve Payment'"
           :loading-status="isLoading"
           :button-class="'bg-btn-purple text-white rounded-sm my-6'"
-          @buttonClicked="createCylinder"
+          @buttonClicked="makePayment"
         />
       </div>
     </div>
@@ -59,16 +54,19 @@ export default defineComponent({
     const close = () => {
       ctx.emit('close')
     }
+    const makePayment = () => {
+      ctx.emit('makePayment', form)
+    }
     const isLoading = ref<Boolean>(false)
     const form = reactive({
-      customer: '',
-      anount: 0,
+      amount: 0,
     })
 
     return {
       close,
       isLoading,
       form,
+      makePayment,
     }
   },
 })

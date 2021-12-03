@@ -129,8 +129,8 @@
               <td class="px-2 py-1 text-center">
                 <input
                   type="checkbox"
-                  v-model="invoice.checked"
-                  @change="changedChecked(invoice, i)"
+                  :checked="invoiceId == invoice._id ? true : false"
+                  @change="changedChecked(invoice)"
                   class="rounded-sm"
                 />
               </td>
@@ -220,7 +220,11 @@
         </table>
       </div>
     </div>
-    <invoice-payment v-if="showPayment" @close="showPayment = false" />
+    <invoice-payment
+      v-if="showPayment"
+      @makePayment="makePayment"
+      @close=";(showPayment = false), (inoviceId = '')"
+    />
     <invoice-filter
       v-if="showFilter"
       :filters="invoiceFilters"
@@ -237,6 +241,7 @@ import {
   onMounted,
   reactive,
   ref,
+  useContext,
 } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
@@ -244,7 +249,7 @@ import FilterComponent from '@/components/Base/FilterButton.vue'
 import InvoiceFilter from '@/components/Overlays/Filter.vue'
 import { mainStore } from '@/module/Pinia'
 import { getFilters, getQueryString, getTableBody } from '@/constants/utils'
-import { fetchInvoices } from '@/module/Account'
+import { fetchInvoices, updateInvoice } from '@/module/Account'
 import InvoicePayment from '@/components/Overlays/InvoicePayment.vue'
 
 export default defineComponent({
@@ -269,6 +274,7 @@ export default defineComponent({
     const queryString = ref<String>('')
     const { getLoggedInUser: user } = mainStore()
 
+    const context = useContext()
     const headers = [
       'Invoice Number',
       'Invoice Type',
@@ -310,10 +316,10 @@ export default defineComponent({
       pageLimit.value = newLimit
       getInvoices(1, pageLimit.value)
     }
-    const index = ref(0)
-    function changedChecked(invoice: object, i: number) {
+    const invoiceId = ref('')
+    function changedChecked(invoice: any) {
       showPayment.value = true
-      index.value = i
+      invoiceId.value = invoice._id
     }
 
     function filterVehicles(filters: any) {
@@ -338,7 +344,6 @@ export default defineComponent({
               amount: invoice.totalAmount,
               date: new Date(invoice.createdAt).toDateString(),
               _id: invoice._id,
-              checked: false,
             }
           })
 
@@ -347,6 +352,17 @@ export default defineComponent({
           paginationProp.currentPage = response.page
         })
         .finally(() => (isLoading.value = false))
+    }
+    const makePayment = (form: any) => {
+      console.log(form)
+      if (!form.amount) {
+        context.$toast.error('Specify an amount.')
+      }
+      updateInvoice(invoiceId.value, { amountPaid: form.amount })
+        .then((data) => {
+          console.log(data)
+        })
+        .catch((err) => console.log(err))
     }
 
     onMounted(() => {
@@ -368,7 +384,8 @@ export default defineComponent({
       displayedFilters,
       showPayment,
       changedChecked,
-      index,
+      invoiceId,
+      makePayment,
     }
   },
 })

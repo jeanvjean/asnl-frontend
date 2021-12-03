@@ -36,3 +36,13 @@ export function fetchInvoice(invoiceId: String) {
     }
   })
 }
+export function updateInvoice(invoiceId: String, payload: object) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await $axios.post(`/account/update-payment/${invoiceId}`, payload)
+      resolve(response.data.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}

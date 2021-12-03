@@ -55,6 +55,18 @@
               @get="setEcr($event)"
               :initValue="form.ecrNo"
             />
+            <!-- <input
+              type="text"
+              id="myInput"
+              v-model="ecrSearch"
+              :onkeyup="searchEcr()"
+              placeholder="Search for names.."
+            />
+            <ul id="myUL">
+              <li v-for="(name, i) in displayList" :key="i">
+                <a href="#">{{ name }}</a>
+              </li>
+            </ul> -->
           </div>
           <div class="w-full space-y-2" v-if="form.ecrNo">
             <input-component
@@ -299,6 +311,29 @@ export default defineComponent({
         }
       })
     }
+    const ecrSearch = ref('')
+    const displayList = ref<any>([])
+    const searchEcr = () => {
+      let filter = ecrSearch.value.toLowerCase()
+
+      // ecrs.value.forEach((item: any) => {}
+
+      for (var i = 0; i < ecrs.value.length; i++) {
+        console.log(ecrs.value[i].name)
+        if (
+          ecrs.value[i].name.toLowerCase().indexOf(filter) > -1 &&
+          filter != ''
+        ) {
+          // li[i].style.display = "";
+          displayList.value.push(ecrs.value[i].name)
+          console.log('Among', ecrs.value[i].name)
+          return
+        } else {
+          displayList.value = []
+        }
+      }
+    }
+
     const increment = () => {
       if (selected.customer) {
         internalCylinders.value.push({
@@ -510,6 +545,9 @@ export default defineComponent({
       auth,
       getCustomer,
       printNow,
+      searchEcr,
+      ecrSearch,
+      displayList,
     }
   },
 })
