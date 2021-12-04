@@ -106,11 +106,36 @@ class VehicleRepository {
     })
   }
 
-  vehicleInspection(requestBody: Object, vehicleId: String) {
+  vehicleInspection(requestBody: Object, vehicleId: string) {
     return new Promise<any>((resolve, reject) => {
       try {
         const response = $axios.post(
           `/vehicle/register-inspection/${vehicleId}`,
+          requestBody
+        )
+        resolve(response)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+  fetchDeliveryNotes() {
+    return new Promise<any>((resolve, reject) => {
+      try {
+        const response = $axios.get(
+          `/vehicle/fetch-delivery-notes`
+        )
+        resolve(response)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+  createDeliveryNote(requestBody: object) {
+    return new Promise<any>((resolve, reject) => {
+      try {
+        const response = $axios.post(
+          `/vehicle/create-delivery-note`,
           requestBody
         )
         resolve(response)

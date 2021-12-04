@@ -265,6 +265,7 @@ export default defineComponent({
       customer: {
         name: '',
         id: '',
+        email: '',
       },
       ecrNo: '',
       date: new Date().toISOString(),
@@ -415,9 +416,8 @@ export default defineComponent({
       customers.value.forEach((item: any) => {
         console.log(value)
         if (item.value == value) {
-          console.log(item.value)
-          console.log(item.name)
           form.customer.name = item.name
+          form.customer.email = item.email
         }
       })
     }
@@ -456,10 +456,12 @@ export default defineComponent({
 
     const fetchCustomers = () => {
       CustomerController.fetchUnPaginatedCustomers().then((response) => {
+        console.log(response)
         customers.value = response.map((element: any) => {
           return {
             name: element.name,
             value: element._id,
+            email: element.email,
           }
         })
       })
@@ -493,10 +495,13 @@ export default defineComponent({
         date: 'required|date',
         cylinderType: 'required|string',
         cylinders: 'required|array',
+        'cylinders.*.noOfCylidners': 'required|numeric',
         'cylinders.*.cylinderNumber': 'required|string',
         'cylinders.*.unitPrice': 'required|numeric',
         'cylinders.*.amount': 'required|numeric',
         'cylinders.*.volume.value': 'required|numeric',
+        // production_id: 'required|string',
+        // purchase_id: 'required|string',
       }
 
       const validation: any = new Validator(form, rules)

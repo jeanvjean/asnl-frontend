@@ -69,7 +69,7 @@
           <h2 class="font-medium text-md">
             Payment Status:
             <span class="text-gray-600">{{
-              form.amountPaid == form.totalAmount ? 'Paid' : 'Not Completed'
+              form.outstandingBalance == 0 ? 'Paid' : 'Not Completed'
             }}</span>
           </h2>
         </div>
@@ -258,7 +258,6 @@
       :text="'OCN has been generated successfully!'"
       :buttonText="'Continue'"
       @close="showSuccess = false"
-      :action="false"
     />
   </div>
 </template>
@@ -296,6 +295,7 @@ export default defineComponent({
       totalAmount: '',
       invoiceNo: '',
       amountPaid: '',
+      outstandingBalance: 0,
       id: '',
       date: null,
     })
@@ -384,6 +384,7 @@ export default defineComponent({
         form.totalAmount = response.totalAmount
         form.invoiceNo = response.invoiceNo
         form.amountPaid = response.amountPaid
+        form.outstandingBalance = response.outstandingBalance
         form.date = response.createdAt
 
         changeHeaders(form.receiptType)

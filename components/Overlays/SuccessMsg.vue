@@ -20,7 +20,7 @@
       </div>
       <div class="space-y-2">
         <button-component
-          v-if="action"
+          v-if="isAction"
           :button-text="'Proceed to Invoice'"
           :loading-status="isLoading"
           :button-class="'bg-btn-purple text-white rounded-sm my-6'"
@@ -60,7 +60,7 @@ export default defineComponent({
     buttonText: {
       type: String,
     },
-    action: {
+    isAction: {
       type: Boolean,
       default: false,
     },

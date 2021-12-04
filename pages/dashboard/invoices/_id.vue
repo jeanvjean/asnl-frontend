@@ -18,6 +18,7 @@
                 border border-btn-purple
                 text-btn-purple
               "
+              v-if="details.invoice_id == null"
               @click="generateInvoice"
             >
               Generate Invoice
@@ -248,7 +249,7 @@
       :buttonText="'Continue'"
       @close="showSuccess = false"
       @action="router.push(`/dashboard/invoice/${invoice_id}`)"
-      :action="true"
+      :isAction="true"
     />
   </div>
 </template>
@@ -268,7 +269,7 @@ import SuccessMsg from '~/components/Overlays/SuccessMsg.vue'
 var converter = require('number-to-words')
 
 export default defineComponent({
-  name: 'Requisition',
+  name: 'sales-requisition-id',
   layout: 'dashboard',
   components: { SuccessMsg },
   setup() {
@@ -291,6 +292,7 @@ export default defineComponent({
       },
       ecrNo: '',
       date: null,
+      invoice_id: null,
     })
 
     const preparedBy = reactive({
@@ -346,6 +348,7 @@ export default defineComponent({
         details.customer = data.customer
         details.ecrNo = data.ecrNo
         details.date = data.createdAt
+        details.invoice_id = data.invoice_id
         cylinders.value = data.cylinders
         data.cylinders.forEach((item: any) => {
           totalVolume.value += item.volume.value
