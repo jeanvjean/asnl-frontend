@@ -285,7 +285,11 @@ export default defineComponent({
                 item.barcode,
                 item.cylinderNumber
               ).then((data) => {
-                if (!totalCylinders.value.includes(data.data.cylinder._id)) {
+                if (
+                  totalCylinders.value.includes(
+                    data.data.cylinder.cylinderNumber
+                  )
+                ) {
                   scanCylinders.value.push({
                     _id: data.data.cylinder._id,
                     cylinderNumber: data.data.cylinder.cylinderNumber,

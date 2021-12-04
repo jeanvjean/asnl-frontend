@@ -435,7 +435,6 @@ export default defineComponent({
     }
 
     const fetchAllEcr = () => {
-      console.log('here')
       fetchEcrs().then((response) => {
         ecrs.value = response.docs.map((item: any) => {
           return {

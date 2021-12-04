@@ -253,6 +253,13 @@
         </div>
       </div>
     </div>
+    <success-msg
+      v-if="showSuccess"
+      :text="'OCN has been generated successfully!'"
+      :buttonText="'Continue'"
+      @close="showSuccess = false"
+      :action="false"
+    />
   </div>
 </template>
 
@@ -263,6 +270,7 @@ import {
   reactive,
   ref,
   useRoute,
+  useRouter,
 } from '@nuxtjs/composition-api'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
@@ -272,11 +280,13 @@ import { CustomerController } from '@/module/Customer'
 import { ProductObject } from '@/module/Product'
 import { fetchInvoice, updateInvoice } from '@/module/Account'
 import { createOcn } from '@/module/Incoming'
+import SuccessMsg from '~/components/Overlays/SuccessMsg.vue'
 
 export default defineComponent({
   components: {
     SelectComponent,
     InputComponent,
+    SuccessMsg,
   },
   layout: 'dashboard',
   setup() {
@@ -302,7 +312,7 @@ export default defineComponent({
         value: 'product',
       },
     ]
-
+    const router = useRouter()
     const headers = ref<Array<String>>([])
     const products = ref<Array<any>>([])
     const cylinders = ref<Array<any>>([])
@@ -398,6 +408,7 @@ export default defineComponent({
       console.log(form)
     }
 
+    const showSuccess = ref(false)
     const genereteOCN = () => {
       let payload = {
         customer: form.customer.id,
@@ -422,6 +433,9 @@ export default defineComponent({
       createOcn(payload)
         .then((data: any) => {
           console.log(data)
+          if (data.code == 200) {
+            showSuccess.value = true
+          }
         })
         .catch((err) => {
           console.log(err)
@@ -453,6 +467,8 @@ export default defineComponent({
       totalVolume,
       cylinderType,
       genereteOCN,
+      showSuccess,
+      router,
     }
   },
 })

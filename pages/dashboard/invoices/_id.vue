@@ -242,6 +242,14 @@
         </div>
       </div>
     </div>
+    <success-msg
+      v-if="showSuccess"
+      :text="'Invoice has been generated successfully!'"
+      :buttonText="'Continue'"
+      @close="showSuccess = false"
+      @action="router.push(`/dashboard/invoice/${invoice_id}`)"
+      :action="true"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -250,16 +258,19 @@ import {
   ref,
   watch,
   useRoute,
+  useRouter,
   onBeforeMount,
   reactive,
 } from '@nuxtjs/composition-api'
 import { fetchRequisition } from '~/module/Sales'
 import { createInvoice } from '~/module/Account'
+import SuccessMsg from '~/components/Overlays/SuccessMsg.vue'
 var converter = require('number-to-words')
 
 export default defineComponent({
   name: 'Requisition',
   layout: 'dashboard',
+  components: { SuccessMsg },
   setup() {
     const types = [{ name: 'Assign Cylinder', value: 'temp' }]
     const reciepients = [{ name: 'Oxygen', value: 'temp' }]
@@ -268,6 +279,7 @@ export default defineComponent({
     const status = ref('')
     const message = ref('')
     const route = useRoute()
+    const router = useRouter()
 
     const id = route.value.params.id
 
@@ -300,6 +312,8 @@ export default defineComponent({
       }
     })
     const count = ref(0)
+    const invoice_id = ref('')
+    const showSuccess = ref(false)
 
     const generateInvoice = () => {
       let requestBody = {
@@ -319,6 +333,10 @@ export default defineComponent({
       }
       createInvoice(requestBody).then((data) => {
         console.log(data)
+        if (data.code == 200) {
+          showSuccess.value = true
+          invoice_id.value = data.data._id
+        }
       })
     }
 
@@ -354,6 +372,9 @@ export default defineComponent({
       totalAmount,
       generateInvoice,
       preparedBy,
+      showSuccess,
+      invoice_id,
+      router,
     }
   },
 })

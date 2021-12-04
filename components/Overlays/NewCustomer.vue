@@ -218,21 +218,30 @@
           <div
             v-for="(product, i) in products"
             :key="i"
-            class="flex items-center justify-center space-x-4 w-1/2"
+            class="flex items-center justify-center space-x-4"
           >
             <select-component
               :label-title="'Products'"
               :select-array="productsArray"
-              :default-option-text="'Select a Product'"
+              :default-option-text="'Select Product'"
               :init-value="product.id"
-              @get="product.id = $event.value"
+              @get="
+                product.product.product_id = $event.value
+                getProduct($event.value, i)
+              "
             />
-            <!-- <input-component
+            <input-component
               :label-title="'Units'"
               :input-placeholder="'Enter Unit'"
-              :default-value="product.price"
-              @get="product.price = $event.value"
-            /> -->
+              :default-value="product.unit_price.value"
+              @get="product.unit_price.value = $event.value"
+            />
+            <input-component
+              :label-title="'VAT'"
+              :input-placeholder="'Enter VAT'"
+              :default-value="product.vat.value"
+              @get="product.vat.value = $event.value"
+            />
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="fill-current w-12 h-12 text-black pt-6"
@@ -275,7 +284,7 @@ import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
-import { ProductObject } from '@/module/Product'
+import { CylinderController } from '@/module/Cylinder'
 import { CustomerController } from '@/module/Customer'
 import { ValidatorObject } from '@/module/Validation'
 import { getRandomValue } from '@/constants/utils'
@@ -329,13 +338,13 @@ export default defineComponent({
     })
 
     function fetchProducts() {
-      ProductObject.fetchProductsUnPaginated().then((response: any) => {
-        console.log(response)
-        productsArray.value = response.map((product: any) => {
+      CylinderController.getCylinders().then((response: any) => {
+        // console.log(response.data.data.cylinders, 'product')
+        productsArray.value = response.data.data.cylinders.map((gas: any) => {
           return {
-            name: product.asnlNumber,
-            value: product._id,
-            price: product.unitCost,
+            name: gas.gasName,
+            value: gas._id,
+            colorCode: gas.colorCode,
           }
         })
       })
@@ -349,13 +358,35 @@ export default defineComponent({
     onMounted(() => {
       fetchProducts()
     })
+    const getProduct = (value: any, index: number) => {
+      let product: any = productsArray.value.find(
+        (item: any) => item.value == value
+      )
+      if (product) {
+        products.value[index].product.productName = product.name
+        products.value[index].product.colorCode = product.colorCode
+        console.log(product)
+        console.log(products.value)
+      }
+    }
 
     const increment = () => {
       products.value.push({
-        id: '',
-        price: '',
+        product: {
+          product_id: '',
+          productName: '',
+          colorCode: '',
+        },
+        unit_price: {
+          value: 0,
+          unit: 'NGN',
+        },
+        vat: {
+          value: 0,
+          unit: '%',
+        },
       })
-      changeComponentKey()
+      // changeComponentKey()
     }
 
     function processFile(event: any, index: any) {
@@ -372,35 +403,35 @@ export default defineComponent({
       componentKey.value = random
     }
 
-    const requestPayload = computed(() => {
-      const formData = new FormData()
-      formData.append('name', form.name)
-      formData.append('customerType', form.customerType)
-      formData.append('modeOfService', form.modeOfService)
-      formData.append('nickName', form.nickName)
-      formData.append('address', form.address)
-      formData.append('contactPerson', form.contactPerson)
-      formData.append('email', form.email)
-      formData.append('phoneNumber', form.phoneNumber)
-      formData.append('TIN', form.TIN)
-      formData.append('rcNumber', form.rcNumber)
-      formData.append('cylinderHoldingTime', form.cylinderHoldingTime)
-      formData.append('territory', form.territory)
-      formData.append('unitPrice', form.unitPrice)
-      formData.append('CAC', form.CAC)
-      formData.append('validId', form.validId)
+    // const requestPayload = computed(() => {
+    //   const formData = new FormData()
+    //   formData.append('name', form.name)
+    //   formData.append('customerType', form.customerType)
+    //   formData.append('modeOfService', form.modeOfService)
+    //   formData.append('nickName', form.nickName)
+    //   formData.append('address', form.address)
+    //   formData.append('contactPerson', form.contactPerson)
+    //   formData.append('email', form.email)
+    //   formData.append('phoneNumber', form.phoneNumber)
+    //   formData.append('TIN', form.TIN)
+    //   formData.append('rcNumber', form.rcNumber)
+    //   formData.append('cylinderHoldingTime', form.cylinderHoldingTime)
+    //   formData.append('territory', form.territory)
+    //   formData.append('unitPrice', form.unitPrice)
+    //   formData.append('CAC', form.CAC)
+    //   formData.append('validId', form.validId)
 
-      products.value.forEach((element: any) => {
-        formData.append('products', element.id)
-      })
+    //   products.value.forEach((element: any) => {
+    //     formData.append('products', element.id)
+    //   })
 
-      return formData
-    })
+    //   return formData
+    // })
 
     onMounted(() => {
       changeComponentKey()
     })
-
+    const payload = ref<any>({})
     const submit = () => {
       const rules = {
         name: 'required',
@@ -419,8 +450,26 @@ export default defineComponent({
         CAC: 'required',
         validId: 'required',
       }
-      console.log(products.value.length)
-      const validation: any = new Validator(form, rules)
+      payload.value = {
+        name: form.name,
+        customerType: form.customerType,
+        modeOfService: form.modeOfService,
+        nickName: form.nickName,
+        address: form.address,
+        contactPerson: form.contactPerson,
+        email: form.email,
+        phoneNumber: form.phoneNumber,
+        TIN: form.TIN,
+        rcNumber: form.rcNumber,
+        cylinderHoldingTime: form.cylinderHoldingTime,
+        territory: form.territory,
+        unitPrice: form.unitPrice,
+        CAC: form.CAC,
+        validId: form.validId,
+        products: products.value,
+      }
+
+      const validation: any = new Validator(payload, rules)
       if (validation.fails()) {
         let messages: string[] = []
 
@@ -430,7 +479,7 @@ export default defineComponent({
         })
       } else {
         isLoading.value = true
-        CustomerController.registerCustomer(requestPayload.value)
+        CustomerController.registerCustomer(payload.value)
           .then((response) => {
             close()
             if (_props.fromCylinder) {
@@ -450,10 +499,11 @@ export default defineComponent({
       increment,
       componentKey,
       processFile,
-      requestPayload,
+      // requestPayload,
       submit,
       isLoading,
       removeProduct,
+      getProduct,
     }
   },
 })

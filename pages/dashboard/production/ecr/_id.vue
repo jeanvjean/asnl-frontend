@@ -303,7 +303,7 @@ export default defineComponent({
                   item.barcode,
                   item.cylinderNumber
                 ).then((data) => {
-                  if (data && data.data.cylinder.available) {
+                  if (data) {
                     scanCylinders.value.push({
                       _id: data.data.cylinder._id,
                       cylinderNumber: data.data.cylinder.cylinderNumber,
@@ -313,7 +313,7 @@ export default defineComponent({
                         data.data.cylinder.gasVolumeContent.unit,
                     })
                   } else {
-                    context.$toast.error('This Cylinder is not available.')
+                    context.$toast.error('This cylinder is not available.')
                   }
                 })
               }
