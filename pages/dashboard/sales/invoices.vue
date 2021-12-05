@@ -11,6 +11,8 @@
         <pagination
           :pagination-details="paginationProp"
           @limitChanged="adjustLimit"
+          @next="changePage($event.value)"
+          @prev="changePage($event.value)"
         />
       </div>
       <div class="w-full flex items-center space-x-4 px-6 py-2">
@@ -199,10 +201,25 @@
                     rounded-sm
                     text-btn-purple text-sm
                   "
+                  v-if="invoice.deliveryNo"
                   @click="generateDN(invoice)"
                 >
                   Generate Waybill
                 </button>
+                <span
+                  v-else
+                  class="
+                    text-btn-green
+                    bg-green-100
+                    rounded-lg
+                    px-2
+                    py-2
+                    capitalize
+                    text-center
+                  "
+                >
+                  Completed
+                </span>
               </td>
             </tr>
           </tbody>
@@ -234,7 +251,7 @@ import FilterComponent from '@/components/Base/FilterButton.vue'
 import InvoiceFilter from '@/components/Overlays/Filter.vue'
 import { mainStore } from '@/module/Pinia'
 import { getFilters, getQueryString, getTableBody } from '@/constants/utils'
-import { fetchInvoices, updateInvoice } from '@/module/Account'
+import { fetchInvoices } from '@/module/Account'
 import { VehicleController } from '@/module/Vehicle'
 import InvoicePayment from '@/components/Overlays/InvoicePayment.vue'
 
@@ -297,7 +314,9 @@ export default defineComponent({
       hasPrevPage: false,
       currentPage: 1,
     })
-
+    function changePage(nextPage: number) {
+      getInvoices(nextPage)
+    }
     function adjustLimit(newLimit: Number) {
       pageLimit.value = newLimit
       getInvoices(1, pageLimit.value)
@@ -332,6 +351,7 @@ export default defineComponent({
               cylinders: invoice.cylinders,
               date: new Date(invoice.createdAt).toDateString(),
               _id: invoice._id,
+              deliveryNo: invoice.deliveryNo,
             }
           })
           paginationProp.hasNextPage = response.hasNextPage
@@ -390,6 +410,7 @@ export default defineComponent({
       changedChecked,
       invoiceId,
       generateDN,
+      changePage,
     }
   },
 })

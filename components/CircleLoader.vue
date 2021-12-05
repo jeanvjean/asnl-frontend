@@ -3,7 +3,7 @@
     class="w-6 h-6 fill-current"
     viewBox="0 0 38 38"
     xmlns="http://www.w3.org/2000/svg"
-    stroke="#fff"
+    stroke="grey"
   >
     <g fill="none" fill-rule="evenodd">
       <g transform="translate(1 1)" stroke-width="2">

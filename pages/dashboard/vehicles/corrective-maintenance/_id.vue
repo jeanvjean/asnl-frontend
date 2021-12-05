@@ -490,7 +490,7 @@ export default defineComponent({
   layout: 'dashboard',
   setup() {
     const route = useRoute()
-    const vehicleId = ref<String>('')
+    const vehicleId = ref<string>('')
     const vehicleData = ref<any>({})
 
     onMounted(() => {

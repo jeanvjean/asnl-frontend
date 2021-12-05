@@ -27,48 +27,34 @@
           Walk-in Customer
         </button>
       </div>
-      <h1 class="px-2 mt-4 mb-2 font-bold tracking-wide text-base uppercase">
-        Customer Details
-      </h1>
+      <div v-if="form.customer.name != ''">
+        <h1 class="px-2 mt-4 mb-2 font-bold tracking-wide text-base uppercase">
+          Customer Details
+        </h1>
+        <h1 class="px-2 mt-4 mb-2 tracking-wide text-base">
+          Name: {{ form.customer.name }}
+        </h1>
+        <h1 class="px-2 mt-4 mb-2 tracking-wide text-base">
+          Email: {{ form.customer.email }}
+        </h1>
+      </div>
       <form @submit.prevent="submit">
         <div
           class="grid grid-rows-1 md:grid-cols-3 w-full px-4 gap-y-2 md:gap-x-4"
         >
-          <div class="w-full space-y-2">
-            <select-component
-              :label-title="'Customer Name'"
-              :default-option-text="'Select a Customer'"
-              :selectArray="customers"
-              :initValue="form.customer.name"
-              @get="
-                form.customer.id = $event.value
-                getCustomer($event.value)
-                getDispEcrs()
-              "
-            />
-          </div>
-          <div class="w-full space-y-2">
-            <select-component
+          <div class="w-full space-y-2 flex">
+            <input-component
               :label-title="'ECR Number'"
-              :default-option-text="'Select ECR Number'"
-              :selectArray="dispEcrs"
-              @get="setEcr($event)"
-              :initValue="form.ecrNo"
+              @get="form.ecrNo = $event.value"
+              :inputPlaceholder="'Enter ECR No'"
+              :default-value="form.ecrNo"
             />
-            <!-- <input
-              type="text"
-              id="myInput"
-              v-model="ecrSearch"
-              :onkeyup="searchEcr()"
-              placeholder="Search for names.."
-            />
-            <ul id="myUL">
-              <li v-for="(name, i) in displayList" :key="i">
-                <a href="#">{{ name }}</a>
-              </li>
-            </ul> -->
+            <circle-loader class="mt-8" v-if="ecrLoading" />
           </div>
-          <div class="w-full space-y-2" v-if="form.ecrNo">
+          <div
+            class="w-full space-y-2"
+            v-if="form.ecrNo && form.cylinderType != ''"
+          >
             <input-component
               :labelTitle="'Gas Type'"
               :default-value="form.cylinderType"
@@ -235,14 +221,21 @@ import SelectComponent from '@/components/Form/Select.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import { ValidatorObject } from '@/module/Validation'
 import { createRequisition } from '@/module/Sales'
+import { fetchEcrDetail } from '@/module/ECR'
 import { initiateScan } from '@/module/SCAN'
 import { fetchEcrs } from '@/module/ECR'
 import { values } from 'lodash'
 import { mainStore } from '@/module/Pinia'
 import printJS from 'print-js'
 
+import CircleLoader from '@/components/CircleLoader.vue'
 export default defineComponent({
-  components: { InputComponent, SelectComponent, ButtonComponent },
+  components: {
+    InputComponent,
+    SelectComponent,
+    ButtonComponent,
+    CircleLoader,
+  },
   layout: 'noSidebar',
   setup() {
     const appStore = mainStore()
@@ -275,6 +268,7 @@ export default defineComponent({
     })
     const componentKey = ref<number>(0)
 
+    const ecrLoading = ref(false)
     const changeComponentKey = () => {
       componentKey.value = Math.floor(Math.random() * 100)
     }
@@ -360,6 +354,41 @@ export default defineComponent({
     }
 
     watch(
+      () => form.ecrNo,
+      (currentValue, oldValue) => {
+        var typingTimer
+        clearTimeout(typingTimer)
+        typingTimer = setTimeout(() => {
+          ecrLoading.value = true
+          fetchEcrDetail(currentValue.toUpperCase()).then((data) => {
+            console.log(data)
+            if (
+              data.docs.length > 0 &&
+              data.docs[0].ecrNo == currentValue.toUpperCase()
+            ) {
+              form.customer.name = data.docs[0].customer.name
+              form.customer.id = data.docs[0].customer._id
+              form.customer.email = data.docs[0].customer.email
+              form.cylinderType = data.docs[0].gasType.gasName
+              ecrCylinders.value = data.docs[0].removeArr.map((id: any) => id)
+              changeComponentKey()
+              ecrLoading.value = false
+            } else {
+              context.$toast.error(`There is no ECR with ${currentValue}`)
+              form.customer.name = ''
+              form.customer.id = ''
+              form.customer.email = ''
+              form.cylinderType = ''
+              ecrCylinders.value = []
+              changeComponentKey()
+              ecrLoading.value = false
+            }
+          })
+        }, 3000)
+      }
+    )
+
+    watch(
       () => scan.formId,
       (currentValue, oldValue) => {
         console.log(currentValue)
@@ -436,6 +465,7 @@ export default defineComponent({
 
     const fetchAllEcr = () => {
       fetchEcrs().then((response) => {
+        console.log(response)
         ecrs.value = response.docs.map((item: any) => {
           return {
             name: item.ecrNo,
@@ -552,6 +582,7 @@ export default defineComponent({
       searchEcr,
       ecrSearch,
       displayList,
+      ecrLoading,
     }
   },
 })

@@ -34,6 +34,18 @@ export function fetchEcrs() {
     }
   })
 }
+export function fetchEcrDetail(ecrNo: String) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await $axios.get(`ecr/fetch-ecr?search=${ecrNo}&page=1&limit=10`)
+      resolve(response.data.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+
 export function fetchFcrs(page: number, limit: number, query: string = '') {
   return new Promise<any>(async (resolve, reject) => {
     try {

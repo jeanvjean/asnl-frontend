@@ -39,6 +39,7 @@
         'border-gray-600 bg-gray-200 ': isDisabled,
         'border-gray-200 text-gray-500 bg-white': !isDisabled,
       }"
+      :id="id"
       @input="returnValue"
       @invalid="isInvalid = true"
       @focus="isInvalid = false"
@@ -79,6 +80,11 @@ export default defineComponent({
       type: Boolean,
       default: true,
       required: false,
+    },
+    id: {
+      type: String,
+      required: false,
+      default: '',
     },
   },
   setup(_props, ctx) {

@@ -126,6 +126,16 @@
           </table>
         </div>
         <div class="w-full overflow-x-auto px-8 my-4">
+          <input
+            type="checkbox"
+            @change="
+              {
+              }
+            "
+            class="rounded-sm"
+            id="vat"
+          />
+          <label for="vat">Apply VAT</label>
           <div
             class="
               grid grid-rows-1

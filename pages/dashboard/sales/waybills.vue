@@ -5,14 +5,16 @@
     </div>
 
     <div class="bg-white px-6 py-4 mt-6">
-      <!--<div class="flex items-center justify-around px-2 py-2 space-x-4 w-full">
-         <filter-component @filter="showFilter = true" />
+      <div class="flex items-center justify-around px-2 py-2 space-x-4 w-full">
+        <!-- <filter-component @filter="showFilter = true" /> -->
         <search-component :place-holder="'Search'" />
         <pagination
           :pagination-details="paginationProp"
           @limitChanged="adjustLimit"
+          @next="changePage($event.value)"
+          @prev="changePage($event.value)"
         />
-      </div> -->
+      </div>
       <div class="w-full flex items-center space-x-4 px-6 py-2">
         <div
           v-for="(selectedFilter, j) in displayedFilters"
@@ -94,7 +96,7 @@
                   text-center
                 "
               >
-                Total Amount
+                Cylinders
               </th>
               <th
                 class="
@@ -109,19 +111,6 @@
               >
                 Date
               </th>
-              <th
-                class="
-                  uppercase
-                  text-gray-800
-                  font-light
-                  text-sm
-                  px-6
-                  py-2
-                  text-center
-                "
-              >
-                Action
-              </th>
             </tr>
           </thead>
           <tbody class="bg-white">
@@ -129,7 +118,6 @@
               <td class="px-2 py-1 text-center">
                 <input
                   type="checkbox"
-                  :checked="invoiceId == invoice._id ? true : false"
                   @change="changedChecked(invoice)"
                   class="rounded-sm"
                 />
@@ -145,7 +133,7 @@
                   border-white border
                 "
               >
-                {{ invoice.invoiceNumber }}
+                {{ invoice.deliveryNo }}
               </td>
               <td
                 class="
@@ -158,7 +146,7 @@
                   border-white border
                 "
               >
-                {{ invoice.type }}
+                {{ invoice.invoiceNo }}
               </td>
               <td
                 class="
@@ -171,7 +159,7 @@
                   border-white border
                 "
               >
-                {{ invoice.customer }}
+                {{ invoice.customer.name }}
               </td>
               <td
                 class="
@@ -184,7 +172,7 @@
                   border-white border
                 "
               >
-                {{ invoice.amount }}
+                {{ invoice.cylinders }}
               </td>
               <td
                 class="
@@ -198,22 +186,6 @@
                 "
               >
                 {{ invoice.date }}
-              </td>
-              <td>
-                <router-link
-                  :to="`/dashboard/invoice/${invoice._id}`"
-                  class="
-                    text-center
-                    mx-auto
-                    p-1
-                    text-btn-purple
-                    border border-btn-purple
-                    rounded-sm
-                    block
-                  "
-                >
-                  View Invoice
-                </router-link>
               </td>
             </tr>
           </tbody>
@@ -306,7 +278,7 @@ export default defineComponent({
 
     function adjustLimit(newLimit: Number) {
       pageLimit.value = newLimit
-      //   getInvoices(1, pageLimit.value)
+      fetchDelivery(1, pageLimit.value)
     }
     function filterVehicles(filters: any) {
       queryString.value = getQueryString(filters)
@@ -322,23 +294,25 @@ export default defineComponent({
       currentPage: 1,
     })
 
-    function changedChecked() {}
+    function changePage(nextPage: number) {
+      fetchDelivery(nextPage)
+    }
 
-    const fetchDelivery = () => {
-      console.log('response')
-      VehicleController.fetchDeliveryNotes()
+    const fetchDelivery = (page: Number, limit: Number = 10) => {
+      VehicleController.fetchDeliveryNotes(page, limit)
         .then((response: any) => {
-          console.log('response')
-          //   body.value = response.docs.map((invoice: any) => {
-          //     return {
-          //       invoiceNumber: invoice.invoiceNo,
-          //       type: invoice.recieptType,
-          //       customer: invoice.customer.name,
-          //       amount: invoice.totalAmount,
-          //       date: new Date(invoice.createdAt).toDateString(),
-          //       _id: invoice._id,
-          //     }
-          //   })
+          console.log(response)
+          body.value = response.docs.map((d: any) => {
+            return {
+              deliveryNo: d.deliveryNo,
+              invoiceNo: d.invoiceNo,
+              type: d.deliveryType,
+              customer: d.customer,
+              cylinders: d.cylinders.length,
+              date: new Date(d.createdAt).toDateString(),
+              _id: d._id,
+            }
+          })
           paginationProp.hasNextPage = response.hasNextPage
           paginationProp.hasPrevPage = response.hasPrevPage
           paginationProp.currentPage = response.page
@@ -348,8 +322,7 @@ export default defineComponent({
           console.log('hello')
         })
     }
-
-    onMounted(() => fetchDelivery())
+    onMounted(() => fetchDelivery(page.value, pageLimit.value))
 
     return {
       headers,
@@ -363,7 +336,9 @@ export default defineComponent({
       isLoading,
       displayedFilters,
       showPayment,
-      changedChecked,
+      // changedChecked,
+      changePage,
+      adjustLimit,
     }
   },
 })
