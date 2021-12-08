@@ -37,6 +37,7 @@
                 @prev="getRequisitions($event.value, pageLimit)"
               />
               <router-link
+              v-show="false"
                 to="/dashboard/production/new-sales-requisition"
                 class="
                   flex

@@ -323,13 +323,13 @@ export default defineComponent({
       isLoading.value = true
       CustomerController.fetchCustomers(page)
         .then((response) => {
+          console.log(response.docs)
           body.value = getTableBody(response.docs, [
             'name',
             'email',
             'phoneNumber',
             'address',
           ])
-
           paginationProp.hasNextPage = response.hasNextPage
           paginationProp.hasPrevPage = response.hasPrevPage
           paginationProp.currentPage = response.page

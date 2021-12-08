@@ -192,16 +192,17 @@
               >
                 {{ invoice.date }}
               </td>
-              <td>
+              <td class="text-center">
                 <button
                   class="
                     px-6
                     py-1
+                    mx-auto
                     border border-btn-purple
                     rounded-sm
                     text-btn-purple text-sm
                   "
-                  v-if="invoice.deliveryNo"
+                  v-if="!invoice.deliveryNo"
                   @click="generateDN(invoice)"
                 >
                   Generate Waybill
@@ -341,7 +342,7 @@ export default defineComponent({
       isLoading.value = true
       fetchInvoices(pageValue, pageLimit, queryString)
         .then((response: any) => {
-          console.log(response)
+          console.log(response.docs)
           body.value = response.docs.map((invoice: any) => {
             return {
               invoiceNumber: invoice.invoiceNo,
@@ -354,6 +355,7 @@ export default defineComponent({
               deliveryNo: invoice.deliveryNo,
             }
           })
+          console.log(body.value)
           paginationProp.hasNextPage = response.hasNextPage
           paginationProp.hasPrevPage = response.hasPrevPage
           paginationProp.currentPage = response.page

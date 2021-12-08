@@ -702,8 +702,7 @@ export default defineComponent({
       profile.value[10].value = new Date(
         _props.customer.cylinderHoldingTime
       ).toLocaleDateString()
-      profile.value[12].value = _props.customer.unitPrice
-    })
+     })
 
     function toggleAccordion(index: number) {
       accordions.value.forEach((element, i) => {

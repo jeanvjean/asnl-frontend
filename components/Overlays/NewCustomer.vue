@@ -118,11 +118,19 @@
             @get="form.territory = $event.value"
           />
 
-          <input-component
+          <!-- <input-component
             :label-title="'Unit Price'"
             :input-placeholder="'Enter Unit Price'"
             :default-value="form.unitPrice"
             @get="form.unitPrice = $event.value"
+            :inputType="'number'"
+          /> -->
+          <input-component
+            :label-title="'VAT'"
+            :input-placeholder="'Enter VAT'"
+            :default-value="form.vat.value"
+            @get="form.vat.value = $event.value"
+            :inputType="'number'"
           />
 
           <div class="w-full py-2">
@@ -235,13 +243,9 @@
               :input-placeholder="'Enter Unit'"
               :default-value="product.unit_price.value"
               @get="product.unit_price.value = $event.value"
+              :inputType="'number'"
             />
-            <input-component
-              :label-title="'VAT'"
-              :input-placeholder="'Enter VAT'"
-              :default-value="product.vat.value"
-              @get="product.vat.value = $event.value"
-            />
+
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="fill-current w-12 h-12 text-black pt-6"
@@ -267,6 +271,7 @@
           />
         </div>
       </form>
+      <button @click="submit">submit</button>
     </div>
   </back-drop>
 </template>
@@ -288,6 +293,7 @@ import { CylinderController } from '@/module/Cylinder'
 import { CustomerController } from '@/module/Customer'
 import { ValidatorObject } from '@/module/Validation'
 import { getRandomValue } from '@/constants/utils'
+// import FormData from 'form-data'
 
 export default defineComponent({
   components: { BackDrop, InputComponent, SelectComponent, ButtonComponent },
@@ -335,6 +341,10 @@ export default defineComponent({
       unitPrice: '',
       CAC: '',
       validId: '',
+      vat: {
+        value: 0,
+        unit: '%',
+      },
     })
 
     function fetchProducts() {
@@ -365,8 +375,6 @@ export default defineComponent({
       if (product) {
         products.value[index].product.productName = product.name
         products.value[index].product.colorCode = product.colorCode
-        console.log(product)
-        console.log(products.value)
       }
     }
 
@@ -380,10 +388,6 @@ export default defineComponent({
         unit_price: {
           value: 0,
           unit: 'NGN',
-        },
-        vat: {
-          value: 0,
-          unit: '%',
         },
       })
       // changeComponentKey()
@@ -403,30 +407,26 @@ export default defineComponent({
       componentKey.value = random
     }
 
-    // const requestPayload = computed(() => {
-    //   const formData = new FormData()
-    //   formData.append('name', form.name)
-    //   formData.append('customerType', form.customerType)
-    //   formData.append('modeOfService', form.modeOfService)
-    //   formData.append('nickName', form.nickName)
-    //   formData.append('address', form.address)
-    //   formData.append('contactPerson', form.contactPerson)
-    //   formData.append('email', form.email)
-    //   formData.append('phoneNumber', form.phoneNumber)
-    //   formData.append('TIN', form.TIN)
-    //   formData.append('rcNumber', form.rcNumber)
-    //   formData.append('cylinderHoldingTime', form.cylinderHoldingTime)
-    //   formData.append('territory', form.territory)
-    //   formData.append('unitPrice', form.unitPrice)
-    //   formData.append('CAC', form.CAC)
-    //   formData.append('validId', form.validId)
-
-    //   products.value.forEach((element: any) => {
-    //     formData.append('products', element.id)
-    //   })
-
-    //   return formData
-    // })
+    const requestPayload = computed(() => {
+      const formData = new FormData()
+      formData.append('name', form.name)
+      formData.append('customerType', form.customerType)
+      formData.append('modeOfService', form.modeOfService)
+      formData.append('nickName', form.nickName)
+      formData.append('address', form.address)
+      formData.append('contactPerson', form.contactPerson)
+      formData.append('email', form.email)
+      formData.append('phoneNumber', form.phoneNumber)
+      formData.append('TIN', form.TIN)
+      formData.append('rcNumber', form.rcNumber)
+      formData.append('cylinderHoldingTime', form.cylinderHoldingTime)
+      formData.append('territory', form.territory)
+      formData.append('CAC', form.CAC)
+      formData.append('vat', form.vat)
+      formData.append('validId', form.validId)
+      formData.append('products', JSON.stringify(products.value))
+      return formData
+    })
 
     onMounted(() => {
       changeComponentKey()
@@ -446,7 +446,6 @@ export default defineComponent({
         rcNumber: 'string',
         cylinderHoldingTime: 'required',
         territory: 'required',
-        unitPrice: 'required',
         CAC: 'required',
         validId: 'required',
       }
@@ -463,13 +462,11 @@ export default defineComponent({
         rcNumber: form.rcNumber,
         cylinderHoldingTime: form.cylinderHoldingTime,
         territory: form.territory,
-        unitPrice: form.unitPrice,
         CAC: form.CAC,
+        vat: form.vat,
         validId: form.validId,
-        products: products.value,
       }
-
-      const validation: any = new Validator(payload, rules)
+      const validation: any = new Validator(payload.value, rules)
       if (validation.fails()) {
         let messages: string[] = []
 
@@ -479,7 +476,8 @@ export default defineComponent({
         })
       } else {
         isLoading.value = true
-        CustomerController.registerCustomer(payload.value)
+        console.log(payload.value)
+        CustomerController.registerCustomer(requestPayload.value)
           .then((response) => {
             close()
             if (_props.fromCylinder) {

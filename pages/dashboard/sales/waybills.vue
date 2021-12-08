@@ -6,7 +6,7 @@
 
     <div class="bg-white px-6 py-4 mt-6">
       <div class="flex items-center justify-around px-2 py-2 space-x-4 w-full">
-        <!-- <filter-component @filter="showFilter = true" /> -->
+        <filter-button />
         <search-component :place-holder="'Search'" />
         <pagination
           :pagination-details="paginationProp"
@@ -14,6 +14,44 @@
           @next="changePage($event.value)"
           @prev="changePage($event.value)"
         />
+        <button
+          class="
+            flex
+            justify-between
+            items-end
+            bg-btn-purple
+            px-4
+            py-2
+            space-x-4
+            rounded-sm
+            text-white
+            font-semibold
+            text-md
+          "
+          @click="showTick = true"
+          v-if="!showTick"
+        >
+          Create Route Plan
+        </button>
+        <button
+          class="
+            flex
+            justify-between
+            items-end
+            bg-btn-purple
+            px-4
+            py-2
+            space-x-4
+            rounded-sm
+            text-white
+            font-semibold
+            text-md
+          "
+          v-if="showTick && customersDN.length > 0"
+          @click="showRoutePlan = true"
+        >
+          Proceed
+        </button>
       </div>
       <div class="w-full flex items-center space-x-4 px-6 py-2">
         <div
@@ -45,7 +83,20 @@
             class="bg-gray-200 tracking-tight text-base font-semibold uppercase"
           >
             <tr>
-              <th></th>
+              <th v-if="showTick"></th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-3
+                  py-3
+                  text-center
+                "
+              >
+                Delivery Number
+              </th>
               <th
                 class="
                   uppercase
@@ -59,19 +110,7 @@
               >
                 Inovice Number
               </th>
-              <th
-                class="
-                  uppercase
-                  text-gray-800
-                  font-thin
-                  text-sm
-                  px-3
-                  py-3
-                  text-center
-                "
-              >
-                Invoice Type
-              </th>
+
               <th
                 class="
                   uppercase
@@ -115,11 +154,12 @@
           </thead>
           <tbody class="bg-white">
             <tr v-for="(invoice, index) in body" :key="index">
-              <td class="px-2 py-1 text-center">
+              <td class="px-2 py-1 text-center" v-if="showTick">
                 <input
                   type="checkbox"
-                  @change="changedChecked(invoice)"
+                  @change="changedChecked(invoice, index)"
                   class="rounded-sm"
+                  v-if="showTick && !invoice.route_plan_id"
                 />
               </td>
               <td
@@ -127,7 +167,7 @@
                   text-left
                   capitalize
                   font-light
-                  text-md
+                  text-md text-center
                   px-6
                   py-6
                   border-white border
@@ -172,7 +212,7 @@
                   border-white border
                 "
               >
-                {{ invoice.cylinders }}
+                {{ invoice.cylinders.length }}
               </td>
               <td
                 class="
@@ -204,6 +244,11 @@
       @close="showFilter = false"
       @filterAdded="filterVehicles"
     />
+    <RoutePlan
+      v-if="showRoutePlan"
+      @close="showRoutePlan = false"
+      :customersDN="customersDN"
+    />
   </div>
 </template>
 
@@ -217,8 +262,9 @@ import {
 } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
-import FilterComponent from '@/components/Base/FilterButton.vue'
+import FilterButton from '@/components/Base/FilterButton.vue'
 import InvoiceFilter from '@/components/Overlays/Filter.vue'
+import RoutePlan from '@/components/Overlays/RoutePlan.vue'
 import { mainStore } from '@/module/Pinia'
 import { getFilters, getQueryString, getTableBody } from '@/constants/utils'
 import { VehicleController } from '@/module/Vehicle'
@@ -229,9 +275,10 @@ export default defineComponent({
   components: {
     Pagination,
     SearchComponent,
-    FilterComponent,
+    FilterButton,
     InvoiceFilter,
     InvoicePayment,
+    RoutePlan,
   },
   layout: 'dashboard',
   setup() {
@@ -287,6 +334,8 @@ export default defineComponent({
     }
 
     const showPayment = ref(false)
+    const showRoutePlan = ref(false)
+    const showTick = ref(false)
 
     const paginationProp = reactive({
       hasNextPage: false,
@@ -297,20 +346,42 @@ export default defineComponent({
     function changePage(nextPage: number) {
       fetchDelivery(nextPage)
     }
+    const customersDN = ref<any>([])
+    const changedChecked = (d: any, index: number) => {
+      if (
+        !customersDN.value
+          .map((item: any) => item.deliveryNo)
+          .includes(d.deliveryNo)
+      ) {
+        customersDN.value.push({
+          name: d.customer.name,
+          email: d.customer.email,
+          destination: '',
+          departure: '',
+          deliveryNo: d.deliveryNo,
+          numberOfCylinders: d.cylinders.length,
+          cylinders: d.cylinders,
+        })
+      } else {
+        customersDN.value.splice(index, 1)
+      }
+      console.log(customersDN.value)
+    }
 
     const fetchDelivery = (page: Number, limit: Number = 10) => {
       VehicleController.fetchDeliveryNotes(page, limit)
         .then((response: any) => {
-          console.log(response)
+          console.log(response.docs)
           body.value = response.docs.map((d: any) => {
             return {
               deliveryNo: d.deliveryNo,
               invoiceNo: d.invoiceNo,
               type: d.deliveryType,
               customer: d.customer,
-              cylinders: d.cylinders.length,
+              cylinders: d.cylinders,
               date: new Date(d.createdAt).toDateString(),
               _id: d._id,
+              route_plan_id: d.route_plan_id ? d.route_plan_id : null,
             }
           })
           paginationProp.hasNextPage = response.hasNextPage
@@ -336,9 +407,12 @@ export default defineComponent({
       isLoading,
       displayedFilters,
       showPayment,
-      // changedChecked,
+      changedChecked,
+      showRoutePlan,
+      showTick,
       changePage,
       adjustLimit,
+      customersDN,
     }
   },
 })

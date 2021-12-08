@@ -126,16 +126,16 @@
           </table>
         </div>
         <div class="w-full overflow-x-auto px-8 my-4">
-          <input
-            type="checkbox"
-            @change="
-              {
-              }
-            "
-            class="rounded-sm"
-            id="vat"
-          />
-          <label for="vat">Apply VAT</label>
+          <div v-if="details.invoice_id == null">
+            <input
+              type="checkbox"
+              v-model="applyVat"
+              @change="applyingVAT"
+              class="rounded-sm"
+              id="vat"
+            />
+            <label for="vat">Apply VAT {{ vat }} % </label>
+          </div>
           <div
             class="
               grid grid-rows-1
@@ -161,7 +161,7 @@
             <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">VAT</h4>
-                <p>7%</p>
+                <p>{{ vat }} %</p>
               </div>
             </div>
 
@@ -275,6 +275,7 @@ import {
 } from '@nuxtjs/composition-api'
 import { fetchRequisition } from '~/module/Sales'
 import { createInvoice } from '~/module/Account'
+import { CustomerController } from '~/module/Customer'
 import SuccessMsg from '~/components/Overlays/SuccessMsg.vue'
 var converter = require('number-to-words')
 
@@ -298,6 +299,7 @@ export default defineComponent({
       customer: {
         name: '',
         id: '',
+        email: '',
         type: '',
       },
       ecrNo: '',
@@ -312,9 +314,22 @@ export default defineComponent({
       subrole: '',
       date: null,
     })
+    const applyVat = ref<Boolean>(false)
     const cylinders = ref<any>([])
     const totalVolume = ref(0)
     const totalAmount = ref(0)
+    const oTotalAmount = ref(0)
+    const vat = ref(0)
+
+    const applyingVAT = () => {
+      if (applyVat.value == true) {
+        totalAmount.value =
+          Number(totalAmount.value) +
+          Number((totalAmount.value * vat.value) / 100)
+      } else {
+        totalAmount.value = oTotalAmount.value
+      }
+    }
 
     watch(status, (currentValue) => {
       if (currentValue === 'success') {
@@ -331,7 +346,7 @@ export default defineComponent({
       let requestBody = {
         customer: {
           name: details.customer.name,
-          email: 'gbenga@email.com',
+          email: details.customer.email,
           id: details.customer.id,
         },
         totalAmount: totalAmount.value,
@@ -360,15 +375,22 @@ export default defineComponent({
         details.date = data.createdAt
         details.invoice_id = data.invoice_id
         cylinders.value = data.cylinders
+
         data.cylinders.forEach((item: any) => {
           totalVolume.value += item.volume.value
           totalAmount.value += item.amount
+          oTotalAmount.value += item.amount
         })
+
         preparedBy.name = data.preparedBy.name
         preparedBy.image = data.preparedBy.image
         preparedBy.subrole = data.preparedBy.subrole
         preparedBy.email = data.preparedBy.email
         preparedBy.date = data.preparedBy.createdAt
+
+        CustomerController.fetchCustomer(data.customer.id).then((data) => {
+          vat.value = data.data.vat ? data.data.vat.value : 5
+        })
       })
     })
     return {
@@ -388,6 +410,9 @@ export default defineComponent({
       showSuccess,
       invoice_id,
       router,
+      applyVat,
+      applyingVAT,
+      vat,
     }
   },
 })

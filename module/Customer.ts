@@ -25,6 +25,18 @@ class Customer {
       }
     })
   }
+  fetchCustomer(customerId: string) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get(
+          `customer/fetch-customer/${customerId}`
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 
   fetchCylinders(customerId: String) {
     return new Promise<any>(async (resolve, reject) => {

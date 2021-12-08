@@ -377,7 +377,7 @@ export default defineComponent({
 
     const getInvoiceDetails = (id: String) => {
       fetchInvoice(id).then((response) => {
-        console.log(response)
+        // console.log(response)
         form.id = response._id
         form.customer = response.customer
         form.receiptType = response.recieptType
@@ -433,7 +433,7 @@ export default defineComponent({
 
       createOcn(payload)
         .then((data: any) => {
-          console.log(data)
+          // console.log(data)
           if (data.code == 200) {
             showSuccess.value = true
           }

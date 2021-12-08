@@ -1,5 +1,5 @@
 <template>
-  <back-drop :centralize="isCentralise">
+  <back-drop :centralize="false">
     <div
       class="
         w-full
@@ -136,7 +136,7 @@
             "
           >
             <h4 class="text-sm">Customer Details</h4>
-
+            <!-- 
             <button
               type="button"
               class="
@@ -168,7 +168,7 @@
                   d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-            </button>
+            </button> -->
           </div>
           <div
             v-for="(customer, i) in form.customers"
@@ -244,6 +244,12 @@ import ButtonComponent from '@/components/Form/Button.vue'
 
 export default defineComponent({
   components: { BackDrop, InputComponent, SelectComponent, ButtonComponent },
+  props: {
+    customersDN: {
+      type: Array,
+      required: true,
+    },
+  },
   setup(_props, ctx) {
     const close = () => {
       ctx.emit('close')
@@ -319,7 +325,7 @@ export default defineComponent({
       fuelsConsumed: '',
       timeOut: '',
       timeIn: '',
-      customers: [],
+      customers: _props.customersDN,
     })
 
     const customers = ref<Array<any>>([])
@@ -382,7 +388,8 @@ export default defineComponent({
       } else {
         isLoading.value = true
         VehicleController.createRoutePlan(form, vehicleId.value)
-          .then(() => {
+          .then((data) => {
+            console.log(data)
             close()
           })
           .finally(() => {

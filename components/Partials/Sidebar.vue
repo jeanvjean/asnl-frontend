@@ -333,7 +333,7 @@ export default defineComponent({
             },
             {
               title: 'Incoming',
-              link: '/dashboard/invoices',
+              link: '/dashboard/incoming',
             },
             {
               title: 'Invoices',
@@ -348,6 +348,10 @@ export default defineComponent({
               link: '#',
               showSubCategory: false,
               subCategories: [
+                {
+                  title: 'Cylinders',
+                  link: '/dashboard/outgoing',
+                },
                 {
                   title: 'Delivery Waybill',
                   link: '/dashboard/sales/waybills',

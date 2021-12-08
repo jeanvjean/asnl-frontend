@@ -157,6 +157,7 @@ export default defineComponent({
       showLoader.value = true
       fetchECRs(page, limit, query)
         .then((response) => {
+          console.log(response)
           tableBody.value = response.docs.map((erc: any) => {
             return {
               ercNo: erc.ecrNo,

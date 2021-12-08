@@ -303,7 +303,13 @@ export default defineComponent({
                   item.barcode,
                   item.cylinderNumber
                 ).then((data) => {
-                  if (data) {
+                  if(!form.gasType){
+                      context.$toast.error('Select a gas type first')
+                      return 
+                  }
+                  console.log(data.data.cylinder.gasName==selectedGas.value)
+                  console.log(data.data.cylinder)
+                  if (data && data.data.cylinder.gasName== selectedGas.value) {
                     scanCylinders.value.push({
                       _id: data.data.cylinder._id,
                       cylinderNumber: data.data.cylinder.cylinderNumber,
@@ -313,7 +319,7 @@ export default defineComponent({
                         data.data.cylinder.gasVolumeContent.unit,
                     })
                   } else {
-                    context.$toast.error('This cylinder is not available.')
+                    context.$toast.error('This cylinder is not available or does not have the same gas type.')
                   }
                 })
               }

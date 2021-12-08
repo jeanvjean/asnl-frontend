@@ -13,6 +13,19 @@ export function fetchIcns(page: Number, limit: Number, query: String) {
     }
   })
 }
+export function fetchOcns(page: number, limit: number, query: string) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await $axios.get(
+        `/ocn/fetch-ocns?page=${page}&limit=${limit}&noteType=out-going${query}`
+      )
+      resolve(response.data.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
 
 export function fetchIcn(icnId: string) {
   return new Promise<any>(async (resolve, reject) => {
