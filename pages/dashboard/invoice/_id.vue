@@ -256,8 +256,9 @@
     <success-msg
       v-if="showSuccess"
       :text="'OCN has been generated successfully!'"
-      :buttonText="'Continue'"
+      :buttonText="'View OCN Created'"
       @close="showSuccess = false"
+      @action="$router.push(`/dashboard/outgoing/${ocn_id}`)"
     />
   </div>
 </template>
@@ -319,6 +320,7 @@ export default defineComponent({
     const productsArray = ref<Array<any>>([])
 
     const totalVolume = ref(0)
+    const ocn_id = ref('')
     const cylinderType = ref('')
 
     const changeHeaders = (receiptType: String) => {
@@ -377,7 +379,7 @@ export default defineComponent({
 
     const getInvoiceDetails = (id: String) => {
       fetchInvoice(id).then((response) => {
-        // console.log(response)
+        console.log(response)
         form.id = response._id
         form.customer = response.customer
         form.receiptType = response.recieptType
@@ -433,7 +435,8 @@ export default defineComponent({
 
       createOcn(payload)
         .then((data: any) => {
-          // console.log(data)
+          console.log(data)
+          ocn_id.value = data.data._id
           if (data.code == 200) {
             showSuccess.value = true
           }
@@ -470,6 +473,7 @@ export default defineComponent({
       genereteOCN,
       showSuccess,
       router,
+      ocn_id,
     }
   },
 })

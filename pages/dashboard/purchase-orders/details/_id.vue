@@ -1,6 +1,22 @@
 <template>
   <div :key="componentKey" class="w-full md:w-10/12 lg:w-8/12 md:mx-auto mt-10">
     <div class="bg-white px-6 md:px-10 py-6">
+      <div
+        v-if="auth._id === purchaseDetails.nextApprovingOfficer._id"
+        class="my-2 md:space-x-4 flex items-center justify-end w-full"
+      >
+        <div>
+          <button-component
+            :button-class="'bg-btn-purple text-white'"
+            :button-text="'Create Sales Requistion'"
+            @buttonClicked="
+              $router.push(
+                `/dashboard/sales/requisition/purchase/${purchaseDetails.id}`
+              )
+            "
+          />
+        </div>
+      </div>
       <div class="flex items-center justify-between px-2 py-2">
         <h1 class="uppercase font-semibold">
           {{ purchaseDetails.type }} PURCHASE ORDER DETAILS
@@ -235,6 +251,7 @@ export default defineComponent({
       approvingOfficers: [],
       nextApprovingOfficer: '',
       fillingAgent: '',
+      id: '',
     })
     const users = ref<any>([])
     const showFinalStep = ref<Boolean>(false)
@@ -263,6 +280,8 @@ export default defineComponent({
     const fetchOrderDetails = (orderId: String) => {
       CustomerController.fetchPurchaseOrder(orderId)
         .then((response: any) => {
+          console.log(response)
+          purchaseDetails.id = response._id
           purchaseDetails.approvalStage = response.approvalStage
           purchaseDetails.status = response.approvalStatus
           purchaseDetails.cylinders = response.cylinders

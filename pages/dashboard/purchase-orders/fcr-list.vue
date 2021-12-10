@@ -66,9 +66,13 @@
                     rounded-sm
                     text-btn-purple text-sm
                   "
-                  @click=";(singleEcr = slotProps.rowObject), (showErc = true)"
+                  @click="
+                    $router.push(
+                      `/dashboard/sales/requisition/purchase/${slotProps.rowObject._id}`
+                    )
+                  "
                 >
-                  Details
+                  Create Sales Requistion
                 </button>
               </template>
             </table-component>

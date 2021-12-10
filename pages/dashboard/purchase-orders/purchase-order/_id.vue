@@ -268,6 +268,8 @@ export default defineComponent({
                   item.barcode,
                   item.cylinderNumber
                 ).then((data) => {
+                  console.log(data)
+                  console.log(totalCylinders.value)
                   if (
                     data &&
                     totalCylinders.value.includes(

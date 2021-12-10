@@ -136,7 +136,7 @@
             "
           >
             <h4 class="text-sm">Customer Details</h4>
-            <!-- 
+
             <button
               type="button"
               class="
@@ -152,6 +152,7 @@
                 text-sm
               "
               @click="increment"
+              v-if="form.activity == 'pick-up'"
             >
               <span>Add More Customer Details</span>
               <svg
@@ -168,7 +169,7 @@
                   d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-            </button> -->
+            </button>
           </div>
           <div
             v-for="(customer, i) in form.customers"
@@ -247,7 +248,7 @@ export default defineComponent({
   props: {
     customersDN: {
       type: Array,
-      required: true,
+      required: false,
     },
   },
   setup(_props, ctx) {
@@ -325,7 +326,7 @@ export default defineComponent({
       fuelsConsumed: '',
       timeOut: '',
       timeIn: '',
-      customers: _props.customersDN,
+      customers: _props.customersDN || [],
     })
 
     const customers = ref<Array<any>>([])
@@ -338,7 +339,7 @@ export default defineComponent({
         email: '',
         destination: '',
         departure: '',
-        numberOfCylinders: '0',
+        numberOfCylinders: 0,
       })
       changeComponentKey()
     }
@@ -399,7 +400,7 @@ export default defineComponent({
     }
 
     watch(form, (currentValue: any) => {
-      if (currentValue.customers.length < 2) {
+      if (currentValue.customers && currentValue.customers.length < 2) {
         isCentralise.value = true
       } else {
         isCentralise.value = false

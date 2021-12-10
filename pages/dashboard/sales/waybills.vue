@@ -246,7 +246,10 @@
     />
     <RoutePlan
       v-if="showRoutePlan"
-      @close="showRoutePlan = false"
+      @close="
+        showRoutePlan = false
+        $router.go(0)
+      "
       :customersDN="customersDN"
     />
   </div>
@@ -356,8 +359,8 @@ export default defineComponent({
         customersDN.value.push({
           name: d.customer.name,
           email: d.customer.email,
-          destination: '',
-          departure: '',
+          destination: d.customer.destination,
+          departure: d.customer.departure,
           deliveryNo: d.deliveryNo,
           numberOfCylinders: d.cylinders.length,
           cylinders: d.cylinders,
@@ -377,7 +380,11 @@ export default defineComponent({
               deliveryNo: d.deliveryNo,
               invoiceNo: d.invoiceNo,
               type: d.deliveryType,
-              customer: d.customer,
+              customer: {
+                ...d.customer,
+                destination: d.branch.location,
+                departure: '',
+              },
               cylinders: d.cylinders,
               date: new Date(d.createdAt).toDateString(),
               _id: d._id,
@@ -389,6 +396,7 @@ export default defineComponent({
           paginationProp.currentPage = response.page
         })
         .finally(() => {
+          console.log(body.value)
           isLoading.value = false
           console.log('hello')
         })

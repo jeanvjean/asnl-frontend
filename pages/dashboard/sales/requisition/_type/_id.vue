@@ -111,7 +111,7 @@
                       </td>
                       <td>
                         <input-component
-                          :input-placeholder="'Cylinder Size'"
+                          :input-placeholder="'Unit Price'"
                           :default-value="cylinder.unitPrice"
                           :input-type="'number'"
                           @get="
@@ -136,7 +136,6 @@
                           "
                         />
                       </td>
-
                       <td>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -181,7 +180,10 @@
           </div>
         </div>
 
-        <div class="flex items-center space-x-6 px-4 mt-4">
+        <div
+          class="flex items-center space-x-6 px-4 mt-4"
+          v-if="productionDetail.cylinders.length > 0"
+        >
           <button-component
             :buttonType="'button'"
             @buttonClicked="printNow()"
@@ -221,7 +223,7 @@ import { ValidatorObject } from '@/module/Validation'
 import { createRequisition } from '@/module/Sales'
 import { fetchEcrDetail } from '@/module/ECR'
 import { initiateScan } from '@/module/SCAN'
-import { fetchEcrs } from '@/module/ECR'
+import { fetchEcrs, fetchEcr } from '@/module/ECR'
 import { fetchSchedule } from '@/module/Production'
 import { values } from 'lodash'
 import { mainStore } from '@/module/Pinia'
@@ -241,7 +243,6 @@ export default defineComponent({
     const auth: any = appStore.getLoggedInUser
     const route = useRoute()
     const prodId = route.value.params.id
-    console.log(route.value.params.id)
     const selected = reactive({
       customer: true,
       walkin: false,
@@ -389,12 +390,12 @@ export default defineComponent({
                         value: data.data.cylinder.gasVolumeContent.value,
                         unit: data.data.cylinder.gasVolumeContent.unit,
                       },
-                      unitPrice: data.data.cylinder.purchaseCost?.cost,
+                      unitPrice: getUnitPrice(data.data.cylinder.gasName),
                       amount:
-                        data.data.cylinder.purchaseCost?.cost *
+                        Number(getUnitPrice(data.data.cylinder.gasName)) *
                         data.data.cylinder.cylNo,
                     })
-                    form.cylinders = cylinders.value
+                    productionDetail.cylinders = cylinders.value
                   } else {
                     context.$toast.error(
                       'The cylinder is either empty of does not belong to the ECR'
@@ -483,12 +484,14 @@ export default defineComponent({
       cylinders: [],
       type: 'regular',
       date: new Date().toISOString(),
-      production_id: '',
+      production_id: null,
       cylinderType: '',
+      fcr_id: null,
     })
     const products = ref<any>([])
     const getUnitPrice = (gasName: any) => {
       var unit = 0
+
       for (let index = 0; index < products.value.length; index++) {
         if (products.value[index].product.productName == gasName) {
           unit = products.value[index].product.unit_price
@@ -503,41 +506,66 @@ export default defineComponent({
       return unit
     }
 
-    const getProductionDetail = () => {
-      fetchSchedule(route.value.params.id).then((response) => {
-        console.log(response)
-        productionDetail.production_id = response._id
-        productionDetail.customer = {
-          id: response.customer._id,
-          name: response.customer.name,
-          email: response.customer.email,
-        }
-        productionDetail.ecrNo = response.ecrNo
-        products.value = response.customer.products
-        productionDetail.cylinderType = response.cylinders[0].gasName
-        productionDetail.cylinders = response.cylinders.map((cylinder: any) => {
-          return {
-            cylinderNumber: cylinder.cylinderNumber,
-            noOfCylidners: cylinder.cylNo,
-            volume: cylinder.gasVolumeContent,
-            type: cylinder.gasName,
-            status: cylinder.cylinderStatus,
-            unitPrice: getUnitPrice(cylinder.gasName),
-            id: cylinder._id,
+    const getDetail = () => {
+      if (route.value.params.type == 'purchase') {
+        fetchEcr(route.value.params.id).then((response) => {
+          console.log(response.removeArr)
+          productionDetail.fcr_id = response._id
+          productionDetail.customer = {
+            id: response.supplier._id,
+            name: response.supplier.name,
+            email: response.supplier.email,
           }
-        })
+          productionDetail.ecrNo = response.ecrNo
+          // products.value = response.customer.products
+          productionDetail.cylinderType = response.cylinders[0].gasName
+          ecrCylinders.value = response.removeArr
+          // {
+          //   return {
+          //     cylinderNumber: cylinder.cylinderNumber,
+          //     noOfCylidners: cylinder.cylNo,
+          //     volume: cylinder.gasVolumeContent,
+          //     type: cylinder.gasName,
+          //     status: cylinder.cylinderStatus,
+          //     unitPrice: getUnitPrice(cylinder.gasName),
+          //     id: cylinder._id,
+          //   }
+          // }
 
-        changeComponentKey()
-      })
+          changeComponentKey()
+          //           }
+        })
+      } else {
+        fetchSchedule(route.value.params.id).then((response) => {
+          console.log(response.ecr.removeArr)
+          productionDetail.production_id = response._id
+          productionDetail.customer = {
+            id: response.customer._id,
+            name: response.customer.name,
+            email: response.customer.email,
+          }
+          productionDetail.ecrNo = response.ecrNo
+          products.value = response.customer.products
+          productionDetail.cylinderType = response.cylinders[0].gasName
+          ecrCylinders.value = response.ecr.removeArr
+          // {
+          //   return {
+          //     cylinderNumber: cylinder.cylinderNumber,
+          //     noOfCylidners: cylinder.cylNo,
+          //     volume: cylinder.gasVolumeContent,
+          //     type: cylinder.gasName,
+          //     status: cylinder.cylinderStatus,
+          //     unitPrice: getUnitPrice(cylinder.gasName),
+          //   }
+          // }
+
+          changeComponentKey()
+        })
+      }
     }
 
     onMounted(() => {
-      Promise.all([
-        getGases(),
-        fetchCustomers(),
-        fetchAllEcr(),
-        getProductionDetail(),
-      ])
+      Promise.all([getGases(), fetchCustomers(), fetchAllEcr(), getDetail()])
     })
     const context = useContext()
     const router = useRouter()
@@ -550,7 +578,7 @@ export default defineComponent({
         date: 'required|date',
         cylinderType: 'required|string',
         cylinders: 'required|array',
-        'cylinders.*.noOfCylidners': 'required|numeric',
+        'cylinders.*.noOfCylinders': 'required|numeric',
         'cylinders.*.cylinderNumber': 'required|string',
         'cylinders.*.unitPrice': 'required|numeric',
         'cylinders.*.amount': 'required|numeric',
@@ -558,7 +586,6 @@ export default defineComponent({
         // production_id: 'required|string',
         // purchase_id: 'required|string',
       }
-
       const validation: any = new Validator(productionDetail, rules)
       if (validation.fails()) {
         let messages: string[] = []
@@ -569,6 +596,11 @@ export default defineComponent({
         })
       } else {
         buttonLoading.value = true
+        //   if (route.value.params.type == 'purchase') {
+        //      productionDetail.production_id =null
+        //   } else {
+        //      productionDetail.fcr_id = null
+        //   }
         createRequisition(productionDetail)
           .then(() => {
             router.push('/dashboard/production/sales-requisition')

@@ -202,8 +202,8 @@
                     rounded-sm
                     text-btn-purple text-sm
                   "
-                  v-if="!invoice.deliveryNo"
-                  @click="generateDN(invoice)"
+                  v-if="!invoice.delivery_id"
+                  @click="generateDN(invoice, index)"
                 >
                   Generate Waybill
                 </button>
@@ -227,7 +227,12 @@
         </table>
       </div>
     </div>
-
+    <SuccessMsg
+      v-if="showSuccess"      :text="'You have succesfully generated a Delivery Waybill'"
+      :buttonText="'View Delivery Waybills'"
+      @action="$router.push('/dashboard/sales/waybills')"
+      @close="showSuccess = false"
+    />
     <invoice-filter
       v-if="showFilter"
       :filters="invoiceFilters"
@@ -255,6 +260,7 @@ import { getFilters, getQueryString, getTableBody } from '@/constants/utils'
 import { fetchInvoices } from '@/module/Account'
 import { VehicleController } from '@/module/Vehicle'
 import InvoicePayment from '@/components/Overlays/InvoicePayment.vue'
+import SuccessMsg from '@/components/Overlays/SuccessMsg.vue'
 
 export default defineComponent({
   name: 'Sales-Invoice',
@@ -264,6 +270,7 @@ export default defineComponent({
     FilterComponent,
     InvoiceFilter,
     InvoicePayment,
+    SuccessMsg,
   },
   layout: 'dashboard',
   setup() {
@@ -309,6 +316,7 @@ export default defineComponent({
     })
 
     const showPayment = ref(false)
+    const showSuccess = ref(false)
 
     const paginationProp = reactive({
       hasNextPage: false,
@@ -352,7 +360,7 @@ export default defineComponent({
               cylinders: invoice.cylinders,
               date: new Date(invoice.createdAt).toDateString(),
               _id: invoice._id,
-              deliveryNo: invoice.deliveryNo,
+              delivery_id: invoice.delivery_id,
             }
           })
           console.log(body.value)
@@ -371,7 +379,7 @@ export default defineComponent({
       deliveryType: 'customer',
     })
 
-    const generateDN = (invoice: any) => {
+    const generateDN = (invoice: any, i: number) => {
       //   console.log(invoice)
       payload.customer = {
         name: invoice.customer.name,
@@ -383,12 +391,15 @@ export default defineComponent({
       ]
       payload.invoiceNo = invoice.invoiceNumber
       payload.deliveryType = 'customer'
+      payload.invoice_id = invoice._id
 
       VehicleController.createDeliveryNote(payload)
         .then((data: any) => {
-          console.log(data.data)
+          // console.log(data.data)
+          showSuccess.value = true
+          body.value[i].delivery_id = 'hey'
         })
-        .catch((err) => console.log(err.response.data))
+        .catch((err) => console.log(err.response))
     }
 
     onMounted(() => {
@@ -413,6 +424,7 @@ export default defineComponent({
       invoiceId,
       generateDN,
       changePage,
+      showSuccess,
     }
   },
 })

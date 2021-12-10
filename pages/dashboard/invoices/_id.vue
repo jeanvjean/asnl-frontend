@@ -6,28 +6,21 @@
           <h1 class="flex-1 text-gray-400 font-medium text-lg">
             Requisition Details
           </h1>
+          <div class="w-1/6 mr-2">
+            <button-component
+              v-if="details.invoice_id == null"
+              @buttonClicked="generateInvoice"
+              :buttonText="'Generate an Invoice'"
+              :button-class="'border border-blue-300 bg-blue-500 text-white'"
+              :loading-status="false"
+            />
+          </div>
           <div class="flex space-x-6">
             <button
               class="
                 flex
                 items-center
-                space-x-4
-                px-4
-                py-2
-                rounded-sm
-                border border-btn-purple
-                text-btn-purple
-              "
-              v-if="details.invoice_id == null"
-              @click="generateInvoice"
-            >
-              Generate Invoice
-            </button>
-            <button
-              class="
-                flex
-                items-center
-                bg-btn-purple
+                bg-blue-500
                 text-white
                 space-x-4
                 px-4
@@ -255,7 +248,7 @@
     </div>
     <success-msg
       v-if="showSuccess"
-      :text="'Invoice has been generated successfully!'"
+      :text="`You\'ve successfully created an invoice. For ${details.customer.name.toUpperCase()} for the total sum of NGN${totalAmount}`"
       :buttonText="'Continue'"
       @close="showSuccess = false"
       @action="router.push(`/dashboard/invoice/${invoice_id}`)"
@@ -276,13 +269,14 @@ import {
 import { fetchRequisition } from '~/module/Sales'
 import { createInvoice } from '~/module/Account'
 import { CustomerController } from '~/module/Customer'
+import ButtonComponent from '~/components/Form/Button.vue'
 import SuccessMsg from '~/components/Overlays/SuccessMsg.vue'
 var converter = require('number-to-words')
 
 export default defineComponent({
   name: 'sales-requisition-id',
   layout: 'dashboard',
-  components: { SuccessMsg },
+  components: { SuccessMsg, ButtonComponent },
   setup() {
     const types = [{ name: 'Assign Cylinder', value: 'temp' }]
     const reciepients = [{ name: 'Oxygen', value: 'temp' }]
@@ -320,6 +314,7 @@ export default defineComponent({
     const totalAmount = ref(0)
     const oTotalAmount = ref(0)
     const vat = ref(0)
+    const loading = ref(false)
 
     const applyingVAT = () => {
       if (applyVat.value == true) {
@@ -343,6 +338,7 @@ export default defineComponent({
     const showSuccess = ref(false)
 
     const generateInvoice = () => {
+      loading.value = true
       let requestBody = {
         customer: {
           name: details.customer.name,
@@ -358,13 +354,19 @@ export default defineComponent({
         salesReq: id,
         cylinders: [...cylinders.value],
       }
-      createInvoice(requestBody).then((data) => {
-        console.log(data)
-        if (data.code == 200) {
-          showSuccess.value = true
-          invoice_id.value = data.data._id
-        }
-      })
+      createInvoice(requestBody)
+        .then((data) => {
+          console.log(data)
+          if (data.code == 200) {
+            showSuccess.value = true
+            invoice_id.value = data.data._id
+          }
+          loading.value = false
+        })
+        .catch((err) => {
+          console.log(err)
+          loading.value = false
+        })
     }
 
     onBeforeMount(() => {
@@ -413,6 +415,7 @@ export default defineComponent({
       applyVat,
       applyingVAT,
       vat,
+      loading,
     }
   },
 })
