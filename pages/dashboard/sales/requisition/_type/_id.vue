@@ -509,7 +509,7 @@ export default defineComponent({
     const getDetail = () => {
       if (route.value.params.type == 'purchase') {
         fetchEcr(route.value.params.id).then((response) => {
-          console.log(response.removeArr)
+          console.log(response)
           productionDetail.fcr_id = response._id
           productionDetail.customer = {
             id: response.supplier._id,

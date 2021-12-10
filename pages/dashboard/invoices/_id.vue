@@ -249,7 +249,7 @@
     <success-msg
       v-if="showSuccess"
       :text="`You\'ve successfully created an invoice. For ${details.customer.name.toUpperCase()} for the total sum of NGN${totalAmount}`"
-      :buttonText="'Continue'"
+      :buttonText="'View Generated Invoice'"
       @close="showSuccess = false"
       @action="router.push(`/dashboard/invoice/${invoice_id}`)"
       :isAction="true"
@@ -346,7 +346,7 @@ export default defineComponent({
           id: details.customer.id,
         },
         totalAmount: totalAmount.value,
-        amountPaid: totalAmount.value,
+        amountPaid: 0,
         date: '2021-05-15T10:38:50.733Z',
         amountInWords: `${converter.toWords(totalAmount.value)} Naira Only`,
         recieptType: cylinders.value.length > 0 ? 'cylinder' : 'product',

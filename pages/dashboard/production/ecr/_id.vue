@@ -303,13 +303,11 @@ export default defineComponent({
                   item.barcode,
                   item.cylinderNumber
                 ).then((data) => {
-                  if(!form.gasType){
-                      context.$toast.error('Select a gas type first')
-                      return 
+                  if (!form.gasType) {
+                    context.$toast.error('Select a gas type first')
+                    return
                   }
-                  console.log(data.data.cylinder.gasName==selectedGas.value)
-                  console.log(data.data.cylinder)
-                  if (data && data.data.cylinder.gasName== selectedGas.value) {
+                  if (data && data.data.cylinder.gasName == selectedGas.value) {
                     scanCylinders.value.push({
                       _id: data.data.cylinder._id,
                       cylinderNumber: data.data.cylinder.cylinderNumber,
@@ -319,7 +317,9 @@ export default defineComponent({
                         data.data.cylinder.gasVolumeContent.unit,
                     })
                   } else {
-                    context.$toast.error('This cylinder is not available or does not have the same gas type.')
+                    context.$toast.error(
+                      'This cylinder is not available or does not have the same gas type.'
+                    )
                   }
                 })
               }
@@ -340,7 +340,6 @@ export default defineComponent({
         barcode: item.barcode,
         volume: item.gasVolumeContent.value + item.gasVolumeContent.unit,
       })
-
       changeComponentKey()
     }
     const removeCylinders = (index: any) => {
@@ -362,7 +361,8 @@ export default defineComponent({
     const getIcn = (icnId: any) => {
       fetchIcn(icnId)
         .then((response: any) => {
-          // console.log(response)
+          console.log(response)
+          // cylindersLenght = response.totalAsnlCylinders.length + response.totalCustomerCylinders.length
           form.customer = response.customer._id
           constantsValues.icnNo = response.icnNo
           form.icn_id = response._id

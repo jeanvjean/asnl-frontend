@@ -222,6 +222,13 @@
         />
       </form>
     </div>
+    <SuccessMsg
+      v-if="showSuccess"
+      :text="'You have succesfully created a Route Plan'"
+      :buttonText="'Close'"
+      @action="$router.go(0)"
+      @close="$router.go(0)"
+    />
   </back-drop>
 </template>
 <script lang="ts">
@@ -242,9 +249,16 @@ import { ValidatorObject } from '@/module/Validation'
 import { DriverObject } from '@/module/Driver'
 import { VehicleController } from '@/module/Vehicle'
 import ButtonComponent from '@/components/Form/Button.vue'
+import SuccessMsg from '@/components/Overlays/SuccessMsg.vue'
 
 export default defineComponent({
-  components: { BackDrop, InputComponent, SelectComponent, ButtonComponent },
+  components: {
+    BackDrop,
+    SuccessMsg,
+    InputComponent,
+    SelectComponent,
+    ButtonComponent,
+  },
   props: {
     customersDN: {
       type: Array,
@@ -262,6 +276,7 @@ export default defineComponent({
     const route = useRoute()
     const vehicleId = ref<String>('')
     const isLoading = ref<Boolean>(false)
+    const showSuccess = ref<Boolean>(false)
 
     const activityType = [
       {
@@ -391,7 +406,8 @@ export default defineComponent({
         VehicleController.createRoutePlan(form, vehicleId.value)
           .then((data) => {
             console.log(data)
-            close()
+            showSuccess.value = true
+            // close()
           })
           .finally(() => {
             isLoading.value = false
@@ -406,6 +422,17 @@ export default defineComponent({
         isCentralise.value = false
       }
     })
+
+    //     watch(
+    //   () => form.ecrNo,
+    //   (currentValue, oldValue) => {
+    //     var typingTimer
+    //     clearTimeout(typingTimer)
+    //     typingTimer = setTimeout(() => {
+    //       })
+    //     }, 3000)
+    //   }
+    // )
 
     return {
       close,
@@ -422,6 +449,7 @@ export default defineComponent({
       vehicleId,
       isLoading,
       isCentralise,
+      showSuccess,
     }
   },
 })

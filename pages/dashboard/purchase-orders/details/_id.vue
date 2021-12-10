@@ -5,7 +5,7 @@
         v-if="auth._id === purchaseDetails.nextApprovingOfficer._id"
         class="my-2 md:space-x-4 flex items-center justify-end w-full"
       >
-        <div>
+        <!-- <div>
           <button-component
             :button-class="'bg-btn-purple text-white'"
             :button-text="'Create Sales Requistion'"
@@ -15,7 +15,7 @@
               )
             "
           />
-        </div>
+        </div> -->
       </div>
       <div class="flex items-center justify-between px-2 py-2">
         <h1 class="uppercase font-semibold">
