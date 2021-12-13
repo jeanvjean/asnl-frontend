@@ -422,8 +422,8 @@ export default defineComponent({
       formData.append('cylinderHoldingTime', form.cylinderHoldingTime)
       formData.append('territory', form.territory)
       formData.append('CAC', form.CAC)
-      formData.append('vat', form.vat)
-      formData.append('validId', JSON.stringify(form.validId))
+      formData.append('vat', JSON.stringify(form.vat))
+      formData.append('validId', form.validId)
       formData.append('products', JSON.stringify(products.value))
       return formData
     })
