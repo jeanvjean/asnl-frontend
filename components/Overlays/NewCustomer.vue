@@ -271,7 +271,6 @@
           />
         </div>
       </form>
-      <button @click="submit">submit</button>
     </div>
   </back-drop>
 </template>
@@ -282,6 +281,7 @@ import {
   onMounted,
   reactive,
   ref,
+  useRouter,
   useContext,
 } from '@nuxtjs/composition-api'
 import Validator from 'validatorjs'
@@ -309,6 +309,7 @@ export default defineComponent({
     }
 
     const context = useContext()
+    const router = useRouter()
     const products = ref<Array<any>>([])
     const productsArray = ref([])
     const componentKey = ref<number>(1)
@@ -484,7 +485,10 @@ export default defineComponent({
               ctx.emit('addNewCustomer', response.data)
             }
           })
-          .finally(() => (isLoading.value = false))
+          .finally(() => {
+            isLoading.value = false
+            router.go(0)
+          })
       }
     }
 
