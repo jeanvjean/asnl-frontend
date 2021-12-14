@@ -208,9 +208,15 @@ export default defineComponent({
               startDate: new Date(route.startDate).toDateString(),
               endDate: new Date(route.endDate).toDateString(),
               driver: {
-                name: route.vehicle.assignedTo.name,
-                id: route.vehicle.assignedTo._id,
-                image: route.vehicle.assignedTo.image,
+                name: route.vehicle.assignedTo
+                  ? route.vehicle.assignedTo.name
+                  : '',
+                id: route.vehicle.assignedTo
+                  ? route.vehicle.assignedTo._id
+                  : '',
+                image: route.vehicle.assignedTo
+                  ? route.vehicle.assignedTo.image
+                  : '',
               },
               customers: route.customers,
               territory: route.territory,
