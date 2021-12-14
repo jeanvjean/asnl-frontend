@@ -398,7 +398,7 @@ export default defineComponent({
     const submit = () => {
       const rules = {
         cylinders: 'array',
-        'cylinders.*.cylinderId': 'required|string',
+        // 'cylinders.*.cylinderId': 'required|string',
       }
       const validation: any = new Validator(form, rules)
       if (validation.fails()) {
