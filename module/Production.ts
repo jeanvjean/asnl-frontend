@@ -40,7 +40,7 @@ export function fetchSchedules(
   return new Promise<any>(async (resolve, reject) => {
     try {
       const response = await $axios.get(
-        `/production/fetch-production-approvals?page=${page}&limit=${limit}${queryString}`
+        `/production/fetch-production-schedules?page=${page}&limit=${limit}${queryString}`
       )
       resolve(response.data.data)
     } catch (error) {
