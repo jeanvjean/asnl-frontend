@@ -171,7 +171,7 @@
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
-                    :default-value="cylinder.volume"
+                    :default-value="cylinder.volume.value"
                     :input-placeholder="'Volume'"
                     :is-disabled="true"
                   />
@@ -371,6 +371,7 @@ export default defineComponent({
       CylinderController.getRegisteredCylindersUnPaginated().then(
         (response) => {
           cylinderResponse.value = response.data
+          console.log(cylinderResponse.value)
         }
       )
     })

@@ -367,7 +367,7 @@
                 </td>
                 <td class="font-light text-lg text-center">
                   <input-component
-                    :default-value="cylinder.volume"
+                    :default-value="cylinder.volume.value"
                     :input-placeholder="'Cost of Sale'"
                   />
                 </td>
@@ -585,6 +585,7 @@ export default defineComponent({
     function fetchBranches() {
       CylinderController.fetchBranches().then((response: any) => {
         response.forEach((branch: any) => {
+          // console.log(response)
           if (auth.branch !== branch._id) {
             branches.value.push({
               name: `${branch.name} - ${branch.location}`,
