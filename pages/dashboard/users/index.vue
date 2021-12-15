@@ -412,6 +412,7 @@ export default defineComponent({
       UserController.getUsers(pageValue, limit, query)
         .then((response: any) => {
           const myResponse = response.data.data
+          console.log(response.data)
 
           paginationProp.hasNextPage = myResponse.hasNextPage
           paginationProp.hasPrevPage = myResponse.hasPrevPage

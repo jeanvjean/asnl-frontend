@@ -183,9 +183,12 @@ export default defineComponent({
           permissions: requestPermissions.value,
         }
         UserController.inviteUser(form)
-          .then(() => {
+          .then((data) => {
             email.value = role.value = subrole.value = ''
             key.value++
+            if (data.data.data.failedInvites.includes(form.email)) {
+              context.$toast.error('Something went wrong, change the email.')
+            }
           })
           .finally(() => {
             isLoading.value = false
