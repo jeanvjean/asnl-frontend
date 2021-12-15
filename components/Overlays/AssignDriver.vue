@@ -118,6 +118,3 @@ export default defineComponent({
   },
 })
 </script>
-
-function onBeforeMounted(arg0: () => void) { throw new Error('Function not
-implemented.') }
