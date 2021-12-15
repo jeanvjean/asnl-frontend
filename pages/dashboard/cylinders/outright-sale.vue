@@ -585,7 +585,6 @@ export default defineComponent({
     function fetchBranches() {
       CylinderController.fetchBranches().then((response: any) => {
         response.forEach((branch: any) => {
-          // console.log(response)
           if (auth.branch !== branch._id) {
             branches.value.push({
               name: `${branch.name} - ${branch.location}`,

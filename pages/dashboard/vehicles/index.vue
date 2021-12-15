@@ -341,14 +341,23 @@ export default defineComponent({
       isLoading.value = true
       VehicleController.fetchVehicles(pageValue, pageLimit, queryString)
         .then((response: any) => {
-          body.value = getTableBody(response.docs, [
-            'vehCategory',
-            'regNo',
-            'manufacturer',
-            'vehicleType',
-            'vModel',
-            'currMile',
-          ])
+          console.log(response.docs)
+          body.value = getTableBody(
+            response.docs.map((item: any) => {
+              return {
+                ...item,
+                currMile: item.currMile ? item.currMile : 0,
+              }
+            }),
+            [
+              'vehCategory',
+              'regNo',
+              'manufacturer',
+              'vehicleType',
+              'vModel',
+              'currMile',
+            ]
+          )
           paginationProp.hasNextPage = response.hasNextPage
           paginationProp.hasPrevPage = response.hasPrevPage
           paginationProp.currentPage = response.page
