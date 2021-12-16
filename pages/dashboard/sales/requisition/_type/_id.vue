@@ -390,9 +390,9 @@ export default defineComponent({
                         value: data.data.cylinder.gasVolumeContent.value,
                         unit: data.data.cylinder.gasVolumeContent.unit,
                       },
-                      unitPrice: getUnitPrice(data.data.cylinder.gasName),
+                      unitPrice: products.value[data.data.cylinder.gasName],
                       amount:
-                        Number(getUnitPrice(data.data.cylinder.gasName)) *
+                        Number(products.value[data.data.cylinder.gasName]) *
                         data.data.cylinder.cylNo,
                     })
                     productionDetail.cylinders = cylinders.value
@@ -489,22 +489,6 @@ export default defineComponent({
       fcr_id: null,
     })
     const products = ref<any>([])
-    const getUnitPrice = (gasName: any) => {
-      var unit = 0
-
-      for (let index = 0; index < products.value.length; index++) {
-        if (products.value[index].product.productName == gasName) {
-          unit = products.value[index].product.unit_price
-          console.log(unit, products.value[index].product.unit_price)
-          return
-        } else {
-          unit = 9
-          console.log(unit)
-          return
-        }
-      }
-      return unit
-    }
 
     const getDetail = () => {
       if (route.value.params.type == 'purchase') {
@@ -517,27 +501,21 @@ export default defineComponent({
             email: response.supplier.email,
           }
           productionDetail.ecrNo = response.ecrNo
-          // products.value = response.customer.products
+          let p: any = {}
+          response.customer.products.forEach((item: any) => {
+            p[item.product.productName] = item.unit_price.vaule
+          })
+          products.value = p
+          console.log(products.value)
           productionDetail.cylinderType = response.cylinders[0].gasName
           ecrCylinders.value = response.removeArr
-          // {
-          //   return {
-          //     cylinderNumber: cylinder.cylinderNumber,
-          //     noOfCylidners: cylinder.cylNo,
-          //     volume: cylinder.gasVolumeContent,
-          //     type: cylinder.gasName,
-          //     status: cylinder.cylinderStatus,
-          //     unitPrice: getUnitPrice(cylinder.gasName),
-          //     id: cylinder._id,
-          //   }
-          // }
 
           changeComponentKey()
           //           }
         })
       } else {
         fetchSchedule(route.value.params.id).then((response) => {
-          console.log(response.ecr.removeArr)
+          console.log(response)
           productionDetail.production_id = response._id
           productionDetail.customer = {
             id: response.customer._id,
@@ -545,7 +523,13 @@ export default defineComponent({
             email: response.customer.email,
           }
           productionDetail.ecrNo = response.ecrNo
-          products.value = response.customer.products
+          // products.value = response.customer.products
+          let p: any = {}
+          response.customer.products.forEach((item: any) => {
+            p[item.product.productName] = item.unit_price.value
+          })
+          products.value = p
+          console.log(products.value)
           productionDetail.cylinderType = response.cylinders[0].gasName
           ecrCylinders.value = response.ecr.removeArr
           // {

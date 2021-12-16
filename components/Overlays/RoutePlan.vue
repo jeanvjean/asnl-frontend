@@ -171,6 +171,14 @@
               </svg>
             </button>
           </div>
+          <!-- <div v-if="show_search == true">
+            <input-component
+              :label-title="'Customer name'"
+              :input-placeholder="`Search customers by name`"
+              :default-value="''"
+              @get="customer_name = $event.value"
+            />
+          </div> -->
           <div
             v-for="(customer, i) in form.customers"
             :key="i"
@@ -250,6 +258,7 @@ import { DriverObject } from '@/module/Driver'
 import { VehicleController } from '@/module/Vehicle'
 import ButtonComponent from '@/components/Form/Button.vue'
 import SuccessMsg from '@/components/Overlays/SuccessMsg.vue'
+import { CustomerController } from '~/module/Customer'
 
 export default defineComponent({
   components: {
@@ -422,14 +431,32 @@ export default defineComponent({
         isCentralise.value = false
       }
     })
-
-    //     watch(
-    //   () => form.ecrNo,
+    const customer_name = ref<string>('')
+    const show_search = ref(false)
+    // watch(
+    //   () => customer_name.value,
     //   (currentValue, oldValue) => {
     //     var typingTimer
     //     clearTimeout(typingTimer)
     //     typingTimer = setTimeout(() => {
-    //       })
+    //       if (currentValue != '') {
+    //         CustomerController.fetchCustomerDto(currentValue).then((data) => {
+    //           console.log(data)
+    //           if (data) {
+    //             form.customers.push({
+    //               name: data.name,
+    //               email: data.email,
+    //               destination: data.branch.location,
+    //               departure: '',
+    //               numberOfCylinders: 0,
+    //             })
+    //             show_search.value = false
+    //           } else {
+    //             context.$toast.error('Custmer not found!')
+    //           }
+    //           // customer_name.value = ''
+    //         })
+    //       }
     //     }, 3000)
     //   }
     // )
@@ -450,6 +477,9 @@ export default defineComponent({
       isLoading,
       isCentralise,
       showSuccess,
+      customer_name,
+      show_search,
+      changeComponentKey,
     }
   },
 })
