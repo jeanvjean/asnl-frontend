@@ -63,7 +63,10 @@
             >
               <template #action="slotProps">
                 <router-link
-                  v-if="slotProps.rowObject.type == 'customer'"
+                  v-if="
+                    slotProps.rowObject.type == 'customer' ||
+                    slotProps.rowObject.type == 'walk-in'
+                  "
                   :to="
                     slotProps.rowObject.asnlCylinders +
                       slotProps.rowObject.companyCylinders <
