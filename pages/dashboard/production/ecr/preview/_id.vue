@@ -138,14 +138,14 @@ export default defineComponent({
     }
 
     const printDiv = () => {
-      var printContents = document.getElementById('print').innerHTML
+      var printContents = document.getElementById('print')
       var originalContents = document.body.innerHTML
-
-      document.body.innerHTML = printContents
-
-      window.print()
-      document.body.innerHTML = originalContents
-      router.go(0)
+      if (printContents) {
+        document.body.innerHTML = printContents.innerHTML
+        window.print()
+        document.body.innerHTML = originalContents
+        router.go(0)
+      }
     }
     const getEcrDetails = () => {
       fetchEcr(route.value.params.id)
