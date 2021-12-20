@@ -65,7 +65,7 @@
                 justify-center
                 items-center
               "
-              id="printJS-barcode"
+              id="print"
             >
               <barcode :value="details.barcode" width="1">
                 Show this if the rendering fails.
@@ -87,7 +87,7 @@
                   text-white
                   w-full
                 "
-                @click="printJS('printJS-barcode', 'html')"
+                @click="printDiv"
               >
                 <span>Product Barcode</span>
                 <svg
@@ -280,8 +280,13 @@ export default defineComponent({
 
     const showDetails = ref(true)
     const showBarcode = ref(false)
-    const printWindow = () => {
+    const printDiv = () => {
+      var printContents = document.getElementById('print').innerHTML
+      var originalContents = document.body.innerHTML
+      document.body.innerHTML = printContents
       window.print()
+      document.body.innerHTML = originalContents
+      router.go(0)
     }
 
     return {
@@ -290,7 +295,7 @@ export default defineComponent({
       showBarcode,
       formatTitle,
       cylinder,
-      printWindow,
+      printDiv,
       printJS,
       months,
     }

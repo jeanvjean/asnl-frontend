@@ -1,6 +1,6 @@
 <template>
   <div class="px-6 py-6">
-    <div class="py-2">
+    <div class="py-2" id="print">
       <div class="bg-white w-3/4 mx-auto">
         <div class="flex justify-between px-6 py-4">
           <h1 class="flex-1 text-gray-400 font-medium text-lg">
@@ -27,10 +27,7 @@
                 py-2
                 rounded-sm
               "
-              @click="
-                status = 'success'
-                showConfirmation = true
-              "
+              @click="printDiv"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -337,6 +334,15 @@ export default defineComponent({
     const invoice_id = ref('')
     const showSuccess = ref(false)
 
+    const printDiv = () => {
+      var printContents = document.getElementById('print').innerHTML
+      var originalContents = document.body.innerHTML
+      document.body.innerHTML = printContents
+      window.print()
+      document.body.innerHTML = originalContents
+      router.go(0)
+    }
+
     const generateInvoice = () => {
       loading.value = true
       let requestBody = {
@@ -416,6 +422,7 @@ export default defineComponent({
       applyingVAT,
       vat,
       loading,
+      printDiv,
     }
   },
 })
