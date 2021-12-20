@@ -59,15 +59,37 @@
             :input-type="'number'"
             @get="form.fuelGiven = $event.value"
           />
-
-          <select-component
-            :label-title="'Territory'"
-            :select-array="[]"
-            :default-option-text="'Enter Territory'"
-            :init-value="form.territory"
-            @get="form.territory = $event.value"
-          />
-
+          <div>
+            <select-component
+              :label-title="'Territory'"
+              :select-array="territory"
+              :default-option-text="'Enter Territory'"
+              :init-value="form.territory"
+              @get="form.territory = $event.value"
+            />
+            <div class="inline-block text-sm text-gray-400 my-2 mr-3">
+              <button
+                @click="addTer = true"
+                class="flex justify-evenly items-center"
+                type="button"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4 fill-current text-transparent mr-2"
+                  viewBox="0 0 24 24"
+                  stroke="gray"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span class="underline">Add Territory</span>
+              </button>
+            </div>
+          </div>
           <input-component
             :label-title="'Start Date'"
             :input-placeholder="'Select Start Date'"
@@ -211,6 +233,11 @@
         />
       </form>
     </div>
+    <AddTerritory
+      v-if="addTer"
+      @close="addTer = false"
+      @addToTerritory="addToTerritory"
+    />
     <SuccessMsg
       v-if="showSuccess"
       :text="'You have succesfully created a Route Plan'"
@@ -235,12 +262,14 @@ import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import DataList from '@/components/Form/DataList.vue'
 import SelectComponent from '@/components/Form/Select.vue'
+import AddTerritory from '@/components/Overlays/AddTerritory.vue'
 import { ValidatorObject } from '@/module/Validation'
 import { DriverObject } from '@/module/Driver'
 import { VehicleController } from '@/module/Vehicle'
 import ButtonComponent from '@/components/Form/Button.vue'
 import SuccessMsg from '@/components/Overlays/SuccessMsg.vue'
 import { CustomerController } from '~/module/Customer'
+import { fetchTerrotiries } from '@/module/Territory'
 
 export default defineComponent({
   components: {
@@ -250,6 +279,7 @@ export default defineComponent({
     InputComponent,
     SelectComponent,
     ButtonComponent,
+    AddTerritory,
   },
   props: {
     customersDN: {
@@ -291,10 +321,14 @@ export default defineComponent({
         value: 'supplier',
       },
     ]
-
     const driversArray = ref<Array<Object>>([])
     const vehicleArray = ref<Array<Object>>([])
+    const addTer = ref(false)
+    const territory = ref<any>([])
 
+    const addToTerritory = (ter: any) => {
+      territory.value.push(ter)
+    }
     const fetchDrivers = () => {
       DriverObject.getUnPaginatedDrivers().then((response: any) => {
         const drivers = response
@@ -357,7 +391,6 @@ export default defineComponent({
     const increment = () => {
       form.customers.push({
         name: '',
-        // email: '',
         destination: '',
         departure: '',
         numberOfCylinders: 0,
@@ -369,11 +402,26 @@ export default defineComponent({
       const random = Math.floor(Math.random() * (1000 - 100 + 1)) + 100
       componentKey.value = random
     }
-
+    const fetchAllTer = () => {
+      fetchTerrotiries().then((response: any) => {
+        console.log(response)
+        territory.value = response.map((ter: any) => {
+          return {
+            name: ter.name,
+            value: ter.name,
+          }
+        })
+      })
+    }
     onMounted(() => {
       vehicleId.value = route.value.params.id
       changeComponentKey()
-      Promise.all([fetchDrivers(), fetchVehicles(), fetchCustomers()])
+      Promise.all([
+        fetchDrivers(),
+        fetchVehicles(),
+        fetchCustomers(),
+        fetchAllTer(),
+      ])
     })
 
     const submit = () => {
@@ -394,8 +442,8 @@ export default defineComponent({
         customers: 'required|array',
         'customers.*.name': 'required|string',
         // 'customers.*.email': 'required|string',
-        'customers.*.destination': 'required|string',
-        'customers.*.departure': 'required|string',
+        // 'customers.*.destination': 'required|string',
+        // 'customers.*.departure': 'required|string',
         'customers.*.numberOfCylinders': 'required|numeric|min:1',
       }
 
@@ -478,6 +526,9 @@ export default defineComponent({
       customer_name,
       show_search,
       changeComponentKey,
+      territory,
+      addToTerritory,
+      addTer,
     }
   },
 })

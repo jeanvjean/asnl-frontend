@@ -47,22 +47,7 @@
       id="browser"
     />
 
-    <datalist
-      id="browsers"
-      class="
-        block
-        w-full
-        px-4
-        py-2
-        rounded-sm
-        font-semibold
-        focus:outline-none focus:border-btn-purple
-        placeholder-gray-400
-        focus:placeholder-gray-200
-        text-gray-900
-        border-2
-      "
-    >
+    <datalist id="browsers">
       <option :value="item.name" v-for="(item, i) in arr" :key="i"></option>
     </datalist>
   </div>
