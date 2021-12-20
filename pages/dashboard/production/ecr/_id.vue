@@ -362,7 +362,6 @@ export default defineComponent({
       fetchIcn(icnId)
         .then((response: any) => {
           console.log(response)
-          // cylindersLenght = response.totalAsnlCylinders.length + response.totalCustomerCylinders.length
           form.customer = response.customer._id
           constantsValues.icnNo = response.icnNo
           form.icn_id = response._id
@@ -377,7 +376,7 @@ export default defineComponent({
           totalCylinders.value = response.data.map(
             (element: any) => element.cylinderNumber
           )
-          console.log(response.data)
+
           form.cylinders = response.data.map((element: any) => {
             return {
               cylinderId: element.cylinderNumber,
@@ -416,8 +415,10 @@ export default defineComponent({
         }
         console.log(form)
         createEcr(form)
-          .then(() => {
-            router.push('/dashboard/production/ecr-list')
+          .then((response) => {
+            router.push(
+              `/dashboard/production/ecr/preview/${response.data.ecr._id}`
+            )
           })
           .finally(() => (buttonLoading.value = false))
       }

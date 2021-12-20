@@ -46,7 +46,7 @@
 
           <select-component
             :label-title="'Vehicle Number'"
-            :select-array="vehicleArray"
+            :select-array="driversArray"
             :default-option-text="'Enter Vehicle Number'"
             :init-value="vehicleId"
             @get="vehicleId = $event.value"
@@ -60,34 +60,11 @@
             @get="form.fuelGiven = $event.value"
           />
 
-          <input-component
-            :label-title="'Fuel Consumed (Litres)'"
-            :input-placeholder="'Enter Fuel in Litres'"
-            :default-value="form.fuelsConsumed"
-            :input-type="'number'"
-            @get="form.fuelsConsumed = $event.value"
-          />
-
-          <input-component
-            :label-title="'Mileage In'"
-            :input-placeholder="'Enter Fuel in Litres'"
-            :default-value="form.mileageIn"
-            :input-type="'number'"
-            @get="form.mileageIn = $event.value"
-          />
-
-          <input-component
-            :label-title="'Mileage Out'"
-            :input-placeholder="'Enter Fuel in Litres'"
-            :default-value="form.mileageOut"
-            :input-type="'number'"
-            @get="form.mileageOut = $event.value"
-          />
-
-          <input-component
+          <select-component
             :label-title="'Territory'"
-            :input-placeholder="'Enter Territory'"
-            :default-value="form.territory"
+            :select-array="[]"
+            :default-option-text="'Enter Territory'"
+            :init-value="form.territory"
             @get="form.territory = $event.value"
           />
 
@@ -191,35 +168,39 @@
               border-0 border-b-4 border-gray-300
             "
           >
-            <input-component
+            <data-list
               :label-title="'Name'"
+              :arr="customersArray"
               :input-placeholder="`Enter ${form.orderType} Name`"
               :default-value="customer.name"
               @get="customer.name = $event.value"
             />
+            <!-- <input-component
+              :label-title="'Name'"
+              :input-placeholder="`Enter ${form.orderType} Name`"
+              :default-value="customer.name"
+              @get="customer.name = $event.value"
+            /> -->
+
             <input-component
-              :label-title="'Email'"
-              :input-placeholder="`Enter ${form.orderType} Email`"
-              :default-value="customer.email"
-              @get="customer.email = $event.value"
-            />
-            <input-component
-              :label-title="'Number of Cylinders'"
-              :input-placeholder="`Total Cylinders`"
-              :default-value="customer.numberOfCylinders"
-              @get="customer.numberOfCylinders = $event.value"
-            />
-            <input-component
+              v-if="form.activity != 'pick-up'"
               :label-title="'Destination'"
               :input-placeholder="`Enter ${form.orderType} Destination`"
               :default-value="customer.destination"
               @get="customer.destination = $event.value"
             />
             <input-component
+              v-if="form.activity != 'delivery'"
               :label-title="'Departure'"
               :input-placeholder="'Enter Departure'"
               :default-value="customer.departure"
               @get="customer.departure = $event.value"
+            />
+            <input-component
+              :label-title="'Quantity Projection'"
+              :input-placeholder="`Total Cylinders`"
+              :default-value="customer.numberOfCylinders"
+              @get="customer.numberOfCylinders = $event.value"
             />
           </div>
         </div>
@@ -252,6 +233,7 @@ import {
 import Validator from 'validatorjs'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
+import DataList from '@/components/Form/DataList.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import { ValidatorObject } from '@/module/Validation'
 import { DriverObject } from '@/module/Driver'
@@ -264,6 +246,7 @@ export default defineComponent({
   components: {
     BackDrop,
     SuccessMsg,
+    DataList,
     InputComponent,
     SelectComponent,
     ButtonComponent,
@@ -315,10 +298,11 @@ export default defineComponent({
     const fetchDrivers = () => {
       DriverObject.getUnPaginatedDrivers().then((response: any) => {
         const drivers = response
+        console.log(drivers)
         driversArray.value = drivers.map((driver: any) => {
           return {
             name: driver.name ? driver.name : 'Not Specified',
-            value: driver._id,
+            value: driver.vehicle,
           }
         })
       })
@@ -327,12 +311,25 @@ export default defineComponent({
     const fetchVehicles = () => {
       VehicleController.fetchVehiclesUnPaginated().then((response: any) => {
         const vehicles = response
+        console.log(vehicles)
         vehicleArray.value = vehicles.map((vehicle: any) => {
           return {
             name: vehicle.regNo,
             value: vehicle._id,
           }
         })
+      })
+    }
+    const fetchCustomers = () => {
+      CustomerController.fetchUnPaginatedCustomers().then((response: any) => {
+        customersArray.value = response.map((item: any) => {
+          return {
+            name: item.name,
+            phoneNumber: item.phoneNumber,
+            departure: item.address,
+          }
+        })
+        console.log(customersArray.value)
       })
     }
 
@@ -344,10 +341,10 @@ export default defineComponent({
       modeOfService: 'delivery',
       date: new Date().toISOString(),
       territory: '',
-      mileageIn: '',
-      mileageOut: '',
+      // mileageIn: '',
+      // mileageOut: '',
       fuelGiven: '',
-      fuelsConsumed: '',
+      // fuelsConsumed: '',
       timeOut: '',
       timeIn: '',
       customers: _props.customersDN || [],
@@ -360,7 +357,7 @@ export default defineComponent({
     const increment = () => {
       form.customers.push({
         name: '',
-        email: '',
+        // email: '',
         destination: '',
         departure: '',
         numberOfCylinders: 0,
@@ -376,7 +373,7 @@ export default defineComponent({
     onMounted(() => {
       vehicleId.value = route.value.params.id
       changeComponentKey()
-      Promise.all([fetchDrivers(), fetchVehicles()])
+      Promise.all([fetchDrivers(), fetchVehicles(), fetchCustomers()])
     })
 
     const submit = () => {
@@ -388,15 +385,15 @@ export default defineComponent({
         modeOfService: 'required|string',
         date: 'required|date',
         territory: 'required|string',
-        mileageIn: 'required|string',
-        mileageOut: 'required|string',
+        // mileageIn: 'required|string',
+        // mileageOut: 'required|string',
         fuelGiven: 'required|string',
-        fuelsConsumed: 'required|string',
+        // fuelsConsumed: 'required|string',
         timeOut: 'required|date',
         timeIn: 'required|date',
         customers: 'required|array',
         'customers.*.name': 'required|string',
-        'customers.*.email': 'required|string',
+        // 'customers.*.email': 'required|string',
         'customers.*.destination': 'required|string',
         'customers.*.departure': 'required|string',
         'customers.*.numberOfCylinders': 'required|numeric|min:1',
@@ -433,6 +430,7 @@ export default defineComponent({
     })
     const customer_name = ref<string>('')
     const show_search = ref(false)
+
     // watch(
     //   () => customer_name.value,
     //   (currentValue, oldValue) => {

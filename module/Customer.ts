@@ -17,7 +17,7 @@ class Customer {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get(
-          `/customer/fetch-customers?page=${page}&limit=10&name=exon`
+          `/customer/fetch-customers?page=${page}&limit=10`
         )
         resolve(response.data.data)
       } catch (error) {

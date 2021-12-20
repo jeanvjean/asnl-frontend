@@ -307,6 +307,16 @@ export default defineComponent({
       getFilters,
       generateEcr,
     }
+    // print from the mobile phone when the driver is throught with the truck ecr
+
+    //total vol out of
+    // remove
+
+    // on icm view
+    // add driver
+    // add security amn detail
+    // remover order details and order vol/qyt
   },
 })
 </script>
+
