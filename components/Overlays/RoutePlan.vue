@@ -135,7 +135,7 @@
             "
           >
             <h4 class="text-sm">Customer Details</h4>
-
+            <!-- 
             <button
               type="button"
               class="
@@ -168,7 +168,16 @@
                   d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-            </button>
+            </button> -->
+
+            <div class="w-1/2" v-if="form.activity == 'pick-up'">
+              <data-list
+                :label-title="'Add a new customer'"
+                :arr="customersArray"
+                :input-placeholder="`Enter ${form.orderType} Name`"
+                @get="getCustomer($event.value)"
+              />
+            </div>
           </div>
           <!-- <div v-if="show_search == true">
             <input-component
@@ -176,6 +185,14 @@
               :input-placeholder="`Search customers by name`"
               :default-value="''"
               @get="customer_name = $event.value"
+            />
+          </div> -->
+          <!-- <div class="w-1/2" v-if="form.activity == 'pick-up'">
+            <data-list
+              :label-title="'Name'"
+              :arr="customersArray"
+              :input-placeholder="`Enter ${form.orderType} Name`"
+              @get="getCustomer($event.value)"
             />
           </div> -->
           <div
@@ -190,19 +207,12 @@
               border-0 border-b-4 border-gray-300
             "
           >
-            <data-list
+            <input-component
               :label-title="'Name'"
-              :arr="customersArray"
               :input-placeholder="`Enter ${form.orderType} Name`"
               :default-value="customer.name"
               @get="customer.name = $event.value"
             />
-            <!-- <input-component
-              :label-title="'Name'"
-              :input-placeholder="`Enter ${form.orderType} Name`"
-              :default-value="customer.name"
-              @get="customer.name = $event.value"
-            /> -->
 
             <input-component
               v-if="form.activity != 'pick-up'"
@@ -354,6 +364,17 @@ export default defineComponent({
         })
       })
     }
+    const getCustomer = (name: string) => {
+      CustomerController.fetchCustomerDto(name).then((data) => {
+        console.log(data)
+        form.customers.push({
+          name: data.name,
+          email: data.email,
+          departure: data.address,
+          numberOfCylinders: 0,
+        })
+      })
+    }
     const fetchCustomers = () => {
       CustomerController.fetchUnPaginatedCustomers().then((response: any) => {
         customersArray.value = response.map((item: any) => {
@@ -393,6 +414,7 @@ export default defineComponent({
         name: '',
         destination: '',
         departure: '',
+        email: '',
         numberOfCylinders: 0,
       })
       changeComponentKey()
@@ -441,7 +463,7 @@ export default defineComponent({
         timeIn: 'required|date',
         customers: 'required|array',
         'customers.*.name': 'required|string',
-        // 'customers.*.email': 'required|string',
+        'customers.*.email': 'required|string',
         // 'customers.*.destination': 'required|string',
         // 'customers.*.departure': 'required|string',
         'customers.*.numberOfCylinders': 'required|numeric|min:1',
@@ -529,6 +551,7 @@ export default defineComponent({
       territory,
       addToTerritory,
       addTer,
+      getCustomer,
     }
   },
 })
