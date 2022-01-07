@@ -100,8 +100,10 @@ export default defineComponent({
   setup(_props, ctx) {
     const inputValue = ref<String | Number>('')
     const returnValue = debounce(() => {
-      ctx.emit('get', inputValue)
-    }, 1000)
+      if (inputValue.value !== '') {
+        ctx.emit('get', inputValue)
+      }
+    }, 2000)
     const isInvalid = ref<Boolean>(false)
 
     onMounted(() => {
