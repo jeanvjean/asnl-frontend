@@ -15,10 +15,7 @@
       > </label
     ><input
       v-model="inputValue"
-      :type="inputType"
       :placeholder="inputPlaceholder"
-      :disabled="isDisabled"
-      :required="isRequired"
       class="
         block
         w-full
@@ -55,6 +52,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
 import { debounce } from 'lodash'
+import { CustomerController } from '~/module/Customer'
 
 export default defineComponent({
   props: {
@@ -101,10 +99,17 @@ export default defineComponent({
     const inputValue = ref<String | Number>('')
     const returnValue = debounce(() => {
       if (inputValue.value !== '') {
-        ctx.emit('get', inputValue)
+        getCustomer(inputValue.value)
       }
     }, 2000)
     const isInvalid = ref<Boolean>(false)
+
+    const getCustomer = (name: any) => {
+      CustomerController.fetchCustomerDto(name).then((data) => {
+        ctx.emit('get', data)
+        inputValue.value = ''
+      })
+    }
 
     onMounted(() => {
       if (_props.defaultValue) {

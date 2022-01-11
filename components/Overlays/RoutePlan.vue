@@ -135,66 +135,19 @@
             "
           >
             <h4 class="text-sm">Customer Details</h4>
-            <!-- 
-            <button
-              type="button"
-              class="
-                flex
-                space-x-2
-                items-center
-                bg-white
-                text-btn-purple
-                border border-btn-purple
-                px-2
-                py-1
-                rounded-sm
-                text-sm
-              "
-              @click="increment"
-              v-if="form.activity == 'pick-up'"
-            >
-              <span>Add More Customer Details</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="#5C53FF"
-                class="w-6 h-6 fill-current text-white"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </button> -->
 
-            <div class="w-1/2" v-if="form.activity == 'pick-up'">
-              <data-list
-                :label-title="'Add a new customer'"
+            <div
+              class="w-1/2"
+              v-if="form.activity == 'pick-up' && form.orderType != ''"
+            >
+              <find-customer
+                :label-title="`Add a new ${form.orderType}`"
                 :arr="customersArray"
-                :input-placeholder="`Enter ${form.orderType} Name`"
-                @get="getCustomer($event.value)"
+                :input-placeholder="`Enter ${form.orderType} name`"
+                @get="addCustomer($event)"
               />
             </div>
           </div>
-          <!-- <div v-if="show_search == true">
-            <input-component
-              :label-title="'Customer name'"
-              :input-placeholder="`Search customers by name`"
-              :default-value="''"
-              @get="customer_name = $event.value"
-            />
-          </div> -->
-          <!-- <div class="w-1/2" v-if="form.activity == 'pick-up'">
-            <data-list
-              :label-title="'Name'"
-              :arr="customersArray"
-              :input-placeholder="`Enter ${form.orderType} Name`"
-              @get="getCustomer($event.value)"
-            />
-          </div> -->
           <div
             v-for="(customer, i) in form.customers"
             :key="i"
@@ -285,7 +238,7 @@ import {
 import Validator from 'validatorjs'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
-import DataList from '@/components/Form/DataList.vue'
+import FindCustomer from '~/components/Form/FindCustomer.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import AddTerritory from '@/components/Overlays/AddTerritory.vue'
 import { ValidatorObject } from '@/module/Validation'
@@ -300,7 +253,7 @@ export default defineComponent({
   components: {
     BackDrop,
     SuccessMsg,
-    DataList,
+    FindCustomer,
     InputComponent,
     SelectComponent,
     ButtonComponent,
@@ -318,6 +271,7 @@ export default defineComponent({
     }
 
     const isCentralise = ref<Boolean>(true)
+    const defaultValue = ref<string>('')
 
     const context = useContext()
     const route = useRoute()
@@ -381,15 +335,26 @@ export default defineComponent({
     }
     const getCustomer = (name: string) => {
       CustomerController.fetchCustomerDto(name).then((data) => {
-        console.log(data)
+        // console.log(data)
         form.customers.push({
           name: data.name,
           email: data.email,
           departure: data.address,
           numberOfCylinders: 0,
         })
+        defaultValue.value = ''
       })
     }
+    const addCustomer = (data: any) => {
+      console.log(data)
+      form.customers.push({
+        name: data.name,
+        email: data.email,
+        departure: data.address,
+        numberOfCylinders: 0,
+      })
+    }
+
     const fetchCustomers = () => {
       CustomerController.fetchUnPaginatedCustomers().then((response: any) => {
         customersArray.value = response.map((item: any) => {
@@ -571,7 +536,8 @@ export default defineComponent({
       territory,
       addToTerritory,
       addTer,
-      getCustomer,
+      addCustomer,
+      defaultValue,
     }
   },
 })

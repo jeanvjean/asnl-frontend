@@ -67,7 +67,7 @@
             class="bg-gray-200 tracking-tight text-base font-semibold uppercase"
           >
             <tr>
-              <th></th>
+              <!-- <th></th> -->
               <th class="text-left px-4 py-3 text-black">Cylinder No</th>
               <th class="text-center px-4 py-3 text-black">Volume</th>
               <th class="text-center px-4 py-3 text-black">Type</th>
@@ -76,13 +76,13 @@
           </thead>
           <tbody class="bg-white">
             <tr v-for="(row, index) in productionDetail.cylinders" :key="index">
-              <td class="px-2 py-1 text-center">
+              <!-- <td class="px-2 py-1 text-center">
                 <input
                   v-if="row.status != 'filled'"
                   type="checkbox"
                   @change="addCylinders(row)"
                 />
-              </td>
+              </td> -->
               <td
                 class="
                   text-left
