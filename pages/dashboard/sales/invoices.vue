@@ -177,7 +177,7 @@
                   border-white border
                 "
               >
-                {{ invoice.amount }}
+                {{ formatCurrency(invoice.amount) }}
               </td>
               <td
                 class="
@@ -228,7 +228,8 @@
       </div>
     </div>
     <SuccessMsg
-      v-if="showSuccess"      :text="'You have succesfully generated a Delivery Waybill'"
+      v-if="showSuccess"
+      :text="'You have succesfully generated a Delivery Waybill'"
       :buttonText="'View Delivery Waybills'"
       @action="$router.push('/dashboard/sales/waybills')"
       @close="showSuccess = false"
@@ -261,6 +262,7 @@ import { fetchInvoices } from '@/module/Account'
 import { VehicleController } from '@/module/Vehicle'
 import InvoicePayment from '@/components/Overlays/InvoicePayment.vue'
 import SuccessMsg from '@/components/Overlays/SuccessMsg.vue'
+import formatCurrency from '@/utils/formatCurrency'
 
 export default defineComponent({
   name: 'Sales-Invoice',
@@ -375,12 +377,10 @@ export default defineComponent({
       customer: {},
       cylinders: [],
       invoiceNo: '',
-      //   lpoNo: 'string',
       deliveryType: 'customer',
     })
 
     const generateDN = (invoice: any, i: number) => {
-      //   console.log(invoice)
       payload.customer = {
         name: invoice.customer.name,
         id: invoice.customer.id,
@@ -425,6 +425,7 @@ export default defineComponent({
       generateDN,
       changePage,
       showSuccess,
+      formatCurrency,
     }
   },
 })

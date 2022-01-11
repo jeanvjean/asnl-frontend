@@ -46,6 +46,23 @@
               >
                 View
               </router-link>
+
+              <router-link
+                v-else-if="
+                  slotProps.rowObject.produced &&
+                  !slotProps.rowObject.sales_req_id
+                "
+                :to="`/dashboard/sales/requisition/prod/${slotProps.rowId}`"
+                class="
+                  px-6
+                  py-1
+                  border border-btn-purple
+                  rounded-sm
+                  text-btn-purple text-sm
+                "
+              >
+                Create Sales Requistion
+              </router-link>
               <span
                 v-else
                 class="
@@ -81,6 +98,7 @@ import FilterButton from '@/components/Base/FilterButton.vue'
 import TableComponent from '@/components/Table.vue'
 import { getTableBody } from '@/constants/utils'
 import Pagination from '@/components/Base/Pagination.vue'
+import ButtonComponent from '@/components/Form/Button.vue'
 
 export default defineComponent({
   name: 'CreateReport',
@@ -89,6 +107,7 @@ export default defineComponent({
     FilterButton,
     TableComponent,
     Pagination,
+    ButtonComponent,
   },
   layout: 'dashboard',
   setup() {

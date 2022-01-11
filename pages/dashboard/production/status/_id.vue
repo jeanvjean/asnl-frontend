@@ -223,16 +223,6 @@
           :button-type="'button'"
           @buttonClicked="finalise"
         />
-        <button-component
-          v-if="buttonsToShow.completed"
-          :button-class="'bg-btn-purple text-white w-full md:w-1/3 mr-2'"
-          :button-text="'Create Sales Requistion'"
-          :loading-status="buttonLoading"
-          :button-type="'button'"
-          @buttonClicked="
-            $router.push(`/dashboard/sales/requisition/prod/${schedule}`)
-          "
-        />
       </form>
     </div>
   </div>

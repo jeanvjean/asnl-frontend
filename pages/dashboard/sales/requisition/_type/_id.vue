@@ -14,7 +14,7 @@
         >
           Air Separation Cylinder
         </button>
-        <button
+        <!-- <button
           class="px-6 py-2 tracking-wide font-medium border-2 border-gray-200"
           :class="{
             'bg-purple-600 text-white': selected.walkin,
@@ -25,7 +25,7 @@
           "
         >
           Walk-in Customer
-        </button>
+        </button> -->
       </div>
       <div v-if="productionDetail.customer">
         <h1 class="px-2 mt-4 mb-2 font-bold tracking-wide text-base uppercase">
@@ -125,11 +125,10 @@
                       </td>
                       <td>
                         <input-component
-                          :input-placeholder="'Cylinder Size'"
+                          :input-placeholder="'Cylinder Amount'"
                           :default-value="cylinder.amount"
                           :input-type="'number'"
                           @get="
-                            cylinder.unitPrice = $event.value
                             cylinder.amount =
                               Number(cylinder.unitPrice) *
                               Number(cylinder.volume.value)

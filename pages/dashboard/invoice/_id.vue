@@ -33,6 +33,7 @@
                 border border-btn-purple
                 text-btn-purple
               "
+              v-if="form.outstandingBalance == 0"
             >
               Generate Reciept
             </button>
@@ -134,10 +135,10 @@
                   {{ cylinder.volume.value }} {{ cylinder.volume.unit }}
                 </td>
                 <td class="px-4 py-2 border border-gray-300 text-left">
-                  {{ cylinder.unitPrice }}
+                  {{ formatCurrency(cylinder.unitPrice) }}
                 </td>
                 <td class="px-4 py-2 border border-gray-300 text-left">
-                  {{ cylinder.amount }}
+                  {{ formatCurrency(cylinder.amount) }}
                 </td>
               </tr>
             </tbody>
@@ -169,7 +170,9 @@
             <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Total Amount</h4>
-                <p class="leading-3">₦ {{ form.totalAmount }}.00</p>
+                <p class="leading-3">
+                  {{ formatCurrency(form.totalAmount) }}.00
+                </p>
               </div>
             </div>
           </div>
@@ -282,6 +285,7 @@ import { ProductObject } from '@/module/Product'
 import { fetchInvoice, updateInvoice } from '@/module/Account'
 import { createOcn } from '@/module/Incoming'
 import SuccessMsg from '~/components/Overlays/SuccessMsg.vue'
+import formatCurrency from '@/utils/formatCurrency'
 
 export default defineComponent({
   components: {
@@ -486,6 +490,7 @@ export default defineComponent({
       router,
       ocn_id,
       printDiv,
+      formatCurrency,
     }
   },
 })

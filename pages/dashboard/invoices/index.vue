@@ -13,7 +13,6 @@
           @limitChanged="adjustLimit"
           @next="getInvoices($event.value)"
           @prev="getInvoices($event.value)"
-             
         />
       </div>
       <div class="w-full flex items-center space-x-4 px-6 py-2">
@@ -187,7 +186,7 @@
                   border-white border
                 "
               >
-                {{ invoice.amount }}
+                {{ formatCurrency(invoice.amount) }}
               </td>
               <td
                 class="
@@ -254,6 +253,7 @@ import { mainStore } from '@/module/Pinia'
 import { getFilters, getQueryString, getTableBody } from '@/constants/utils'
 import { fetchInvoices, updateInvoice } from '@/module/Account'
 import InvoicePayment from '@/components/Overlays/InvoicePayment.vue'
+import formatCurrency from '@/utils/formatCurrency'
 
 export default defineComponent({
   name: 'Reports',
@@ -365,7 +365,7 @@ export default defineComponent({
       updateInvoice(invoiceId.value, { amountPaid: form.amount })
         .then((data) => {
           console.log(data)
-          showPayment.value =false
+          showPayment.value = false
         })
         .catch((err) => console.log(err))
     }
@@ -391,6 +391,7 @@ export default defineComponent({
       showPayment,
       changedChecked,
       invoiceId,
+      formatCurrency,
       makePayment,
     }
   },
