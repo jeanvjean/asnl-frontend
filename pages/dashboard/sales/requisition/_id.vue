@@ -1,613 +1,489 @@
 <template>
-  <div :key="componentKey">
-    <div class="py-4 px-2">
-      <div class="flex space-x-0 items-center">
+  <div class="px-6 py-6">
+    <div class="flex justify-end mx-auto w-3/4 py-4">
+      <div class="flex space-x-6">
         <button
-          class="px-6 py-2 tracking-wide font-medium border-2 border-gray-200"
-          :class="{
-            'bg-purple-600 text-white': selected.customer,
-          }"
-          @click="
-            ;(selected.customer = true), (selected.walkin = false)
-            form.type = 'regular'
+          class="
+            flex
+            items-center
+            bg-blue-500
+            text-white
+            space-x-4
+            px-4
+            py-2
+            rounded-sm
           "
+          @click="printDiv"
         >
-          Air Separation Cylinder
-        </button>
-        <button
-          class="px-6 py-2 tracking-wide font-medium border-2 border-gray-200"
-          :class="{
-            'bg-purple-600 text-white': selected.walkin,
-          }"
-          @click="
-            ;(selected.walkin = true), (selected.customer = false)
-            form.type = 'walk-in'
-          "
-        >
-          Walk-in Customer
-        </button>
-      </div>
-      <div v-if="productionDetail.customer">
-        <h1 class="px-2 mt-4 mb-2 font-bold tracking-wide text-base uppercase">
-          Customer Details
-        </h1>
-        <h1 class="px-2 mt-4 mb-2 tracking-wide text-base">
-          Name: {{ productionDetail.customer.name }}
-        </h1>
-        <h1 class="px-2 mt-4 mb-2 tracking-wide text-base">
-          Email: {{ productionDetail.customer.email }}
-        </h1>
-      </div>
-      <form @submit.prevent="submit">
-        <div
-          class="grid grid-rows-1 md:grid-cols-3 w-full px-4 gap-y-2 md:gap-x-4"
-        >
-          <div class="w-full space-y-2 flex">
-            <input-component
-              :label-title="'ECR Number'"
-              @get="productionDetail.ecrNo = $event.value"
-              :inputPlaceholder="'Enter ECR No'"
-              :default-value="productionDetail.ecrNo"
-              :isDisabled="true"
-            />
-            <circle-loader class="mt-8" v-if="ecrLoading" />
-          </div>
-          <div
-            class="w-full space-y-2"
-            v-if="productionDetail.ecrNo && productionDetail.cylinderType != ''"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4 fill-current text-btn-purple"
+            viewBox="0 0 24 24"
+            stroke="white"
           >
-            <input-component
-              :labelTitle="'Gas Type'"
-              :default-value="productionDetail.cylinderType"
-              :inputPlaceholder="'Gas type'"
-              :isDisabled="true"
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
             />
-          </div>
+          </svg>
+          <span>Print a Copy</span>
+        </button>
+      </div>
+    </div>
+    <div class="py-2" id="print">
+      <div class="bg-white w-3/4 mx-auto">
+        <div class="ml-6 pt-6">
+          <h1 class="flex-1 text-gray-400 font-medium text-lg">
+            Sales Requisition Details
+          </h1>
         </div>
-        <div class="px-4 my-8">
-          <div v-if="scan.formId">Scan ID:{{ scan.formId }}</div>
-          <h1 class="font-semibold uppercase mb-2">Cylinder Details</h1>
+        <div class="px-10 py-6 border-gray-300 w-full">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Customer Name
+                </th>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  ECR No
+                </th>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Date
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="px-4 py-2 border-gray-300 text-left text-center">
+                  {{ details.customer.name }}
+                </td>
+                <td
+                  class="
+                    px-4
+                    py-2
+                    border-l border-gray-300
+                    text-left text-center
+                  "
+                >
+                  {{ details.ecrNo }}
+                </td>
+                <td
+                  class="
+                    px-4
+                    py-2
+                    border-l border-gray-300
+                    text-left text-center
+                  "
+                >
+                  {{
+                    new Date(details.date).getMonth() +
+                    '/' +
+                    new Date(details.date).getDate() +
+                    '/' +
+                    new Date(details.date).getFullYear()
+                  }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
+        <div class="px-10 py-6 border-b border-t border-gray-300 w-full">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th class="px-4 py-2 text-right">S/N</th>
+                <th class="px-4 py-2 text-left">Cylinder No</th>
+                <th class="px-4 py-2 text-left">Volume</th>
+                <th class="px-4 py-2 text-left">Unit Price</th>
+                <th class="px-4 py-2 text-left">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(cylinder, i) in cylinders" :key="i">
+                <td class="px-4 py-2 text-right">0{{ i + 1 }}.</td>
+                <td class="px-4 py-2 border border-gray-300 text-left">
+                  {{ cylinder.cylinderNumber }}
+                </td>
+                <td class="px-4 py-2 border border-gray-300 text-left">
+                  {{ cylinder.volume.value }} {{ cylinder.volume.unit }}
+                </td>
+                <td class="px-4 py-2 border border-gray-300 text-left">
+                  {{ formatCurrency(cylinder.unitPrice) }}
+                </td>
+                <td class="px-4 py-2 border border-gray-300 text-left">
+                  {{ formatCurrency(cylinder.amount) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="px-10 py-6 border-gray-300 w-full">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Total Quantity
+                </th>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Total Volume
+                </th>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  VAT
+                </th>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Total Amount
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="px-4 py-2 border-gray-300 text-left text-center">
+                  {{ cylinders.length }}
+                </td>
+                <td
+                  class="
+                    px-4
+                    py-2
+                    border-l border-gray-300
+                    text-left text-center
+                  "
+                >
+                  {{ totalVolume }}kg
+                </td>
+                <td
+                  class="
+                    px-4
+                    py-2
+                    border-l border-gray-300
+                    text-left text-center
+                  "
+                >
+                  {{ vat }}%
+                </td>
+                <td
+                  class="
+                    px-4
+                    py-2
+                    border-l border-gray-300
+                    text-left text-center
+                  "
+                >
+                  {{ formatCurrency(totalAmount) }}.00
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flex items-start py-2 px-2 mx-4">
           <div>
-            <div class="w-full flex items-center space-x-2">
-              <div class="w-full overflow-x-auto">
-                <table class="table table-auto w-full border-collapse">
-                  <thead>
-                    <tr>
-                      <th class="border border-black px-1 py-1 text-sm">S/N</th>
-                      <th class="border border-black px-1 py-1">
-                        Cylinder Number
-                      </th>
-                      <th class="border border-black px-1 py-1">Volume</th>
-                      <th class="border border-black px-1 py-1">Unit Price</th>
-                      <th class="border border-black px-1 py-1">Amount</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody v-if="selected.customer">
-                    <tr
-                      v-for="(cylinder, i) in productionDetail.cylinders"
-                      :key="i"
-                    >
-                      <td>{{ i + 1 }}</td>
-                      <td>
-                        <input-component
-                          :input-placeholder="'Volume'"
-                          :default-value="cylinder.cylinderNumber"
-                        />
-                      </td>
-                      <td>
-                        <input-component
-                          :input-placeholder="'Volume'"
-                          :default-value="cylinder.volume.value"
-                          :input-type="'number'"
-                          @get="
-                            ;(cylinder.volume.value = $event.value),
-                              (cylinder.amount =
-                                Number(cylinder.unitPrice) *
-                                Number(cylinder.volume.value))
-                          "
-                        />
-                      </td>
-                      <td>
-                        <input-component
-                          :input-placeholder="'Cylinder Size'"
-                          :default-value="cylinder.unitPrice"
-                          :input-type="'number'"
-                          @get="
-                            cylinder.unitPrice = $event.value
-                            cylinder.amount =
-                              Number(cylinder.unitPrice) *
-                              Number(cylinder.volume.value)
-                            changeComponentKey()
-                          "
-                        />
-                      </td>
-                      <td>
-                        <input-component
-                          :input-placeholder="'Cylinder Size'"
-                          :default-value="cylinder.amount"
-                          :input-type="'number'"
-                          @get="
-                            cylinder.unitPrice = $event.value
-                            cylinder.amount =
-                              Number(cylinder.unitPrice) *
-                              Number(cylinder.volume.value)
-                          "
-                        />
-                      </td>
-
-                      <td>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          class="fill-current text-gray-500 w-5 h-5 mx-auto"
-                          @click="decrement(i)"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+            <p class="text-gray-500 text-sm font-medium leading-6">
+              Initiated at
+            </p>
+            <p class="text-gray-500 text-sm font-medium">
+              <span>
+                {{
+                  new Date(preparedBy.date).getMonth() +
+                  '/' +
+                  new Date(preparedBy.date).getDate() +
+                  '/' +
+                  new Date(preparedBy.date).getFullYear()
+                }}
+              </span>
+              <span>
+                {{ new Date(preparedBy.date).getHours() }}:
+                {{ new Date(preparedBy.date).getMinutes() }}</span
+              >
+            </p>
+            <div class="flex items-start space-x-4 py-2">
+              <img
+                v-if="preparedBy.image != null"
+                class="h-10 w-10 rounded-full"
+                :src="preparedBy.image"
+                alt=""
+              />
+              <img
+                v-else
+                class="h-10 w-10 rounded-full"
+                src="@/assets/images/default-avatar.jpg"
+                alt=""
+              />
+              <div>
+                <p class="text-black text-lg">{{ preparedBy.name }}</p>
+                <p class="text-gray-600 text-sm">{{ preparedBy.subrole }}</p>
               </div>
             </div>
           </div>
-
-          <div class="mt-4">
-            <button
-              class="flex items-center space-x-2 text-purple-500"
-              type="button"
-              v-show="!scan.formId"
-              @click="initCylinder"
-            >
-              <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M4,6H6V18H4V6M7,6H8V18H7V6M9,6H12V18H9V6M13,6H14V18H13V6M16,6H18V18H16V6M19,6H20V18H19V6M2,4V8H0V4A2,2 0 0,1 2,2H6V4H2M22,2A2,2 0 0,1 24,4V8H22V4H18V2H22M2,16V20H6V22H2A2,2 0 0,1 0,20V16H2M22,20V16H24V20A2,2 0 0,1 22,22H18V20H22Z"
-                />
-              </svg>
-              <span>Scan Cylinders</span>
-            </button>
+          <div v-show="false">
+            <p class="text-gray-500 text-sm font-medium leading-6">
+              Initiated at
+            </p>
+            <p class="text-gray-500 text-sm font-medium">
+              <span>24/02/2020</span> <span>11:02</span>
+            </p>
+            <div class="flex items-start space-x-4 py-2">
+              <img
+                class="h-10 w-10 rounded-full"
+                src="@/assets/images/default-avatar.jpg"
+                alt=""
+              />
+              <div>
+                <p class="text-black text-lg">Chimerem Egbuson</p>
+                <p class="text-gray-600 text-sm">Operations Manager</p>
+              </div>
+            </div>
           </div>
-          <div class="mt-6 w-1/3" v-if="auth.name">
-            <p class="font-bold tracking-wide text-base">Prepared by:</p>
-            {{ auth.name.toUpperCase() }}
+          <div v-show="false">
+            <p class="text-gray-500 text-sm font-medium leading-6">
+              Initiated at
+            </p>
+            <p class="text-gray-500 text-sm font-medium">
+              <span>24/02/2020</span> <span>11:02</span>
+            </p>
+            <div class="flex items-start space-x-4 py-2">
+              <img
+                class="h-10 w-10 rounded-full"
+                src="@/assets/images/default-avatar.jpg"
+                alt=""
+              />
+              <div>
+                <p class="text-black text-lg">Chimerem Egbuson</p>
+                <p class="text-gray-600 text-sm">Operations Manager</p>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div class="flex items-center space-x-6 px-4 mt-4">
-          <button-component
-            :buttonType="'button'"
-            @buttonClicked="printNow()"
-            :button-class="'bg-btn-purple text-white w-full md:w-1/4'"
-            :button-text="'Print a copy'"
-          />
-          <button-component
-            @click="submit"
-            :button-class="'bg-btn-white border border-btn-purple text-btn-purple w-full md:w-1/4'"
-            :button-text="'Save'"
-            :loading-status="buttonLoading"
-          />
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
-
 <script lang="ts">
 import {
   defineComponent,
-  onMounted,
-  reactive,
   ref,
-  useContext,
-  useRouter,
-  useRoute,
   watch,
+  useRoute,
+  useRouter,
+  onBeforeMount,
+  reactive,
 } from '@nuxtjs/composition-api'
-import Validator from 'validatorjs'
-import { CylinderController } from '@/module/Cylinder'
-import { CustomerController } from '@/module/Customer'
-import InputComponent from '@/components/Form/Input.vue'
-import SelectComponent from '@/components/Form/Select.vue'
-import ButtonComponent from '@/components/Form/Button.vue'
-import { ValidatorObject } from '@/module/Validation'
-import { createRequisition } from '@/module/Sales'
-import { fetchEcrDetail } from '@/module/ECR'
-import { initiateScan } from '@/module/SCAN'
-import { fetchEcrs } from '@/module/ECR'
-import { fetchSchedule } from '@/module/Production'
-import { values } from 'lodash'
-import { mainStore } from '@/module/Pinia'
-import printJS from 'print-js'
+import { fetchRequisition } from '~/module/Sales'
+import { createInvoice } from '~/module/Account'
+import { CustomerController } from '~/module/Customer'
+import ButtonComponent from '~/components/Form/Button.vue'
+import formatCurrency from '@/utils/formatCurrency'
 
-import CircleLoader from '@/components/CircleLoader.vue'
+var converter = require('number-to-words')
+
 export default defineComponent({
-  components: {
-    InputComponent,
-    SelectComponent,
-    ButtonComponent,
-    CircleLoader,
-  },
-  layout: 'noSidebar',
+  name: 'sales-requisition-id',
+  layout: 'dashboard',
+  components: { ButtonComponent },
   setup() {
-    const appStore = mainStore()
-    const auth: any = appStore.getLoggedInUser
+    const types = [{ name: 'Assign Cylinder', value: 'temp' }]
+    const reciepients = [{ name: 'Oxygen', value: 'temp' }]
+    const showConfirmation = ref(false)
+    const showFinalStep = ref(false)
+    const status = ref('')
+    const message = ref('')
     const route = useRoute()
-    const prodId = route.value.params.id
-    console.log(route.value.params.id)
-    const selected = reactive({
-      customer: true,
-      walkin: false,
-    })
+    const router = useRouter()
 
-    const scan = reactive<any>({
-      status: '',
-      _id: '',
-      cylinders: [],
-      formId: '',
-      initNum: 0,
-    })
+    const id = route.value.params.id
 
-    const form = reactive({
+    const details = reactive({
       customer: {
         name: '',
         id: '',
         email: '',
+        type: '',
       },
       ecrNo: '',
-      date: new Date().toISOString(),
-      cylinderType: '',
-      cylinders: [],
-      type: 'regular',
+      date: null,
+      invoice_id: null,
     })
-    const componentKey = ref<number>(0)
 
-    const ecrLoading = ref(false)
-    const changeComponentKey = () => {
-      componentKey.value = Math.floor(Math.random() * 100)
-    }
-
+    const preparedBy = reactive({
+      email: '',
+      image: '',
+      name: '',
+      subrole: '',
+      date: null,
+    })
+    const applyVat = ref<Boolean>(false)
     const cylinders = ref<any>([])
-    const ecrCylinders = ref<any>([])
-    const customers = ref<any>([])
-    const ecrs = ref<any>([])
-    const dispEcrs = ref<any>([])
-    const externalCylinders = ref<any>([])
-    const internalCylinders = ref<any>([])
+    const totalVolume = ref(0)
+    const totalAmount = ref(0)
+    const oTotalAmount = ref(0)
+    const vat = ref(0)
+    const loading = ref(false)
 
-    const scanCylinders = ref([])
-
-    const { $fire } = useContext()
-    const db = $fire.database
-
-    const initCylinder = () => {
-      initiateScan().then((response) => {
-        scan.status = response.status
-        scan._id = response._id
-        scan.cylinders = response.cylinders
-        scan.formId = response.formId
-        scan.initNum = response.initNum
-      })
-    }
-    const setEcr = (event: any) => {
-      ecrs.value.forEach((item: any) => {
-        if (item.value == event.value) {
-          form.ecrNo = item.name
-          form.cylinderType = item.gas
-          ecrCylinders.value = item.cylinders
-          console.log(ecrCylinders.value)
-        }
-      })
-    }
-    const ecrSearch = ref('')
-    const displayList = ref<any>([])
-    const searchEcr = () => {
-      let filter = ecrSearch.value.toLowerCase()
-      for (var i = 0; i < ecrs.value.length; i++) {
-        console.log(ecrs.value[i].name)
-        if (
-          ecrs.value[i].name.toLowerCase().indexOf(filter) > -1 &&
-          filter != ''
-        ) {
-          displayList.value.push(ecrs.value[i].name)
-          console.log('Among', ecrs.value[i].name)
-          return
-        } else {
-          displayList.value = []
-        }
-      }
-    }
-
-    watch(
-      () => form.ecrNo,
-      (currentValue, oldValue) => {
-        var typingTimer
-        clearTimeout(typingTimer)
-        typingTimer = setTimeout(() => {
-          ecrLoading.value = true
-          fetchEcrDetail(currentValue.toUpperCase()).then((data) => {
-            console.log(data)
-            if (
-              data.docs.length > 0 &&
-              data.docs[0].ecrNo == currentValue.toUpperCase()
-            ) {
-              form.customer.name = data.docs[0].customer.name
-              form.customer.id = data.docs[0].customer._id
-              form.customer.email = data.docs[0].customer.email
-              form.cylinderType = data.docs[0].gasType.gasName
-              ecrCylinders.value = data.docs[0].removeArr.map((id: any) => id)
-              changeComponentKey()
-              ecrLoading.value = false
-            } else {
-              context.$toast.error(`There is no ECR with ${currentValue}`)
-              form.customer.name = ''
-              form.customer.id = ''
-              form.customer.email = ''
-              form.cylinderType = ''
-              ecrCylinders.value = []
-              changeComponentKey()
-              ecrLoading.value = false
-            }
-          })
-        }, 3000)
-      }
-    )
-
-    watch(
-      () => scan.formId,
-      (currentValue, oldValue) => {
-        console.log(currentValue)
-        const ref = db.ref(`forms/${currentValue}/form`)
-        // const ref = db.ref(`forms/1/form`)
-        ref.on(
-          'value',
-          (snapshot: any) => {
-            if (snapshot.val()) {
-              const cyl = JSON.parse(snapshot.val().cylinders)
-              if (cyl.length) {
-                var item = cyl[cyl.length - 1]
-                CylinderController.confirmCylinderOnSysytem(
-                  item.assignedNumber,
-                  item.barcode,
-                  item.cylinderNumber
-                ).then((data) => {
-                  console.log(ecrCylinders.value)
-                  console.log(data.data.cylinder)
-                  if (ecrCylinders.value.includes(data.data.cylinder._id)) {
-                    console.log(data.data)
-                    cylinders.value.push({
-                      noOfCylinders: data.data.cylinder.cylNo,
-                      cylinderNumber: data.data.cylinder.cylinderNumber,
-                      volume: {
-                        value: data.data.cylinder.gasVolumeContent.value,
-                        unit: data.data.cylinder.gasVolumeContent.unit,
-                      },
-                      unitPrice: data.data.cylinder.purchaseCost?.cost,
-                      amount:
-                        data.data.cylinder.purchaseCost?.cost *
-                        data.data.cylinder.cylNo,
-                    })
-                    form.cylinders = cylinders.value
-                  } else {
-                    context.$toast.error(
-                      'The cylinder is either empty of does not belong to the ECR'
-                    )
-                  }
-                })
-              }
-            }
-          },
-          (errorObject: Error) => {
-            console.log('The read failed: ' + errorObject.name)
-          }
-        )
-      }
-    )
-
-    const gasTypes = ref([])
-
-    const getCustomer = (value: any) => {
-      customers.value.forEach((item: any) => {
-        console.log(value)
-        if (item.value == value) {
-          form.customer.name = item.name
-          form.customer.email = item.email
-        }
-      })
-    }
-    const getGases = () => {
-      CylinderController.getCylinders().then((response) => {
-        const myResponse = response.data.data.cylinders
-        // console.log(myResponse)
-        gasTypes.value = myResponse.map((element: any) => {
-          return {
-            name: element.gasName,
-            value: element.gasName,
-          }
-        })
-      })
-    }
-
-    const fetchAllEcr = () => {
-      fetchEcrs().then((response) => {
-        console.log(response)
-        ecrs.value = response.docs.map((item: any) => {
-          return {
-            name: item.ecrNo,
-            value: item._id,
-            _id: item.customer._id,
-            cylinders: item.removeArr.map((id: any) => id),
-            gas: item.gasType.gasName,
-          }
-        })
-      })
-    }
-    const getDispEcrs = () => {
-      dispEcrs.value = ecrs.value.filter(
-        (item: any) => item._id === form.customer.id
-      )
-    }
-
-    const fetchCustomers = () => {
-      CustomerController.fetchUnPaginatedCustomers().then((response) => {
-        console.log(response)
-        customers.value = response.map((element: any) => {
-          return {
-            name: element.name,
-            value: element._id,
-            email: element.email,
-          }
-        })
-      })
-    }
-
-    function decrement(index: number) {
-      productionDetail.cylinders.splice(index, 1)
-      changeComponentKey()
-    }
-    const printNow = () => {
-      printJS('printJS-barcode', 'html')
-    }
-    const buttonLoading = ref<Boolean>(false)
-
-    const productionDetail = reactive({
-      customer: {},
-      ecrNo: '',
-      cylinders: [],
-      type: 'regular',
-      date: new Date().toISOString(),
-      production_id: '',
-      cylinderType: '',
-    })
-    const products = ref<any>([])
-    const getUnitPrice = (gasName: any) => {
-      var unit = 0
-      for (let index = 0; index < products.value.length; index++) {
-        if (products.value[index].product.productName == gasName) {
-          unit = products.value[index].product.unit_price
-          console.log(unit, products.value[index].product.unit_price)
-          return
-        } else {
-          unit = 9
-          console.log(unit)
-          return
-        }
-      }
-      return unit
-    }
-
-    const getProductionDetail = () => {
-      fetchSchedule(route.value.params.id).then((response) => {
-        console.log(response)
-        productionDetail.production_id = response._id
-        productionDetail.customer = {
-          id: response.customer._id,
-          name: response.customer.name,
-          email: response.customer.email,
-        }
-        productionDetail.ecrNo = response.ecrNo
-        products.value = response.customer.products
-        productionDetail.cylinderType = response.cylinders[0].gasName
-        productionDetail.cylinders = response.cylinders.map((cylinder: any) => {
-          return {
-            cylinderNumber: cylinder.cylinderNumber,
-            noOfCylidners: cylinder.cylNo,
-            volume: cylinder.gasVolumeContent,
-            type: cylinder.gasName,
-            status: cylinder.cylinderStatus,
-            unitPrice: getUnitPrice(cylinder.gasName),
-            id: cylinder._id,
-          }
-        })
-
-        changeComponentKey()
-      })
-    }
-
-    onMounted(() => {
-      Promise.all([
-        getGases(),
-        fetchCustomers(),
-        fetchAllEcr(),
-        getProductionDetail(),
-      ])
-    })
-    const context = useContext()
-    const router = useRouter()
-
-    const submit = () => {
-      const rules = {
-        'customer.name': 'required|string',
-        'customer.id': 'required|string',
-        ecrNo: 'required|string',
-        date: 'required|date',
-        cylinderType: 'required|string',
-        cylinders: 'required|array',
-        'cylinders.*.noOfCylidners': 'required|numeric',
-        'cylinders.*.cylinderNumber': 'required|string',
-        'cylinders.*.unitPrice': 'required|numeric',
-        'cylinders.*.amount': 'required|numeric',
-        'cylinders.*.volume.value': 'required|numeric',
-        // production_id: 'required|string',
-        // purchase_id: 'required|string',
-      }
-
-      const validation: any = new Validator(productionDetail, rules)
-      if (validation.fails()) {
-        let messages: string[] = []
-
-        messages = ValidatorObject.getMessages(validation.errors)
-        messages.forEach((error: string) => {
-          context.$toast.error(error)
-        })
+    const applyingVAT = () => {
+      if (applyVat.value == true) {
+        totalAmount.value =
+          Number(totalAmount.value) +
+          Number((totalAmount.value * vat.value) / 100)
       } else {
-        buttonLoading.value = true
-        createRequisition(productionDetail)
-          .then(() => {
-            router.push('/dashboard/production/sales-requisition')
-          })
-          .finally(() => {
-            buttonLoading.value = false
-          })
+        totalAmount.value = oTotalAmount.value
       }
     }
 
+    watch(status, (currentValue) => {
+      if (currentValue === 'success') {
+        message.value = 'You have successfully approved this request'
+      } else if (currentValue === 'error') {
+        message.value = 'You have regretably declined this request'
+      }
+    })
+    const count = ref(0)
+    const invoice_id = ref('')
+    const showSuccess = ref(false)
+
+    const printDiv = () => {
+      var printContents = document.getElementById('print')
+      var originalContents = document.body.innerHTML
+      if (printContents) {
+        document.body.innerHTML = printContents.innerHTML
+        window.print()
+        document.body.innerHTML = originalContents
+        router.go(0)
+      }
+    }
+
+    const generateInvoice = () => {
+      loading.value = true
+      let requestBody = {
+        customer: {
+          name: details.customer.name,
+          email: details.customer.email,
+          id: details.customer.id,
+        },
+        totalAmount: totalAmount.value,
+        amountPaid: 0,
+        date: '2021-05-15T10:38:50.733Z',
+        amountInWords: `${converter.toWords(totalAmount.value)} Naira Only`,
+        recieptType: cylinders.value.length > 0 ? 'cylinder' : 'product',
+        customerType: details.customer.type,
+        salesReq: id,
+        cylinders: [...cylinders.value],
+      }
+      createInvoice(requestBody)
+        .then((data) => {
+          console.log(data)
+          if (data.code == 200) {
+            showSuccess.value = true
+            invoice_id.value = data.data._id
+          }
+          loading.value = false
+        })
+        .catch((err) => {
+          console.log(err)
+          loading.value = false
+        })
+    }
+
+    onBeforeMount(() => {
+      fetchRequisition(id).then((data) => {
+        console.log(data)
+        details.customer = data.customer
+        details.ecrNo = data.ecrNo
+        details.date = data.createdAt
+        details.invoice_id = data.invoice_id
+        cylinders.value = data.cylinders
+
+        data.cylinders.forEach((item: any) => {
+          totalVolume.value += item.volume.value
+          totalAmount.value += item.amount
+          oTotalAmount.value += item.amount
+        })
+
+        preparedBy.name = data.preparedBy.name
+        preparedBy.image = data.preparedBy.image
+        preparedBy.subrole = data.preparedBy.subrole
+        preparedBy.email = data.preparedBy.email
+        preparedBy.date = data.preparedBy.createdAt
+
+        CustomerController.fetchCustomer(data.customer.id).then((data) => {
+          vat.value = data.data.vat ? data.data.vat.value : 5
+        })
+      })
+    })
     return {
-      selected,
+      types,
+      reciepients,
+      showConfirmation,
+      showFinalStep,
+      status,
+      message,
+      count,
+      details,
       cylinders,
-      productionDetail,
-      decrement,
-      form,
-      externalCylinders,
-      internalCylinders,
-      gasTypes,
-      submit,
-      buttonLoading,
-      changeComponentKey,
-      componentKey,
-      customers,
-      initCylinder,
-      scanCylinders,
-      scan,
-      ecrs,
-      dispEcrs,
-      getDispEcrs,
-      ecrCylinders,
-      setEcr,
-      auth,
-      getCustomer,
-      printNow,
-      searchEcr,
-      ecrSearch,
-      displayList,
-      ecrLoading,
+      totalVolume,
+      totalAmount,
+      generateInvoice,
+      preparedBy,
+      showSuccess,
+      invoice_id,
+      router,
+      applyVat,
+      applyingVAT,
+      vat,
+      loading,
+      printDiv,
+      formatCurrency,
     }
   },
 })

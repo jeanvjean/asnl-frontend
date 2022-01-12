@@ -1,107 +1,139 @@
 <template>
   <div class="px-6 py-6">
+    <div class="flex justify-end py-4 w-3/4 mx-auto">
+      <div class="flex space-x-6 remove">
+        <button
+          class="
+            flex
+            items-center
+            bg-btn-purple
+            text-white
+            space-x-4
+            px-4
+            py-2
+            rounded-sm
+          "
+          @click="genereteOCN"
+        >
+          <span>Generate OCN</span>
+        </button>
+        <button
+          class="
+            flex
+            items-center
+            space-x-4
+            px-4
+            py-2
+            rounded-sm
+            border border-btn-purple
+            text-btn-purple
+          "
+          v-if="form.outstandingBalance == 0"
+        >
+          Generate Reciept
+        </button>
+        <button
+          class="
+            flex
+            items-center
+            bg-btn-purple
+            text-white
+            space-x-4
+            px-4
+            py-2
+            rounded-sm
+          "
+          @click="printDiv"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4 fill-current text-btn-purple"
+            viewBox="0 0 24 24"
+            stroke="white"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+            />
+          </svg>
+          <span>Print a Copy</span>
+        </button>
+      </div>
+    </div>
     <div class="py-2" id="print">
       <div class="bg-white w-3/4 mx-auto">
-        <div class="flex justify-between px-6 py-4">
+        <div class="ml-6 pt-6">
           <h1 class="flex-1 text-gray-400 font-medium text-lg">
             Invoice Details
           </h1>
-          <div class="flex space-x-6">
-            <button
-              class="
-                flex
-                items-center
-                bg-btn-purple
-                text-white
-                space-x-4
-                px-4
-                py-2
-                rounded-sm
-              "
-              @click="genereteOCN"
-            >
-              <span>Generate OCN</span>
-            </button>
-            <button
-              class="
-                flex
-                items-center
-                space-x-4
-                px-4
-                py-2
-                rounded-sm
-                border border-btn-purple
-                text-btn-purple
-              "
-              v-if="form.outstandingBalance == 0"
-            >
-              Generate Reciept
-            </button>
-            <button
-              class="
-                flex
-                items-center
-                bg-btn-purple
-                text-white
-                space-x-4
-                px-4
-                py-2
-                rounded-sm
-              "
-              @click="printDiv"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 fill-current text-btn-purple"
-                viewBox="0 0 24 24"
-                stroke="white"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-                />
-              </svg>
-              <span>Print a Copy</span>
-            </button>
-          </div>
-        </div>
-        <div class="ml-6">
-          <h2 class="font-medium text-md">
+          <h2 class="font-medium text-md mt-6">
             Payment Status:
             <span class="text-gray-600">{{
               form.outstandingBalance == 0 ? 'Paid' : 'Not Completed'
             }}</span>
           </h2>
         </div>
-        <div class="w-full overflow-x-auto px-8 my-8">
-          <div
-            class="
-              grid grid-rows-1
-              lg:grid-cols-3
-              divide divide-x-2 divide-gray-300
-              mt-8
-            "
-          >
-            <div class="flex items-center justify-center">
-              <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Customer Name</h4>
-                <p class="text-gray-600">{{ form.customer.name }}</p>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-center">
-              <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Cylinder Type</h4>
-                <p>{{ cylinderType }}</p>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-center">
-              <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Date</h4>
-                <p>
+        <div class="px-10 py-6 border-gray-300 w-full">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Customer Name
+                </th>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Cylinder Type
+                </th>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Date
+                </th>
+              </tr>
+            </thead>
+            <tbody v-if="form.receiptType === 'cylinder' && cylinders.length">
+              <tr>
+                <td class="px-4 py-2 border-gray-300 text-left text-center">
+                  {{ form.customer.name }}
+                </td>
+                <td
+                  class="
+                    px-4
+                    py-2
+                    border-l border-gray-300
+                    text-left text-center
+                  "
+                >
+                  {{ cylinderType }}
+                </td>
+                <td
+                  class="
+                    px-4
+                    py-2
+                    border-l border-gray-300
+                    text-left text-center
+                  "
+                >
                   {{
                     new Date(form.date).getMonth() +
                     '/' +
@@ -109,74 +141,108 @@
                     '/' +
                     new Date(form.date).getFullYear()
                   }}
-                </p>
-              </div>
-            </div>
-          </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div class="px-10 py-6 border-b border-t border-gray-300 w-full">
-          <table class="w-10/12">
+          <table class="w-full">
             <thead>
               <tr>
-                <th class="px-4 py-2 text-right w-20">S/N</th>
-                <th class="px-4 py-2 text-left">Cylinder No</th>
-                <th class="px-4 py-2 text-left">Volume</th>
-                <th class="px-4 py-2 text-left">Unit Price</th>
-                <th class="px-4 py-2 text-left">Amount</th>
+                <th class="px-4 py-2 text-center">S/N</th>
+                <th class="px-4 py-2 text-center">Cylinder No</th>
+                <th class="px-4 py-2 text-center">Volume</th>
+                <th class="px-4 py-2 text-center">Unit Price</th>
+                <th class="px-4 py-2 text-center">Amount</th>
               </tr>
             </thead>
             <tbody v-if="form.receiptType === 'cylinder' && cylinders.length">
               <tr v-for="(cylinder, i) in cylinders" :key="i">
-                <td class="px-4 py-2 text-right">0{{ i + 1 }}.</td>
-                <td class="px-4 py-2 border border-gray-300 text-left">
+                <td class="px-4 py-2 text-center">0{{ i + 1 }}.</td>
+                <td class="px-4 py-2 border border-gray-300 text-center">
                   {{ cylinder.cylinderNumber }}
                 </td>
-                <td class="px-4 py-2 border border-gray-300 text-left">
+                <td class="px-4 py-2 border border-gray-300 text-center">
                   {{ cylinder.volume.value }} {{ cylinder.volume.unit }}
                 </td>
-                <td class="px-4 py-2 border border-gray-300 text-left">
+                <td class="px-4 py-2 border border-gray-300 text-center">
                   {{ formatCurrency(cylinder.unitPrice) }}
                 </td>
-                <td class="px-4 py-2 border border-gray-300 text-left">
+                <td class="px-4 py-2 border border-gray-300 text-center">
                   {{ formatCurrency(cylinder.amount) }}
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div class="w-full overflow-x-auto px-8 pb-4 my-4">
-          <div
-            class="
-              grid grid-rows-1
-              lg:grid-cols-3
-              divide divide-x-2 divide-gray-300
-              mt-8
-            "
-          >
-            <div class="flex items-center justify-center">
-              <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Total Quantity</h4>
-                <p>{{ cylinders.length }}</p>
-              </div>
-            </div>
 
-            <div class="flex items-center justify-center">
-              <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Total Volume</h4>
-                <p>{{ totalVolume }}kg</p>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-center">
-              <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Total Amount</h4>
-                <p class="leading-3">
-                  {{ formatCurrency(form.totalAmount) }}.00
-                </p>
-              </div>
-            </div>
-          </div>
+        <div class="px-10 py-6 border-gray-300 w-full">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Total Quantity
+                </th>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Total Volume
+                </th>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Total Amount
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="px-4 py-2 border-gray-300 text-left text-center">
+                  {{ cylinders.length }}
+                </td>
+                <td
+                  class="
+                    px-4
+                    py-2
+                    border-l border-gray-300
+                    text-left text-center
+                  "
+                >
+                  {{ totalVolume }}kg
+                </td>
+                <td
+                  class="
+                    px-4
+                    py-2
+                    border-l border-gray-300
+                    text-left text-center
+                  "
+                >
+                  {{ formatCurrency(form.totalAmount) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+
         <div class="flex items-start py-2 px-2 mx-4" v-if="false">
           <!--  <div>
             <p class="text-gray-500 text-sm font-medium leading-6">
@@ -286,6 +352,7 @@ import { fetchInvoice, updateInvoice } from '@/module/Account'
 import { createOcn } from '@/module/Incoming'
 import SuccessMsg from '~/components/Overlays/SuccessMsg.vue'
 import formatCurrency from '@/utils/formatCurrency'
+// import html2canvas from 'html2canvas'
 
 export default defineComponent({
   components: {
@@ -418,8 +485,9 @@ export default defineComponent({
 
     const showSuccess = ref(false)
     const printDiv = () => {
-      var printContents = document.getElementById('print')
+      let printContents = document.getElementById('print')
       var originalContents = document.body.innerHTML
+
       if (printContents) {
         document.body.innerHTML = printContents.innerHTML
         window.print()

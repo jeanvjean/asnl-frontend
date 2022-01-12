@@ -184,12 +184,6 @@
           v-if="productionDetail.cylinders.length > 0"
         >
           <button-component
-            :buttonType="'button'"
-            @buttonClicked="printNow()"
-            :button-class="'bg-btn-purple text-white w-full md:w-1/4'"
-            :button-text="'Print a copy'"
-          />
-          <button-component
             @click="submit"
             :button-class="'bg-btn-white border border-btn-purple text-btn-purple w-full md:w-1/4'"
             :button-text="'Save'"
@@ -585,8 +579,8 @@ export default defineComponent({
         //      productionDetail.fcr_id = null
         //   }
         createRequisition(productionDetail)
-          .then(() => {
-            router.push('/dashboard/production/sales-requisition')
+          .then((res) => {
+            router.push(`/dashboard/sales/requisition/${res.data._id}`)
           })
           .finally(() => {
             buttonLoading.value = false

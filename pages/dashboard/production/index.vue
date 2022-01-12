@@ -61,7 +61,7 @@
                   text-btn-purple text-sm
                 "
               >
-                Create Sales Requistion
+                Create Requistion
               </router-link>
               <span
                 v-else
@@ -144,6 +144,7 @@ export default defineComponent({
               date: new Date(schedule.date).toDateString(),
               _id: schedule._id,
               produced: schedule.produced,
+              sales_req_id: schedule.sales_req_id,
             }
           })
 

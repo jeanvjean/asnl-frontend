@@ -1,78 +1,112 @@
 <template>
   <div class="px-6 py-6">
+    <div class="flex justify-end mx-auto w-3/4 py-4">
+      <div class="w-1/6 mr-2">
+        <button-component
+          v-if="details.invoice_id == null"
+          @buttonClicked="generateInvoice"
+          :buttonText="'Generate an Invoice'"
+          :button-class="'border border-blue-300 bg-blue-500 text-white'"
+          :loading-status="false"
+        />
+      </div>
+      <div class="flex space-x-6">
+        <button
+          class="
+            flex
+            items-center
+            bg-blue-500
+            text-white
+            space-x-4
+            px-4
+            py-2
+            rounded-sm
+          "
+          @click="printDiv"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4 fill-current text-btn-purple"
+            viewBox="0 0 24 24"
+            stroke="white"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+            />
+          </svg>
+          <span>Print a Copy</span>
+        </button>
+      </div>
+    </div>
     <div class="py-2" id="print">
       <div class="bg-white w-3/4 mx-auto">
-        <div class="flex justify-between px-6 py-4">
+        <div class="ml-6 pt-6">
           <h1 class="flex-1 text-gray-400 font-medium text-lg">
-            Requisition Details
+            Sales Requisition Details
           </h1>
-          <div class="w-1/6 mr-2">
-            <button-component
-              v-if="details.invoice_id == null"
-              @buttonClicked="generateInvoice"
-              :buttonText="'Generate an Invoice'"
-              :button-class="'border border-blue-300 bg-blue-500 text-white'"
-              :loading-status="false"
-            />
-          </div>
-          <div class="flex space-x-6">
-            <button
-              class="
-                flex
-                items-center
-                bg-blue-500
-                text-white
-                space-x-4
-                px-4
-                py-2
-                rounded-sm
-              "
-              @click="printDiv"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 fill-current text-btn-purple"
-                viewBox="0 0 24 24"
-                stroke="white"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-                />
-              </svg>
-              <span>Print a Copy</span>
-            </button>
-          </div>
         </div>
-        <div class="w-full overflow-x-auto px-8 my-8">
-          <div
-            class="
-              grid grid-rows-1
-              lg:grid-cols-3
-              divide divide-x-2 divide-gray-300
-              mt-8
-            "
-          >
-            <div class="flex items-center justify-center">
-              <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Customer Name</h4>
-                <p>{{ details.customer.name }}</p>
-              </div>
-            </div>
-
-            <span class="flex items-center justify-center">
-              <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">ERC No</h4>
-                <p>{{ details.ecrNo }}</p>
-              </div>
-            </span>
-
-            <div class="flex items-center justify-center">
-              <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Date</h4>
-                <p>
+        <div class="px-10 py-6 border-gray-300 w-full">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Customer Name
+                </th>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  ECR No
+                </th>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Date
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="px-4 py-2 border-gray-300 text-left text-center">
+                  {{ details.customer.name }}
+                </td>
+                <td
+                  class="
+                    px-4
+                    py-2
+                    border-l border-gray-300
+                    text-left text-center
+                  "
+                >
+                  {{ details.ecrNo }}
+                </td>
+                <td
+                  class="
+                    px-4
+                    py-2
+                    border-l border-gray-300
+                    text-left text-center
+                  "
+                >
                   {{
                     new Date(details.date).getMonth() +
                     '/' +
@@ -80,16 +114,17 @@
                     '/' +
                     new Date(details.date).getFullYear()
                   }}
-                </p>
-              </div>
-            </div>
-          </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+
         <div class="px-10 py-6 border-b border-t border-gray-300 w-full">
-          <table class="w-10/12">
+          <table class="w-full">
             <thead>
               <tr>
-                <th class="px-4 py-2 text-right w-20">S/N</th>
+                <th class="px-4 py-2 text-right">S/N</th>
                 <th class="px-4 py-2 text-left">Cylinder No</th>
                 <th class="px-4 py-2 text-left">Volume</th>
                 <th class="px-4 py-2 text-left">Unit Price</th>
@@ -126,43 +161,94 @@
             />
             <label for="vat">Apply VAT {{ vat }} % </label>
           </div>
-          <div
-            class="
-              grid grid-rows-1
-              lg:grid-cols-4
-              divide divide-x-2 divide-gray-300
-              mt-8
-            "
-          >
-            <div class="flex items-center justify-center">
-              <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Total Quantity</h4>
-                <p>{{ cylinders.length }}</p>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-center">
-              <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Total Volume</h4>
-                <p>{{ totalVolume }}kg</p>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-center">
-              <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">VAT</h4>
-                <p>{{ vat }} %</p>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-center">
-              <div class="space-y-4">
-                <h4 class="text-gray-400 font-medium">Total Amount</h4>
-                <p class="leading-3">{{ formatCurrency(totalAmount) }}.00</p>
-              </div>
-            </div>
-          </div>
         </div>
+
+        <div class="px-10 py-6 border-gray-300 w-full">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Total Quantity
+                </th>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Total Volume
+                </th>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  VAT
+                </th>
+                <th
+                  class="
+                    px-4
+                    py-2
+                    text-left text-center text-gray-400
+                    font-medium
+                  "
+                >
+                  Total Amount
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="px-4 py-2 border-gray-300 text-left text-center">
+                  {{ cylinders.length }}
+                </td>
+                <td
+                  class="
+                    px-4
+                    py-2
+                    border-l border-gray-300
+                    text-left text-center
+                  "
+                >
+                  {{ totalVolume }}kg
+                </td>
+                <td
+                  class="
+                    px-4
+                    py-2
+                    border-l border-gray-300
+                    text-left text-center
+                  "
+                >
+                  {{ vat }}%
+                </td>
+                <td
+                  class="
+                    px-4
+                    py-2
+                    border-l border-gray-300
+                    text-left text-center
+                  "
+                >
+                  {{ formatCurrency(totalAmount) }}.00
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <div class="flex items-start py-2 px-2 mx-4">
           <div>
             <p class="text-gray-500 text-sm font-medium leading-6">
