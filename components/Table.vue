@@ -65,8 +65,9 @@
               {{ rowSingle.value }}
             </span>
           </td>
-          <td class="text-center icon-button">
+          <td class="text-center icon-button w-1/5 align-center">
             <slot
+              class="mx-auto"
               name="action"
               :rowId="getRowId(rows)"
               :rowObject="getRowObject(rows)"
