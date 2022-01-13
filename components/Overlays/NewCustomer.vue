@@ -110,13 +110,37 @@
             :default-value="form.cylinderHoldingTime"
             @get="form.cylinderHoldingTime = $event.value"
           />
-
-          <input-component
-            :label-title="'Territory'"
-            :input-placeholder="'Enter Territory'"
-            :default-value="form.territory"
-            @get="form.territory = $event.value"
-          />
+          <div>
+            <select-component
+              :label-title="'Territory'"
+              :select-array="territory"
+              :default-option-text="'Enter Territory'"
+              :init-value="form.territory"
+              @get="form.territory = $event.value"
+            />
+            <div class="inline-block text-sm text-gray-400 my-2 mr-3">
+              <button
+                @click="addTer = true"
+                class="flex justify-evenly items-center"
+                type="button"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4 fill-current text-transparent mr-2"
+                  viewBox="0 0 24 24"
+                  stroke="gray"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span class="underline">Add Territory</span>
+              </button>
+            </div>
+          </div>
 
           <!-- <input-component
             :label-title="'Unit Price'"
@@ -271,6 +295,11 @@
           />
         </div>
       </form>
+      <add-territory
+        v-if="addTer"
+        @close="addTer = false"
+        @addToTerritory="addToTerritory"
+      />
     </div>
   </back-drop>
 </template>
@@ -293,10 +322,17 @@ import { CylinderController } from '@/module/Cylinder'
 import { CustomerController } from '@/module/Customer'
 import { ValidatorObject } from '@/module/Validation'
 import { getRandomValue } from '@/constants/utils'
-// import FormData from 'form-data'
+import AddTerritory from '@/components/Overlays/AddTerritory.vue'
+import { fetchTerrotiries } from '@/module/Territory'
 
 export default defineComponent({
-  components: { BackDrop, InputComponent, SelectComponent, ButtonComponent },
+  components: {
+    BackDrop,
+    AddTerritory,
+    InputComponent,
+    SelectComponent,
+    ButtonComponent,
+  },
   props: {
     fromCylinder: {
       type: Boolean,
@@ -347,6 +383,13 @@ export default defineComponent({
         unit: '%',
       },
     })
+    const addTer = ref(false)
+
+    const territory = ref<any>([])
+
+    const addToTerritory = (ter: any) => {
+      territory.value.push(ter)
+    }
 
     function fetchProducts() {
       CylinderController.getCylinders().then((response: any) => {
@@ -365,9 +408,20 @@ export default defineComponent({
       products.value.splice(index, 1)
       changeComponentKey()
     }
+    const fetchAllTer = () => {
+      fetchTerrotiries().then((response: any) => {
+        console.log(response)
+        territory.value = response.map((ter: any) => {
+          return {
+            name: ter.name,
+            value: ter.name,
+          }
+        })
+      })
+    }
 
     onMounted(() => {
-      fetchProducts()
+      Promise.all([fetchAllTer(), fetchProducts()])
     })
     const getProduct = (value: any, index: number) => {
       let product: any = productsArray.value.find(
@@ -501,7 +555,11 @@ export default defineComponent({
       increment,
       componentKey,
       processFile,
+      territory,
       // requestPayload,
+      changeComponentKey,
+      addToTerritory,
+      addTer,
       submit,
       isLoading,
       removeProduct,

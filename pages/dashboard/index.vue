@@ -322,6 +322,7 @@ export default defineComponent({
           paginationProp.currentPage = myResponse.cylinders.page
         })
         .finally(() => {
+          console.log(registeredCylinders.value)
           isLoading.value = false
         })
     }

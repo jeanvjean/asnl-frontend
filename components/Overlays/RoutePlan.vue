@@ -91,32 +91,18 @@
             </div>
           </div>
           <input-component
-            :label-title="'Start Date'"
+            :label-title="'Date'"
             :input-placeholder="'Select Start Date'"
             :input-type="'date'"
             @get="form.startDate = $event.value"
           />
 
-          <input-component
+          <!-- <input-component
             :label-title="'End Date'"
             :input-placeholder="'Select End Date'"
             :input-type="'date'"
             @get="form.endDate = $event.value"
-          />
-
-          <input-component
-            :label-title="'Time In'"
-            :input-placeholder="'Select Time in'"
-            :input-type="'datetime-local'"
-            @get="form.timeIn = $event.value"
-          />
-
-          <input-component
-            :label-title="'Time Out'"
-            :input-placeholder="'Select Time Out'"
-            :input-type="'datetime-local'"
-            @get="form.timeOut = $event.value"
-          />
+          /> -->
         </div>
         <div :key="componentKey">
           <div
@@ -370,7 +356,7 @@ export default defineComponent({
 
     const form = reactive<any>({
       startDate: '',
-      endDate: '',
+      // endDate: '',
       activity: '',
       orderType: '',
       modeOfService: 'delivery',
@@ -380,8 +366,8 @@ export default defineComponent({
       // mileageOut: '',
       fuelGiven: '',
       // fuelsConsumed: '',
-      timeOut: '',
-      timeIn: '',
+      // timeOut: '',
+      // timeIn: '',
       customers: _props.customersDN || [],
     })
 
@@ -433,7 +419,7 @@ export default defineComponent({
     const submit = () => {
       const rules = {
         startDate: 'required|date',
-        endDate: 'required|date',
+        // endDate: 'required|date',
         activity: 'required|string',
         orderType: 'required|string',
         modeOfService: 'required|string',
@@ -443,8 +429,8 @@ export default defineComponent({
         // mileageOut: 'required|string',
         fuelGiven: 'required|string',
         // fuelsConsumed: 'required|string',
-        timeOut: 'required|date',
-        timeIn: 'required|date',
+        // timeOut: 'required|date',
+        // timeIn: 'required|date',
         customers: 'required|array',
         'customers.*.name': 'required|string',
         'customers.*.email': 'required|string',
