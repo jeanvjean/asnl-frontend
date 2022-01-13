@@ -57,24 +57,6 @@
               :table-body="tableBody"
               :show-loader="showLoader"
             >
-              <template #action="slotProps">
-                <button
-                  class="
-                    px-6
-                    py-1
-                    border border-btn-purple
-                    rounded-sm
-                    text-btn-purple text-sm
-                  "
-                  @click="
-                    $router.push(
-                      `/dashboard/sales/requisition/purchase/${slotProps.rowObject._id}`
-                    )
-                  "
-                >
-                  Create Sales Requistion
-                </button>
-              </template>
             </table-component>
           </div>
         </div>

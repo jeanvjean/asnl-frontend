@@ -25,6 +25,13 @@
             :default-value="constantsValues.icnNo"
           />
           <select-component
+            :label-title="'Mode of Service'"
+            :default-option-text="'Select an Mode of Service'"
+            :select-array="modeOfServices"
+            :init-value="form.modeOfService"
+            @get="form.modeOfService = $event.value"
+          />
+          <select-component
             :label-title="'Order Type'"
             :default-option-text="'Select an Order Type'"
             :select-array="orderTypes"
@@ -193,6 +200,7 @@ export default defineComponent({
       gasType: '',
       priority: 2,
       icn_id: '',
+      modeOfService: '',
     })
     const scan = reactive<any>({
       status: '',

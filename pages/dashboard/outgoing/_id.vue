@@ -60,7 +60,7 @@
           <div
             class="
               grid grid-rows-1
-              lg:grid-cols-3
+              lg:grid-cols-2
               divide divide-x-2 divide-gray-300
               mt-8
             "
@@ -79,12 +79,12 @@
               </div>
             </div>
 
-            <div class="flex items-center justify-center">
+            <!-- <div class="flex items-center justify-center">
               <div class="space-y-4">
                 <h4 class="text-gray-400 font-medium">Total Amount</h4>
                 <p class="leading-3">₦ {{ details.totalAmount.value }}.00</p>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

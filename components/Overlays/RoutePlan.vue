@@ -169,7 +169,11 @@
             />
             <div class="flex align-self-center">
               <input-component
-                :label-title="'Quantity Projection'"
+                :label-title="
+                  form.activity == 'pick-up'
+                    ? 'Projected Quantity'
+                    : 'Total Cylinders'
+                "
                 :input-placeholder="`Total Cylinders`"
                 :default-value="customer.numberOfCylinders"
                 @get="customer.numberOfCylinders = $event.value"

@@ -2,7 +2,10 @@
   <div class="px-6 py-6" id="print">
     <div class="py-2" v-if="!loading">
       <div class="bg-white w-3/4 mx-auto">
-        <div class="flex justify-end px-6 py-4">
+        <div class="flex justify-between px-6 py-4">
+          <h1 class="flex-1 text-gray-400 font-medium text-lg">
+            Delivery No #{{ form.deliveryNo }}
+          </h1>
           <div class="flex space-x-6">
             <button
               class="
@@ -39,9 +42,11 @@
           <table class="w-full">
             <thead>
               <tr>
-                <th class="px-4 py-2 text-left">Customer Name</th>
-                <th class="px-4 py-2 text-left">ICN No</th>
-                <th class="px-4 py-2 text-left">Cylinder Type</th>
+                <th class="px-4 py-2 text-left" v-if="form.deliveryType">
+                  {{ form.deliveryType.toUpperCase() }} Name
+                </th>
+                <th class="px-4 py-2 text-left">Total Quantity</th>
+                <th class="px-4 py-2 text-left">Delivery Type</th>
                 <th class="px-4 py-2 text-left">Date</th>
               </tr>
             </thead>
@@ -51,10 +56,10 @@
                   <p class="text-gray-600">{{ form.customer.name }}</p>
                 </td>
                 <td class="px-4 py-2 border border-gray-300 text-left">
-                  <p>{{ form.icn_id.icnNo }}</p>
+                  <p>{{ form.cylinders.length }}</p>
                 </td>
                 <td class="px-4 py-2 border border-gray-300 text-left">
-                  <p>{{ form.gasType.gasName }}</p>
+                  <p>{{ form.deliveryType }}</p>
                 </td>
                 <td class="px-4 py-2 border border-gray-300 text-left">
                   <p>
@@ -66,28 +71,6 @@
                       new Date(form.createdAt).getFullYear()
                     }}
                   </p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="w-full">
-            <thead>
-              <tr>
-                <th class="px-4 py-2 text-left">ECR NO</th>
-                <th class="px-4 py-2 text-left">Mode of Service</th>
-                <th class="px-4 py-2 text-left">Order Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="px-4 py-2 border border-gray-300 text-left">
-                  <p class="text-gray-600">{{ form.ecrNo }}</p>
-                </td>
-                <td class="px-4 py-2 border border-gray-300 text-left">
-                  <p>{{ form.modeOfService }}</p>
-                </td>
-                <td class="px-4 py-2 border border-gray-300 text-left">
-                  <p>{{ form.type }}</p>
                 </td>
               </tr>
             </tbody>
@@ -106,11 +89,13 @@
               <tr v-for="(cylinder, i) in form.cylinders" :key="i">
                 <td class="px-4 py-2 text-right">0{{ i + 1 }}.</td>
                 <td class="px-4 py-2 border border-gray-300 text-left">
-                  {{ cylinder.cylinderNumber }}
+                  <!-- {{ cylinder.cylinderNumber}} -->
+                  Yet to be populated
                 </td>
                 <td class="px-4 py-2 border border-gray-300 text-left">
-                  {{ cylinder.gasVolumeContent.value }}
-                  {{ cylinder.gasVolumeContent.unit }}
+                  <!-- {{ cylinder.gasVolumeContent.value }} -->
+                  Yet to be populated
+                  <!-- {{ cylinder.gasVolumeContent.unit }} -->
                 </td>
               </tr>
             </tbody>
@@ -122,22 +107,20 @@
               Recieved By: <span class="font-normal">Yet to be populated</span>
             </p>
             <p class="text- text-md font-medium font-bold leading-6">
-              Security: <span class="font-normal">Yet to be populated</span>
+              Security:<span class="font-normal">Yet to be populated</span>
             </p>
             <p class="text- text-md font-medium font-bold leading-6">
-              Driver:<span class="font-normal">Yet to be populated</span>
+              Driver:<span class="font-normal"> Yet to be populated</span>
             </p>
           </div>
           <div>
             <p class="text- text-md font-medium font-bold leading-6">
               Total Quantity:
-              <span class="font-normal">{{ form.icn_id.totalQty }}</span>
+              <span class="font-normal">{{ form.cylinders.length }}</span>
             </p>
             <p class="text- text-md font-medium font-bold leading-6">
               Total Volume:
-              <span class="font-normal">{{
-                form.icn_id.totalVol.value + form.icn_id.totalVol.unit
-              }}</span>
+              <span class="font-normal">Yet to be populated</span>
             </p>
           </div>
         </div>
@@ -156,7 +139,7 @@ import {
   useRouter,
 } from '@nuxtjs/composition-api'
 import { getRandomValue } from '@/constants/utils'
-import { fetchEcr } from '@/module/ECR'
+import { VehicleController } from '@/module/Vehicle'
 
 export default defineComponent({
   components: {},
@@ -170,13 +153,11 @@ export default defineComponent({
     const form = reactive({
       customer: null,
       branch: null,
-      ecrNo: '',
-      gasType: null,
+      deliveryNo: '',
+      deliveryType: null,
       icn_id: null,
       cylinders: [],
       createdAt: null,
-      modeOfService: '',
-      type: '',
     })
     const loading = ref(true)
     const changeComponentKey = () => {
@@ -193,18 +174,16 @@ export default defineComponent({
         router.go(0)
       }
     }
-    const getEcrDetails = () => {
-      fetchEcr(route.value.params.id)
+    const fetchDeliveryNote = () => {
+      VehicleController.fetchDeliveryNote(route.value.params.id)
         .then((response) => {
           console.log(response)
           form.customer = response.customer
           form.createdAt = response.createdAt
           form.branch = response.branch
-          form.ecrNo = response.ecrNo
-          form.gasType = response.gasType
-          form.icn_id = response.icn_id
-          form.type = response.type
-          form.modeOfService = response.modeOfService
+          form.deliveryNo = response.deliveryNo
+          form.deliveryType = response.deliveryType
+          form.icn_id = response.invoice_id
           form.cylinders = response.cylinders
           if (response.customer) {
             loading.value = false
@@ -214,7 +193,7 @@ export default defineComponent({
     }
     onMounted(() => {
       changeComponentKey()
-      Promise.all([getEcrDetails()])
+      Promise.all([fetchDeliveryNote()])
     })
 
     return {

@@ -120,18 +120,18 @@ class VehicleRepository {
     })
   }
 
-  // fetchDeliveryNotes() {
-  //   return new Promise<any>(async (resolve, reject) => {
-  //     try {
-  //       const response = await $axios.get(
-  //         `/vehicle/fetch-delivery-notes`
-  //       )
-  //       resolve(response.data)
-  //     } catch (error) {
-  //       reject(error)
-  //     }
-  //   })
-  // }
+  fetchDeliveryNote(id: string) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.get(
+          `/vehicle/delivery-note/${id}`
+        )
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
   async fetchDeliveryNotes(page: Number, limit: Number,) {
     return await $axios.get(`/vehicle/fetch-delivery-notes?page=${page}&limit=${limit}`).then((response) => {
       return response.data.data

@@ -336,12 +336,12 @@ export default defineComponent({
               link: '/dashboard/incoming',
             },
             {
-              title: 'Invoices',
-              link: '/dashboard/sales/invoices',
-            },
-            {
               title: 'Sales Requisition',
               link: '/dashboard/production/sales-requisition',
+            },
+            {
+              title: 'Invoices',
+              link: '/dashboard/sales/invoices',
             },
             {
               title: 'Outgoing',

@@ -228,6 +228,7 @@
                       w-full
                       overflow-none
                     "
+                    v-if="auth.role === 'admin'"
                     @click="
                       changeCustomer(slotProps.rowId), (showDeleteReason = true)
                     "
@@ -276,6 +277,7 @@ import { CustomerDto } from '@/types/Types'
 import ReasonComponent from '@/components/Overlays/Reason.vue'
 import TableComponent from '@/components/Table.vue'
 import { getTableBody } from '@/constants/utils'
+import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
   name: 'Home',
@@ -297,6 +299,9 @@ export default defineComponent({
       hasPrevPage: false,
       currentPage: 1,
     })
+
+    const appStore = mainStore()
+    const auth: any = appStore.getLoggedInUser
 
     const section = ref<String>('profile')
 
@@ -372,6 +377,7 @@ export default defineComponent({
       changeCustomer,
       deleteCustomer,
       isLoading,
+      auth,
     }
   },
 })

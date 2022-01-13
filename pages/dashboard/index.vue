@@ -167,7 +167,11 @@
               text-md
               rounded-sm
             "
-            @click="showRegister = !showRegister"
+            @click="
+              auth.role == 'sales'
+                ? (showRegCus = !showRegCus)
+                : (showRegister = !showRegister)
+            "
           >
             Register Cylinder
           </button>
@@ -218,6 +222,11 @@
         @show="showRegister = true"
       ></table-component>
     </div>
+    <new-customer-cylinder
+      v-if="showRegCus"
+      @close="showRegCus = false"
+      @refresh=";(showRegCus = false), getCylinders(1)"
+    ></new-customer-cylinder>
     <new-cylinder
       v-if="showRegister"
       @close="showRegister = false"
@@ -246,6 +255,7 @@ import {
 } from '@nuxtjs/composition-api'
 import TableComponent from '@/components/Base/Table2.vue'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
+import NewCustomerCylinder from '@/components/Overlays/NewCustomerCylinder.vue'
 import NewCylinderType from '@/components/Overlays/NewCylinderType.vue'
 import { CylinderController } from '@/module/Cylinder'
 import SearchComponent from '@/components/Base/Search.vue'
@@ -254,12 +264,14 @@ import Pagination from '@/components/Base/Pagination.vue'
 import CylinderFilter from '@/components/Overlays/Filter.vue'
 import { cylinderFilters } from '@/constants/variables'
 import { getFilters, getQueryString } from '@/constants/utils'
+import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
   name: 'Analytics',
   components: {
     TableComponent,
     NewCylinder,
+    NewCustomerCylinder,
     SearchComponent,
     FilterComponent,
     Pagination,
@@ -281,6 +293,9 @@ export default defineComponent({
     const showRegiserCylinderType = ref(false)
 
     const page = ref<number>(1)
+
+    const appStore = mainStore()
+    const auth: any = appStore.getLoggedInUser
 
     function changePage(nextPage: number) {
       getCylinders(nextPage)
@@ -350,6 +365,7 @@ export default defineComponent({
     const body = ref([])
 
     const showRegister = ref(false)
+    const showRegCus = ref(false)
     const showCylinderType = ref(false)
     return {
       headers,
@@ -368,6 +384,8 @@ export default defineComponent({
       searchCylinder,
       isLoading,
       displayedFilters,
+      auth,
+      showRegCus,
     }
   },
 })

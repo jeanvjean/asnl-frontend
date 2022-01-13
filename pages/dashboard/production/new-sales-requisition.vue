@@ -14,7 +14,7 @@
         >
           Air Separation Cylinder
         </button>
-        <button
+        <!-- <button
           class="px-6 py-2 tracking-wide font-medium border-2 border-gray-200"
           :class="{
             'bg-purple-600 text-white': selected.walkin,
@@ -25,41 +25,37 @@
           "
         >
           Walk-in Customer
-        </button>
+        </button> -->
+      </div>
+      <div class="w-2/5 space-y-2 flex mx-2">
+        <find-customer
+          :label-title="form.customer.name ? 'Change Customer' : 'Customer'"
+          :arr="customersArray"
+          :input-placeholder="`Enter customer's name`"
+          @get="addCustomer($event)"
+        />
+        <circle-loader class="mt-8" v-if="ecrLoading" />
       </div>
       <div v-if="form.customer.name != ''">
         <h1 class="px-2 mt-4 mb-2 font-bold tracking-wide text-base uppercase">
           Customer Details
         </h1>
         <h1 class="px-2 mt-4 mb-2 tracking-wide text-base">
-          Name: {{ form.customer.name }}
-        </h1>
-        <h1 class="px-2 mt-4 mb-2 tracking-wide text-base">
-          Email: {{ form.customer.email }}
+          Customer's name: {{ form.customer.name.toUpperCase() }}
         </h1>
       </div>
       <form @submit.prevent="submit">
         <div
-          class="grid grid-rows-1 md:grid-cols-3 w-full px-4 gap-y-2 md:gap-x-4"
+          class="grid grid-rows-1 md:grid-cols-2 w-full px-2 gap-y-2 md:gap-x-2"
         >
-          <div class="w-full space-y-2 flex">
-            <input-component
-              :label-title="'ECR Number'"
-              @get="form.ecrNo = $event.value"
-              :inputPlaceholder="'Enter ECR No'"
-              :default-value="form.ecrNo"
-            />
-            <circle-loader class="mt-8" v-if="ecrLoading" />
-          </div>
-          <div
-            class="w-full space-y-2"
-            v-if="form.ecrNo && form.cylinderType != ''"
-          >
-            <input-component
+          <div class="w-full space-y-2">
+            <select-component
               :labelTitle="'Gas Type'"
-              :default-value="form.cylinderType"
-              :inputPlaceholder="'Gas type'"
-              :isDisabled="true"
+              :inputPlaceholder="'Select gas type'"
+              @get="form.cylinderType = $event.value"
+              :initValue="form.cylinderType"
+              :selectArray="gasTypes"
+              :isDisabled="form.customer.name == ''"
             />
           </div>
         </div>
@@ -107,7 +103,7 @@
                       </td>
                       <td>
                         <input-component
-                          :input-placeholder="'Cylinder Size'"
+                          :input-placeholder="'Unit price'"
                           :default-value="cylinder.unitPrice"
                           :input-type="'number'"
                           @get="
@@ -115,30 +111,21 @@
                             cylinder.amount =
                               Number(cylinder.unitPrice) *
                               Number(cylinder.volume.value)
+                            changeComponentKey()
                           "
                         />
                       </td>
                       <td>
-                        <div
-                          class="
-                            py-2
-                            px-8
-                            inline
-                            border-4
-                            rounded-sm
-                            font-semibold
-                            text-gray-900 text-gray-500
-                            border-gray-200
-                            bg-white
+                        <input-component
+                          :input-placeholder="'Cylinder Amount'"
+                          :default-value="cylinder.amount"
+                          :input-type="'number'"
+                          @get="
+                            cylinder.amount =
+                              Number(cylinder.unitPrice) *
+                              Number(cylinder.volume.value)
                           "
-                        >
-                          <span
-                            v-show="cylinder.amount"
-                            class="font-semibold text-gray-900 text-gray-500"
-                          >
-                            {{ cylinder.amount }}</span
-                          >
-                        </div>
+                        />
                       </td>
                       <td>
                         <svg
@@ -186,12 +173,6 @@
 
         <div class="flex items-center space-x-6 px-4 mt-4">
           <button-component
-            :buttonType="'button'"
-            @buttonClicked="printNow()"
-            :button-class="'bg-btn-purple text-white w-full md:w-1/4'"
-            :button-text="'Print a copy'"
-          />
-          <button-component
             @click="submit"
             :button-class="'bg-btn-white border border-btn-purple text-btn-purple w-full md:w-1/4'"
             :button-text="'Save'"
@@ -226,6 +207,7 @@ import { initiateScan } from '@/module/SCAN'
 import { fetchEcrs } from '@/module/ECR'
 import { values } from 'lodash'
 import { mainStore } from '@/module/Pinia'
+import FindCustomer from '~/components/Form/FindCustomer.vue'
 import printJS from 'print-js'
 
 import CircleLoader from '@/components/CircleLoader.vue'
@@ -235,6 +217,7 @@ export default defineComponent({
     SelectComponent,
     ButtonComponent,
     CircleLoader,
+    FindCustomer,
   },
   layout: 'noSidebar',
   setup() {
@@ -258,7 +241,6 @@ export default defineComponent({
       customer: {
         name: '',
         id: '',
-        email: '',
       },
       ecrNo: '',
       date: new Date().toISOString(),
@@ -287,6 +269,8 @@ export default defineComponent({
     const db = $fire.database
 
     const initCylinder = () => {
+      if (form.cylinderType == '')
+        return context.$toast.error('Select a gas type')
       initiateScan().then((response) => {
         scan.status = response.status
         scan._id = response._id
@@ -310,8 +294,6 @@ export default defineComponent({
     const displayList = ref<any>([])
     const searchEcr = () => {
       let filter = ecrSearch.value.toLowerCase()
-
-      // ecrs.value.forEach((item: any) => {}
 
       for (var i = 0; i < ecrs.value.length; i++) {
         console.log(ecrs.value[i].name)
@@ -368,7 +350,6 @@ export default defineComponent({
             ) {
               form.customer.name = data.docs[0].customer.name
               form.customer.id = data.docs[0].customer._id
-              form.customer.email = data.docs[0].customer.email
               form.cylinderType = data.docs[0].gasType.gasName
               ecrCylinders.value = data.docs[0].removeArr.map((id: any) => id)
               changeComponentKey()
@@ -377,7 +358,6 @@ export default defineComponent({
               context.$toast.error(`There is no ECR with ${currentValue}`)
               form.customer.name = ''
               form.customer.id = ''
-              form.customer.email = ''
               form.cylinderType = ''
               ecrCylinders.value = []
               changeComponentKey()
@@ -408,8 +388,12 @@ export default defineComponent({
                 ).then((data) => {
                   console.log(ecrCylinders.value)
                   console.log(data.data.cylinder)
-                  if (ecrCylinders.value.includes(data.data.cylinder._id)) {
+                  // if (ecrCylinders.value.includes(data.data.cylinder._id)) {
+                  if (form.cylinderType === data.data.cylinder.gasName) {
                     console.log(data.data)
+                    console.log(products.value)
+                    console.log(products.value[data.data.cylinder.gasName])
+
                     cylinders.value.push({
                       noOfCylinders: data.data.cylinder.cylNo,
                       cylinderNumber: data.data.cylinder.cylinderNumber,
@@ -417,9 +401,11 @@ export default defineComponent({
                         value: data.data.cylinder.gasVolumeContent.value,
                         unit: data.data.cylinder.gasVolumeContent.unit,
                       },
-                      unitPrice: data.data.cylinder.purchaseCost?.cost,
+                      unitPrice: Number(
+                        products.value[data.data.cylinder.gasName]
+                      ),
                       amount:
-                        data.data.cylinder.purchaseCost?.cost *
+                        Number(products.value[data.data.cylinder.gasName]) *
                         data.data.cylinder.cylNo,
                     })
                     form.cylinders = cylinders.value
@@ -439,6 +425,7 @@ export default defineComponent({
       }
     )
 
+    const products = ref<any>([])
     const gasTypes = ref([])
 
     const getCustomer = (value: any) => {
@@ -446,7 +433,6 @@ export default defineComponent({
         console.log(value)
         if (item.value == value) {
           form.customer.name = item.name
-          form.customer.email = item.email
         }
       })
     }
@@ -484,17 +470,38 @@ export default defineComponent({
       )
     }
 
+    const customersArray = ref([])
     const fetchCustomers = () => {
-      CustomerController.fetchUnPaginatedCustomers().then((response) => {
-        console.log(response)
-        customers.value = response.map((element: any) => {
+      ecrLoading.value = true
+      CustomerController.fetchUnPaginatedCustomers().then((response: any) => {
+        ecrLoading.value = false
+        customersArray.value = response.map((item: any) => {
           return {
-            name: element.name,
-            value: element._id,
-            email: element.email,
+            name: item.name,
+            id: item._id,
           }
         })
       })
+    }
+
+    const addCustomer = (data: any) => {
+      console.log(data)
+      form.customer.name = data.name
+      form.customer.id = data._id
+      gasTypes.value = data.products.map((product: any) => {
+        return {
+          name: product.product.productName,
+          value: product.product.productName,
+        }
+      })
+      let p: any = {}
+      data.products.forEach((item: any) => {
+        p[item.product.productName] = item.unit_price.value
+      })
+      products.value = p
+      form.cylinders = []
+      form.cylinderType = ''
+      changeComponentKey()
     }
 
     function decrement(index: any) {
@@ -521,11 +528,10 @@ export default defineComponent({
       const rules = {
         'customer.name': 'required|string',
         'customer.id': 'required|string',
-        ecrNo: 'required|string',
         date: 'required|date',
         cylinderType: 'required|string',
         cylinders: 'required|array',
-        'cylinders.*.noOfCylidners': 'required|numeric',
+        'cylinders.*.noOfCylinders': 'required|numeric',
         'cylinders.*.cylinderNumber': 'required|string',
         'cylinders.*.unitPrice': 'required|numeric',
         'cylinders.*.amount': 'required|numeric',
@@ -545,8 +551,8 @@ export default defineComponent({
       } else {
         buttonLoading.value = true
         createRequisition(form)
-          .then(() => {
-            router.push('/dashboard/production/sales-requisition')
+          .then((res) => {
+            router.push(`/dashboard/sales/requisition/${res.data._id}`)
           })
           .finally(() => {
             buttonLoading.value = false
@@ -559,6 +565,7 @@ export default defineComponent({
       cylinders,
       increment,
       decrement,
+      addCustomer,
       form,
       externalCylinders,
       internalCylinders,
@@ -583,6 +590,7 @@ export default defineComponent({
       ecrSearch,
       displayList,
       ecrLoading,
+      customersArray,
     }
   },
 })

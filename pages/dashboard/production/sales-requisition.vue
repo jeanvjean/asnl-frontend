@@ -37,7 +37,6 @@
                 @prev="getRequisitions($event.value, pageLimit)"
               />
               <router-link
-              v-show="false"
                 to="/dashboard/production/new-sales-requisition"
                 class="
                   flex
@@ -72,7 +71,11 @@
                     rounded-sm
                     text-btn-purple text-sm
                   "
-                  @click=";(singleEcr = slotProps.rowObject), (showErc = true)"
+                  @click="
+                    $router.push(
+                      `/dashboard/sales/requisition/${slotProps.rowObject._id}`
+                    )
+                  "
                 >
                   Details
                 </button>

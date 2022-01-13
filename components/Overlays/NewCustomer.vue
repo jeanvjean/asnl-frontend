@@ -39,13 +39,13 @@
             :init-value="form.customerType"
             @get="form.customerType = $event.value"
           />
-          <input-component
+          <select-component
             :label-title="'Mode of Service'"
-            :input-placeholder="'Enter Mode of Service'"
-            :default-value="form.modeOfService"
+            :select-array="modeOfService"
+            :default-option-text="'Select Mode of Service'"
+            :init-value="form.modeOfService"
             @get="form.modeOfService = $event.value"
           />
-
           <input-component
             :label-title="'Customer Name'"
             :input-placeholder="'Enter Customer Name'"
@@ -79,6 +79,7 @@
             :input-placeholder="'Enter Email Address'"
             :default-value="form.email"
             @get="form.email = $event.value"
+            :is-required="false"
           />
 
           <input-component
@@ -109,6 +110,7 @@
             :input-placeholder="'Enter Cylinder Holding Time'"
             :default-value="form.cylinderHoldingTime"
             @get="form.cylinderHoldingTime = $event.value"
+            :is-required="false"
           />
           <div>
             <select-component
@@ -255,7 +257,7 @@
             <select-component
               :label-title="'Products'"
               :select-array="productsArray"
-              :default-option-text="'Select Product'"
+              :default-option-text="'Select product'"
               :init-value="product.id"
               @get="
                 product.product.product_id = $event.value
@@ -264,7 +266,7 @@
             />
             <input-component
               :label-title="'Units'"
-              :input-placeholder="'Enter Unit'"
+              :input-placeholder="'Enter unit price'"
               :default-value="product.unit_price.value"
               @get="product.unit_price.value = $event.value"
               :inputType="'number'"
@@ -351,14 +353,44 @@ export default defineComponent({
     const componentKey = ref<number>(1)
     const isLoading = ref<Boolean>(false)
 
-    const customerTypes = [
+    const modeOfService = [
       {
-        name: 'Walk-in Customer',
-        value: 'walk-in',
+        name: 'ASNL',
+        value: 'asnl',
       },
       {
-        name: 'Regular Customer',
-        value: 'regular',
+        name: 'Customer',
+        value: 'customer',
+      },
+      {
+        name: 'Both',
+        value: 'both',
+      },
+    ]
+    const customerTypes = [
+      {
+        name: 'ASNL Cooperate',
+        value: 'asnl-cooperate',
+      },
+      {
+        name: 'ASNL Medical',
+        value: 'asnl-medical',
+      },
+      {
+        name: 'ASNL Retail',
+        value: 'asnl-retail',
+      },
+      {
+        name: 'TP Cooperate',
+        value: 'tp-cooperate',
+      },
+      {
+        name: 'TP Medical',
+        value: 'tp-medical',
+      },
+      {
+        name: 'TP Retail',
+        value: 'tp-retail',
       },
     ]
 
@@ -495,11 +527,11 @@ export default defineComponent({
         nickName: 'required',
         address: 'required',
         contactPerson: 'required',
-        email: 'required',
+        // email: 'required',
         TIN: 'string',
         phoneNumber: 'required',
         rcNumber: 'string',
-        cylinderHoldingTime: 'required',
+        // cylinderHoldingTime: 'required',
         territory: 'required',
         CAC: 'required',
         validId: 'required',
@@ -557,6 +589,7 @@ export default defineComponent({
       processFile,
       territory,
       // requestPayload,
+      modeOfService,
       changeComponentKey,
       addToTerritory,
       addTer,

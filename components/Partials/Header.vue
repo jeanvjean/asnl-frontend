@@ -206,7 +206,7 @@ import {
   computed,
   useRouter,
   useRoute,
-  onMounted,
+  // onMounted,
 } from '@nuxtjs/composition-api'
 import { mainStore } from '@/module/Pinia'
 

@@ -150,6 +150,19 @@
               >
                 Date
               </th>
+              <th
+                class="
+                  uppercase
+                  text-gray-800
+                  font-thin
+                  text-sm
+                  px-3
+                  py-3
+                  text-center
+                "
+              >
+                Action
+              </th>
             </tr>
           </thead>
           <tbody class="bg-white">
@@ -226,6 +239,22 @@
                 "
               >
                 {{ invoice.date }}
+              </td>
+              <td>
+                <button
+                  class="
+                    px-6
+                    py-1
+                    border border-btn-purple
+                    rounded-sm
+                    text-btn-purple text-sm
+                  "
+                  @click="
+                    $router.push(`/dashboard/sales/waybills/${invoice._id}`)
+                  "
+                >
+                  View
+                </button>
               </td>
             </tr>
           </tbody>

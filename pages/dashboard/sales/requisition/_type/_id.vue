@@ -92,7 +92,7 @@
                       <td>{{ i + 1 }}</td>
                       <td>
                         <input-component
-                          :input-placeholder="'Volume'"
+                          :input-placeholder="'Cylinder Number'"
                           :default-value="cylinder.cylinderNumber"
                         />
                       </td>
