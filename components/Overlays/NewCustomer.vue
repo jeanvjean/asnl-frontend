@@ -442,7 +442,7 @@ export default defineComponent({
     }
     const fetchAllTer = () => {
       fetchTerrotiries().then((response: any) => {
-        console.log(response)
+        // console.log(response)
         territory.value = response.map((ter: any) => {
           return {
             name: ter.name,
@@ -497,7 +497,8 @@ export default defineComponent({
     const requestPayload = computed(() => {
       const formData = new FormData()
       formData.append('name', form.name)
-      formData.append('customerType', form.customerType)
+      formData.append('customerSubType', form.customerType)
+      formData.append('customerType', 'regular')
       formData.append('modeOfService', form.modeOfService)
       formData.append('nickName', form.nickName)
       formData.append('address', form.address)
@@ -563,7 +564,7 @@ export default defineComponent({
         })
       } else {
         isLoading.value = true
-        console.log(payload.value)
+        // console.log(payload.value)
         CustomerController.registerCustomer(requestPayload.value)
           .then((response) => {
             close()
@@ -573,7 +574,7 @@ export default defineComponent({
           })
           .finally(() => {
             isLoading.value = false
-            router.go(0)
+            // router.go(0)
           })
       }
     }

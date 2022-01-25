@@ -392,6 +392,7 @@ export default defineComponent({
       payload.invoiceNo = invoice.invoiceNumber
       payload.deliveryType = 'customer'
       payload.invoice_id = invoice._id
+      console.log(payload)
 
       VehicleController.createDeliveryNote(payload)
         .then((data: any) => {

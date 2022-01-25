@@ -149,6 +149,7 @@ import { CustomerController } from '@/module/Customer'
 import { ValidatorObject } from '@/module/Validation'
 import { CylinderTypes } from '@/constants/variables'
 import ButtonIconComponent from '@/components/Form/ButtonIcon.vue'
+import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
   components: {
@@ -179,6 +180,9 @@ export default defineComponent({
         id: '',
       },
     })
+
+    const appStore = mainStore()
+    const auth: any = appStore.getLoggedInUser
 
     const isLoading = ref<Boolean>(false)
     const showNewCustomer = ref<Boolean>(false)
@@ -265,6 +269,9 @@ export default defineComponent({
           gasVolumeContent: cyl.gasVolumeContent,
           cylinderNumber: cyl.cylinderNumber,
           customer: cyl.customer,
+        }
+        if (auth.role === 'sales') {
+          requestBody.value.owner = 'customer'
         }
 
         isLoading.value = true

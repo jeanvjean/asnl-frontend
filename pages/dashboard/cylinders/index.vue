@@ -471,6 +471,7 @@ export default defineComponent({
       isLoading.value = true
       CylinderController.getRegisteredCylinders(pageValue, pageLimit, query)
         .then((responses: any) => {
+          console.log(responses.data.cylinders)
           const myResponse = responses.data
           body.value = myResponse.cylinders.docs
           paginationProp.hasNextPage = myResponse.cylinders.hasNextPage

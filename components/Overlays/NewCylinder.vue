@@ -204,6 +204,7 @@ import { CustomerController } from '@/module/Customer'
 import { ValidatorObject } from '@/module/Validation'
 import { CylinderTypes } from '@/constants/variables'
 import ButtonIconComponent from '@/components/Form/ButtonIcon.vue'
+import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
   components: {
@@ -215,6 +216,9 @@ export default defineComponent({
   },
   setup(_props, ctx) {
     const context = useContext()
+
+    const appStore = mainStore()
+    const auth: any = appStore.getLoggedInUser
 
     const customers = ref<any>([])
     const gasTypes = ref([])
@@ -324,6 +328,7 @@ export default defineComponent({
           testingPresure: formInputs.testingPresure,
           fillingPreasure: formInputs.fillingPreasure,
           gasVolumeContent: formInputs.gasVolumeContent,
+          assignedNumber: formInputs.assignedNumber,
           //chnage gasVolume content to Object
           cylinderNumber: formInputs.cylinderNumber,
           purchaseCost: formInputs.purchaseCost,
@@ -334,6 +339,9 @@ export default defineComponent({
         }
         if (formInputs.cylinderType !== 'assigned') {
           delete requestBody.value.assignedTo
+        }
+        if (auth.role === 'sales') {
+          requestBody.value.owner = 'customer'
         }
         isLoading.value = true
         CylinderController.registerCylinder(requestBody.value)

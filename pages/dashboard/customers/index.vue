@@ -292,7 +292,7 @@ export default defineComponent({
   },
   layout: 'dashboard',
   setup() {
-    const headers = ['Customer Name', 'Email Address', 'Phone No.', 'Address']
+    const headers = ['Customer Name', 'Address', 'Email Address', 'Phone No.']
 
     const paginationProp = reactive({
       hasNextPage: false,
@@ -331,9 +331,9 @@ export default defineComponent({
           console.log(response.docs)
           body.value = getTableBody(response.docs, [
             'name',
+            'address',
             'email',
             'phoneNumber',
-            'address',
           ])
           paginationProp.hasNextPage = response.hasNextPage
           paginationProp.hasPrevPage = response.hasPrevPage
