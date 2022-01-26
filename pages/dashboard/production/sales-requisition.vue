@@ -184,6 +184,7 @@ export default defineComponent({
       fetchRequisitions(page, limit, query)
         .then((response) => {
           tableBody.value = response.docs.map((requisition: any) => {
+            console.log(requisition.cylinders)
             return {
               ercNo: requisition.ecrNo,
               customer: requisition.customer.name,

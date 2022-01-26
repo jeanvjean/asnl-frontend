@@ -373,7 +373,6 @@ export default defineComponent({
       (currentValue, oldValue) => {
         console.log(currentValue)
         const ref = db.ref(`forms/${currentValue}/form`)
-        // const ref = db.ref(`forms/1/form`)
         ref.on(
           'value',
           (snapshot: any) => {
@@ -395,6 +394,7 @@ export default defineComponent({
                     console.log(products.value[data.data.cylinder.gasName])
 
                     cylinders.value.push({
+                      id: data.data.cylinder._id,
                       noOfCylinders: data.data.cylinder.cylNo,
                       cylinderNumber: data.data.cylinder.cylinderNumber,
                       volume: {
@@ -536,6 +536,7 @@ export default defineComponent({
         'cylinders.*.unitPrice': 'required|numeric',
         'cylinders.*.amount': 'required|numeric',
         'cylinders.*.volume.value': 'required|numeric',
+        'cylinders.*.id': 'required',
         // production_id: 'required|string',
         // purchase_id: 'required|string',
       }

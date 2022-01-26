@@ -57,7 +57,7 @@
                   text-center
                 "
               >
-                Inovice Number
+                Invoice Number
               </th>
               <th
                 class="

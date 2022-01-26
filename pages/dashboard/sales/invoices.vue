@@ -352,8 +352,8 @@ export default defineComponent({
       isLoading.value = true
       fetchInvoices(pageValue, pageLimit, queryString)
         .then((response: any) => {
-          console.log(response.docs)
           body.value = response.docs.map((invoice: any) => {
+            console.log(invoice)
             return {
               invoiceNumber: invoice.invoiceNo,
               type: invoice.recieptType,
@@ -387,7 +387,7 @@ export default defineComponent({
         email: invoice.customer.email,
       }
       payload.cylinders = [
-        ...invoice.cylinders.map((cylinder: any) => cylinder._id),
+        ...invoice.cylinders.map((cylinder: any) => cylinder.id),
       ]
       payload.invoiceNo = invoice.invoiceNumber
       payload.deliveryType = 'customer'

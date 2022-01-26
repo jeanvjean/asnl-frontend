@@ -119,7 +119,10 @@
         <div class="flex justify-between m-4">
           <div class="mb-8">
             <p class="text- text-md font-medium font-bold leading-6">
-              Recieved By: <span class="font-normal">Yet to be populated</span>
+              Recieved By:
+              <span class="font-normal">{{
+                form.initiator ? form.initiator.name.toUpperCase() : ''
+              }}</span>
             </p>
             <p class="text- text-md font-medium font-bold leading-6">
               Security: <span class="font-normal">Yet to be populated</span>
@@ -177,6 +180,7 @@ export default defineComponent({
       createdAt: null,
       modeOfService: '',
       type: '',
+      initiator: null,
     })
     const loading = ref(true)
     const changeComponentKey = () => {
@@ -204,6 +208,7 @@ export default defineComponent({
           form.gasType = response.gasType
           form.icn_id = response.icn_id
           form.type = response.type
+          form.initiator = response.initiator
           form.modeOfService = response.modeOfService
           form.cylinders = response.cylinders
           if (response.customer) {
