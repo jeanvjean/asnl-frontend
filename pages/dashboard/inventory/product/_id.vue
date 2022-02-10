@@ -11,6 +11,8 @@
             :default-option-text="'Choose a Division'"
             :select-array="divisions"
             :init-value="product.division"
+            :is-required="false"
+            :is-disabled="true"
           />
 
           <select-component
@@ -18,31 +20,41 @@
             :default-option-text="'Choose a Supplier'"
             :select-array="suppliers"
             :init-value="product.supplier"
+            :is-required="false"
+            :is-disabled="true"
           />
 
           <input-component
             :label-title="'Product Name'"
             :input-placeholder="'Enter description'"
-            :default-value="product.description"
+            :default-value="product.productName"
+            :is-required="false"
+            :is-disabled="true"
           />
 
           <input-component
             :label-title="'Equipment Model'"
             :input-placeholder="'Enter Equipment Model'"
             :default-value="product.model"
+            :is-required="false"
+            :is-disabled="true"
           />
 
           <input-component
             :label-title="'Equipment Type'"
             :input-placeholder="'Enter Equipment Type'"
             :default-value="product.type"
+            :is-required="false"
+            :is-disabled="true"
           />
 
           <input-component
-            :label-title="'ASNL Part Number'"
+            :label-title="'ASNL Number'"
             :input-placeholder="'#######'"
             :input-type="'number'"
             :default-value="product.asnlNumber"
+            :is-required="false"
+            :is-disabled="true"
           />
 
           <input-component
@@ -50,12 +62,16 @@
             :input-placeholder="'########'"
             :input-type="'number'"
             :default-value="product.partNo"
+            :is-required="false"
+            :is-disabled="true"
           />
 
           <input-component
             :label-title="'Serial No'"
             :input-placeholder="'Enter Serial Number'"
             :default-value="product.serialNo"
+            :is-required="false"
+            :is-disabled="true"
           />
 
           <input-component
@@ -63,6 +79,8 @@
             :input-placeholder="'Enter Quantity'"
             :input-type="'number'"
             :default-value="product.quantity"
+            :is-required="false"
+            :is-disabled="true"
           />
 
           <input-component
@@ -70,6 +88,8 @@
             :input-placeholder="'#'"
             :input-type="'number'"
             :default-value="product.unitCost"
+            :is-required="false"
+            :is-disabled="true"
           />
 
           <input-component
@@ -77,12 +97,16 @@
             :input-placeholder="'#'"
             :input-type="'number'"
             :default-value="product.totalCost"
+            :is-required="false"
+            :is-disabled="true"
           />
 
           <input-component
             :label-title="'Location'"
             :input-placeholder="'Enter Location'"
             :default-value="product.location"
+            :is-required="false"
+            :is-disabled="true"
           />
         </div>
       </div>
@@ -100,7 +124,6 @@ import {
 import InputComponent from '@/components/Form/Input.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import { ProductObject } from '@/module/Product'
-// import { ProductDetail } from '~/types/Types'
 export default defineComponent({
   components: { InputComponent, SelectComponent },
   layout: 'dashboard',
@@ -142,7 +165,7 @@ export default defineComponent({
         product.referrer = String(productDetail.referer)
         product.reorderLevel = String(productDetail.reorderLevel)
         product.serialNo = String(productDetail.serialNumber)
-        // product.supplier = String(productDetail.supplier._id)
+        product.supplier = String(productDetail.supplier._id)
         product.totalCost = String(productDetail.totalCost)
         product.unitCost = String(productDetail.unitCost)
         reset()
@@ -161,8 +184,8 @@ export default defineComponent({
     }
 
     function fetchSuppliers() {
-      ProductObject.fetchSuppliers(1).then((response: any) => {
-        suppliers.value = response.docs.map((element: any) => {
+      ProductObject.fetchAllSuppliers().then((response: any) => {
+        suppliers.value = response.map((element: any) => {
           return {
             name: element.name,
             value: element._id,

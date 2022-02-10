@@ -46,8 +46,7 @@
             border border-gray-300
             bg-gray-200
             space-x-4
-            focus:outline-none
-            focus:border-btn-purple
+            focus:outline-none focus:border-btn-purple
             rounded-sm
           "
           @click="getDriver(index)"
@@ -93,6 +92,7 @@
           </div>
         </button>
       </div>
+      <table-loader v-if="showLoader" />
     </div>
     <driver
       v-if="showDriver"
@@ -112,10 +112,11 @@ import Driver from '@/components/Overlays/Driver.vue'
 import { DriverObject } from '@/module/Driver'
 import { DriverDto } from '@/types/Types'
 import Pagination from '@/components/Base/Pagination.vue'
+import TableLoader from '@/components/TableLoader.vue'
 
 export default defineComponent({
   name: 'Drivers',
-  components: { Driver, Pagination },
+  components: { Driver, Pagination, TableLoader },
   layout: 'dashboard',
   setup() {
     const showDriver = ref(false)
@@ -130,26 +131,30 @@ export default defineComponent({
     function changePage(nextPage: number) {
       getDrivers(nextPage)
     }
+    const showLoader = ref<Boolean>()
 
     const page = ref<number>(1)
 
     const clickedUser = ref()
 
     function getDrivers(pageNumber: number) {
-      DriverObject.getDrivers(pageNumber).then((response: any) => {
-        const driverResponse = response.data.data
-        drivers.value = driverResponse.docs.map((element: DriverDto) => {
-          return {
-            name: element.name ?? 'Not Specified',
-            phoneNumber: element.phoneNumber ?? 'Not Specified',
-            subrole: element.subrole ?? 'Not Specified',
-            location: element.location ?? 'Not Specified',
-          }
+      showLoader.value = true
+      DriverObject.getDrivers(pageNumber)
+        .then((response: any) => {
+          const driverResponse = response.data.data
+          drivers.value = driverResponse.docs.map((element: DriverDto) => {
+            return {
+              name: element.name ?? 'Not Specified',
+              phoneNumber: element.phoneNumber ?? 'Not Specified',
+              subrole: element.subrole ?? 'Not Specified',
+              location: element.location ?? 'Not Specified',
+            }
+          })
+          paginationProp.hasNextPage = driverResponse.hasNextPage
+          paginationProp.hasPrevPage = driverResponse.hasPrevPage
+          paginationProp.currentPage = driverResponse.page
         })
-        paginationProp.hasNextPage = driverResponse.hasNextPage
-        paginationProp.hasPrevPage = driverResponse.hasPrevPage
-        paginationProp.currentPage = driverResponse.page
-      })
+        .finally(() => (showLoader.value = false))
     }
 
     function getDriver(i: number) {
@@ -169,6 +174,7 @@ export default defineComponent({
       getDrivers,
       paginationProp,
       changePage,
+      showLoader,
     }
   },
 })

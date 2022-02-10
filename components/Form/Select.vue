@@ -1,31 +1,43 @@
 <template>
-  <div class="w-full py-2">
+  <div class="py-2 w-full">
     <label
       v-if="labelTitle"
-      class="block w-full px-1 text-gray-800 text-md mb-1"
+      class="block w-full px-1 text-gray-600 text-md mb-1 font-semibold"
     >
       <span>
         {{ labelTitle }}
       </span>
-      <span v-if="isRequired" class="text-red-600 text-base">*</span> </label
+      <span
+        v-if="isRequired"
+        class="text-red-600 text-base"
+        :class="{ 'text-xl': isInvalid }"
+        >*</span
+      > </label
     ><select
       v-model="selectedValue"
       :disabled="isDisabled"
+      :required="isRequired"
       class="
-        appearance-none
         block
         w-full
         px-4
         py-2
-        border-2 border-gray-200
-        text-black
         rounded-sm
-        focus:outline-none
-        focus:border-btn-purple
-        font-thin
-        bg-white
+        font-semibold
+        focus:outline-none focus:border-btn-purple
+        placeholder-gray-400
+        focus:placeholder-gray-200
+        text-gray-900
+        border-2
       "
+      :class="{
+        'border-red-300': isInvalid,
+        'border-gray-600 bg-gray-200 ': isDisabled,
+        'border-gray-200 text-gray-500 bg-white': !isDisabled,
+      }"
       @change="returnValue"
+      @invalid="isInvalid = true"
+      @focus="isInvalid = false"
     >
       <option
         v-if="defaultOptionText"
@@ -38,11 +50,39 @@
         v-for="(row, index) in selectArray"
         :key="index"
         :value="row.value"
-        class="text-black capitalize"
+        class="'text-black capitalize'"
       >
         {{ row.name }}
+        {{ row.length || row.length == 0 ? `(${row.length})` : '' }}
       </option>
     </select>
+
+    <div
+      v-if="addText"
+      @click="clickAdd"
+      class="inline-block text-sm text-gray-400 my-2 mr-3"
+    >
+      <button
+        class="flex justify-evenly items-center"
+        type="button"
+        @click="clickAdd"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-4 h-4 fill-current text-transparent mr-2"
+          viewBox="0 0 24 24"
+          stroke="gray"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <span class="underline">{{ addText }}</span>
+      </button>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -64,7 +104,7 @@ export default defineComponent({
       required: false,
     },
     initValue: {
-      type: String,
+      type: [String, Number],
       required: false,
       default: '',
     },
@@ -77,15 +117,29 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    addText: {
+      required: false,
+      type: String,
+    },
   },
   setup(_props, ctx) {
-    const selectedValue = ref<String>(_props.initValue)
+    const selectedValue = ref<String | Number>(_props.initValue)
     const returnValue = () => {
       ctx.emit('get', selectedValue)
     }
+    const returnLength = (gasName: String) => {
+      ctx.emit('getGasLength')
+    }
+    const clickAdd = () => {
+      ctx.emit('addFunction')
+    }
+    const isInvalid = ref<Boolean>(false)
     return {
       returnValue,
       selectedValue,
+      isInvalid,
+      returnLength,
+      clickAdd,
     }
   },
 })

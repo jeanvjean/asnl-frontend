@@ -1,47 +1,30 @@
 <template>
-  <div class="w-full mt-2 text-white">
-    <button
-      v-if="!loadingStatus"
-      type="button"
-      class="w-full py-3 rounded-sm text-center"
-      :class="buttonClass"
-      @click="buttonClicked"
-    >
-      {{ buttonText }}
-    </button>
-    <button
-      v-else
-      type="button"
-      class="
-        w-full
-        py-3
-        rounded-sm
-        flex
-        items-center
-        justify-center
-        space-x-2
-        animate-pulse
-      "
-      :class="buttonClass"
-      @click="buttonClicked"
-    >
-      <svg
-        class="animate-spin w-6 h-6 fill-current"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-      >
-        <path
-          d="M14.66 15.66A8 8 0 1117 10h-2a6 6 0 10-1.76 4.24l1.42 1.42zM12 10h8l-4 4-4-4z"
-        />
-      </svg>
-      <span class="font-semibold">{{ loadingText }}</span>
-    </button>
-  </div>
+  <button
+    v-if="!loadingStatus"
+    :type="buttonType"
+    class="w-full py-3 px-2 rounded-sm text-center font-semibold"
+    :class="buttonClass"
+    @click="buttonClicked"
+  >
+    {{ buttonText }}
+  </button>
+  <button
+    v-else
+    type="button"
+    disabled
+    class="w-full py-3 rounded-sm text-white"
+    :class="buttonClass"
+    @click="buttonClicked"
+  >
+    <circle-loader class="mx-auto" />
+  </button>
 </template>
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
+import CircleLoader from '@/components/CircleLoader.vue'
 
 export default defineComponent({
+  components: { CircleLoader },
   props: {
     buttonText: {
       type: String,
@@ -50,21 +33,23 @@ export default defineComponent({
     // eslint-disable-next-line vue/require-default-prop
     buttonClass: {
       type: String,
+      required: false,
     },
     loadingStatus: {
       type: Boolean,
       required: false,
       default: false,
     },
-    loadingText: {
+    buttonType: {
       type: String,
       required: false,
-      default: 'Submitting',
+      default: 'submit',
     },
   },
   setup(_props, ctx) {
     const buttonClicked = () => {
       ctx.emit('buttonClicked')
+      // ctx.emit('click')
     }
     return {
       buttonClicked,

@@ -233,7 +233,7 @@
             </table>
           </div>
           <div class="w-auto px-12 mb-10">
-            <div class="w-full mx-auto">
+            <div class="grid grid-cols-3 gap-x-10 w-full h-full mx-auto px-4">
               <button
                 class="flex items-center space-x-1"
                 @click="increaseCounter()"
@@ -253,16 +253,87 @@
                 </div>
                 <div class="underline">Add New Product</div>
               </button>
+
+              <label
+                for="file-upload"
+                class="
+                  block
+                  custom-file-upload
+                  w-full
+                  h-full
+                  border-2 border-gray-300
+                  py-3
+                  rounded-sm
+                  focus:border focus:border-gray-200
+                "
+              >
+                <div class="text-center mb-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    class="w-6 h-6 fill-current text-gray-600 mx-auto"
+                  >
+                    <path
+                      d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"
+                    />
+                    <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                  </svg>
+                </div>
+                <div class="text-center font-medium text-xs w-full">
+                  <span class="inline-block">
+                    {{
+                      form.file.name ? form.file.name : 'Upload an Attachment'
+                    }}
+                  </span>
+                </div>
+              </label>
+              <input
+                id="file-upload"
+                type="file"
+                @change="processFile($event)"
+              />
+
+              <div
+                class="
+                  rounded-sm
+                  border border-gray-300
+                  px-4
+                  mx-auto
+                  text-sm
+                  w-full
+                "
+              >
+                <p class="text-gray-500 text-sm font-medium leading-6">
+                  Inspecting officer
+                </p>
+                <div class="flex items-start space-x-2 py-2">
+                  <img
+                    v-if="user.image"
+                    class="h-10 w-10 rounded-full"
+                    :src="user.image"
+                    alt=""
+                  />
+                  <img
+                    v-else
+                    class="h-10 w-10 rounded-full"
+                    src="@/assets/images/default-avatar.jpg"
+                    alt=""
+                  />
+                  <div>
+                    <p class="text-black text-lg capitalize">{{ user.name }}</p>
+                    <p class="text-gray-600 text-sm capitalize">
+                      {{ user.role }}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div
             class="
               w-full
-              lg:w-3/5
-              lg:flex
-              lg:justify-between
-              lg:items-center
-              lg:space-x-6
+              lg:w-3/5 lg:flex lg:justify-between lg:items-center lg:space-x-6
+              px-6
             "
           >
             <button
@@ -292,21 +363,22 @@
 </template>
 <script lang="ts">
 import {
+  computed,
   defineComponent,
   onMounted,
   reactive,
   ref,
   useContext,
 } from '@nuxtjs/composition-api'
+import Validator from 'validatorjs'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import SelectComponent from '@/components/Form/Select.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import { CustomerController } from '@/module/Customer'
 import { ProductObject } from '@/module/Product'
 import { ProductDto } from '@/types/Types'
-import Validator from 'validatorjs'
-import { ValidatorObject } from '~/module/Validation'
-
+import { ValidatorObject } from '@/module/Validation'
+import { mainStore } from '@/module/Pinia'
 export default defineComponent({
   components: {
     BackDrop,
@@ -317,10 +389,11 @@ export default defineComponent({
     const close = () => {
       ctx.emit('close')
     }
+    const appStore = mainStore()
+    const user: any = appStore.getLoggedInUser
 
     const products = ref<Array<ProductDto>>([])
     const productsArray = ref<any>([])
-
     const componentKey = ref<number>(0)
     const customers = ref<any>([])
 
@@ -329,6 +402,7 @@ export default defineComponent({
       mrn: '',
       comment: '',
       customer: '',
+      file: '',
     })
 
     const context = useContext()
@@ -379,6 +453,22 @@ export default defineComponent({
       componentKey.value++
     }
 
+    const requestBody = computed(() => {
+      const formData = new FormData()
+      formData.append('jobTag', form.jobTag)
+      formData.append('comment', form.comment)
+      formData.append('mrn', form.mrn)
+      formData.append('customer', form.customer)
+      formData.append('mrnDocument', form.file)
+      formData.append('products', JSON.stringify(products.value))
+      return formData
+    })
+
+    function processFile(event: any) {
+      const file = event.target.files[0]
+      form.file = file
+    }
+
     const submitForm = () => {
       const data = {
         products: products.value,
@@ -386,6 +476,7 @@ export default defineComponent({
         mrn: form.mrn,
         comment: form.comment,
         customer: form.customer,
+        mrnDocument: form.file,
       }
 
       const rules = {
@@ -398,6 +489,7 @@ export default defineComponent({
         comment: 'string',
         customer: 'required|string',
         mrn: 'required|string',
+        mrnDocument: 'required',
       }
 
       const validation = new Validator(data, rules)
@@ -409,7 +501,7 @@ export default defineComponent({
           context.$toast.error(error)
         })
       } else {
-        ProductObject.registerDisbursal(data)
+        ProductObject.registerDisbursal(requestBody.value)
           .then(() => {
             componentKey.value = 0
             ctx.emit('reload')
@@ -434,7 +526,17 @@ export default defineComponent({
       submitForm,
       productsArray,
       setProductName,
+      user,
+      processFile,
     }
   },
 })
 </script>
+<style scoped>
+input[type='file'] {
+  display: none;
+}
+.custom-file-upload {
+  cursor: pointer;
+}
+</style>

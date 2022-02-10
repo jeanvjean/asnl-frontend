@@ -3,17 +3,10 @@
     <div class="flex flex-col w-80">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div class="flex flex-col h-0 flex-1">
-        <div class="h-20 px-4 flex items-center justify-between">
+        <div class="h-20 px-4 flex items-center">
           <h2 class="text-left font-semibold text-2xl text-white">
             Air Separation
           </h2>
-          <svg
-            class="w-6 h-6 fill-current text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-          </svg>
         </div>
         <div class="flex-1 flex flex-col overflow-y-auto">
           <nav class="flex-1 px-4 py-4 bg-bg-sidebar space-y-4 text-gray-400">
@@ -58,15 +51,8 @@
                   :key="i"
                   class="w-full"
                 >
-                  <button
-                    v-if="subNav.type && subNav.type === 'button'"
-                    class="block px-2 py-2 focus:outline-none focus:text-white"
-                    @click="toggleComponent(subNav.action)"
-                  >
-                    {{ subNav.title }}
-                  </button>
                   <router-link
-                    v-else-if="!subNav.subCategories"
+                    v-if="!subNav.subCategories"
                     :to="subNav.link"
                     class="block px-2 py-2"
                     >{{ subNav.title }}</router-link
@@ -114,10 +100,6 @@
         v-if="showRegiserCylinder"
         @close="showRegiserCylinder = !showRegiserCylinder"
       />
-      <new-cylinder-type
-        v-if="showRegiserCylinderType"
-        @close="showRegiserCylinderType = !showRegiserCylinderType"
-      />
     </div>
   </div>
 </template>
@@ -125,12 +107,12 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
-import NewCylinderType from '@/components/Overlays/NewCylinderType.vue'
 import DashboardIcon from '@/components/Icons/DashboardIcon.vue'
 import CylinderIcon from '@/components/Icons/CylinderIcon.vue'
 import UserIcon from '@/components/Icons/UserIcon.vue'
 import ReportIcon from '@/components/Icons/ReportIcon.vue'
 import DriverIcon from '@/components/Icons/DriverIcon.vue'
+import InvoiceIcon from '@/components/Icons/InvoiceIcon.vue'
 import InventoryIcon from '@/components/Icons/InventoryIcon.vue'
 import VehicleIcon from '@/components/Icons/VehicleIcon.vue'
 import LogoutIcon from '@/components/Icons/LogoutIcon.vue'
@@ -142,13 +124,10 @@ import TimerIcon from '@/components/Icons/TimerIcon.vue'
 import { mainStore } from '@/module/Pinia'
 
 export default defineComponent({
-  components: { NewCylinder, NewCylinderType, CaretDown, CaretUp },
+  components: { NewCylinder, CaretDown, CaretUp },
   setup() {
     const showRegiserCylinder = ref(false)
-    const showRegiserCylinderType = ref(false)
-    const appStore = mainStore()
-
-    const auth: any = appStore.getLoggedInUser
+    const { getLoggedInUser: auth }: any = mainStore()
 
     const role = auth.role
     const roleNavigations = ref<any>([])
@@ -156,14 +135,6 @@ export default defineComponent({
     function getNavigations(role: string) {
       const result = navigations[role] ? navigations[role] : navigations.admin
       return result
-    }
-
-    function toggleComponent(action: String) {
-      if (action === 'register-cylinder') {
-        showRegiserCylinder.value = true
-      } else if (action === 'register-gas-type') {
-        showRegiserCylinderType.value = true
-      }
     }
 
     onMounted(() => {
@@ -188,7 +159,7 @@ export default defineComponent({
         {
           title: 'User Management',
           icon: UserIcon,
-          link: '/dashboard/user-management/',
+          link: '/dashboard/users/',
         },
         {
           title: 'Cylinders',
@@ -198,31 +169,35 @@ export default defineComponent({
           subCategories: [
             {
               title: 'Analytics',
-              link: '/dashboard/cylinder-management/',
+              link: '/dashboard/cylinders/',
             },
             {
               title: 'Transfer Analytics',
-              link: '/dashboard/cylinder-management/transfer-list',
+              link: '/dashboard/cylinders/transfer-list',
             },
             {
               title: 'Cylinder Type Transfers',
-              link: '/dashboard/cylinder-management/cylinder-type',
+              link: '/dashboard/cylinders/cylinder-type',
             },
             {
               title: 'Pending Condemn Cylinder',
-              link: '/dashboard/cylinder-management/condemn-cylinder',
+              link: '/dashboard/cylinders/condemn-cylinder',
+            },
+          ],
+        },
+        {
+          title: 'Invoice',
+          icon: InvoiceIcon,
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'Sales Requisitions',
+              link: '/dashboard/invoices/sales-requisitions',
             },
             {
-              title: 'Register Cylinder',
-              type: 'button',
-              action: 'register-cylinder',
-              link: '/dashboard/cylinder-management/condemn-cylinder',
-            },
-            {
-              title: 'Register Gas Type',
-              type: 'button',
-              action: 'register-gas-type',
-              link: '/dashboard/cylinder-management/condemn-cylinder',
+              title: 'Invoice',
+              link: '/dashboard/invoices',
             },
           ],
         },
@@ -245,7 +220,7 @@ export default defineComponent({
               link: '/dashboard/inventory/suppliers',
             },
             {
-              title: 'GRN',
+              title: 'Recieved Goods',
               link: '/dashboard/inventory/goods-recieve-note',
             },
             {
@@ -262,23 +237,19 @@ export default defineComponent({
           subCategories: [
             {
               title: 'All Vehicles',
-              link: '/dashboard/vehicle-management/',
+              link: '/dashboard/vehicles/',
             },
             {
               title: 'Route Plan',
-              link: '/dashboard/vehicle-management/route-plan',
+              link: '/dashboard/vehicles/route-plan',
             },
             {
-              title: 'Vehicle Performance',
-              link: '/dashboard/vehicle-management/vehicle-performance',
-            },
-            {
-              title: 'Corrective Maintenance',
-              link: '/dashboard/vehicle-management/corrective-maintenance',
+              title: 'Corrective Maintenance Requests',
+              link: '#',
             },
             {
               title: 'Pre-Inspection Maintenance',
-              link: '/dashboard/cylinder-management/pre-inspection-maintenance',
+              link: '/dashboard/cylinders/pre-inspection-maintenance',
             },
           ],
         },
@@ -300,6 +271,10 @@ export default defineComponent({
               title: 'Cylinder Mgt. Report',
               link: '/dashboard/reports/cylinder',
             },
+            {
+              title: 'Vehicle Performance',
+              link: '/dashboard/vehicles/vehicle-performance',
+            },
           ],
         },
         {
@@ -318,19 +293,8 @@ export default defineComponent({
           showSubCategory: false,
           subCategories: [
             {
-              title: 'Register',
-              link: '#',
-              showSubCategory: false,
-              subCategories: [
-                {
-                  title: "Customer's Cylinders",
-                  link: '#',
-                },
-              ],
-            },
-            {
               title: 'Transfer',
-              link: '/dashboard/cylinder-management/transfer-list',
+              link: '/dashboard/cylinders/transfer-list',
             },
             {
               title: 'Pending Transfer List',
@@ -343,17 +307,17 @@ export default defineComponent({
                 },
                 {
                   title: 'Condemned Cylinders',
-                  link: '/dashboard/cylinder-management/condemn-cylinder',
+                  link: '/dashboard/cylinders/condemn-cylinder',
                 },
                 {
                   title: 'Cylinder Type Change',
-                  link: '/dashboard/cylinder-management/cylinder-type',
+                  link: '/dashboard/cylinders/cylinder-type',
                 },
               ],
             },
             {
               title: 'Cylinder Pool',
-              link: '/dashboard/cylinder-management/',
+              link: '/dashboard/cylinders/',
             },
           ],
         },
@@ -365,41 +329,19 @@ export default defineComponent({
           subCategories: [
             {
               title: 'Customers',
-              link: '/dashboard/customer-management/',
+              link: '/dashboard/customers/',
             },
             {
               title: 'Incoming',
-              link: '#',
-              showSubCategory: false,
-              subCategories: [
-                {
-                  title: 'Walk-in Customers',
-                  link: '#',
-                },
-                {
-                  title: 'Driver Pick-ups',
-                  link: '#',
-                },
-                {
-                  title: 'Suppliers',
-                  link: '#',
-                },
-              ],
+              link: '/dashboard/incoming',
             },
             {
               title: 'Sales Requisition',
-              link: '#',
-              showSubCategory: false,
-              subCategories: [
-                {
-                  title: 'Customers Cylinders',
-                  link: '#',
-                },
-                {
-                  title: 'Company Cylinders',
-                  link: '#',
-                },
-              ],
+              link: '/dashboard/production/sales-requisition',
+            },
+            {
+              title: 'Invoices',
+              link: '/dashboard/sales/invoices',
             },
             {
               title: 'Outgoing',
@@ -407,8 +349,12 @@ export default defineComponent({
               showSubCategory: false,
               subCategories: [
                 {
+                  title: 'Cylinders',
+                  link: '/dashboard/outgoing',
+                },
+                {
                   title: 'Delivery Waybill',
-                  link: '#',
+                  link: '/dashboard/sales/waybills',
                 },
               ],
             },
@@ -429,20 +375,20 @@ export default defineComponent({
         {
           title: 'Purchase Orders',
           icon: InventoryIcon,
-          link: '#',
+          link: '/dashboard/purchase-orders',
           showSubCategory: false,
           subCategories: [
             {
+              title: 'FCR List',
+              link: '/dashboard/purchase-orders/fcr-list',
+            },
+            {
+              title: 'All Orders',
+              link: '/dashboard/purchase-orders',
+            },
+            {
               title: 'Suppliers',
-              link: '#',
-            },
-            {
-              title: 'Internal Suppliers',
-              link: '#',
-            },
-            {
-              title: 'External Suppliers',
-              link: '#',
+              link: '/dashboard/inventory/suppliers',
             },
           ],
         },
@@ -453,8 +399,12 @@ export default defineComponent({
           showSubCategory: false,
           subCategories: [
             {
+              title: 'ERC List',
+              link: '/dashboard/production/ecr-list',
+            },
+            {
               title: 'Production Schedule',
-              link: '/dashboard/production/production-schedule',
+              link: '/dashboard/production/',
             },
             {
               title: 'Production Delivery',
@@ -504,6 +454,14 @@ export default defineComponent({
           showSubCategory: false,
           subCategories: [
             {
+              title: 'ECR list',
+              link: '/dashboard/complaints/ecr-list',
+            },
+            {
+              title: 'All Complaints',
+              link: '/dashboard/complaints',
+            },
+            {
               title: 'Notification',
               link: '#',
             },
@@ -520,12 +478,12 @@ export default defineComponent({
           showSubCategory: false,
           subCategories: [
             {
-              title: 'Register',
-              link: '/dashboard/vehicle-management/',
+              title: 'All Vehicles',
+              link: '/dashboard/vehicles/',
             },
             {
               title: 'Route Plan',
-              link: '/dashboard/vehicle-management/route-plan',
+              link: '/dashboard/vehicles/route-plan',
             },
             {
               title: 'Vehicle Maintenance',
@@ -534,24 +492,31 @@ export default defineComponent({
               subCategories: [
                 {
                   title: 'Pre-inspection Maintenance',
-                  link: '/dashboard/vehicle-management/pre-inspection-maintenance',
+                  link: '/dashboard/vehicles/pre-inspection-maintenance',
                 },
                 {
-                  title: 'Corrective Maintenance',
-                  link: '/dashboard/vehicle-management/corrective-maintenance',
+                  title: 'Corrective Maintenance Requests',
+                  link: '#',
                 },
               ],
-            },
-            {
-              title: 'Vehicle Performance',
-              link: '/dashboard/vehicle-management/vehicle-performance',
             },
           ],
         },
         {
           title: 'Reports',
           icon: ReportIcon,
-          link: '/dashboard/reports/',
+          link: '#',
+          showSubCategory: false,
+          subCategories: [
+            {
+              title: 'All Reports',
+              link: '/dashboard/reports/',
+            },
+            {
+              title: 'Vehicle Performance',
+              link: '/dashboard/vehicles/vehicle-performance',
+            },
+          ],
         },
         logout,
       ],
@@ -559,9 +524,8 @@ export default defineComponent({
 
     return {
       showRegiserCylinder,
-      showRegiserCylinderType,
+
       roleNavigations,
-      toggleComponent,
     }
   },
 })

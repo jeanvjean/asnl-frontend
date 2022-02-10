@@ -26,6 +26,7 @@
           </svg>
         </div>
         <input
+          v-model="searchValue"
           class="
             block
             border
@@ -36,24 +37,22 @@
             h-full
             text-gray-900
             placeholder-gray-500
-            focus:outline-none
-            focus:placeholder-gray-400
-            focus:ring-0
+            focus:outline-none focus:placeholder-gray-400 focus:ring-0
             px-10
             py-3
             sm:text-sm
           "
           :placeholder="placeHolder"
           type="search"
-          name="search"
+          @input="emitSearch($event)"
         />
       </div>
     </form>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
-
+import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { debounce } from 'lodash'
 export default defineComponent({
   props: {
     placeHolder: {
@@ -61,6 +60,19 @@ export default defineComponent({
       required: false,
       default: 'Search',
     },
+  },
+  setup(_props, ctx) {
+    const searchValue = ref<String>('')
+
+    const emitSearch = debounce(
+      () => ctx.emit('search', searchValue.value),
+      1000
+    )
+
+    return {
+      searchValue,
+      emitSearch,
+    }
   },
 })
 </script>

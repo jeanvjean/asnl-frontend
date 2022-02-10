@@ -1,6 +1,17 @@
 <template>
   <button
-    class="flex space-x-4 items-center bg-gray-200 rounded-sm px-5 py-2.5"
+    class="
+      flex
+      space-x-4
+      items-center
+      bg-gray-200
+      rounded-sm
+      px-3
+      py-2.5
+      border
+      hover:border-gray-500
+      focus:border-gray-500
+    "
     @click="emitClick"
   >
     <svg

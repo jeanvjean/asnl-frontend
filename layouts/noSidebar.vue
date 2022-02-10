@@ -42,7 +42,7 @@
           Create Pickup
         </button>
       </div>
-      <div v-else class="flex items-center space-x-4">
+      <div v-else class="flex items-center space-x-4 invisible">
         <button
           class="px-6 py-2 text-gray-600 rounded-sm border border-gray-400"
         >

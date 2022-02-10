@@ -1,5 +1,5 @@
 <template>
-  <back-drop :centralize="true">
+  <back-drop :centralize="false">
     <div
       class="
         w-full
@@ -26,265 +26,371 @@
           />
         </svg>
       </div>
-      <div class="grid grid-rows-1 md:grid-cols-2 gap-x-4">
-        <select-component
-          :label-title="'Customer'"
-          :select-array="customerTypes"
-          :default-option-text="'Select an Order Type'"
-          :init-value="form.customerType"
-          @get="form.customerType = $event.value"
-        />
-
-        <select-component
-          :label-title="'Order Type'"
-          :select-array="customerTypes"
-          :default-option-text="'Select an Order Type'"
-          :init-value="form.customerType"
-          @get="form.customerType = $event.value"
-        />
-
-        <select-component
-          :label-title="'Activity'"
-          :select-array="customerTypes"
-          :default-option-text="'Select an Order Type'"
-          :init-value="form.customerType"
-          @get="form.customerType = $event.value"
-        />
-
-        <select-component
-          :label-title="'Mode of Service'"
-          :select-array="customerTypes"
-          :default-option-text="'Select Mode of Service'"
-          :init-value="form.customerType"
-          @get="form.customerType = $event.value"
-        />
-        <input-component
-          :label-title="'Start Date'"
-          :input-placeholder="'Enter Start Date'"
-          :default-value="form.modeOfService"
-          :input-type="'date'"
-          @get="form.modeOfService = $event.value"
-        />
-
-        <input-component
-          :label-title="'End Date'"
-          :input-placeholder="'Enter End Date'"
-          :default-value="form.name"
-          :input-type="'date'"
-          @get="form.name = $event.value"
-        />
-
-        <input-component
-          :label-title="'Departure'"
-          :input-placeholder="'Enter Departure Location'"
-          :default-value="form.rcNumber"
-          :is-required="false"
-          @get="form.rcNumber = $event.value"
-        />
-
-        <input-component
-          :label-title="'Destination'"
-          :input-placeholder="'Enter Destination Location'"
-          :default-value="form.nickName"
-          @get="form.nickName = $event.value"
-        />
-
-        <input-component
-          :label-title="'ERC Number'"
-          :input-placeholder="'Enter ERC Number'"
-          :default-value="form.address"
-          @get="form.address = $event.value"
-        />
-
-        <input-component
-          :label-title="'ICN Number'"
-          :input-placeholder="'Enter ICN Number'"
-          :default-value="form.contactPerson"
-          @get="form.contactPerson = $event.value"
-        />
-      </div>
-      <span :key="componentKey">
-        <div
-          class="
-            border-t border-b-0 border-l-0 border-r-0
-            pt-3
-            my-2
-            border-2 border-gray-300
-            flex
-            justify-between
-            items-center
-            px-3
-          "
-        >
-          <h4>Products Section</h4>
-          <button
-            class="
-              flex
-              justify-center
-              items-center
-              bg-btn-purple
-              text-white
-              px-4
-              py-2
-              rounded-sm
-            "
-            @click="increment"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6 fill-current"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-              />
-            </svg>
-            <span class="text-white">Add Product</span>
-          </button>
-        </div>
-        <div
-          v-for="(product, i) in products"
-          :key="i"
-          class="grid grid-rows-1 md:grid-cols-2 gap-x-4"
-        >
+      <form autocomplete="off" @submit.prevent="submit">
+        <div class="grid grid-rows-1 md:grid-cols-3 gap-x-4">
           <select-component
-            :label-title="'Products'"
-            :select-array="productsArray"
-            :default-option-text="'Select a Product'"
-            :init-value="product.id"
-            @get="changePrice($event.value, i)"
+            :label-title="'Route Plan Type'"
+            :select-array="activityType"
+            :default-option-text="'Select an Route Plan Type'"
+            :init-value="form.activity"
+            @get="form.activity = $event.value"
           />
-          <input-component
-            :label-title="'Unit Price'"
-            :input-placeholder="'Enter Unit of Price'"
-            :disabled="true"
-            :default-value="product.price"
-          />
-        </div>
-      </span>
 
-      <button
-        class="
-          rounded-sm
-          mt-4
-          px-8
-          py-3
-          border border-blue-300
-          text-md
-          font-semibold
-          flex
-          justify-between
-          bg-blue-500
-          text-white
-        "
-        @click="submit"
-      >
-        Add Customer
-      </button>
+          <select-component
+            :label-title="'Order Type'"
+            :select-array="orderType"
+            :default-option-text="'Select an Order Type'"
+            :init-value="form.orderType"
+            @get="form.orderType = $event.value"
+          />
+
+          <select-component
+            :label-title="'Vehicle Number'"
+            :select-array="driversArray"
+            :default-option-text="'Enter Vehicle Number'"
+            :init-value="vehicleId"
+            @get="vehicleId = $event.value"
+          />
+
+          <input-component
+            :label-title="'Fuel Given (Litres)'"
+            :input-placeholder="'Enter Fuel in Litres'"
+            :default-value="form.fuelGiven"
+            :input-type="'number'"
+            @get="form.fuelGiven = $event.value"
+          />
+          <div>
+            <select-component
+              :label-title="'Territory'"
+              :select-array="territory"
+              :default-option-text="'Enter Territory'"
+              :init-value="form.territory"
+              @get="form.territory = $event.value"
+            />
+            <div class="inline-block text-sm text-gray-400 my-2 mr-3">
+              <button
+                @click="addTer = true"
+                class="flex justify-evenly items-center"
+                type="button"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4 fill-current text-transparent mr-2"
+                  viewBox="0 0 24 24"
+                  stroke="gray"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span class="underline">Add Territory</span>
+              </button>
+            </div>
+          </div>
+          <input-component
+            :label-title="'Date'"
+            :input-placeholder="'Select Start Date'"
+            :input-type="'date'"
+            @get="form.startDate = $event.value"
+          />
+
+          <!-- <input-component
+            :label-title="'End Date'"
+            :input-placeholder="'Select End Date'"
+            :input-type="'date'"
+            @get="form.endDate = $event.value"
+          /> -->
+        </div>
+        <div :key="componentKey">
+          <div
+            class="
+              border-t border-b-0 border-l-0 border-r-0
+              my-2
+              border-2 border-gray-300
+              px-3
+              w-full
+              font-semibold
+              py-2
+              text-lg
+              flex
+              items-center
+              justify-between
+            "
+          >
+            <h4 class="text-sm">Customer Details</h4>
+
+            <div
+              class="w-1/2"
+              v-if="form.activity == 'pick-up' && form.orderType != ''"
+            >
+              <find-customer
+                :label-title="`Add a new ${form.orderType}`"
+                :arr="customersArray"
+                :input-placeholder="`Enter ${form.orderType} name`"
+                @get="addCustomer($event)"
+              />
+            </div>
+          </div>
+          <div
+            v-for="(customer, i) in form.customers"
+            :key="i"
+            class="
+              grid grid-rows-1
+              md:grid-cols-3
+              gap-x-4
+              w-full
+              py-1
+              border-0 border-b-4 border-gray-300
+            "
+          >
+            <input-component
+              :label-title="'Name'"
+              :input-placeholder="`Enter ${form.orderType} Name`"
+              :default-value="customer.name"
+              @get="customer.name = $event.value"
+            />
+
+            <input-component
+              v-if="form.activity != 'pick-up'"
+              :label-title="'Destination'"
+              :input-placeholder="`Enter ${form.orderType} Destination`"
+              :default-value="customer.destination"
+              @get="customer.destination = $event.value"
+            />
+            <input-component
+              v-if="form.activity != 'delivery'"
+              :label-title="'Departure'"
+              :input-placeholder="'Enter Departure'"
+              :default-value="customer.departure"
+              @get="customer.departure = $event.value"
+            />
+            <div class="flex align-self-center">
+              <input-component
+                :label-title="
+                  form.activity == 'pick-up'
+                    ? 'Projected Quantity'
+                    : 'Total Cylinders'
+                "
+                :input-placeholder="`Total Cylinders`"
+                :default-value="customer.numberOfCylinders"
+                @get="customer.numberOfCylinders = $event.value"
+              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="fill-current text-gray-500 w-5 h-5 mx-auto"
+                @click="decrement(i)"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <button-component
+          :button-text="'Create Route Plan'"
+          :loading-status="isLoading"
+          :button-class="'border border-btn-purple mt-4 bg-btn-purple text-white'"
+        />
+      </form>
     </div>
+    <AddTerritory
+      v-if="addTer"
+      @close="addTer = false"
+      @addToTerritory="addToTerritory"
+    />
+    <SuccessMsg
+      v-if="showSuccess"
+      :text="'You have succesfully created a Route Plan'"
+      :buttonText="'Close'"
+      @action="$router.go(0)"
+      @close="$router.go(0)"
+    />
   </back-drop>
 </template>
 <script lang="ts">
 import {
-  computed,
   defineComponent,
   onMounted,
   reactive,
   ref,
   useContext,
+  useRoute,
+  watch,
 } from '@nuxtjs/composition-api'
+import Validator from 'validatorjs'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
+import FindCustomer from '~/components/Form/FindCustomer.vue'
 import SelectComponent from '@/components/Form/Select.vue'
-import { ProductObject } from '@/module/Product'
-import Validator from 'validatorjs'
-import { CustomerController } from '@/module/Customer'
+import AddTerritory from '@/components/Overlays/AddTerritory.vue'
 import { ValidatorObject } from '@/module/Validation'
+import { DriverObject } from '@/module/Driver'
+import { VehicleController } from '@/module/Vehicle'
+import ButtonComponent from '@/components/Form/Button.vue'
+import SuccessMsg from '@/components/Overlays/SuccessMsg.vue'
+import { CustomerController } from '~/module/Customer'
+import { fetchTerrotiries } from '@/module/Territory'
 
 export default defineComponent({
-  components: { BackDrop, InputComponent, SelectComponent },
+  components: {
+    BackDrop,
+    SuccessMsg,
+    FindCustomer,
+    InputComponent,
+    SelectComponent,
+    ButtonComponent,
+    AddTerritory,
+  },
+  props: {
+    customersDN: {
+      type: Array,
+      required: false,
+    },
+  },
   setup(_props, ctx) {
     const close = () => {
       ctx.emit('close')
     }
 
-    const context = useContext()
+    const isCentralise = ref<Boolean>(true)
+    const defaultValue = ref<string>('')
 
-    const customerTypes = [
+    const context = useContext()
+    const route = useRoute()
+    const vehicleId = ref<String>('')
+    const isLoading = ref<Boolean>(false)
+    const showSuccess = ref<Boolean>(false)
+
+    const activityType = [
       {
         name: 'Pick Up',
-        value: 'pick up',
+        value: 'pick-up',
+      },
+      {
+        name: 'Delivery',
+        value: 'delivery',
       },
     ]
 
-    const form = reactive<any>({
-      name: '',
-      customerType: '',
-      modeOfService: '',
-      nickName: '',
-      address: '',
-      contactPerson: '',
-      email: '',
-      TIN: '',
-      phoneNumber: '',
-      rcNumber: '',
-      cylinderHoldingTime: '',
-      territory: '',
-      unitPrice: '',
-      CAC: '',
-      validId: '',
-    })
+    const orderType = [
+      {
+        name: 'Customer',
+        value: 'customer',
+      },
+      {
+        name: 'Supplier',
+        value: 'supplier',
+      },
+    ]
+    const driversArray = ref<Array<Object>>([])
+    const vehicleArray = ref<Array<Object>>([])
+    const addTer = ref(false)
+    const territory = ref<any>([])
 
-    const productsBody = ref<Array<String>>([])
-
-    function fetchProducts() {
-      ProductObject.fetchProductsUnPaginated().then((response: any) => {
-        productsArray.value = response.map((product: any) => {
+    const addToTerritory = (ter: any) => {
+      territory.value.push(ter)
+    }
+    const fetchDrivers = () => {
+      DriverObject.getUnPaginatedDrivers().then((response: any) => {
+        const drivers = response
+        console.log(drivers)
+        driversArray.value = drivers.map((driver: any) => {
           return {
-            name: product.asnlNumber,
-            value: product._id,
-            price: product.unitCost,
+            name: driver.name ? driver.name : 'Not Specified',
+            value: driver.vehicle,
           }
         })
       })
     }
 
-    onMounted(() => {
-      fetchProducts()
+    const fetchVehicles = () => {
+      VehicleController.fetchVehiclesUnPaginated().then((response: any) => {
+        const vehicles = response
+        console.log(vehicles)
+        vehicleArray.value = vehicles.map((vehicle: any) => {
+          return {
+            name: vehicle.regNo,
+            value: vehicle._id,
+          }
+        })
+      })
+    }
+    const getCustomer = (name: string) => {
+      CustomerController.fetchCustomerDto(name).then((data) => {
+        // console.log(data)
+        form.customers.push({
+          name: data.name,
+          email: data.email,
+          departure: data.address,
+          numberOfCylinders: 0,
+        })
+        defaultValue.value = ''
+      })
+    }
+    const addCustomer = (data: any) => {
+      console.log(data)
+      form.customers.push({
+        name: data.name,
+        email: data.email,
+        departure: data.address,
+        numberOfCylinders: 0,
+      })
+    }
+
+    const fetchCustomers = () => {
+      CustomerController.fetchUnPaginatedCustomers().then((response: any) => {
+        customersArray.value = response.map((item: any) => {
+          return {
+            name: item.name,
+            phoneNumber: item.phoneNumber,
+            departure: item.address,
+          }
+        })
+        console.log(customersArray.value)
+      })
+    }
+
+    const form = reactive<any>({
+      startDate: '',
+      // endDate: '',
+      activity: '',
+      orderType: '',
+      modeOfService: 'delivery',
+      date: new Date().toISOString(),
+      territory: '',
+      // mileageIn: '',
+      // mileageOut: '',
+      fuelGiven: '',
+      // fuelsConsumed: '',
+      // timeOut: '',
+      // timeIn: '',
+      customers: _props.customersDN || [],
     })
 
-    const products = ref<Array<any>>([])
-    const productsArray = ref([])
+    const customers = ref<Array<any>>([])
+    const customersArray = ref([])
     const componentKey = ref<number>(1)
 
     const increment = () => {
-      products.value.push({
-        id: '',
-        price: '',
+      form.customers.push({
+        name: '',
+        destination: '',
+        departure: '',
+        email: '',
+        numberOfCylinders: 0,
       })
+      changeComponentKey()
     }
-
-    function processFile(event: any, index: any) {
-      const file = event.target.files[0]
-      if (index === 'cac') {
-        form.CAC = file
-      } else {
-        form.validId = file
-      }
-    }
-
-    function changePrice(selectedProduct: any, index: any) {
-      productsArray.value.forEach((prod: any) => {
-        if (prod.value === selectedProduct) {
-          products.value[index].id = String(selectedProduct)
-          products.value[index].price = String(prod.price)
-          productsBody.value.push(selectedProduct)
-        }
-      })
+    const decrement = (index: number) => {
+      form.customers.splice(index, 1)
       changeComponentKey()
     }
 
@@ -292,53 +398,49 @@ export default defineComponent({
       const random = Math.floor(Math.random() * (1000 - 100 + 1)) + 100
       componentKey.value = random
     }
-
-    const requestPayload = computed(() => {
-      const formData = new FormData()
-      formData.append('name', form.name)
-      formData.append('customerType', form.customerType)
-      formData.append('modeOfService', form.modeOfService)
-      formData.append('nickName', form.nickName)
-      formData.append('address', form.address)
-      formData.append('contactPerson', form.contactPerson)
-      formData.append('email', form.email)
-      formData.append('phoneNumber', form.phoneNumber)
-      formData.append('TIN', form.TIN)
-      formData.append('rcNumber', form.rcNumber)
-      formData.append('cylinderHoldingTime', form.cylinderHoldingTime)
-      formData.append('territory', form.territory)
-      formData.append('unitPrice', form.unitPrice)
-      formData.append('CAC', form.CAC)
-      formData.append('validId', form.validId)
-
-      productsBody.value.forEach((element: any) => {
-        formData.append('products', element)
+    const fetchAllTer = () => {
+      fetchTerrotiries().then((response: any) => {
+        console.log(response)
+        territory.value = response.map((ter: any) => {
+          return {
+            name: ter.name,
+            value: ter.name,
+          }
+        })
       })
-
-      return formData
-    })
-
+    }
     onMounted(() => {
+      vehicleId.value = route.value.params.id
       changeComponentKey()
+      Promise.all([
+        fetchDrivers(),
+        fetchVehicles(),
+        fetchCustomers(),
+        fetchAllTer(),
+      ])
     })
 
     const submit = () => {
       const rules = {
-        name: 'required',
-        customerType: 'required',
-        modeOfService: 'required',
-        nickName: 'required',
-        address: 'required',
-        contactPerson: 'required',
-        email: 'required',
-        TIN: 'string',
-        phoneNumber: 'required',
-        rcNumber: 'string',
-        cylinderHoldingTime: 'required',
-        territory: 'required',
-        unitPrice: 'required',
-        CAC: 'required',
-        validId: 'required',
+        startDate: 'required|date',
+        // endDate: 'required|date',
+        activity: 'required|string',
+        orderType: 'required|string',
+        modeOfService: 'required|string',
+        date: 'required|date',
+        territory: 'required|string',
+        // mileageIn: 'required|string',
+        // mileageOut: 'required|string',
+        fuelGiven: 'required|string',
+        // fuelsConsumed: 'required|string',
+        // timeOut: 'required|date',
+        // timeIn: 'required|date',
+        customers: 'required|array',
+        'customers.*.name': 'required|string',
+        'customers.*.email': 'required|string',
+        // 'customers.*.destination': 'required|string',
+        // 'customers.*.departure': 'required|string',
+        'customers.*.numberOfCylinders': 'required|numeric|min:1',
       }
 
       const validation: any = new Validator(form, rules)
@@ -349,27 +451,83 @@ export default defineComponent({
         messages.forEach((error: string) => {
           context.$toast.error(error)
         })
-      } else if (!productsBody.value.length) {
-        context.$toast.error('Products is Required')
       } else {
-        CustomerController.registerCustomer(requestPayload.value).then(() => {
-          close()
-        })
+        isLoading.value = true
+        VehicleController.createRoutePlan(form, vehicleId.value)
+          .then((data) => {
+            console.log(data)
+            showSuccess.value = true
+            // close()
+          })
+          .finally(() => {
+            isLoading.value = false
+          })
       }
     }
+
+    watch(form, (currentValue: any) => {
+      if (currentValue.customers && currentValue.customers.length < 2) {
+        isCentralise.value = true
+      } else {
+        isCentralise.value = false
+      }
+    })
+    const customer_name = ref<string>('')
+    const show_search = ref(false)
+
+    // watch(
+    //   () => customer_name.value,
+    //   (currentValue, oldValue) => {
+    //     var typingTimer
+    //     clearTimeout(typingTimer)
+    //     typingTimer = setTimeout(() => {
+    //       if (currentValue != '') {
+    //         CustomerController.fetchCustomerDto(currentValue).then((data) => {
+    //           console.log(data)
+    //           if (data) {
+    //             form.customers.push({
+    //               name: data.name,
+    //               email: data.email,
+    //               destination: data.branch.location,
+    //               departure: '',
+    //               numberOfCylinders: 0,
+    //             })
+    //             show_search.value = false
+    //           } else {
+    //             context.$toast.error('Custmer not found!')
+    //           }
+    //           // customer_name.value = ''
+    //         })
+    //       }
+    //     }, 3000)
+    //   }
+    // )
 
     return {
       close,
       form,
-      customerTypes,
-      products,
-      productsArray,
+      orderType,
+      customers,
+      customersArray,
       increment,
-      changePrice,
+      decrement,
       componentKey,
-      processFile,
-      requestPayload,
       submit,
+      activityType,
+      driversArray,
+      vehicleArray,
+      vehicleId,
+      isLoading,
+      isCentralise,
+      showSuccess,
+      customer_name,
+      show_search,
+      changeComponentKey,
+      territory,
+      addToTerritory,
+      addTer,
+      addCustomer,
+      defaultValue,
     }
   },
 })

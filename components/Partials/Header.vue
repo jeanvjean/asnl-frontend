@@ -5,8 +5,7 @@
         px-4
         border-r border-gray-200
         text-gray-500
-        focus:outline-none
-        focus:ring-2 focus:ring-inset focus:ring-indigo-500
+        focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500
         md:hidden
       "
       @click="showMobileSidebar"
@@ -50,7 +49,7 @@
       </div>
       <h1
         v-else
-        class="capitalize font-semibold tracking-wide customFontRegular pl-4"
+        class="uppercase font-semibold tracking-wide customFontRegular pl-4"
       >
         {{ String(title).replace(/-/gi, ' ') }}
       </h1>
@@ -63,7 +62,9 @@
             text-gray-400
             hover:text-gray-500
             focus:outline-none
-            focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+            focus:ring-2
+            focus:ring-offset-2
+            focus:ring-indigo-500
           "
         >
           <span class="sr-only">View notifications</span>
@@ -164,7 +165,7 @@
             aria-labelledby="user-menu"
           >
             <router-link
-              :to="'/dashboard/user-management/' + auth._id + '/' + auth.email"
+              :to="'/dashboard/users/' + auth._id + '/' + auth.email"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               role="menuitem"
               >Your Profile</router-link
@@ -205,6 +206,7 @@ import {
   computed,
   useRouter,
   useRoute,
+  // onMounted,
 } from '@nuxtjs/composition-api'
 import { mainStore } from '@/module/Pinia'
 
@@ -239,7 +241,6 @@ export default defineComponent({
     })
 
     const showBackButtons = [
-      'vehicle-performance-main',
       'corrective-maintenance-main',
       'new-product',
       'cylinder-type',
@@ -249,6 +250,7 @@ export default defineComponent({
       'new-user',
       'transfer',
       'id',
+      'new-complaint',
     ]
 
     const goBack = () => {

@@ -5,11 +5,15 @@ class CylinderRepository {
     return await $axios.get('/cylinder/fetch-cylinders')
   }
 
-  getRegisteredCylinders(page: number) {
+  getRegisteredCylinders(
+    page: number,
+    limit: number = 10,
+    queryString: string = ''
+  ) {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get(
-          `/cylinder/fetch-registered-cylinders?page=${page}&limit=10`
+          `/cylinder/fetch-registered-cylinders?page=${page}&limit=${limit}${queryString}`
         )
         resolve(response.data)
       } catch (error) {
@@ -33,9 +37,7 @@ class CylinderRepository {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get(
-          `/cylinder/fetch-cylinder-stats
-`
-        )
+          `/cylinder/fetch-cylinder-stats`)
         resolve(response.data)
       } catch (error) {
         reject(error)
@@ -82,11 +84,11 @@ class CylinderRepository {
     })
   }
 
-  fetchPendingTransfers(page: Number) {
+  fetchPendingTransfers(page: Number, limit: Number, queryString: String = '') {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get(
-          `/cylinder/fetch-transfers?page=${page}&limit=10`
+          `/cylinder/fetch-transfers?page=${page}&limit=${limit}${queryString}`
         )
         resolve(response.data)
       } catch (error) {
@@ -232,6 +234,16 @@ class CylinderRepository {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response: any = await $axios.get(`/cylinder/fetch-transfer/${id}`)
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+  confirmCylinderOnSysytem(assignedNumber: String = '', barcode: String = '', cylinderNumber: String = '') {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response: any = await $axios.get(`/cylinder/check-cylinder?cylinderNumber=${cylinderNumber}&barcode=${barcode}&assignedNumber=${assignedNumber}`)
         resolve(response.data)
       } catch (error) {
         reject(error)

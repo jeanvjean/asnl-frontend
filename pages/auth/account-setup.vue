@@ -45,7 +45,7 @@
           <Button
             :button-text="'Update Profile'"
             :loading-status="loading"
-            :button-class="'bg-gray-400 text-white'"
+                    :button-class="addedClass"
             @buttonClicked="updateProfile"
           />
         </div>
@@ -60,12 +60,13 @@ import {
   ref,
   useContext,
   useRouter,
+  watch
 } from '@nuxtjs/composition-api'
 import Input from '@/components/Form/Input.vue'
 import SelectInput from '@/components/Form/Select.vue'
 import Button from '@/components/Form/Button.vue'
 import { UserController } from '@/module/User'
-import { mainStore } from '~/module/Pinia'
+import { mainStore } from '@/module/Pinia'
 export default defineComponent({
   name: 'Landing',
   components: { Input, Button, SelectInput },
@@ -87,6 +88,21 @@ export default defineComponent({
       gender: '',
       phoneNumber: '',
       location: '',
+    })
+
+    const addedClass = ref('bg-gray-400 text-white')
+
+  watch(form, () => {
+      if (      
+        form.email &&
+        form.name &&
+        form.gender &&
+        form.phoneNumber &&
+        form.location) {
+        addedClass.value = 'bg-btn-purple text-white'
+      } else {
+        addedClass.value = 'bg-gray-400 text-white'
+      }
     })
 
     const loading = ref(false)
@@ -128,6 +144,7 @@ export default defineComponent({
       form,
       loading,
       updateProfile,
+            addedClass,
     }
   },
 })

@@ -1,8 +1,8 @@
 <template>
   <div class="py-6 px-8">
     <h1 class="text-black font-thin text-xl mb-4">Cylinder Analytics</h1>
-    <div class="grid grid-rows-1 xl:grid-cols-3 gap-4 mb-6">
-      <div class="bg-white px-10 pt-10 pb-24">
+    <div class="grid grid-rows-1 xl:grid-cols-3 gap-6 mb-6">
+      <div class="bg-white px-10 pt-10 pb-24 rounded-md">
         <p class="font-medium text-black tracking-wide pb-4">
           Total Air Separation Cylinders
         </p>
@@ -34,7 +34,7 @@
           </svg>
         </div>
       </div>
-      <div class="bg-white px-10 pt-10 pb-24">
+      <div class="bg-white px-10 pt-10 pb-24 rounded-md">
         <p class="font-medium text-black tracking-wide pb-4">
           Total Buffer Cylinders
         </p>
@@ -66,7 +66,7 @@
           </svg>
         </div>
       </div>
-      <div class="bg-white px-10 pt-10 pb-24">
+      <div class="bg-white px-10 pt-10 pb-24 rounded-md">
         <p class="font-medium text-black tracking-wide pb-4">
           Total Assigned Cylinders
         </p>
@@ -150,7 +150,8 @@
         <div class="flex items-start px-2 space-x-4 w-full">
           <filter-component @filter="showFilter = !showFilter" />
           <search-component
-            :place-holder="'Search for Users, Cylinder no,gas type, Cylinder Volume'"
+            :place-holder="'Search for Cylinder Number'"
+            @search="searchCylinder($event)"
           />
 
           <button
@@ -170,19 +171,75 @@
           >
             Register Cylinder
           </button>
+          <button
+            class="
+              flex
+              justify-between
+              items-end
+              bg-btn-purple
+              px-4
+              py-2
+              text-white
+              font-semibold
+              text-md
+              rounded-sm
+            "
+            @click="showRegiserCylinderType = !showRegiserCylinderType"
+          >
+            Register Gas Type
+          </button>
+        </div>
+      </div>
+      <div class="w-full flex items-center space-x-4 px-6 py-2">
+        <div
+          v-for="(selectedFilter, j) in displayedFilters"
+          :key="j"
+          class="
+            bg-purple-400 bg-opacity-10
+            text-purple-700
+            font-medium
+            capitalize
+            flex
+            items-center
+            space-x-2
+            px-4
+            py-2
+            rounded-lg
+            text-xs
+          "
+        >
+          <span class="rounded-md">{{ selectedFilter }}</span>
         </div>
       </div>
       <table-component
         :head="headers"
         :body="registeredCylinders"
+        :show-loader="isLoading"
         @show="showRegister = true"
       ></table-component>
     </div>
+    <!-- <new-customer-cylinder
+      v-if="showRegCus"
+      @close="showRegCus = false"
+      @refresh=";(showRegCus = false), getCylinders(1)"
+    ></new-customer-cylinder> -->
     <new-cylinder
       v-if="showRegister"
-      @close=";(showRegister = false), getCylinders(1)"
+      @close="showRegister = false"
+      @refresh=";(showRegister = false), getCylinders(1)"
     ></new-cylinder>
-    <cylinder-filter v-if="showFilter" @close="showFilter = !showFilter" />
+    <new-cylinder-type
+      v-if="showRegiserCylinderType"
+      @close="showRegiserCylinderType = !showRegiserCylinderType"
+    />
+    <cylinder-filter
+      v-if="showFilter"
+      :filters="cylinderFilters"
+      :show-gases="true"
+      :show-customers="true"
+      @close="showFilter = !showFilter"
+      @filterAdded="filterCylinders($event)"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -194,36 +251,47 @@ import {
 } from '@nuxtjs/composition-api'
 import TableComponent from '@/components/Base/Table2.vue'
 import NewCylinder from '@/components/Overlays/NewCylinder.vue'
+import NewCustomerCylinder from '@/components/Overlays/NewCustomerCylinder.vue'
+import NewCylinderType from '@/components/Overlays/NewCylinderType.vue'
 import { CylinderController } from '@/module/Cylinder'
 import SearchComponent from '@/components/Base/Search.vue'
 import FilterComponent from '@/components/Base/FilterButton.vue'
 import Pagination from '@/components/Base/Pagination.vue'
-import CylinderFilter from '@/components/Overlays/CylinderFilter.vue'
+import CylinderFilter from '@/components/Overlays/Filter.vue'
+import { cylinderFilters } from '@/constants/variables'
+import { getFilters, getQueryString } from '@/constants/utils'
+import { mainStore } from '@/module/Pinia'
+
 export default defineComponent({
   name: 'Analytics',
   components: {
     TableComponent,
     NewCylinder,
+    NewCustomerCylinder,
     SearchComponent,
     FilterComponent,
     Pagination,
     CylinderFilter,
+    NewCylinderType,
   },
   layout: 'dashboard',
 
   setup() {
     const showFilter = ref<Boolean>(false)
-
+    const isLoading = ref<Boolean>(false)
     const headers = [
       'Cylinder No',
       'Gas Type',
-      'Gas Volume Content',
-      'Water Capacity',
+      'Cylinder Size',
       'Cylinder Type',
-      'Manufacture Date',
     ]
 
+    const showRegiserCylinderType = ref(false)
+
     const page = ref<number>(1)
+
+    const appStore = mainStore()
+    const auth: any = appStore.getLoggedInUser
 
     function changePage(nextPage: number) {
       getCylinders(nextPage)
@@ -246,9 +314,15 @@ export default defineComponent({
       getCylinders(page.value)
     })
 
-    function getCylinders(pageValue: number) {
-      CylinderController.getRegisteredCylinders(pageValue).then(
-        (responses: any) => {
+    function getCylinders(
+      pageValue: number,
+      pageLimit: number = 10,
+      query = ''
+    ) {
+      isLoading.value = true
+      CylinderController.getRegisteredCylinders(pageValue, pageLimit, query)
+        .then((responses: any) => {
+          console.log(responses.data)
           const myResponse = responses.data
           stat.totalCylinders = myResponse.counts.totalCylinders
           stat.totalBufferCylinders = myResponse.counts.totalBufferCylinders
@@ -257,13 +331,37 @@ export default defineComponent({
           paginationProp.hasNextPage = myResponse.cylinders.hasNextPage
           paginationProp.hasPrevPage = myResponse.cylinders.hasPrevPage
           paginationProp.currentPage = myResponse.cylinders.page
-        }
-      )
+        })
+        .finally(() => {
+          console.log(registeredCylinders.value)
+          isLoading.value = false
+        })
+    }
+
+    function searchCylinder(searchValue: string) {
+      if (searchValue) {
+        displayedFilters.value = []
+        queryString.value = ''
+        getCylinders(1, 10, `&search=${searchValue}`)
+      } else {
+        getCylinders(1, 10)
+      }
+    }
+
+    const displayedFilters = ref<Array<String>>([])
+    const queryString = ref<string>('')
+
+    function filterCylinders(filters: any) {
+      queryString.value = getQueryString(filters)
+      displayedFilters.value = getFilters(filters)
+
+      getCylinders(1, 10, queryString.value)
     }
 
     const body = ref([])
 
     const showRegister = ref(false)
+    const showRegCus = ref(false)
     const showCylinderType = ref(false)
     return {
       headers,
@@ -275,7 +373,15 @@ export default defineComponent({
       changePage,
       getCylinders,
       showCylinderType,
+      showRegiserCylinderType,
       showFilter,
+      cylinderFilters,
+      filterCylinders,
+      searchCylinder,
+      isLoading,
+      displayedFilters,
+      auth,
+      showRegCus,
     }
   },
 })

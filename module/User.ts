@@ -11,11 +11,11 @@ class UserRepository {
     })
   }
 
-  suspendUser(userId: String, suspendStatus: Boolean) {
+  suspendUser(userId: String, suspendStatus: Boolean, reason: String) {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response = await $axios.get(
-          `/user/suspend/${userId}?suspend=${!suspendStatus}`
+          `/user/suspend/${userId}?suspend=${!suspendStatus}&reason=${reason}`
         )
         resolve(response.data)
       } catch (error) {
@@ -32,8 +32,23 @@ class UserRepository {
     })
   }
 
-  async getUsers(page: number) {
-    return await $axios.get('/user/get-users?page=' + page + '&limit=' + 10)
+  async getUsers(page: number, limit: number = 10, queryString: String = '') {
+    return await $axios.get(
+      `user/get-branch-users?page=${page}&limit=${limit}${queryString}`
+    )
+  }
+
+  fetchDeletedUsers(page: number, limit: number = 10) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.get(
+          `/user/fetch-deleted-users?page=${page}&limit=${limit}`
+        )
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 
   fetchUserUnPaginated() {
@@ -55,8 +70,8 @@ class UserRepository {
     return await $axios.get('/user/get-roles')
   }
 
-  async deleteUser(userId: number) {
-    return await $axios.delete('/user/delete-user/' + userId)
+  async deleteUser(userId: number, reason: String) {
+    return await $axios.delete(`/user/delete-user/${userId}?reason=${reason}`)
   }
 
   async updateUserRole(userId: String, role: String, subrole: String) {
@@ -73,6 +88,17 @@ class UserRepository {
           '/vehicle/fetch-activityLogs/' + userId
         )
         resolve(response)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  fetchUserStatistics() {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.get('/user/user-stats')
+        resolve(response.data)
       } catch (error) {
         reject(error)
       }

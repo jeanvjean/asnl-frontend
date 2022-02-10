@@ -1,10 +1,10 @@
 <template>
   <router-link
-    to="/dashboard/user-management/new-user"
+    to="/dashboard/users/new-user"
     class="
       flex
       justify-between
-      items-end
+      items-center
       bg-btn-purple
       px-3.5
       py-2
@@ -18,7 +18,7 @@
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      class="w-6 h-6 fill-current font-white"
+      class="w-5 h-5 fill-current font-white"
       viewBox="0 0 20 20"
     >
       <path

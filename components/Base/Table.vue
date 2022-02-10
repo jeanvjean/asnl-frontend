@@ -1,7 +1,7 @@
 <template>
   <div class="overflow-x-auto w-full px-6">
-    <table class="w-full table-auto">
-      <thead class="bg-gray-100">
+    <table id="users-list" class="w-full table-auto">
+      <thead class="bg-gray-200">
         <tr>
           <th
             v-for="(headSingle, index) in head"
@@ -33,13 +33,13 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody v-if="!showLoader">
         <tr
           v-for="(bodySingle, index) in body"
           :key="index"
-          class="font-light hover:bg-gray-100"
+          class="font-extralight hover:bg-gray-100 capitalize text-sm"
         >
-          <td class="px-4 text-left py-4">
+          <td class="px-2 text-left py-4">
             <div class="flex items-center space-x-4">
               <img
                 v-if="bodySingle.image"
@@ -55,33 +55,29 @@
               /><span>{{ bodySingle.name }}</span>
             </div>
           </td>
-          <td class="px-4 text-left py-4">{{ bodySingle.phoneNumber }}</td>
-          <td class="px-4 text-left py-4">{{ bodySingle.email }}</td>
-          <td class="px-4 text-left py-4">
-            <div class="w-40">
-              <span
-                class="px-8 py-2 w-full block text-center capitalize"
-                :class="getColorCode(bodySingle.role)"
-                >{{ bodySingle.role }}</span
-              >
-            </div>
+          <td class="px-2 text-left py-4">{{ bodySingle.phoneNumber }}</td>
+          <td class="px-2 text-left py-4 lowercase">{{ bodySingle.email }}</td>
+          <td class="text-left px-2">
+            <span
+              class="px-4 py-2 w-full block text-center capitalize"
+              :class="getColorCode(bodySingle.role)"
+              >{{ bodySingle.role }}</span
+            >
           </td>
 
-          <td class="pl-4 text-left py-4 pr-10">
-            <div class="w-40">
-              <span
-                class="px-8 py-2 w-full block text-center capitalize"
-                :class="
-                  !bodySingle.deactivated
-                    ? 'bg-green-100 text-green-400'
-                    : 'bg-red-100 text-red-400'
-                "
-                >{{ bodySingle.deactivated ? 'Suspended' : 'Activated' }}</span
-              >
-            </div>
+          <td class="text-left px-2">
+            <span
+              class="px-2 py-2 w-full block text-center"
+              :class="
+                !bodySingle.deactivated
+                  ? 'bg-green-100 text-green-400'
+                  : 'bg-red-100 text-red-400'
+              "
+              >{{ bodySingle.deactivated ? 'Suspended' : 'Activated' }}</span
+            >
           </td>
-          <td class="px-4 py-4 icon-button text-center relative">
-            <button class="mx-auto text-black w-6 h-6">
+          <td class="px-2 py-4 icon-button text-center">
+            <button class="mx-auto text-black w-6 h-6 relative">
               <svg
                 class="fill-current"
                 xmlns="http://www.w3.org/2000/svg"
@@ -112,8 +108,7 @@
                   py-2
                   text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-white
+                  hover:bg-purple-300 hover:text-white
                   w-full
                   overflow-none
                 "
@@ -128,8 +123,7 @@
                   py-2
                   text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-white
+                  hover:bg-purple-300 hover:text-white
                   w-full
                   overflow-none
                 "
@@ -144,12 +138,11 @@
                   py-2
                   text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-white
+                  hover:bg-purple-300 hover:text-white
                   w-full
                   overflow-none
                 "
-                @click="suspendUser(bodySingle.id, bodySingle.deactivated)"
+                @click="initiateReason(bodySingle)"
               >
                 <span v-if="bodySingle.deactivated">Activate User</span>
                 <span v-else>Suspend User</span>
@@ -161,8 +154,7 @@
                   py-2
                   text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-white
+                  hover:bg-purple-300 hover:text-white
                   w-full
                   overflow-none
                 "
@@ -177,17 +169,13 @@
                   py-2
                   text-center text-black
                   focus:outline-none
-                  hover:bg-purple-300
-                  hover:text-white
+                  hover:bg-purple-300 hover:text-white
                   w-full
                   overflow-none
                   font-medium
                 "
                 :to="
-                  '/dashboard/user-management/' +
-                  bodySingle.id +
-                  '/' +
-                  bodySingle.email
+                  '/dashboard/users/' + bodySingle.id + '/' + bodySingle.email
                 "
               >
                 View User</router-link
@@ -197,6 +185,8 @@
         </tr>
       </tbody>
     </table>
+
+    <table-loader v-if="showLoader" />
     <delete-user
       v-if="showDeleteUser"
       :user="hoverUser"
@@ -210,6 +200,12 @@
       @refresh="emitToParent"
       @close="showChangeRole = false"
     />
+    <reason-component
+      v-if="showReason"
+      :action="reasonAction"
+      @close="showReason = !showReason"
+      @reasonGiven="suspendUser(selectedUser.id, selectedUser.status, $event)"
+    />
   </div>
 </template>
 
@@ -217,17 +213,21 @@
 import {
   defineComponent,
   onMounted,
+  reactive,
   ref,
   useContext,
 } from '@nuxtjs/composition-api'
 import DeleteUser from '@/components/Overlays/DeleteUser.vue'
 import ChangeRole from '@/components/Overlays/ChangeRole.vue'
 import { UserController } from '@/module/User'
-
+import ReasonComponent from '@/components/Overlays/Reason.vue'
+import TableLoader from '@/components/TableLoader.vue'
 export default defineComponent({
   components: {
     DeleteUser,
     ChangeRole,
+    ReasonComponent,
+    TableLoader,
   },
   props: {
     head: {
@@ -238,6 +238,10 @@ export default defineComponent({
       type: Array,
       required: true,
     },
+    showLoader: {
+      type: Boolean,
+      required: true,
+    },
   },
   setup(_props, ctx) {
     const showDeleteUser = ref(false)
@@ -245,6 +249,12 @@ export default defineComponent({
     const hoverUser = ref()
     const roles = ref<any>([])
     const context = useContext()
+    const showReason = ref<Boolean>(false)
+    const reasonAction = ref<String>('')
+    const selectedUser = reactive({
+      id: '',
+      status: false,
+    })
 
     function changeUser(i: number) {
       hoverUser.value = _props.body[i]
@@ -253,6 +263,21 @@ export default defineComponent({
     onMounted(() => {
       getRoles()
     })
+
+    function initiateReason(user: any) {
+      selectedUser.id = user.id
+      selectedUser.status = !user.deactivated
+      reasonAction.value = !user.deactivated
+        ? 'Suspending User'
+        : 'Activating User'
+      showReason.value = true
+    }
+
+    function initiateDeleteReason(user: any) {
+      selectedUser.id = user.id
+      reasonAction.value = 'Deleting User'
+      showReason.value = true
+    }
 
     const rolesColor: any = {
       security: 'bg-role-orange text-role-orange bg-opacity-25',
@@ -265,10 +290,11 @@ export default defineComponent({
       return rolesColor[role] ?? rolesColor.default
     }
 
-    function suspendUser(userId: String, status: Boolean) {
-      const message = status ? 'User Re-activated' : 'User Suspended'
-      UserController.suspendUser(userId, status).then(() => {
+    function suspendUser(userId: String, status: Boolean, reason: String) {
+      const message = status === false ? 'User Re-activated' : 'User Suspended'
+      UserController.suspendUser(userId, !status, reason).then(() => {
         context.$toast.success(message)
+        showReason.value = false
         ctx.emit('refresh')
       })
     }
@@ -333,22 +359,12 @@ export default defineComponent({
       roles,
       suspendUser,
       resendInvite,
+      showReason,
+      reasonAction,
+      initiateReason,
+      selectedUser,
+      initiateDeleteReason,
     }
   },
 })
 </script>
-<style scoped>
-.action-menu {
-  display: none;
-}
-.icon-button:hover > .action-menu {
-  display: block;
-  margin-left: -50px;
-  z-index: 50;
-}
-.icon-button:focus > .action-menu {
-  display: block;
-  margin-left: -50px;
-  z-index: 50;
-}
-</style>

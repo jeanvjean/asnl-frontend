@@ -177,7 +177,7 @@
                   "
                 >
                   <svg
-                    class="w-4 h-4 text-center fill-current text-btn-purple"
+                    class="w-4 h-4 text-center fill-current text-white"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                   >
@@ -275,7 +275,7 @@
                 "
               >
                 <svg
-                  class="w-4 h-4 text-center fill-current text-btn-purple"
+                  class="w-4 h-4 text-center fill-current text-white"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -315,7 +315,7 @@
               <div
                 class="
                   border border-btn-purple
-                  bg-btn-purple
+                  bg-btn-purple bg-opacity-25
                   rounded-full
                   w-6
                   h-6
@@ -366,7 +366,7 @@
                 "
               >
                 <svg
-                  class="w-4 h-4 text-center fill-current text-btn-purple"
+                  class="w-4 h-4 text-center fill-current text-white"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -406,7 +406,7 @@
               <div
                 class="
                   border border-btn-purple
-                  bg-btn-purple
+                  bg-btn-purple bg-opacity-25
                   rounded-full
                   w-6
                   h-6
@@ -427,7 +427,7 @@
               </div>
             </div>
             <router-link
-              to="/dashboard/vehicle-management/vehicle-performance"
+              to="/dashboard/vehicles/vehicle-performance"
               class="
                 px-4
                 py-2

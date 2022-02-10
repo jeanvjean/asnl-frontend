@@ -29,8 +29,7 @@
         />
         <button-component
           :button-text="'Create Cylinder Type'"
-          :loading-status="loading.status"
-          :loading-text="loading.text"
+          :loading-status="isLoading"
           :button-class="'bg-btn-purple text-white rounded-sm my-6'"
           @buttonClicked="createCylinder"
         />
@@ -39,7 +38,12 @@
   </back-drop>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, useContext } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  reactive,
+  ref,
+  useContext,
+} from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import InputComponent from '@/components/Form/Input.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
@@ -56,10 +60,7 @@ export default defineComponent({
     const close = () => {
       ctx.emit('close')
     }
-    const loading = reactive({
-      text: 'Submitting',
-      status: false,
-    })
+    const isLoading = ref<Boolean>(false)
     const form = reactive({
       gasName: '',
       colorCode: '',
@@ -69,7 +70,7 @@ export default defineComponent({
       if (!form.gasName && !form.colorCode) {
         mainContext.$toast.global.required()
       } else {
-        loading.status = true
+        isLoading.value = true
         CylinderController.createCylinder(form)
           .then(() => {
             ctx.emit('close')
@@ -77,13 +78,13 @@ export default defineComponent({
             form.colorCode = ''
           })
           .finally(() => {
-            loading.status = false
+            isLoading.value = false
           })
       }
     }
     return {
       close,
-      loading,
+      isLoading,
       form,
       createCylinder,
     }

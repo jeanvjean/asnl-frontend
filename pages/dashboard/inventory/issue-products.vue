@@ -163,9 +163,10 @@
     </div>
     <div class="bg-white px-6 py-4 mt-6">
       <div class="flex items-center justify-around px-2 py-2 space-x-4 w-full">
-        <filter-component />
+        <filter-component @filter="showFilter = true" />
         <search-component :place-holder="'Search for MRN'" />
         <button
+          v-if="auth.role != 'admin'"
           class="
             px-4
             py-2
@@ -189,7 +190,12 @@
           </svg>
           <span> Create MRN</span>
         </button>
-        <pagination :pagination-details="paginationProp" />
+        <pagination
+          :pagination-details="paginationProp"
+          @limitChanged="adjustLimit"
+          @next="changePage($event.value)"
+          @prev="changePage($event.value)"
+        />
       </div>
       <table class="w-full table-auto mt-2">
         <thead class="bg-gray-100">
@@ -224,7 +230,7 @@
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="!isLoading">
           <tr
             v-for="(mrn, i) in body"
             :key="i"
@@ -236,12 +242,20 @@
             </td>
             <td class="px-4 text-center py-4">{{ mrn.customer.name }}</td>
             <td class="px-4 text-center py-4">{{ mrn.jobTag }}</td>
-            <td class="px-4 text-left py-4">
-              <span class="px-8 py-2 bg-yellow-100 text-red-400">
+            <td class="px-2 text-left py-4 capitalize">
+              <span
+                class="rounded-lg py-2 block text-center"
+                :class="{
+                  'bg-yellow-400 text-gray-200 font-bold':
+                    mrn.requestApproval === 'pending',
+                  'bg-green-400 text-gray-200 font-bold':
+                    mrn.requestApproval === 'completed',
+                }"
+              >
                 {{ mrn.requestApproval }}
               </span>
             </td>
-            <td class="px-4 text-center py-4">12/06/2020</td>
+
             <td class="px-4 text-center py-4">
               <button
                 class="
@@ -260,12 +274,25 @@
         </tbody>
       </table>
     </div>
+    <table-loader v-if="isLoading" />
+    <default-state v-if="!isLoading && !body.length" />
 
     <issue-product v-if="showIssueProduct" @close="showIssueProduct = false" />
     <issue-product-detail
       v-if="showIssueProductDetail"
       :mrn="mrnDetail"
       @close="showIssueProductDetail = false"
+      @refresh="
+        ;(showIssueProductDetail = false),
+          fetchPendingDisbursement(pageNumber, pageLimit)
+      "
+    />
+    <mrn-filter
+      v-if="showFilter"
+      :filters="mrnFilters"
+      :show-customers="true"
+      :show-date="true"
+      @close="showFilter = false"
     />
   </div>
 </template>
@@ -278,10 +305,14 @@ import {
 } from '@nuxtjs/composition-api'
 import Pagination from '@/components/Base/Pagination.vue'
 import SearchComponent from '@/components/Base/Search.vue'
-import FilterComponent from '@/components/Base/Filter.vue'
+import FilterComponent from '@/components/Base/FilterButton.vue'
 import IssueProduct from '@/components/Overlays/IssueProducts.vue'
 import IssueProductDetail from '@/components/Overlays/IssueProductDetail.vue'
-import { ProductObject } from '~/module/Product'
+import { ProductObject } from '@/module/Product'
+import { mainStore } from '@/module/Pinia'
+import MrnFilter from '@/components/Overlays/Filter.vue'
+import TableLoader from '@/components/TableLoader.vue'
+import DefaultState from '@/components/DefaultState.vue'
 
 export default defineComponent({
   name: 'Analytics',
@@ -291,21 +322,21 @@ export default defineComponent({
     FilterComponent,
     IssueProduct,
     IssueProductDetail,
+    MrnFilter,
+    TableLoader,
+    DefaultState,
   },
   layout: 'dashboard',
   setup() {
-    const headers = [
-      'Mrn No.',
-      'Request Dept',
-      'Customer',
-      'Job Tag',
-      'Status',
-      'Date',
-    ]
+    const headers = ['Mrn No.', 'Request Dept', 'Customer', 'Job Tag', 'Status']
+    const showFilter = ref<Boolean>(false)
+    const appStore = mainStore()
+    const auth: any = appStore.getLoggedInUser
     const body = ref([])
     const showIssueProduct = ref(false)
     const showIssueProductDetail = ref(false)
     const mrnDetail = ref<any>()
+    const isLoading = ref<Boolean>(false)
 
     const paginationProp = reactive({
       hasNextPage: false,
@@ -319,6 +350,32 @@ export default defineComponent({
       pending: 0,
     })
 
+    function adjustLimit(newLimit: Number) {
+      pageLimit.value = newLimit
+      fetchPendingDisbursement(1, pageLimit.value)
+    }
+
+    const mrnFilters = reactive({
+      status: {
+        list: [
+          {
+            title: 'Pending',
+            type: 'radio',
+            selected: false,
+            identifier: 'status',
+            value: 'pending',
+          },
+          {
+            title: 'Approved',
+            type: 'radio',
+            selected: false,
+            identifier: 'status',
+            value: 'approved',
+          },
+        ],
+      },
+    })
+
     function getDisbursalStat() {
       ProductObject.fetchDisbursalStatistics().then((response: any) => {
         statistics.approved = response.totalApproved
@@ -327,14 +384,20 @@ export default defineComponent({
       })
     }
 
-    function fetchPendingDisbursement() {
-      ProductObject.fetchPendingDisbursement().then((response) => {
-        const mrnResponse: any = response
-        body.value = mrnResponse.docs
-        paginationProp.hasNextPage = mrnResponse.hasNextPage
-        paginationProp.hasPrevPage = mrnResponse.hasPrevPage
-        paginationProp.currentPage = mrnResponse.page
-      })
+    const pageNumber = ref<Number>(1)
+    const pageLimit = ref<Number>(1)
+
+    function fetchPendingDisbursement(page: Number, limit: Number) {
+      isLoading.value = true
+      ProductObject.fetchPendingDisbursement(page, limit)
+        .then((response) => {
+          const mrnResponse: any = response
+          body.value = mrnResponse.docs
+          paginationProp.hasNextPage = mrnResponse.hasNextPage
+          paginationProp.hasPrevPage = mrnResponse.hasPrevPage
+          paginationProp.currentPage = mrnResponse.page
+        })
+        .finally(() => (isLoading.value = false))
     }
 
     function fetchDisbursementDetail(mrn: any) {
@@ -342,8 +405,16 @@ export default defineComponent({
       showIssueProductDetail.value = true
     }
 
+    function changePage(newPage: Number) {
+      pageNumber.value = newPage
+      fetchPendingDisbursement(pageNumber.value, pageLimit.value)
+    }
+
     onMounted(() => {
-      Promise.all([fetchPendingDisbursement(), getDisbursalStat()])
+      Promise.all([
+        fetchPendingDisbursement(pageNumber.value, pageLimit.value),
+        getDisbursalStat(),
+      ])
     })
 
     return {
@@ -355,6 +426,15 @@ export default defineComponent({
       statistics,
       fetchDisbursementDetail,
       mrnDetail,
+      auth,
+      mrnFilters,
+      showFilter,
+      isLoading,
+      adjustLimit,
+      changePage,
+      pageNumber,
+      pageLimit,
+      fetchPendingDisbursement,
     }
   },
 })

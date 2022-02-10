@@ -30,17 +30,24 @@
           </p>
         </div>
       </div>
+      <div>
+        <textarea
+          v-model="deleteReason"
+          class="w-full border-2 border-gray-400"
+          placeholder="Reason for Deleting User"
+          rows="5"
+        ></textarea>
+      </div>
       <div class="flex items-center space-x-4">
         <button-component
           :button-text="'Delete'"
           :loading-status="loading"
-          :loading-text="loadingText"
           :button-class="'text-white bg-btn-purple'"
           @buttonClicked="deleteUser"
         />
         <button-component
           :button-text="'Cancel'"
-          :button-class="'text-black bg-white border border-btn-purple'"
+          :button-class="'text-btn-purple bg-white border border-btn-purple'"
           @buttonClicked="close"
         />
       </div>
@@ -48,7 +55,7 @@
   </back-drop>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, ref, useContext } from '@nuxtjs/composition-api'
 import BackDrop from '@/components/Base/Backdrop.vue'
 import ButtonComponent from '@/components/Form/Button.vue'
 import { UserController } from '@/module/User'
@@ -66,22 +73,30 @@ export default defineComponent({
     }
     const loading = ref(false)
     const loadingText = 'Deleting'
+    const context = useContext()
+    const deleteReason = ref<String>('')
     const deleteUser = () => {
-      loading.value = true
-      UserController.deleteUser(_props.user.id)
-        .then(() => {
-          ctx.emit('refresh')
-          close()
-        })
-        .finally(() => {
-          loading.value = false
-        })
+      if (deleteReason.value) {
+        loading.value = true
+        UserController.deleteUser(_props.user.id, deleteReason.value)
+          .then(() => {
+            ctx.emit('refresh')
+            close()
+          })
+          .finally(() => {
+            loading.value = false
+          })
+      } else {
+        context.$toast.error('Reason is required')
+      }
     }
+
     return {
       close,
       loading,
       loadingText,
       deleteUser,
+      deleteReason,
     }
   },
 })

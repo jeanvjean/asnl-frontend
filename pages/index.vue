@@ -27,7 +27,6 @@
         :button-text="'Login'"
         :button-class="addedClass"
         :loading-status="loading.status"
-        :loading-text="loading.text"
         @buttonClicked="login"
       />
     </form>
@@ -67,7 +66,6 @@ export default defineComponent({
     })
 
     const loading = reactive({
-      text: 'Submitting',
       status: false,
     })
 

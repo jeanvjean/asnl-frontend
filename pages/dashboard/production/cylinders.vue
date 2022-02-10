@@ -90,9 +90,7 @@
 
                 <td class="px-4 text-center py-4">
                   <router-link
-                    :to="
-                      '/dashboard/cylinder-management/cylinder/' + cylinder._id
-                    "
+                    :to="'/dashboard/cylinders/cylinder/' + cylinder._id"
                     class="
                       px-6
                       py-1
@@ -135,7 +133,8 @@ export default defineComponent({
 
     onBeforeMount(() => {
       CylinderController.getRegisteredCylinders(1).then((responses: any) => {
-        body.value = responses.data.cylinders
+        body.value = responses.data.cylinders.docs
+        console.log(body)
       })
     })
 

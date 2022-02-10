@@ -29,7 +29,7 @@ import { defineComponent, ref } from '@nuxtjs/composition-api'
 import Header from '@/components/Partials/Header.vue'
 import MobileSidebar from '@/components/Partials/MobileSidebar.vue'
 import Sidebar from '@/components/Partials/Sidebar.vue'
-import isAuthenticated from '~/middleware/isAuthenticated'
+import isAuthenticated from '@/middleware/isAuthenticated'
 
 export default defineComponent({
   name: 'Dashboard',
@@ -55,5 +55,21 @@ export default defineComponent({
 
 .customFontBold {
   font-family: 'tt_normsbold';
+}
+
+.action-menu {
+  display: none;
+}
+.icon-button:hover > .action-menu {
+  display: block;
+}
+.icon-button:focus > .action-menu {
+  display: block;
+}
+
+@media only screen and (max-width: 600px) {
+  * {
+    font-size: 12px;
+  }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div class="flex items-center space-x-4">
-    <div class="flex items-center space-x-4">
+  <div class="flex flex-none items-center space-x-4">
+    <div class="flex items-center space-x-2">
       <span class="text-sm text-btn-purple">Page</span>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +22,7 @@
           clip-rule="evenodd"
         />
       </svg>
-      <span class="px-2 border border-gray-500 w-8 text-center">
+      <span class="border border-gray-500 w-6 text-center">
         <span>{{ $props.paginationDetails.currentPage }}</span>
       </span>
 
@@ -46,18 +46,23 @@
           clip-rule="evenodd"
         />
       </svg>
-      <!-- <button
-        class="
-          text-purple-500
-          underline
-          uppercase
-          focus:outline-none
-          font-medium
-          text-sm
-        "
+      <div
+        class="flex items-center space-x-2 text-sm font-medium tracking-tight"
       >
-        View All
-      </button> -->
+        <label for="">Rows Per Page</label>
+        <select
+          v-model="limit"
+          class="pr-8 pl-2 py-2 rounded-sm"
+          @change="limitChanged()"
+        >
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="200">200</option>
+          <option value="500">500</option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
@@ -74,6 +79,7 @@ export default defineComponent({
   setup(_props, ctx) {
     const context = useContext()
     const nextPage = ref<number>()
+    const limit = ref<number>(10)
     const prev = () => {
       if (_props.paginationDetails.hasPrevPage) {
         nextPage.value = _props.paginationDetails.currentPage - 1
@@ -92,9 +98,15 @@ export default defineComponent({
       }
     }
 
+    const limitChanged = () => {
+      ctx.emit('limitChanged', limit.value)
+    }
+
     return {
       prev,
       next,
+      limit,
+      limitChanged,
     }
   },
 })

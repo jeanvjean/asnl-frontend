@@ -221,54 +221,49 @@
               </tbody>
             </table>
           </div>
-
-          <div class="px-4">
-            <input-component
-              :label-title="'Comment'"
-              :input-placeholder="'Enter Comment'"
-              :is-required="false"
-              @get="form.comment = $event.value"
-            />
-          </div>
-
-          <div
-            class="
-              w-full
-              lg:w-3/5
-              lg:flex
-              lg:justify-between
-              lg:items-center
-              lg:space-x-6
-            "
+          <form
+            v-if="mrn.nextApprovalOfficer === auth._id"
+            autocomplete="off"
+            @submit.prevent="confirmationComponent(form.status)"
           >
-            <button
-              class="px-6 py-2 rounded-sm bg-btn-purple text-white w-full"
-              @click="confirmationComponent('approve')"
-            >
-              Approve
-            </button>
-            <button
+            <div class="px-4">
+              <input-component
+                :label-title="'Comment'"
+                :input-placeholder="'Enter Comment'"
+                :is-required="false"
+                @get="form.comment = $event.value"
+              />
+            </div>
+
+            <div
               class="
-                px-6
-                py-2
-                rounded-sm
-                bg-white
-                text-purple
-                border border-btn-purple
+                mt-3
                 w-full
+                lg:w-2/5 lg:flex lg:justify-between lg:items-center lg:space-x-6
+                px-4
               "
-              @click="confirmationComponent('reject')"
             >
-              Reject
-            </button>
-          </div>
+              <button-component
+                :button-text="'Approve'"
+                :button-class="'bg-btn-purple text-white w-auto'"
+                :loading-status="buttonLoading.approveLoading"
+                @buttonClicked="form.status = 'approve'"
+              />
+              <button-component
+                :button-text="'Reject'"
+                :button-class="'text-white bg-gray-700 w-auto'"
+                :loading-status="buttonLoading.rejectLoading"
+                @buttonClicked="form.status = 'reject'"
+              />
+            </div>
+          </form>
         </div>
       </div>
     </div>
 
     <confirmation
       v-if="showConfirmation"
-      :display-text="statusText"
+      :display-text="form.status"
       @close="showConfirmation = false"
       @approve="intermediate($event)"
     />
@@ -288,13 +283,15 @@ import { CustomerController } from '@/module/Customer'
 import { ProductObject } from '@/module/Product'
 import { ProductDto } from '@/types/Types'
 import Confirmation from '@/components/Overlays/Confirmation.vue'
-
+import ButtonComponent from '@/components/Form/Button.vue'
+import { mainStore } from '@/module/Pinia'
 export default defineComponent({
   components: {
     BackDrop,
     SelectComponent,
     InputComponent,
     Confirmation,
+    ButtonComponent,
   },
   props: {
     mrn: {
@@ -307,6 +304,11 @@ export default defineComponent({
       ctx.emit('close')
     }
 
+    const refresh = () => {
+      ctx.emit('refresh')
+    }
+
+    const { getLoggedInUser: auth } = mainStore()
     const products = ref<Array<ProductDto>>([])
     const productsArray = ref<any>([])
     const componentKey = ref<number>(0)
@@ -314,10 +316,14 @@ export default defineComponent({
 
     const form = reactive({
       comment: '',
+      status: '',
     })
 
-    const statusText = ref<String>('')
     const showConfirmation = ref<Boolean>(false)
+    const buttonLoading = reactive({
+      approveLoading: false,
+      rejectLoading: false,
+    })
 
     function intermediate(body: any) {
       const finalBody = {
@@ -332,16 +338,19 @@ export default defineComponent({
     }
 
     function approveCylinder(requestBody: any) {
+      buttonLoading.approveLoading = requestBody.status === 'approved'
+      buttonLoading.rejectLoading = requestBody.status === 'rejected'
       ProductObject.approveMrn(requestBody)
         .then(() => {
-          showConfirmation.value = false
-          location.reload()
+          refresh()
         })
-        .catch(() => {})
+        .finally(() => {
+          buttonLoading.approveLoading = false
+          buttonLoading.rejectLoading = false
+        })
     }
 
-    function confirmationComponent(text: String) {
-      statusText.value = text
+    function confirmationComponent() {
       showConfirmation.value = true
     }
 
@@ -393,6 +402,8 @@ export default defineComponent({
       showConfirmation,
       intermediate,
       confirmationComponent,
+      buttonLoading,
+      auth,
     }
   },
 })

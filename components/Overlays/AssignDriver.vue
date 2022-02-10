@@ -21,6 +21,7 @@
           :label-title="'Driver'"
           :default-option-text="'Select Driver'"
           :select-array="drivers"
+          :init-value="form.driver"
           @get="form.driver = $event.value"
         />
         <input-component
@@ -47,6 +48,7 @@
 <script lang="ts">
 import {
   defineComponent,
+  onBeforeMount,
   reactive,
   ref,
   useContext,
@@ -68,6 +70,11 @@ export default defineComponent({
       type: Array,
       required: true,
     },
+    currentDriver: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
   setup(_props, ctx) {
     const context = useContext()
@@ -81,6 +88,10 @@ export default defineComponent({
     const approve = () => {
       ctx.emit('approve')
     }
+
+    onBeforeMount(() => {
+      form.driver = _props.currentDriver
+    })
 
     const assignDriverAction = () => {
       if (!form.comment || !form.driver) {

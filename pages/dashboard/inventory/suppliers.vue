@@ -20,34 +20,17 @@
               :pagination-details="paginationProp"
               @next="changePage($event.value)"
               @prev="changePage($event.value)"
+              @limitChanged="
+                ;(pageProps.limit = $event),
+                  fetchSuppliers(pageProps.number, pageProps.limit)
+              "
             />
           </div>
         </div>
       </div>
       <div class="flex justify-between mb-4 px-6">
         <div class="flex space-x-6 items-center font-medium text-black">
-          <button
-            :class="
-              search == 'general-inventory'
-                ? 'border-b-2 border-btn-purple'
-                : ''
-            "
-            class="py-2 focus:outline-none"
-            @click="changeTab('general-inventory')"
-          >
-            General Inventory
-          </button>
-          <button
-            :class="
-              search == 'product-gas-refill'
-                ? 'border-b-2 border-btn-purple'
-                : ''
-            "
-            class="py-2 focus:outline-none"
-            @click="changeTab('product-gas-refill')"
-          >
-            Gas (Refill)
-          </button>
+          <filter-button @filter="showFilter = true" />
         </div>
         <button
           class="
@@ -75,7 +58,10 @@
           <span>Add New</span>
         </button>
       </div>
-      <div class="grid grid-rows-1 lg:grid-cols-5 gap-y-4 md:gap-x-4 py-4 px-6">
+      <div
+        v-if="!showLoader"
+        class="grid grid-rows-1 lg:grid-cols-5 gap-y-4 md:gap-x-4 py-4 px-6"
+      >
         <div
           v-for="(supplier, i) in suppliers"
           :key="i"
@@ -113,6 +99,7 @@
           </div>
         </div>
       </div>
+      <table-loader v-else />
     </div>
     <create-supplier
       v-if="show"
@@ -120,6 +107,16 @@
       :gas-types="productTypes"
       @close="show = false"
       @refresh="fetchSuppliers(1, search)"
+    />
+    <supplier-filter
+      v-if="showFilter"
+      :filters="supplierFilters"
+      @close="showFilter = false"
+      @filterAdded="
+        queryString = getQueryString($event)
+        displayedFilters = getFilters($event)
+        getICns(pageNumber, pageLimit, queryString)
+      "
     />
   </div>
 </template>
@@ -134,26 +131,67 @@ import CreateSupplier from '@/components/Overlays/Supplier.vue'
 import { ProductObject } from '@/module/Product'
 import { SupplierDto } from '@/types/Types'
 import Pagination from '@/components/Base/Pagination.vue'
+import TableLoader from '@/components/TableLoader.vue'
+import FilterButton from '@/components/Base/FilterButton.vue'
+import SupplierFilter from '@/components/Overlays/Filter.vue'
+import { getQueryString, getFilters } from '@/constants/utils'
 
 export default defineComponent({
   name: 'Suppliers',
-  components: { CreateSupplier, Pagination },
+  components: {
+    CreateSupplier,
+    Pagination,
+    TableLoader,
+    FilterButton,
+    SupplierFilter,
+  },
   layout: 'dashboard',
   setup() {
     const show = ref(false)
     const gasTypes = ref([])
-
+    const showLoader = ref<Boolean>(false)
     const suppliers = ref<Array<SupplierDto>>([])
+    const displayedFilters = ref<Array<String>>([])
+    const queryString = ref<String>('')
+    const showFilter = ref<Boolean>(false)
 
-    function fetchSuppliers(pageValue: number, searchValue: string) {
-      ProductObject.fetchSuppliers(pageValue, searchValue).then(
-        (response: any) => {
+    const supplierFilters = {
+      type: {
+        list: [
+          {
+            title: 'General Inventory',
+            type: 'radio',
+            identifier: 'search',
+            value: 'general-inventory',
+          },
+          {
+            title: 'Gas Refill',
+            type: 'radio',
+            identifier: 'search',
+            value: 'product-gas-refill',
+          },
+        ],
+      },
+    }
+    const pageProps = {
+      number: 1,
+      limit: 10,
+    }
+
+    function fetchSuppliers(
+      pageValue: number,
+      limit: number,
+      searchValue: string
+    ) {
+      showLoader.value = true
+      ProductObject.fetchSuppliers(pageValue, limit, searchValue)
+        .then((response: any) => {
           suppliers.value = response.docs
           paginationProp.hasNextPage = response.hasNextPage
           paginationProp.hasPrevPage = response.hasPrevPage
           paginationProp.currentPage = response.page
-        }
-      )
+        })
+        .finally(() => (showLoader.value = false))
     }
 
     const paginationProp = reactive({
@@ -162,20 +200,15 @@ export default defineComponent({
       currentPage: 1,
     })
 
-    function changeTab(newTab: string) {
-      search.value = newTab
-      suppliers.value = []
-      fetchSuppliers(1, search.value)
-    }
-
     function changePage(nextPage: number) {
-      fetchSuppliers(nextPage, search.value)
+      pageProps.number = nextPage
+      fetchSuppliers(pageProps.number, pageProps.limit, search.value)
     }
 
     const search = ref<string>('general-inventory')
 
     onMounted(() => {
-      fetchSuppliers(1, search.value)
+      fetchSuppliers(pageProps.number, pageProps.limit, search.value)
     })
 
     const supplierTypes = [
@@ -206,9 +239,16 @@ export default defineComponent({
       changePage,
       paginationProp,
       fetchSuppliers,
-      changeTab,
       search,
       productTypes,
+      showLoader,
+      displayedFilters,
+      supplierFilters,
+      queryString,
+      showFilter,
+      getQueryString,
+      getFilters,
+      pageProps,
     }
   },
 })

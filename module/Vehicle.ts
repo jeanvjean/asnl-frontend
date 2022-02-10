@@ -18,11 +18,38 @@ class VehicleRepository {
       })
   }
 
-  fetchVehicles(page: number) {
+  fetchVehicles(page: number, pageLimit: Number = 10, query: String = '') {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const response = await $axios.get(
-          `/vehicle/fetch-vehicles?page=${page}&limit=10`
+          `/vehicle/fetch-vehicles?page=${page}&limit=${pageLimit}${query}`
+        )
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  createRoutePlan(requestBody: any, vehicleId: String) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.post(
+          `/vehicle/record-route/${vehicleId}`,
+          requestBody
+        )
+        resolve(response.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  fetchRoutePlans(page: Number, limit: Number, query: string) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.get(
+          `/vehicle/fetch-routePlans?page=${page}&limit=${limit}&${query}`
         )
         resolve(response.data.data)
       } catch (error) {
@@ -59,6 +86,66 @@ class VehicleRepository {
     return new Promise<any>((resolve, reject) => {
       try {
         const response = $axios.delete('/vehicle/delete-vehicle/' + id)
+        resolve(response)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  fetchPerformance(id: String, startDate: Date, endDate: Date) {
+    return new Promise<any>((resolve, reject) => {
+      try {
+        const response = $axios.get(
+          `/vehicle/vehicle-performance/${id}?fromDate=${startDate}&toDate=${endDate}`
+        )
+        resolve(response)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  vehicleInspection(requestBody: Object, vehicleId: string) {
+    return new Promise<any>((resolve, reject) => {
+      try {
+        const response = $axios.post(
+          `/vehicle/register-inspection/${vehicleId}`,
+          requestBody
+        )
+        resolve(response)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  fetchDeliveryNote(id: string) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.get(
+          `/vehicle/delivery-note/${id}`
+        )
+        resolve(response.data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+  async fetchDeliveryNotes(page: Number, limit: Number,) {
+    return await $axios.get(`/vehicle/fetch-delivery-notes?page=${page}&limit=${limit}`).then((response) => {
+      return response.data.data
+    })
+  }
+
+
+  createDeliveryNote(requestBody: object) {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const response = await $axios.post(
+          `/vehicle/create-delivery-note`,
+          requestBody
+        )
         resolve(response)
       } catch (error) {
         reject(error)

@@ -2,7 +2,7 @@
   <div class="overflow-x-auto w-full py-2 px-2">
     <div class="overflow-x-auto w-full">
       <table class="table-fixed w-full">
-        <thead class="bg-gray-100">
+        <thead class="bg-gray-200">
           <tr class="space-x-4">
             <th
               v-for="(headSingle, index) in head"
@@ -13,7 +13,7 @@
                 font-thin
                 text-sm
                 px-4
-                py-2
+                py-3
                 text-center
                 w-40
               "
@@ -27,7 +27,7 @@
                 font-thin
                 text-sm
                 px-4
-                py-2
+                py-3
                 text-center
                 sm:w-40
                 2xl:w-32
@@ -37,7 +37,7 @@
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="!showLoader">
           <tr
             v-for="(bodySingle, index) in body"
             :key="index"
@@ -56,82 +56,50 @@
               {{ bodySingle.gasType.gasName }}
             </td>
             <td class="px-4 text-center py-4">
-              {{ bodySingle.gasVolumeContent }}
-            </td>
-            <td class="px-4 text-center py-4">
-              {{ bodySingle.waterCapacity }}
+              {{ bodySingle.gasVolumeContent.value }}
             </td>
             <td class="px-4 text-center py-4 w-full">
-              <div>
-                <span
-                  :class="getColorCode(bodySingle.cylinderType)"
-                  class="px-8 py-2 w-full block text-center capitalize"
-                  >{{ bodySingle.cylinderType }}</span
-                >
-              </div>
-            </td>
-            <td class="px-4 text-center py-4">
-              {{ formatDate(bodySingle.dateManufactured) }}
-            </td>
-            <td class="px-4 py-4 icon-button text-center">
-              <button class="mx-auto text-black w-6 h-6 relative">
-                <svg
-                  class="fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M4 12a2 2 0 110-4 2 2 0 010 4zm6 0a2 2 0 110-4 2 2 0 010 4zm6 0a2 2 0 110-4 2 2 0 010 4z"
-                  />
-                </svg>
-              </button>
-              <div
-                class="
-                  absolute
-                  -ml-4
-                  bg-gray-50
-                  border border-gray-300
-                  w-40
-                  font-medium
-                  text-sm
-                  rounded-sm
-                  action-menu
-                  z-10
-                "
+              <span
+                :class="getColorCode(bodySingle.cylinderType)"
+                class="px-8 py-2 w-full block text-center capitalize"
+                >{{ bodySingle.cylinderType }}</span
               >
-                <router-link
-                  class="
-                    block
-                    px-6
-                    py-2
-                    text-center text-black
-                    focus:outline-none
-                    hover:bg-purple-300
-                    hover:text-white
-                    w-full
-                    overflow-none
-                    font-medium
-                    text-xs
-                  "
-                  :to="
-                    '/dashboard/cylinder-management/cylinder/' + bodySingle._id
-                  "
-                >
-                  View Cylinder</router-link
-                >
-              </div>
+            </td>
+            <td class="px-4 py-4 text-center">
+              <router-link
+                class="
+                  block
+                  px-6
+                  py-2
+                  text-center text-btn-purple
+                  bg-white
+                  border border-btn-purple
+                  rounded-sm
+                  w-full
+                  overflow-none
+                  font-medium
+                  text-xs
+                "
+                :to="'/dashboard/cylinders/cylinder/' + bodySingle._id"
+              >
+                View Cylinder</router-link
+              >
             </td>
           </tr>
         </tbody>
       </table>
+      <table-loader v-if="showLoader" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
+import TableLoader from '@/components/TableLoader.vue'
+import { formatDate } from '@/constants/utils'
 
 export default defineComponent({
+  components: { TableLoader },
   props: {
     head: {
       type: Array,
@@ -141,6 +109,7 @@ export default defineComponent({
       type: Array,
       required: true,
     },
+    showLoader: Boolean,
   },
   setup(_props, ctx) {
     const show = () => {
@@ -155,22 +124,6 @@ export default defineComponent({
       return rolesColor[role] ?? rolesColor.default
     }
 
-    function formatDate(dateValue: string) {
-      const date = new Date(dateValue)
-      const year = date.getFullYear()
-      let month: any = date.getMonth() + 1
-      let dt: any = date.getDate()
-
-      if (dt < 10) {
-        dt = '0' + dt
-      }
-      if (month < 10) {
-        month = '0' + month
-      }
-
-      return year + '-' + month + '-' + dt
-    }
-
     return {
       show,
       formatDate,
@@ -179,15 +132,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style scoped>
-.action-menu {
-  display: none;
-}
-.icon-button:hover > .action-menu {
-  display: block;
-}
-.icon-button:focus > .action-menu {
-  display: block;
-}
-</style>
