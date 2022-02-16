@@ -47,9 +47,7 @@
               <span>{{
                 bodySingle.assignedNumber
                   ? bodySingle.assignedNumber
-                  : bodySingle.cylinderNumber
-                  ? bodySingle.cylinderNumber
-                  : ''
+                  : 'Unassigned'
               }}</span>
             </td>
             <td class="px-4 text-center py-4">

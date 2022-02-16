@@ -2,7 +2,7 @@
   <div :key="componentKey">
     <div class="py-4 px-2">
       <div class="flex space-x-0 items-center">
-        <button
+        <!-- <button
           class="px-6 py-2 tracking-wide font-medium border-2 border-gray-200"
           :class="{
             'bg-purple-600 text-white': selected.customer,
@@ -13,7 +13,7 @@
           "
         >
           Air Separation Cylinder
-        </button>
+        </button> -->
         <!-- <button
           class="px-6 py-2 tracking-wide font-medium border-2 border-gray-200"
           :class="{
@@ -93,12 +93,7 @@
                           :input-placeholder="'Volume'"
                           :default-value="cylinder.volume.value"
                           :input-type="'number'"
-                          @get="
-                            ;(cylinder.volume.value = $event.value),
-                              (cylinder.amount =
-                                Number(cylinder.unitPrice) *
-                                Number(cylinder.volume.value))
-                          "
+                          @get="updateFieldOne(cylinder, $event)"
                         />
                       </td>
                       <td>
@@ -106,13 +101,7 @@
                           :input-placeholder="'Unit price'"
                           :default-value="cylinder.unitPrice"
                           :input-type="'number'"
-                          @get="
-                            cylinder.unitPrice = $event.value
-                            cylinder.amount =
-                              Number(cylinder.unitPrice) *
-                              Number(cylinder.volume.value)
-                            changeComponentKey()
-                          "
+                          @get="updateFieldTwo(cylinder, $event)"
                         />
                       </td>
                       <td>
@@ -120,11 +109,7 @@
                           :input-placeholder="'Cylinder Amount'"
                           :default-value="cylinder.amount"
                           :input-type="'number'"
-                          @get="
-                            cylinder.amount =
-                              Number(cylinder.unitPrice) *
-                              Number(cylinder.volume.value)
-                          "
+                          @get="updateFieldThree(cylinder, $event)"
                         />
                       </td>
                       <td>
@@ -499,8 +484,8 @@ export default defineComponent({
         p[item.product.productName] = item.unit_price.value
       })
       products.value = p
-      form.cylinders = []
-      form.cylinderType = ''
+      //form.cylinders = []
+      //form.cylinderType = ''
       changeComponentKey()
     }
 
@@ -593,6 +578,23 @@ export default defineComponent({
       ecrLoading,
       customersArray,
     }
+  },
+  methods: {
+    updateFieldOne(cylinder: any, $event: any) {
+      cylinder.volume.value = $event.value
+      cylinder.amount =
+        Number(cylinder.unitPrice) * Number(cylinder.volume.value)
+    },
+    updateFieldTwo(cylinder: any, $event: any) {
+      cylinder.unitPrice = $event.value
+      cylinder.amount =
+        Number(cylinder.unitPrice) * Number(cylinder.volume.value)
+      this.changeComponentKey()
+    },
+    updateFieldThree(cylinder: any) {
+      cylinder.amount =
+        Number(cylinder.unitPrice) * Number(cylinder.volume.value)
+    },
   },
 })
 </script>

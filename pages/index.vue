@@ -10,7 +10,7 @@
         </span>
       </div>
     </div>
-    <form action="" class="mt-2 px-4" autocomplete="off">
+    <form @submit.prevent="login" class="mt-2 px-4" autocomplete="off">
       <Input
         :input-placeholder="'User@example.com'"
         :label-title="'Email Address'"
@@ -27,7 +27,6 @@
         :button-text="'Login'"
         :button-class="addedClass"
         :loading-status="loading.status"
-        @buttonClicked="login"
       />
     </form>
     <div class="mt-4 font-thin text-gray-700 w-full">

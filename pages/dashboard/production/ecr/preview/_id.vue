@@ -84,21 +84,22 @@
                   <p class="text-gray-600">{{ form.ecrNo }}</p>
                 </td>
                 <td class="px-4 py-2 border border-gray-300 text-left">
-                  <p>{{ form.modeOfService }}</p>
+                  <p>{{ form.modeOfService.toUpperCase() }}</p>
                 </td>
                 <td class="px-4 py-2 border border-gray-300 text-left">
-                  <p>{{ form.type }}</p>
+                  <p>{{ form.type.toUpperCase() }}</p>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
         <div class="px-10 py-6 border-b border-t border-gray-300 w-full">
+          <h3 class="w-10/12">All cylinders in this ECR</h3>
           <table class="w-10/12">
             <thead>
               <tr>
                 <th class="px-4 py-2 text-right w-20">S/N</th>
-                <th class="px-4 py-2 text-left">Cylinder No</th>
+                <th class="px-4 py-2 text-left">Assigned No</th>
                 <th class="px-4 py-2 text-left">Volume</th>
               </tr>
             </thead>
@@ -106,7 +107,7 @@
               <tr v-for="(cylinder, i) in form.cylinders" :key="i">
                 <td class="px-4 py-2 text-right">0{{ i + 1 }}.</td>
                 <td class="px-4 py-2 border border-gray-300 text-left">
-                  {{ cylinder.cylinderNumber }}
+                  {{ cylinder.assignedNumber }}
                 </td>
                 <td class="px-4 py-2 border border-gray-300 text-left">
                   {{ cylinder.gasVolumeContent.value }}

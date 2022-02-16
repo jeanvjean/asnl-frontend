@@ -355,11 +355,11 @@ export default defineComponent({
 
     const modeOfService = [
       {
-        name: 'ASNL',
+        name: 'ASNL Cylinder',
         value: 'asnl',
       },
       {
-        name: 'Customer',
+        name: 'Customer Cylinder',
         value: 'customer',
       },
       {

@@ -138,20 +138,18 @@
           </div>
         </div>
 
-        <div
-          class="flex items-center w-full md:w-1/3 lg:w-1/4 space-x-4 my-4"
-          v-if="
-            scanCylinders.length > 0 &&
-            constantsValues.icnNo &&
-            constantsValues.customerName &&
-            form.gasType &&
-            form.priority &&
-            form.type
-          "
-        >
+        <div class="flex items-center w-full md:w-1/3 lg:w-1/4 space-x-4 my-4">
           <button-component
             :button-class="'bg-btn-purple text-white w-auto'"
             :button-text="'Save'"
+            :disabled="
+              scanCylinders.length === 0 &&
+              constantsValues.icnNo &&
+              constantsValues.customerName &&
+              form.gasType &&
+              form.priority &&
+              form.type
+            "
             :loading-status="buttonLoading"
           />
         </div>
