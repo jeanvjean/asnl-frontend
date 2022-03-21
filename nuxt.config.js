@@ -79,7 +79,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'https://asnl.natterbase.com',
+    baseURL: 'https://boiling-atoll-34781.herokuapp.com/',
   },
   toast: {
     position: 'top-right',

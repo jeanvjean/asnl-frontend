@@ -88,6 +88,15 @@
             </select>
           </div>
 
+          <!-- <SelectComponent
+            :label-title="'Gas Type'"
+            :selectArray="gasTypes"
+            @get="
+              formInputs.standardColor = $event.colorCode
+              formInputs.gasType = $event.value
+            "
+          /> -->
+
           <input-component
             :label-title="'Cylinder Number'"
             :input-placeholder="'Enter Cylinder Number'"
@@ -96,17 +105,10 @@
           />
 
           <input-component
-            :label-title="'Water Capacity (kg)'"
-            :input-placeholder="'Capacity'"
-            :default-value="formInputs.waterCapacity.value"
-            @get="formInputs.waterCapacity.value = $event.value"
-          />
-
-          <input-component
-            :label-title="'Filling Pressure'"
-            :input-placeholder="'Enter Pressure here (bar)'"
-            :default-value="formInputs.fillingPreasure"
-            @get="formInputs.fillingPreasure = $event.value"
+            :label-title="'Assigned Number'"
+            :input-placeholder="'Enter Assigned Number'"
+            :default-value="formInputs.assignedNumber"
+            @get="formInputs.assignedNumber = $event.value"
           />
         </div>
         <div class="w-full md:w-1/3 lg:w-1/3 mx-auto mt-4">
@@ -164,15 +166,24 @@ export default defineComponent({
     const context = useContext()
 
     const customers = ref<any>([])
-    const gasTypes = ref([])
+    const gasTypes = ref<any>([])
     const close = () => {
       ctx.emit('close')
     }
 
     const formInputs = reactive({
       cylinderType: 'buffer',
-      waterCapacity: { value: '', unit: 'kg' },
-      fillingPreasure: '',
+      standardColor: 'blue',
+      testingPresure: 0,
+      purchaseDate: new Date(),
+      dateManufactured: new Date(),
+      gasType: '',
+      purchaseCost: {
+        cost: 0,
+        unit: 'NGN',
+      },
+      waterCapacity: { value: 0, unit: 'kg' },
+      fillingPreasure: 0,
       gasVolumeContent: { value: '', unit: 'kg' },
       cylinderNumber: '',
       customer: {
@@ -233,6 +244,14 @@ export default defineComponent({
 
     const addCustomer = (data: any) => {
       console.log(data)
+      data.products.map((x: any) => {
+        gasTypes.push({
+          ...x,
+          value: x.product_id,
+          name: x.product_name,
+          color: x.colorCode,
+        })
+      })
       formInputs.customer = {
         name: data.name,
         id: data._id,
@@ -249,6 +268,7 @@ export default defineComponent({
         'gasVolumeContent.value': 'required|numeric',
         'gasVolumeContent.unit': 'required|string',
         cylinderNumber: 'required|string',
+        assignedNumber: 'required|string',
       }
       let cyl: any = { ...formInputs }
       cyl.customer = formInputs.customer.id

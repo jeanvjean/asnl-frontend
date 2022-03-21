@@ -412,7 +412,7 @@ export default defineComponent({
               customer: {
                 ...d.customer,
                 destination: d.branch.location,
-                departure: d.customer.id.address,
+                departure: d.customer?.address,
               },
               cylinders: d.cylinders,
               date: new Date(d.createdAt).toDateString(),

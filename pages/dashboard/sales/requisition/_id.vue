@@ -442,9 +442,14 @@ export default defineComponent({
         details.ecrNo = data.ecrNo
         details.date = data.createdAt
         details.invoice_id = data.invoice_id
-        cylinders.value = data.cylinders
+        cylinders.value = data.cylinders.map((x: any) => {
+          return {
+            ...x,
+            amount: x.volume.value * x.unitPrice,
+          }
+        })
 
-        data.cylinders.forEach((item: any) => {
+        cylinders.value.forEach((item: any) => {
           totalVolume.value += item.volume.value
           totalAmount.value += item.amount
           oTotalAmount.value += item.amount
