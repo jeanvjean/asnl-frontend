@@ -144,7 +144,7 @@ export default defineComponent({
     const showType = ref(false)
 
     const headers = [
-      'Cylinder No',
+      'Assigned No',
       'Gas Type',
       'Cylinder Size',
       'Cylinder Type',

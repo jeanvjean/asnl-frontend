@@ -1,9 +1,14 @@
 <template>
   <button
+    :disabled="loadingStatus || disabled"
     v-if="!loadingStatus"
     :type="buttonType"
     class="w-full py-3 px-2 rounded-sm text-center font-semibold"
-    :class="buttonClass"
+    :class="
+      loadingStatus || disabled
+        ? 'opacity-50 cursor-not-allowed ' + buttonClass
+        : buttonClass
+    "
     @click="buttonClicked"
   >
     {{ buttonText }}
@@ -44,6 +49,10 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'submit',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(_props, ctx) {

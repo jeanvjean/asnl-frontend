@@ -167,11 +167,7 @@
               text-md
               rounded-sm
             "
-            @click="
-              auth.role == 'sales'
-                ? (showRegCus = !showRegCus)
-                : (showRegister = !showRegister)
-            "
+            @click="showRegister = !showRegister"
           >
             Register Cylinder
           </button>
@@ -222,11 +218,11 @@
         @show="showRegister = true"
       ></table-component>
     </div>
-    <new-customer-cylinder
+    <!-- <new-customer-cylinder
       v-if="showRegCus"
       @close="showRegCus = false"
       @refresh=";(showRegCus = false), getCylinders(1)"
-    ></new-customer-cylinder>
+    ></new-customer-cylinder> -->
     <new-cylinder
       v-if="showRegister"
       @close="showRegister = false"
